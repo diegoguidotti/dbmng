@@ -1,5 +1,5 @@
-DROP TABLE IF EXIST dbmng_tables;
-DROP TABLE IF EXIST dbmng_fields;
+DROP TABLE IF EXISTS dbmng_tables;
+DROP TABLE IF EXISTS dbmng_fields;
 
 CREATE TABLE dbmng_tables
 (
