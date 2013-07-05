@@ -113,21 +113,6 @@ function say_hello_world() {
 
 		$html .= dbmng_create_table($aForm);
 
-		$nome_val       = '';
-		$eta_val        = '';
-		$update_id_test = '';
-
-		if(isset($_REQUEST['update_id_test'])){
-			$result = db_query('select * from ' . $table . ' where id_test=:id_test', array(':id_test' => intval($_REQUEST['update_id_test'])) );
-	    foreach ($result as $record) {
-           $nome_val       = $record->nome;
-           $eta_val        = $record->eta;
-           $update_id_test = $record->id_test;
-			}
-		}
-			
-		
-
 		$html .= dbmng_create_form($aForm);
 
     return ($html);

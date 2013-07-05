@@ -42,16 +42,19 @@ function dbmng_get_form_array($id_table){
 		foreach ($fields as $fld)
 		{
 			// [MM 2013-07-05] update dbmng_fields adding pk field with type integer possible value 0, 1
-			if ( true )
-			{
-				if(strpos($fld->field_name, "id_") > 0 )
-					$aForm['primary_key'] = $fld->field_name;
-			}
-			else
-			{
-				if( $fld->pk == 1 )
-					$aForm['primary_key'] = $fld->field_name;
-			}
+			if(strpos($fld->field_name, "id_") !== false )
+				$aForm['primary_key'] = "id_test";
+
+		//	if ( true )
+		//	{
+		//		if(strpos($fld->field_name, "id_") !== 0 )
+		//			$aForm['primary_key'] = $fld->field_name;
+		//	}
+		//	else
+		//	{
+		//		if( $fld->pk == 1 )
+		//			$aForm['primary_key'] = $fld->field_name;
+		//	}
 			$aFields[$fld->field_name] = array('label' => $fld->field_label, 'type' => $fld->id_field_type, 'default' => $fld->default_value, 'value' => null);
 		}
 
@@ -125,51 +128,53 @@ Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzi
 */
 function dbmng_create_form($aForm) 
 {
-	 $html="";
-		$do_update=false;
-		if(isset($_GET["upd_" . $aForm['table_name']])){
+	$html="";
+	$do_update=false;
+	
+	if(isset($_GET["upd_" . $aForm['table_name']]))
+		{
 			$do_update=true;
 		}
 
-
-		if ( isset($_GET["ins_" . $aForm['table_name']]) || $do_update )
+	if ( isset($_GET["ins_" . $aForm['table_name']]) || $do_update )
 		{
+      if( $do_update )
+		    {
+					$id_update = $_GET["upd_" . $aForm['table_name']];
 
-			
-
-      if( $do_update ){
-							$id_update=$_GET["upd_" . $aForm['table_name']];		
-							$sql    = "select * from " . $aForm['table_name'] . " where id_" . $aForm['table_name'] . "=".intval($id_update);
-							$result = db_query($sql );		
-							$vals= $result->fetchObject();
-			}
-			
-
+					$sql       = "select * from " . $aForm['table_name'] . " where " . $aForm['primary_key'] . "=" . intval($id_update);
+					$result    = db_query($sql );		
+					$vals      = $result->fetchObject();
+				}
 
 			$html .= "<form method='POST' action='?' >\n";
 			foreach ( $aForm['fields'] as $x => $x_value )
-			{
-				$html .= t($x_value['label']);
-				$html .= "<input name='" . $x . "' ";
-				$html .= "type='text' ";
-				
-				//if( $x_value['value'] == null )
-					//$html .= "value='" . $x_value['default'] . "' ";
-				if($do_update){
-					$html .= "value='" . $vals->$x . "' ";
+				{
+					$html .= t($x_value['label']);
+					$html .= "<input name='" . $x . "' ";
+					$html .= "type='text' ";
+					
+					//if( $x_value['value'] == null )
+				  //	$html .= "value='" . $x_value['default'] . "' ";
+					
+					if($do_update)
+						{
+							$html .= "value='" . $vals->$x . "' ";
+						}
+
+					$html .= "><br />\n";
 				}
-				$html .= "><br />\n";
-			}
 
 			if( isset($_GET["upd_" . $aForm['table_name']] ))
-			{
-				$html .= "<input type='hidden' name='update_record' value='" . $_GET["upd_" . $aForm['table_name']] . "' />\n";
-				$html .= "<input type='submit' value='". t('Update') ."' />\n";
-			}
+				{
+					$html .= "<input type='hidden' name='update_record' value='" . $_GET["upd_" . $aForm['table_name']] . "' />\n";
+					$html .= "<input type='submit' value='". t('Update') ."' />\n";
+				}
 			else
-			{
-				$html .= "<input type='submit' value='" . t('Insert') . "' />\n";
-			}
+				{
+					$html .= "<input type='submit' value='" . t('Insert') . "' />\n";
+				}
+
 	    $html .= "</form>\n";
 		}
 		return $html;
