@@ -141,7 +141,7 @@ function dbmng_create_form($aForm)
 				$html .= "><br />\n";
 			}
 
-			if( $_GET["upd_" . $aForm['table_name']] )
+			if( isset($_GET["upd_" . $aForm['table_name']] ))
 			{
 				$html .= "<input type='hidden' name='update_record' value='" . $_GET["upd_" . $aForm['table_name']] . "' />\n";
 				$html .= "<input type='submit' value='". t('Update') ."' />\n";
@@ -155,6 +155,8 @@ function dbmng_create_form($aForm)
 		return $html;
 }
 
+
+/*
 function dbmng_upd_func($aForm)
 {
 	$table = $aForm['table_name'];
@@ -188,5 +190,6 @@ function dbmng_upd_func($aForm)
 	}
 	
 }
+*/
 
 ?>
