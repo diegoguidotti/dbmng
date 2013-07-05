@@ -93,23 +93,10 @@ function say_hello_world() {
 		}
 		
 		// delete record
-		if(isset($_REQUEST['delete_id_test'])){				
-			$result = db_query('delete from ' . $table . ' WHERE id_test=:id_test', 
-				array( 
-					':id_test' => intval($_REQUEST['delete_id_test'])
-				)
-			);
-		}
-
-		// delete record
-		if(isset($_REQUEST['duplicate_id_test'])){				
-			$result = db_query('insert into ' . $table . ' (nome, eta) select nome, eta from ' . $table . ' WHERE id_test=:id_test', 
-				array( 
-					':id_test' => intval($_REQUEST['duplicate_id_test'])
-				)
-			);
-		}
+		dbmng_create_form_delete($aForm);
 		
+		// duplicate record
+		dbmng_create_form_duplicate($aForm);
 
 		$html .= dbmng_create_table($aForm);
 

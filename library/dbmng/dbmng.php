@@ -159,9 +159,9 @@ function dbmng_create_form($aForm)
 		{
       if( $do_update )
 		    {
-					$id_update = $_GET["upd_" . $aForm['table_name']];
+					$id_upd    = $_GET["upd_" . $aForm['table_name']];
 
-					$sql       = "select * from " . $aForm['table_name'] . " where " . $aForm['primary_key'] . "=" . intval($id_update);
+					$sql       = "select * from " . $aForm['table_name'] . " where " . $aForm['primary_key'] . "=" . intval($id_upd);
 					$result    = db_query($sql );		
 					$vals      = $result->fetchObject();
 				}
@@ -197,6 +197,40 @@ function dbmng_create_form($aForm)
 	    $html .= "</form>\n";
 		}
 		return $html;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////
+// dbmng_create_form_delete
+// ======================
+/// Default action for the function
+/**
+\param $aForm  		Associative array with all the characteristics
+*/
+function dbmng_create_form_delete($aForm) 
+{
+	if(isset($_REQUEST["del_" . $aForm['table_name']]))
+		{
+			$id_del = intval($_REQUEST["del_" . $aForm['table_name']]);
+			$result = db_query("delete from " . $aForm['table_name'] . " WHERE " . $aForm['primary_key'] . " = " . $id_del);
+		}
+}
+
+
+/////////////////////////////////////////////////////////////////////////////
+// dbmng_create_form_duplicate
+// ======================
+/// Default action for the function
+/**
+\param $aForm  		Associative array with all the characteristics
+*/
+function dbmng_create_form_duplicate($aForm) 
+{
+	if(isset($_REQUEST["dup_" . $aForm['table_name']]))
+		{
+			$id_dup = intval($_REQUEST["dup_" . $aForm['table_name']]);
+			$result = db_query("insert into " . $aForm['table_name'] . " (nome, eta) select nome, eta from " . $aForm['table_name'] . " where " . $aForm['primary_key'] . " = " . $id_dup);
+		}
 }
 
 
