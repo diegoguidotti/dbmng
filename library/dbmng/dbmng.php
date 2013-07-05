@@ -125,19 +125,39 @@ Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzi
 */
 function dbmng_create_form($aForm) 
 {
-		$html="";
-		if ( isset($_GET["ins_" . $aForm['table_name']]) || isset($_GET["upd_" . $aForm['table_name']]) )
+	 $html="";
+		$do_update=false;
+		if(isset($_GET["upd_" . $aForm['table_name']])){
+			$do_update=true;
+		}
+
+
+		if ( isset($_GET["ins_" . $aForm['table_name']]) || $do_update )
 		{
+
+			
+
+      if( $do_update ){
+							$id_update=$_GET["upd_" . $aForm['table_name']];		
+							$sql    = "select * from " . $aForm['table_name'] . " where id_" . $aForm['table_name'] . "=".intval($id_update);
+							$result = db_query($sql );		
+							$vals= $result->fetchObject();
+			}
+			
+
+
 			$html .= "<form method='POST' action='?' >\n";
 			foreach ( $aForm['fields'] as $x => $x_value )
 			{
 				$html .= t($x_value['label']);
 				$html .= "<input name='" . $x . "' ";
 				$html .= "type='text' ";
-				if( $x_value['value'] == null )
-					$html .= "value='" . $x_value['default'] . "' ";
-				else
-					$html .= "value='" . $x_value['value'] . "' ";
+				
+				//if( $x_value['value'] == null )
+					//$html .= "value='" . $x_value['default'] . "' ";
+				if($do_update){
+					$html .= "value='" . $vals->$x . "' ";
+				}
 				$html .= "><br />\n";
 			}
 
