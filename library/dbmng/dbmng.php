@@ -1,5 +1,9 @@
 <?php
 
+function getVersion(){
+	return "0.0.2 MM";
+}
+
 /* We create an array containing all the data needed to make the form
 	
 		$aFormS = array();
@@ -13,12 +17,12 @@
 				'fields' => array(
 					array(
 							'field_name' => 'name',
-							'field_label' => 'Nome',
+							'label' => 'Nome',
 							'field_type' => 'text',
 						),
 					array(
 							'field_name' => 'eta',
-							'field_label' => 'Et&agrave',								
+							'label' => 'Et&agrave',								
 							'field_type' => 'text'
 						),
 				)
@@ -37,6 +41,17 @@ function dbmng_get_form_array($id_table){
 		$fields = db_query("select * from dbmng_fields where id_table=".$id_table." order by field_order ASC");
 		foreach ($fields as $fld)
 		{
+			// [MM 2013-07-05] update dbmng_fields adding pk field with type integer possible value 0, 1
+			if ( true )
+			{
+				if(strpos($fld->field_name, "id_") > 0 )
+					$aForm['primary_key'] = $fld->field_name;
+			}
+			else
+			{
+				if( $fld->pk == 1 )
+					$aForm['primary_key'] = $fld->field_name;
+			}
 			$aFields[$fld->field_name] = array('label' => $fld->field_label, 'type' => $fld->id_field_type, 'default' => $fld->default_value, 'value' => null);
 		}
 
@@ -49,26 +64,45 @@ function dbmng_create_table($aForm){
 	  $sql = 'select * from ' . $aForm['table_name'];
 		$result = db_query($sql);
     
-		$html='';
-    $html .= getVersion().'<table><tr><th>' . t('id_test') . '</th><th>' . t('name') . '</th><th>' . t('age') . '</th><th>' . t('functions') . '</th></tr>';
-
-		foreach ($result as $record) {
-			$html .= '<tr><td>' . $record->id_test . '</td><td>' . $record->nome.'</td><td>' . $record->eta . '</td>';
-
-			$html .= '<td>';
-				$html .= '<a href="?delete_id_test=' . $record->id_test.'">' . t('Delete') . '</a>' . '&nbsp;';
-				$html .= '<a href="?update_id_test=' . $record->id_test . '">' . t('Update') . '</a>' . '&nbsp;';
-				$html .= '<a href="?duplicate_id_test=' . $record->id_test . '">' . t('Duplicate') . '</a>';
-			$html .= '</td>';
-			
-			$html .= '</tr>';
-		}
-    $html .= '</table>';
+		$html = "<h1>" . $aForm['table_name'] . "</h1>\n";
 		
-		$html .= '<a href="?insert_new=1">' . t('Insert new data') . '</a><br />';
+		$html .= "<table>";
+		$html .= "<tr>";
+		foreach ( $aForm['fields'] as $x => $x_value )
+		{
+			$html .= "<th>" . $x_value['label'] . "</th>";
+		}
+		$html .= "<th>" . t('functions') . "</th></tr>\n";
+		
+		foreach ($result as $record) {
+			// table value
+			$html .= "<tr><td>" . $record->id_test . "</td><td>" . $record->nome. "</td><td>" . $record->eta . "</td>";
+			
+			// available functionalities
+			$html .= "<td>";
+				$html .= "<a href='?del_" . $aForm['table_name'] . "=" . $record->id_test ."'>" . t('Delete') . "</a>" . "&nbsp;";
+				$html .= "<a href='?upd_" . $aForm['table_name'] . "=" . $record->id_test ."'>" . t('Update') . "</a>" . "&nbsp;";
+				$html .= "<a href='?dup_" . $aForm['table_name'] . "=" . $record->id_test ."'>" . t('Duplicate') . "</a>" . "&nbsp;";
+			$html .= "</td>\n";
+			
+			$html .= "</tr>";
+		}
+    $html .= "</table>\n";
+		
+		$html .= "<a href='?ins_" . $aForm['table_name'] . "'>" . t('Insert new data') . "</a><br />";
 		return $html;
 }
 
+/*
+Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:
+
+insert:    "ins_" . $aForm['table_name']
+update:    "upd_" . $aForm['table_name']
+delete:    "del_" . $aForm['table_name']
+duplicate: "dup_" . $aForm['table_name']
+
+Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:
+*/
 
 /* we need to make the update
 	// form per inserimento e modifica
@@ -89,28 +123,70 @@ function dbmng_create_table($aForm){
 		$html .= "<br /><br />\n";
 
 */
-function dbmng_create_form($aForm) {
-		$html='';
-		$html .= "<form method='POST' action='?' >\n";
-		foreach ( $aForm['fields'] as $x => $x_value )
+function dbmng_create_form($aForm) 
+{
+		$html="";
+		if ( isset($_GET["ins_" . $aForm['table_name']]) || isset($_GET["upd_" . $aForm['table_name']]) )
 		{
-			$html .= t($x_value['label']);
-			$html .= "<input name='".$x."' ";
-			$html .= "type='input' ";
-			if( $x_value['value'] == null )
-				$html .= "value='" . $x_value['default'] . "' ";
+			$html .= "<form method='POST' action='?' >\n";
+			foreach ( $aForm['fields'] as $x => $x_value )
+			{
+				$html .= t($x_value['label']);
+				$html .= "<input name='" . $x . "' ";
+				$html .= "type='text' ";
+				if( $x_value['value'] == null )
+					$html .= "value='" . $x_value['default'] . "' ";
+				else
+					$html .= "value='" . $x_value['value'] . "' ";
+				$html .= "><br />\n";
+			}
+
+			if( $_GET["upd_" . $aForm['table_name']] )
+			{
+				$html .= "<input type='hidden' name='update_record' value='" . $_GET["upd_" . $aForm['table_name']] . "' />\n";
+				$html .= "<input type='submit' value='". t('Update') ."' />\n";
+			}
 			else
-				$html .= "value='" . $x_value['value'] . "' ";
-			$html .= "><br />\n";
-						
+			{
+				$html .= "<input type='submit' value='" . t('Insert') . "' />\n";
+			}
+	    $html .= "</form>\n";
 		}
-		$html .= "<input type='submit' value='" .t('Insert') . "' />\n";
-    $html .= "</form>\n";
 		return $html;
 }
 
-function getVersion(){
-	return "0.0.1";
+function dbmng_upd_func($aForm)
+{
+	$table = $aForm['table_name'];
+	// $nome_val       = '';
+	// $eta_val        = '';
+	// $update_id_test = '';
+
+	// [MM 2013-07-05] update dbmng_fields adding pk field with type integer possible value 0, 1
+	foreach ( $aForm['fields'] as $x => $x_value )
+	{
+	if ( true )
+	{
+		if(strpos($x, "id_") > 0 )
+			$pk = $x;
+	}
+	else
+	{
+		if( $fld->pk == 1 )
+			$pk = $x_value['primary_key'];
+	}
+
+	if(isset("upd_" . $aForm['table_name']))
+	{
+		$sql    = "select * from " . $table . " where " . $pk . "=:" . $pk;
+		$result = db_query($sql, array(":" . $pk => intval($_REQUEST["upd_" . $aForm['table_name']])) );
+    foreach ($result as $record) {
+         $nome_val       = $record->nome;
+         $eta_val        = $record->eta;
+         $update_id_test = $record->id_test;
+		}
+	}
+	
 }
 
 ?>
