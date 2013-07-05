@@ -1,16 +1,14 @@
 <?php
+/*
+Convention to be used in code:
 
-function getVersion(){
-	return "0.0.2 MM";
-}
+insert:    "ins_" . $aForm['table_name']
+update:    "upd_" . $aForm['table_name']
+delete:    "del_" . $aForm['table_name']
+duplicate: "dup_" . $aForm['table_name']
 
-/* We create an array containing all the data needed to make the form
-	
-		$aFormS = array();
-		$aFormS['nome'] = array('label' => 'Name', 'type' => 'text', 'default' => '', 'value' => "Michele");
-		$aFormS['eta'] = array('label' => 'Age', 'type' => 'number', 'default' => '', 'value' => null);
+Associative array with all the characteristics to manage a table
 
-    //It has to be modified in:
  		$aForm= array(				
 				'table_name' => 'test',
 				'primary_key' => 'id_test',
@@ -27,9 +25,22 @@ function getVersion(){
 						),
 				)
 			);
-		*/
+*/
 
 
+function getVersion(){
+	return "0.0.2 MM";
+}
+
+
+/////////////////////////////////////////////////////////////////////////////
+// dbmng_get_form_array
+// ======================
+/// Default action for the function
+/**
+\param $id_table  table id
+\return           HTML generated code
+*/
 function dbmng_get_form_array($id_table){
 		$aForm = array();
 
@@ -63,6 +74,15 @@ function dbmng_get_form_array($id_table){
 		return $aForm;
 }
 
+
+/////////////////////////////////////////////////////////////////////////////
+// dbmng_create_table
+// ======================
+/// Default action for the function
+/**
+\param $aForm  		Associative array with all the characteristics
+\return           HTML generated code
+*/
 function dbmng_create_table($aForm){
 	  $sql = 'select * from ' . $aForm['table_name'];
 		$result = db_query($sql);
@@ -96,17 +116,6 @@ function dbmng_create_table($aForm){
 		return $html;
 }
 
-/*
-Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:
-
-insert:    "ins_" . $aForm['table_name']
-update:    "upd_" . $aForm['table_name']
-delete:    "del_" . $aForm['table_name']
-duplicate: "dup_" . $aForm['table_name']
-
-Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:
-*/
-
 /* we need to make the update
 	// form per inserimento e modifica
     if( isset($_GET['insert_new']) || isset($_GET['update_id_test']) ){
@@ -125,6 +134,16 @@ Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzioni:Convenzi
 		
 		$html .= "<br /><br />\n";
 
+*/
+
+
+/////////////////////////////////////////////////////////////////////////////
+// dbmng_create_form
+// ======================
+/// Default action for the function
+/**
+\param $aForm  		Associative array with all the characteristics
+\return           HTML generated code
 */
 function dbmng_create_form($aForm) 
 {
