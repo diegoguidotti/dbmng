@@ -69,28 +69,11 @@ function say_hello_world() {
 		$id_table=1;
 		$aForm = dbmng_get_form_array($id_table);
 
+		// update record
+		dbmng_create_form_update($aForm);
 
-
-		if(isset($_POST['nome'])){
-			// aggiornamento record esistente
-			if(isset($_POST['update_record'])){
-				$result = db_query('update ' . $table . ' set nome=:nome, eta=:eta WHERE id_test=:id_test', 
-					array( 
-						':nome' => $_POST['nome'] ,
-						':eta' => intval($_POST['eta']), 
-						':id_test' => intval($_POST['update_record'])
-					)
-				);
-			}
-			else{ //inserimento nuovo record
-				$result = db_query('insert into ' . $table . ' (nome, eta) values (:nome, :eta)', 
-					array( 
-						':nome' => $_POST['nome'] ,
-						':eta' => intval($_POST['eta']) 
-					)
-				);
-			}
-		}
+		// insert record
+		dbmng_create_form_insert($aForm);
 		
 		// delete record
 		dbmng_create_form_delete($aForm);

@@ -16,12 +16,12 @@ Associative array with all the characteristics to manage a table
 					array(
 							'field_name' => 'name',
 							'label' => 'Nome',
-							'field_type' => 'text',
+							'type' => 'text',
 						),
 					array(
 							'field_name' => 'eta',
 							'label' => 'Et&agrave',								
-							'field_type' => 'text'
+							'type' => 'text'
 						),
 				)
 			);
@@ -29,17 +29,17 @@ Associative array with all the characteristics to manage a table
 
 
 function getVersion(){
-	return "0.0.2 MM";
+	return "0.0.1";
 }
 
 
 /////////////////////////////////////////////////////////////////////////////
 // dbmng_get_form_array
 // ======================
-/// Default action for the function
+/// This function allow to get fields information into structured array 
 /**
 \param $id_table  table id
-\return           HTML generated code
+\return           structured array 
 */
 function dbmng_get_form_array($id_table){
 		$aForm = array();
@@ -56,16 +56,6 @@ function dbmng_get_form_array($id_table){
 			if(strpos($fld->field_name, "id_") !== false )
 				$aForm['primary_key'] = "id_test";
 
-		//	if ( true )
-		//	{
-		//		if(strpos($fld->field_name, "id_") !== 0 )
-		//			$aForm['primary_key'] = $fld->field_name;
-		//	}
-		//	else
-		//	{
-		//		if( $fld->pk == 1 )
-		//			$aForm['primary_key'] = $fld->field_name;
-		//	}
 			$aFields[$fld->field_name] = array('label' => $fld->field_label, 'type' => $fld->id_field_type, 'default' => $fld->default_value, 'value' => null);
 		}
 
@@ -78,7 +68,7 @@ function dbmng_get_form_array($id_table){
 /////////////////////////////////////////////////////////////////////////////
 // dbmng_create_table
 // ======================
-/// Default action for the function
+/// This function create a table starting from a structured array
 /**
 \param $aForm  		Associative array with all the characteristics
 \return           HTML generated code
@@ -116,31 +106,11 @@ function dbmng_create_table($aForm){
 		return $html;
 }
 
-/* we need to make the update
-	// form per inserimento e modifica
-    if( isset($_GET['insert_new']) || isset($_GET['update_id_test']) ){
-	    $html .= '<form method="POST" action="?" >';
-			$html .= t('Name') . ': <input name="nome" value="' . $nome_val . '" /><br />';
-			$html .= t('Age') . ': <input name="eta" value="' . $eta_val . '" /><br />';
-			if($update_id_test!=''){
-				$html .= '<input type="hidden" name="update_record" value="'.$update_id_test.'" />';
-				$html .= '<input type="submit" value="'. t('Update') .'" />';
-			}
-			else{
-				$html .= '<input type="submit" value="' .t('Insert') .'" />';
-			}
-	    $html .= '</form>';
-    }
-		
-		$html .= "<br /><br />\n";
-
-*/
-
 
 /////////////////////////////////////////////////////////////////////////////
 // dbmng_create_form
 // ======================
-/// Default action for the function
+/// This function create the form to (insert / update) from a structured array 
 /**
 \param $aForm  		Associative array with all the characteristics
 \return           HTML generated code
@@ -186,11 +156,12 @@ function dbmng_create_form($aForm)
 
 			if( isset($_GET["upd_" . $aForm['table_name']] ))
 				{
-					$html .= "<input type='hidden' name='update_record' value='" . $_GET["upd_" . $aForm['table_name']] . "' />\n";
+					$html .= "<input type='hidden' name='upd_" . $aForm['table_name'] . "' value='" . $_GET["upd_" . $aForm['table_name']] . "' />\n";
 					$html .= "<input type='submit' value='". t('Update') ."' />\n";
 				}
 			else
 				{
+					$html .= "<input type='hidden' name='ins_" . $aForm['table_name'] . "' />\n";
 					$html .= "<input type='submit' value='" . t('Insert') . "' />\n";
 				}
 
@@ -203,7 +174,7 @@ function dbmng_create_form($aForm)
 /////////////////////////////////////////////////////////////////////////////
 // dbmng_create_form_delete
 // ======================
-/// Default action for the function
+/// This function delete the selected record
 /**
 \param $aForm  		Associative array with all the characteristics
 */
@@ -220,54 +191,104 @@ function dbmng_create_form_delete($aForm)
 /////////////////////////////////////////////////////////////////////////////
 // dbmng_create_form_duplicate
 // ======================
-/// Default action for the function
+/// This function duplicate the selected record
 /**
 \param $aForm  		Associative array with all the characteristics
 */
 function dbmng_create_form_duplicate($aForm) 
 {
+	$sWhat = "";
+	foreach ( $aForm['fields'] as $x => $x_value )
+		{
+			if($x !== $aForm['primary_key'])
+				$sWhat .= $x . ", ";
+		}
+	$sWhat = substr($sWhat, 0, strlen($sWhat)-2);
+	
 	if(isset($_REQUEST["dup_" . $aForm['table_name']]))
 		{
 			$id_dup = intval($_REQUEST["dup_" . $aForm['table_name']]);
-			$result = db_query("insert into " . $aForm['table_name'] . " (nome, eta) select nome, eta from " . $aForm['table_name'] . " where " . $aForm['primary_key'] . " = " . $id_dup);
+			$result = db_query("insert into " . $aForm['table_name'] . " (" . $sWhat . ") select " . $sWhat . " from " . $aForm['table_name'] . " where " . $aForm['primary_key'] . " = " . $id_dup);
 		}
 }
 
 
-/*
-function dbmng_upd_func($aForm)
-{
-	$table = $aForm['table_name'];
-	// $nome_val       = '';
-	// $eta_val        = '';
-	// $update_id_test = '';
-
-	// [MM 2013-07-05] update dbmng_fields adding pk field with type integer possible value 0, 1
-	foreach ( $aForm['fields'] as $x => $x_value )
-	{
-	if ( true )
-	{
-		if(strpos($x, "id_") > 0 )
-			$pk = $x;
-	}
-	else
-	{
-		if( $fld->pk == 1 )
-			$pk = $x_value['primary_key'];
-	}
-
-	if(isset("upd_" . $aForm['table_name']))
-	{
-		$sql    = "select * from " . $table . " where " . $pk . "=:" . $pk;
-		$result = db_query($sql, array(":" . $pk => intval($_REQUEST["upd_" . $aForm['table_name']])) );
-    foreach ($result as $record) {
-         $nome_val       = $record->nome;
-         $eta_val        = $record->eta;
-         $update_id_test = $record->id_test;
-		}
-	}
-	
-}
+/////////////////////////////////////////////////////////////////////////////
+// dbmng_create_form_insert
+// ======================
+/// This function insert a new record
+/**
+\param $aForm  		Associative array with all the characteristics
 */
+function dbmng_create_form_insert($aForm) 
+{
+	if(isset($_POST["ins_" . $aForm['table_name']]))
+		{
+			$sWhat = "";
+			$sVal  = "";
+			foreach ( $aForm['fields'] as $x => $x_value )
+				{
+					if($x !== $aForm['primary_key'])
+						{
+							$sWhat .= $x . ", ";
+							
+							switch ($x_value['type'])
+								{
+									case "varchar":
+										$sVal  .= "'" . $_POST[$x] . "', ";
+										break;
+									
+									default:
+										$sVal  .= $_POST[$x] . ", ";							
+								}
+						}
+				}
+			$sWhat = substr($sWhat, 0, strlen($sWhat)-2);
+			$sVal  = substr($sVal, 0, strlen($sVal)-2);
+	
+			$sql    = "insert into " . $aForm['table_name'] . " (" . $sWhat . ") values (" . $sVal . ")";
+			$result = db_query($sql);
+		}
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// dbmng_create_form_update
+// ======================
+/// This function update an existing record
+/**
+\param $aForm  		Associative array with all the characteristics
+*/
+function dbmng_create_form_update($aForm) 
+{
+	if(isset($_POST["upd_" . $aForm['table_name']]))
+		{
+			$sSet = "";
+			foreach ( $aForm['fields'] as $x => $x_value )
+				{
+					if($x !== $aForm['primary_key'])
+						{
+							$sSet .= $x . " = ";
+							
+							// update code for switch based on the typology
+							switch ($x_value['type'])
+								{
+									case "varchar":
+										$sSet  .= "'" . $_POST[$x] . "', ";
+										break;
+									
+									default:
+										$sSet  .= $_POST[$x] . ", ";							
+								}
+						}
+				}
+		
+			$sSet = substr($sSet, 0, strlen($sSet)-2);
+	
+			$id_upd = intval($_REQUEST["upd_" . $aForm['table_name']]);
+			$sql    = "update " . $aForm['table_name'] . " set " . $sSet . " where " . $aForm['primary_key'] . " = " . $id_upd;
+			$result = db_query($sql);
+		}
+}
+
 
 ?>
