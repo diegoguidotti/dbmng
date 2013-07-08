@@ -53,8 +53,10 @@ function dbmng_get_form_array($id_table){
 		foreach ($fields as $fld)
 		{
 			// [MM 2013-07-05] update dbmng_fields adding pk field with type integer possible value 0, 1
-			if(strpos($fld->field_name, "id_") !== false )
-				$aForm['primary_key'] = "id_test";
+			if($fld->pk == 1)
+				$aForm['primary_key'] = $fld->field_name; 
+		//	if(strpos($fld->field_name, "id_") !== false )
+		//		$aForm['primary_key'] = "id_test";
 
 			$aFields[$fld->field_name] = array('label' => $fld->field_label, 'type' => $fld->id_field_type, 'default' => $fld->default_value, 'value' => null);
 		}
@@ -139,7 +141,7 @@ function dbmng_create_form($aForm)
 			$html .= "<form method='POST' action='?' >\n";
 			foreach ( $aForm['fields'] as $x => $x_value )
 				{
-					$html .= t($x_value['label']);
+					$html .= "<label for='$x'>" . t($x_value['label']) . "</label>";
 					$html .= "<input name='" . $x . "' ";
 					$html .= "type='text' ";
 					
