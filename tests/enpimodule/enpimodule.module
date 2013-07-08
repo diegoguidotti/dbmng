@@ -75,6 +75,13 @@ function say_hello_world() {
 			//get the form!!!
 			$id_table = $_REQUEST['tbl'];
 			$aForm    = dbmng_get_form_array($id_table);
+
+			//the param array stores sone variabble used by the renderer
+			$aParam = array();
+			//hidden_vars are some hidden variables used by the form creation
+			$aParam['hidden_vars']=array();
+			$aParam['hidden_vars']['tbl']	=  $_REQUEST['tbl'];		
+
 	
 			// update record
 			dbmng_create_form_update($aForm);
@@ -88,9 +95,9 @@ function say_hello_world() {
 			// duplicate record
 			dbmng_create_form_duplicate($aForm);
 	
-			$html .= dbmng_create_table($aForm);
+			$html .= dbmng_create_table($aForm, $aParam);
 	
-			$html .= dbmng_create_form($aForm);
+			$html .= dbmng_create_form($aForm, $aParam);
 		}
 	    return ($html);
 

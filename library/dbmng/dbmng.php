@@ -89,14 +89,26 @@ function dbmng_get_form_array($id_table){
 // ======================
 /// This function create a table starting from a structured array
 /**
-\param $aForm  		Associative array with all the characteristics
+\param $aForm  		Associative array with all the characteristics of the table
+\param $aParam  		Associative array with some custom variable used by the renderer
 \return           HTML generated code
 */
-function dbmng_create_table($aForm){
+function dbmng_create_table($aForm, $aParam){
 	  $sql = 'select * from ' . $aForm['table_name'];
 		$result = db_query($sql);
     
 		$html = "<h1>" . $aForm['table_name'] . "</h1>\n";
+
+		//get some hidden variables if exists()
+		$hv='';
+		if(isset($aParam)){
+			if(isset($aParam['hidden_vars'])){
+				foreach ( $aParam['hidden_vars'] as $x => $x_value ){				
+					$hv.= ('&amp;'.$x.'='.$x_value);
+				}
+			}
+		}
+
 		
 		$html .= "<table>";
 		$html .= "<tr>";
@@ -118,16 +130,16 @@ function dbmng_create_table($aForm){
 			
 			// available functionalities
 			$html .= "<td>";
-				$html .= "<a href='?del_" . $aForm['table_name'] . "=" . $record->id_test ."'>" . t('Delete') . "</a>" . "&nbsp;";
-				$html .= "<a href='?upd_" . $aForm['table_name'] . "=" . $record->id_test ."'>" . t('Update') . "</a>" . "&nbsp;";
-				$html .= "<a href='?dup_" . $aForm['table_name'] . "=" . $record->id_test ."'>" . t('Duplicate') . "</a>" . "&nbsp;";
+				$html .= "<a href='?del_" . $aForm['table_name'] . "=" . $record->$aForm['primary_key'] .$hv."'>" . t('Delete') . "</a>" . "&nbsp;";
+				$html .= "<a href='?upd_" . $aForm['table_name'] . "=" . $record->$aForm['primary_key'] .$hv."'>" . t('Update') . "</a>" . "&nbsp;";
+				$html .= "<a href='?dup_" . $aForm['table_name'] . "=" . $record->$aForm['primary_key'] .$hv."'>" . t('Duplicate') . "</a>" . "&nbsp;";
 			$html .= "</td>\n";
 			
 			$html .= "</tr>";
 		}
     $html .= "</table>\n";
 		
-		$html .= "<a href='?tbl=" . $aForm['id_table'] . "&ins_" . $aForm['table_name'] . "'>" . t('Insert new data') . "</a><br />";
+		$html .= "<a href='?ins_" . $aForm['table_name'] . $hv. "'>" . t('Insert new data') . "</a><br />";
 		return $html;
 }
 
@@ -138,12 +150,23 @@ function dbmng_create_table($aForm){
 /// This function create the form to (insert / update) from a structured array 
 /**
 \param $aForm  		Associative array with all the characteristics
+\param $aParam  		Associative array with some custom variable used by the renderer
 \return           HTML generated code
 */
-function dbmng_create_form($aForm) 
+function dbmng_create_form($aForm, $aParam) 
 {
 	$html="";
 	$do_update=false;
+   //get some hidden variables if exists()
+		$hv='';
+		if(isset($aParam)){
+			if(isset($aParam['hidden_vars'])){
+				foreach ( $aParam['hidden_vars'] as $x => $x_value ){				
+					$hv.= ("<input type='hidden' name='".$x."' value='".$x_value."' />\n");
+				}
+			}
+		}
+
 	
 	if(isset($_GET["upd_" . $aForm['table_name']]))
 		{
@@ -161,7 +184,7 @@ function dbmng_create_form($aForm)
 					$vals      = $result->fetchObject();
 				}
 
-			$html .= "<form method='POST' action='?' >\n";
+			$html .= "<form method='POST' action='?' >\n".$hv."";
 			foreach ( $aForm['fields'] as $x => $x_value )
 				{
 					if( isset($x_value['field_function']) )
