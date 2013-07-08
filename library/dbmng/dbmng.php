@@ -12,6 +12,7 @@ duplicate: "dup_" . $aForm['table_name']
 Associative array with all the characteristics to manage a table
 
  		$aForm= array(				
+				'id_table' => 'ID',
 				'table_name' => 'test',
 				'primary_key' => 'id_test',
 				'fields' => array(
@@ -50,8 +51,11 @@ function getVersion(){
 function dbmng_get_form_array($id_table){
 		$aForm = array();
 
-		$table = db_query("select * from dbmng_tables where id_table=".$id_table." ");
-		$aForm['table_name']= $table->fetchObject()->table_name;
+		$table = db_query("select * from dbmng_tables where id_table=".$id_table);
+		$aForm['id_table']    = $id_table; // $table->fetchObject()->id_table;
+		$fo = $table->fetchObject();
+		$aForm['table_name']  = $fo->table_name;
+		$aForm['table_label'] = $fo->table_label;
 
 
 		$aFields=array();
@@ -114,7 +118,7 @@ function dbmng_create_table($aForm){
 		}
     $html .= "</table>\n";
 		
-		$html .= "<a href='?ins_" . $aForm['table_name'] . "'>" . t('Insert new data') . "</a><br />";
+		$html .= "<a href='?tbl=" . $aForm['id_table'] . "&ins_" . $aForm['table_name'] . "'>" . t('Insert new data') . "</a><br />";
 		return $html;
 }
 
