@@ -67,19 +67,25 @@ function dbmng_get_form_array($id_table){
 				//if(strpos($fld->field_name, "id_") !== false )
 				//	$aForm['primary_key'] = "id_test";
 
+			
+			
+
 			$aFields[$fld->field_name] = array('label' => $fld->field_label, 
 																				 'type' => $fld->id_field_type, 
-																				 'default' => $fld->default_value, 
 																				 'value' => null, 
 																				 'nullable' => $fld->nullable, 
 																				 'field_function' => $fld->field_function);
+			if(($fld->default_value)!=null){
+					$aFields[$fld->field_name]['default']=$fld->default_value;
+			}
 		}
+
 
 		if(!array_key_exists('primary_key', $aForm)){
 					$aForm['primary_key']='id_'.$aForm['table_name'];	
 		}
 		$aForm['fields']=$aFields;
-		
+		print_r($aFields);
 		return $aForm;
 }
 
@@ -200,8 +206,11 @@ function dbmng_create_form($aForm, $aParam)
 									$html .= "<input name='" . $x . "' ";
 									$html .= "id='$x' ";
 									
-									if( !is_null($x_value['default']) && !isset($_GET["upd_" . $aForm['table_name']]) )
+									if( isset($x_value['default']) && !isset($_GET["upd_" . $aForm['table_name']]) )
 										$html .= "value='" . $x_value['default']. "'";
+									else{
+										;
+									}
 		
 									$html .= "type='text' ";
 									
@@ -311,15 +320,7 @@ function dbmng_create_form_insert($aForm)
 						{
 							$sWhat .= $x . ", ";
 							
-							switch ($x_value['type'])
-								{
-									case "varchar":
-										$sVal  .= "'" . $_POST[$x] . "', ";
-										break;
-									
-									default:
-										$sVal  .= $_POST[$x] . ", ";							
-								}
+							$sVal.=dbmng_value_prepare($x_value,$_POST[$x]);							
 						}
 				}
 			$sWhat = substr($sWhat, 0, strlen($sWhat)-2);
@@ -347,17 +348,8 @@ function dbmng_create_form_update($aForm)
 					if($x !== $aForm['primary_key'])
 						{
 							$sSet .= $x . " = ";
-							
-							// update code for switch based on the typology
-							switch ($x_value['type'])
-								{
-									case "varchar":
-										$sSet  .= "'" . $_POST[$x] . "', ";
-										break;
-									
-									default:
-										$sSet  .= $_POST[$x] . ", ";							
-								}
+
+							$sSet.=dbmng_value_prepare($x_value,$_POST[$x]);
 						}
 				}
 		
@@ -367,6 +359,39 @@ function dbmng_create_form_update($aForm)
 			$sql    = "update " . $aForm['table_name'] . " set " . $sSet . " where " . $aForm['primary_key'] . " = " . $id_upd;
 			$result = db_query($sql);
 		}
+}
+
+function dbmng_value_prepare($x_value, $sValue){
+	$sVal='';
+	$sType=$x_value['type'];
+
+	$df=null;
+	if(isset($x_value['default'])){
+		$df=$x_value['default'];
+	}
+
+	echo($sType.'|'.$sValue.'|'.($df==null).'|<br/>');
+	if(strlen($sValue)==0 && $df==null)
+	{
+			$sVal  .= "NULL, ";
+	}
+	else{
+		if(strlen($sValue)==0){
+			$sValue=$df;
+		}
+		switch ($sType)
+			{
+				
+        
+				case "varchar":
+					$sVal  .= "'" . $sValue . "', ";
+					break;
+			
+				default:
+					$sVal  .= $sValue . ", ";							
+			}
+	}
+  return $sVal;
 }
 
 
