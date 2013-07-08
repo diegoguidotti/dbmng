@@ -17,11 +17,13 @@ Associative array with all the characteristics to manage a table
 							'field_name' => 'name',
 							'label' => 'Nome',
 							'type' => 'text',
+							'default' => 'default'
 						),
 					array(
 							'field_name' => 'eta',
 							'label' => 'Et&agrave',								
 							'type' => 'text'
+							'default' => 'default'
 						),
 				)
 			);
@@ -52,13 +54,12 @@ function dbmng_get_form_array($id_table){
 		$fields = db_query("select * from dbmng_fields where id_table=".$id_table." order by field_order ASC");
 		foreach ($fields as $fld)
 		{
-			// [MM 2013-07-05] update dbmng_fields adding pk field with type integer possible value 0, 1
 			if($fld->pk == 1)
 				$aForm['primary_key'] = $fld->field_name; 
-		//	if(strpos($fld->field_name, "id_") !== false )
-		//		$aForm['primary_key'] = "id_test";
+				//if(strpos($fld->field_name, "id_") !== false )
+				//	$aForm['primary_key'] = "id_test";
 
-			$aFields[$fld->field_name] = array('label' => $fld->field_label, 'type' => $fld->id_field_type, 'default' => $fld->default_value, 'value' => null);
+			$aFields[$fld->field_name] = array('label' => $fld->field_label, 'type' => $fld->id_field_type, 'default' => $fld->default_value, 'value' => null, 'nullable' => $fld->nullable);
 		}
 
 		$aForm['fields']=$aFields;
@@ -141,19 +142,43 @@ function dbmng_create_form($aForm)
 			$html .= "<form method='POST' action='?' >\n";
 			foreach ( $aForm['fields'] as $x => $x_value )
 				{
-					$html .= "<label for='$x'>" . t($x_value['label']) . "</label>";
-					$html .= "<input name='" . $x . "' ";
-					$html .= "type='text' ";
-					
+					if( $aForm['primary_key'] != $x )
+						{
+							$html .= "<label for='$x'>" . t($x_value['label']) . "</label>";
+							$html .= "<input name='" . $x . "' ";
+							$html .= "id='$x' ";
+							
+							if( !is_null($x_value['default']) && !isset($_GET["upd_" . $aForm['table_name']]) )
+								$html .= "value='" . $x_value['default']. "'";
+
+							$html .= "type='text' ";
+							
+							if($x_value['nullable'] == 1)
+								$html .= "required ";						
+
+							if($do_update)
+								{
+									$html .= "value='" . $vals->$x . "' ";
+								}
+		
+							$html .= "><br />\n";
+						}
+					else
+						{
+							// [MM] can be deleted if the type is hidden
+							//$html .= "<label for='$x'>" . t($x_value['label']) . "</label>";
+							//$html .= "<input name='" . $x . "' ";
+							//$html .= "id='$x' ";
+							//if( !is_null($x_value['default']) && !isset($_GET["upd_" . $aForm['table_name']]) )
+							//	$html .= "value='" . $x_value['default']. "'";
+              //
+							//$html .= "type='hidden' ";
+							//$html .= "disabled ";
+						}
+
 					//if( $x_value['value'] == null )
 				  //	$html .= "value='" . $x_value['default'] . "' ";
 					
-					if($do_update)
-						{
-							$html .= "value='" . $vals->$x . "' ";
-						}
-
-					$html .= "><br />\n";
 				}
 
 			if( isset($_GET["upd_" . $aForm['table_name']] ))
