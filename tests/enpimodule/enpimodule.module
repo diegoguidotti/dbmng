@@ -76,7 +76,7 @@ function say_hello_world() {
 			$id_table = $_REQUEST['tbl'];
 			$aForm    = dbmng_get_form_array($id_table);
 
-			//the param array stores sone variabble used by the renderer
+			//the param array stores some custom variable used by the renderer
 			$aParam = array();
 			//hidden_vars are some hidden variables used by the form creation
 			$aParam['hidden_vars']=array();

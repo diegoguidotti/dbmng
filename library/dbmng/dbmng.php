@@ -64,20 +64,13 @@ function dbmng_get_form_array($id_table){
 		{
 			if($fld->pk == 1)
 				$aForm['primary_key'] = $fld->field_name; 
-				//if(strpos($fld->field_name, "id_") !== false )
-				//	$aForm['primary_key'] = "id_test";
-
-			
-			
 
 			$aFields[$fld->field_name] = array('label' => $fld->field_label, 
 																				 'type' => $fld->id_field_type, 
 																				 'value' => null, 
 																				 'nullable' => $fld->nullable, 
+																				 'default' => $fld->default_value,
 																				 'field_function' => $fld->field_function);
-			if(($fld->default_value)!=null){
-					$aFields[$fld->field_name]['default']=$fld->default_value;
-			}
 		}
 
 
@@ -85,7 +78,7 @@ function dbmng_get_form_array($id_table){
 					$aForm['primary_key']='id_'.$aForm['table_name'];	
 		}
 		$aForm['fields']=$aFields;
-		print_r($aFields);
+		
 		return $aForm;
 }
 
@@ -206,8 +199,8 @@ function dbmng_create_form($aForm, $aParam)
 									$html .= "<input name='" . $x . "' ";
 									$html .= "id='$x' ";
 									
-									if( isset($x_value['default']) && !isset($_GET["upd_" . $aForm['table_name']]) )
-										$html .= "value='" . $x_value['default']. "'";
+									if( !is_null($x_value['default']) && !isset($_GET["upd_" . $aForm['table_name']]) )
+										$html .= "value='" . $x_value['default']. "' ";
 									else{
 										;
 									}
@@ -361,23 +354,28 @@ function dbmng_create_form_update($aForm)
 		}
 }
 
+/////////////////////////////////////////////////////////////////////////////
+// dbmng_value_prepare
+// ======================
+/// This function prepare the value from the POST request to insert it in the database
+/**
+\param $x_value  		The associative array with the field meta-variables
+\param $sValue  		The value obtained by the request
+*/
 function dbmng_value_prepare($x_value, $sValue){
 	$sVal='';
 	$sType=$x_value['type'];
 
-	$df=null;
-	if(isset($x_value['default'])){
-		$df=$x_value['default'];
-	}
+	//echo($sType.'|'.$sValue.'|'.is_null($x_value['default']).'|<br/>');
 
-	echo($sType.'|'.$sValue.'|'.($df==null).'|<br/>');
-	if(strlen($sValue)==0 && $df==null)
+	//if exists a default value use the default values instead of null
+	if(strlen($sValue)==0 && is_null($x_value['default']) )
 	{
 			$sVal  .= "NULL, ";
 	}
 	else{
 		if(strlen($sValue)==0){
-			$sValue=$df;
+			$sValue=$x_value['default'];
 		}
 		switch ($sType)
 			{
