@@ -1,4 +1,6 @@
 <?php
+include_once "sites/all/library/dbmng/dbmng_extend_functions.php";
+
 /*
 Convention to be used in code:
 
@@ -17,13 +19,15 @@ Associative array with all the characteristics to manage a table
 							'field_name' => 'name',
 							'label' => 'Nome',
 							'type' => 'text',
-							'default' => 'default'
+							'default' => 'default',
+							'field_function' => 'name function'
 						),
 					array(
 							'field_name' => 'eta',
 							'label' => 'Et&agrave',								
 							'type' => 'text'
 							'default' => 'default'
+							'field_function' => 'name function'
 						),
 				)
 			);
@@ -59,7 +63,12 @@ function dbmng_get_form_array($id_table){
 				//if(strpos($fld->field_name, "id_") !== false )
 				//	$aForm['primary_key'] = "id_test";
 
-			$aFields[$fld->field_name] = array('label' => $fld->field_label, 'type' => $fld->id_field_type, 'default' => $fld->default_value, 'value' => null, 'nullable' => $fld->nullable);
+			$aFields[$fld->field_name] = array('label' => $fld->field_label, 
+																				 'type' => $fld->id_field_type, 
+																				 'default' => $fld->default_value, 
+																				 'value' => null, 
+																				 'nullable' => $fld->nullable, 
+																				 'field_function' => $fld->field_function);
 		}
 
 		$aForm['fields']=$aFields;
@@ -142,38 +151,46 @@ function dbmng_create_form($aForm)
 			$html .= "<form method='POST' action='?' >\n";
 			foreach ( $aForm['fields'] as $x => $x_value )
 				{
-					if( $aForm['primary_key'] != $x )
+					if( isset($x_value['field_function']) )
 						{
-							$html .= "<label for='$x'>" . t($x_value['label']) . "</label>";
-							$html .= "<input name='" . $x . "' ";
-							$html .= "id='$x' ";
-							
-							if( !is_null($x_value['default']) && !isset($_GET["upd_" . $aForm['table_name']]) )
-								$html .= "value='" . $x_value['default']. "'";
-
-							$html .= "type='text' ";
-							
-							if($x_value['nullable'] == 1)
-								$html .= "required ";						
-
-							if($do_update)
-								{
-									$html .= "value='" . $vals->$x . "' ";
-								}
-		
-							$html .= "><br />\n";
+							if( function_exists($x_value['field_function']) )
+								$html .= call_user_func($x_value['field_function']);
 						}
 					else
 						{
-							// [MM] can be deleted if the type is hidden
-							//$html .= "<label for='$x'>" . t($x_value['label']) . "</label>";
-							//$html .= "<input name='" . $x . "' ";
-							//$html .= "id='$x' ";
-							//if( !is_null($x_value['default']) && !isset($_GET["upd_" . $aForm['table_name']]) )
-							//	$html .= "value='" . $x_value['default']. "'";
-              //
-							//$html .= "type='hidden' ";
-							//$html .= "disabled ";
+							if( $aForm['primary_key'] != $x )
+								{
+									$html .= "<label for='$x'>" . t($x_value['label']) . "</label>";
+									$html .= "<input name='" . $x . "' ";
+									$html .= "id='$x' ";
+									
+									if( !is_null($x_value['default']) && !isset($_GET["upd_" . $aForm['table_name']]) )
+										$html .= "value='" . $x_value['default']. "'";
+		
+									$html .= "type='text' ";
+									
+									if($x_value['nullable'] == 1)
+										$html .= "required ";						
+		
+									if($do_update)
+										{
+											$html .= "value='" . $vals->$x . "' ";
+										}
+				
+									$html .= "><br />\n";
+								}
+							else
+								{
+									// [MM] can be deleted if the type is hidden
+									//$html .= "<label for='$x'>" . t($x_value['label']) . "</label>";
+									//$html .= "<input name='" . $x . "' ";
+									//$html .= "id='$x' ";
+									//if( !is_null($x_value['default']) && !isset($_GET["upd_" . $aForm['table_name']]) )
+									//	$html .= "value='" . $x_value['default']. "'";
+		              //
+									//$html .= "type='hidden' ";
+									//$html .= "disabled ";
+								}
 						}
 
 					//if( $x_value['value'] == null )
@@ -196,7 +213,6 @@ function dbmng_create_form($aForm)
 		}
 		return $html;
 }
-
 
 /////////////////////////////////////////////////////////////////////////////
 // dbmng_create_form_delete
