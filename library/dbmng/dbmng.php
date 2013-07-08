@@ -57,7 +57,7 @@ function dbmng_get_form_array($id_table){
 		$aForm['table_name']  = $fo->table_name;
 		$aForm['table_label'] = $fo->table_label;
 
-
+		//TODO: ['primary key shoud be an array to manage multiples key']
 		$aFields=array();
 		$fields = db_query("select * from dbmng_fields where id_table=".$id_table." order by field_order ASC");
 		foreach ($fields as $fld)
@@ -75,6 +75,9 @@ function dbmng_get_form_array($id_table){
 																				 'field_function' => $fld->field_function);
 		}
 
+		if(!array_key_exists('primary_key', $aForm)){
+					$aForm['primary_key']='id_'.$aForm['table_name'];	
+		}
 		$aForm['fields']=$aFields;
 		
 		return $aForm;
@@ -105,7 +108,13 @@ function dbmng_create_table($aForm){
 		
 		foreach ($result as $record) {
 			// table value
-			$html .= "<tr><td>" . $record->id_test . "</td><td>" . $record->nome. "</td><td>" . $record->eta . "</td>";
+			$html .= "<tr>";
+			
+			//get the query results for each field
+			foreach ( $aForm['fields'] as $x => $x_value )
+			{
+				$html.= "<td>".$record->$x."</td>";
+			}
 			
 			// available functionalities
 			$html .= "<td>";
