@@ -235,27 +235,51 @@ function dbmng_create_form($aForm, $aParam)
 						{
 							if( $aForm['primary_key'][0] != $x )
 								{
-									$html .= "<label for='$x'>" . t($x_value['label']) . "</label>";
-									$html .= "<input name='" . $x . "' ";
-									$html .= "id='$x' ";
 									
-									if( !is_null($x_value['default']) && !isset($_GET["upd_" . $aForm['table_name']]) )
-										$html .= "value='" . $x_value['default']. "' ";
-									else{
-										;
-									}
-		
-									$html .= "type='text' ";
-									
-									if($x_value['nullable'] == 1)
-										$html .= "required ";						
-		
+									//create the form element
+									$id=$x;
+									$label=t($x_value['label']);
+									$value="";
 									if($do_update)
 										{
-											$html .= "value='" . $vals->$x . "' ";
+											$value = $vals->$x;
 										}
-				
-									$html .= "><br />\n";
+									else if( !is_null($x_value['default'])  )
+										{
+											$value = $x_value['default'];
+										}
+
+									$other="";		
+									if($x_value['nullable'] == 1)
+										$other .= "required ";			
+
+
+
+									$html .= "<label for='$id'>" . $label . "</label>";
+
+									if ($x_value['type']=='text')
+									{
+										$html .= "<textarea  name='$id' id='$id'  $other >";
+										$html .= " $value ";	
+										$html .= "</textarea>";
+									}
+									else if ($x_value['type']=='select')
+									{
+										$html .= "<select  name='$id' id='$id'  $other >";
+										$html .= "<option value='$value'></option> ";	
+										$html .= "</select>";
+
+									}
+									else //varchar and integer
+									{									
+										$html .= "<input type='text' name='$id' id='$id' ";
+										$html .= " value= '$value' ";	
+										$html .= " $other ";	
+										$html .= " />";
+									}
+
+
+									$html.="<br />\n";
 								}
 							else
 								{
@@ -424,12 +448,12 @@ function dbmng_value_prepare($x_value, $sValue)
 
 			switch ($sType)
 				{
-					case "varchar":
-						$sVal  .= "'" . $sValue . "', ";
+					case ($sType=="int" || $sType=="double") :
+						$sVal  .= $sValue . ", ";							
 						break;
 				
 					default:
-						$sVal  .= $sValue . ", ";							
+						$sVal  .= "'" . $sValue . "', ";
 				}
 		}
   return $sVal;
