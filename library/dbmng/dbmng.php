@@ -134,10 +134,10 @@ function dbmng_create_table($aForm, $aParam)
 				
 				if( isset($aParam['user_function']) )
 				{
-				  $nIns = $aParam['user_function']['ins'];
-				  $nUpd = $aParam['user_function']['upd'];
-				  $nDel = (isset($aParam['user_function']['del']) == true) ? $aParam['user_function']['del'] : 0;
-				  $nDup = $aParam['user_function']['dup'];				
+				  $nIns = (isset($aParam['user_function']['ins']) ? $aParam['user_function']['ins'] : 0 );
+				  $nUpd = (isset($aParam['user_function']['upd']) ? $aParam['user_function']['upd'] : 0 );
+				  $nDel = (isset($aParam['user_function']['del']) ? $aParam['user_function']['del'] : 0 );
+				  $nDup = (isset($aParam['user_function']['dup']) ? $aParam['user_function']['dup'] : 0 );				
 				}
 			}
 	
@@ -244,10 +244,25 @@ function dbmng_create_form($aForm, $aParam)
 										{
 											$value = $vals->$x;
 										}
-									else if( !is_null($x_value['default'])  )
+									elseif( !is_null($x_value['default'])  )
 										{
 											$value = $x_value['default'];
 										}
+									elseif( $x_value['type'] == "select" )
+										{
+											$sVoc    = str_replace("id_", "voc_", $x);
+											$voc_sql = "select * from $sVoc";
+											$Voc_val = db_query($voc_sql);
+											$aVoc    = array();
+											$v       = 0;
+											foreach($Voc_val as $val)
+											{
+												$aVoc[$v][0] = $val->id_voc_sex;
+												$aVoc[$v][1] = $val->sex;
+												
+												$v++;
+											}
+										} 
 
 									$other="";		
 									if($x_value['nullable'] == 1)
@@ -255,19 +270,23 @@ function dbmng_create_form($aForm, $aParam)
 
 
 
-									$html .= "<label for='$id'>" . $label . "</label>";
+									$html .= "<label for='$id'>" . $label . "</label>\n";
 
 									if ($x_value['type']=='text')
 									{
 										$html .= "<textarea  name='$id' id='$id'  $other >";
 										$html .= " $value ";	
-										$html .= "</textarea>";
+										$html .= "</textarea>\n";
 									}
 									else if ($x_value['type']=='select')
 									{
-										$html .= "<select  name='$id' id='$id'  $other >";
-										$html .= "<option value='$value'></option> ";	
-										$html .= "</select>";
+										$html .= "<select  name='$id' id='$id'  $other >\n";
+										$nLen = count($aVoc);
+										for( $i=0; $i < $nLen; $i++ )
+										{
+											$html .= "<option value='" . $aVoc[$i][0] . "'>" . $aVoc[$i][1] . "</option> \n";	
+										}
+										$html .= "</select>\n";
 
 									}
 									else //varchar and integer
@@ -275,7 +294,7 @@ function dbmng_create_form($aForm, $aParam)
 										$html .= "<input type='text' name='$id' id='$id' ";
 										$html .= " value= '$value' ";	
 										$html .= " $other ";	
-										$html .= " />";
+										$html .= " />\n";
 									}
 
 
