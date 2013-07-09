@@ -81,23 +81,32 @@ function say_hello_world() {
 			$aParam = array();
 			$aParam['hidden_vars']=array();
 			$aParam['hidden_vars']['tbl']	=  $_REQUEST['tbl'];		
-			$aParam['user_function']['ins']	=  1;		
+
+			//test filter records with a specific uid
+			$aParam['filters']=array();
+			global $user;
+			$aParam['filters']['id_user']	=   $user->uid;		
+
+
+/*
+			$aParam['user_function']['dup']	=  0;		
+			$aParam['user_function']['ins']	=  0;		
 			$aParam['user_function']['upd']	=  1;		
 			$aParam['user_function']['del']	=  1;		
-			$aParam['user_function']['dup']	=  1;		
-
+*/
+			//print_r ($aParam['filters']);
 	
 			// update record
-			dbmng_create_form_update($aForm);
+			dbmng_create_form_update($aForm, $aParam);
 	
 			// insert record
-			dbmng_create_form_insert($aForm);
+			dbmng_create_form_insert($aForm, $aParam);
 			
 			// delete record
-			dbmng_create_form_delete($aForm);
+			dbmng_create_form_delete($aForm, $aParam);
 			
 			// duplicate record
-			dbmng_create_form_duplicate($aForm);
+			dbmng_create_form_duplicate($aForm, $aParam);
 	
 			$html .= dbmng_create_table($aForm, $aParam);
 	

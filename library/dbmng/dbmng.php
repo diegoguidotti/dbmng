@@ -110,16 +110,12 @@ function dbmng_get_form_array($id_table)
 */
 function dbmng_create_table($aForm, $aParam)
 	{
-	  $nIns = 0;
-	  $nUpd = 0;
-	  $nDel = 0;
-	  $nDup = 0;
+	  $nIns = 1;
+	  $nUpd = 1;
+	  $nDel = 1;
+	  $nDup = 1;
 	  
-	  $sql = 'select * from ' . $aForm['table_name'];
-		$result = db_query($sql);
-	  
-		$html = "<h1>" . $aForm['table_name'] . "</h1>\n";
-	
+		$where=' WHERE 1 ';
 		//get some hidden variables if exists()
 		$hv='';
 		if(isset($aParam))
@@ -134,12 +130,33 @@ function dbmng_create_table($aForm, $aParam)
 				
 				if( isset($aParam['user_function']) )
 				{
-				  $nIns = (isset($aParam['user_function']['ins']) ? $aParam['user_function']['ins'] : 0 );
-				  $nUpd = (isset($aParam['user_function']['upd']) ? $aParam['user_function']['upd'] : 0 );
-				  $nDel = (isset($aParam['user_function']['del']) ? $aParam['user_function']['del'] : 0 );
-				  $nDup = (isset($aParam['user_function']['dup']) ? $aParam['user_function']['dup'] : 0 );				
+				  $nIns = (isset($aParam['user_function']['ins']) ? $aParam['user_function']['ins'] : 1 );
+				  $nUpd = (isset($aParam['user_function']['upd']) ? $aParam['user_function']['upd'] : 1 );
+				  $nDel = (isset($aParam['user_function']['del']) ? $aParam['user_function']['del'] : 1 );
+				  $nDup = (isset($aParam['user_function']['dup']) ? $aParam['user_function']['dup'] : 1 );				
 				}
+
+				if( isset($aParam['filters']) )
+				{
+						foreach ( $aParam['filters'] as $x => $x_value )
+							{				
+									$where.=" AND $x=$x_value ";
+							}					
+				}
+
+
 			}
+
+
+	  $sql = 'select * from ' . $aForm['table_name'].' '.$where;
+
+		//print($sql);
+
+
+		$result = db_query($sql);
+	  
+		$html = "<h1>" . $aForm['table_name'] . "</h1>\n";
+	
 	
 		
 		$html .= "<table>";
@@ -341,7 +358,7 @@ function dbmng_create_form($aForm, $aParam)
 /**
 \param $aForm  		Associative array with all the characteristics
 */
-function dbmng_create_form_delete($aForm) 
+function dbmng_create_form_delete($aForm, $aParam) 
 {
 	if(isset($_REQUEST["del_" . $aForm['table_name']]))
 		{
@@ -358,7 +375,7 @@ function dbmng_create_form_delete($aForm)
 /**
 \param $aForm  		Associative array with all the characteristics
 */
-function dbmng_create_form_duplicate($aForm) 
+function dbmng_create_form_duplicate($aForm, $aParam) 
 {
 	$sWhat = "";
 	foreach ( $aForm['fields'] as $x => $x_value )
@@ -366,7 +383,21 @@ function dbmng_create_form_duplicate($aForm)
 			if($x !== $aForm['primary_key'][0])
 				$sWhat .= $x . ", ";
 		}
+
+
+			if( isset($aParam) )
+			{
+				if( isset($aParam['filters']) )
+					{
+							foreach ( $aParam['filters'] as $x => $x_value )
+								{				
+									$sWhat.=$x.", ";
+								}					
+					}
+			}
+
 	$sWhat = substr($sWhat, 0, strlen($sWhat)-2);
+
 	
 	if(isset($_REQUEST["dup_" . $aForm['table_name']]))
 		{
@@ -383,7 +414,7 @@ function dbmng_create_form_duplicate($aForm)
 /**
 \param $aForm  		Associative array with all the characteristics
 */
-function dbmng_create_form_insert($aForm) 
+function dbmng_create_form_insert($aForm, $aParam) 
 {
 	if(isset($_POST["ins_" . $aForm['table_name']]))
 		{
@@ -398,6 +429,21 @@ function dbmng_create_form_insert($aForm)
 							$sVal.=dbmng_value_prepare($x_value,$_POST[$x]);							
 						}
 				}
+
+
+			if( isset($aParam) )
+			{
+				if( isset($aParam['filters']) )
+					{
+							foreach ( $aParam['filters'] as $x => $x_value )
+								{				
+									$sWhat.=$x.", ";
+									$sVal.=$x_value.", ";
+								}					
+					}
+			}
+
+
 			$sWhat = substr($sWhat, 0, strlen($sWhat)-2);
 			$sVal  = substr($sVal, 0, strlen($sVal)-2);
 	
@@ -413,7 +459,7 @@ function dbmng_create_form_insert($aForm)
 /**
 \param $aForm  		Associative array with all the characteristics
 */
-function dbmng_create_form_update($aForm) 
+function dbmng_create_form_update($aForm, $aParam) 
 {
 	if(isset($_POST["upd_" . $aForm['table_name']]))
 		{
