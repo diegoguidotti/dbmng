@@ -253,7 +253,7 @@ function dbmng_create_form($aForm, $aParam)
 
 									if( $x_value['type'] == "select" )
 										{
-											$sVoc    = str_replace("id_", "voc_", $x);
+											$sVoc    = str_replace("id_", "", $x);
 											$voc_sql = "select * from $sVoc";
 											$Voc_val = db_query($voc_sql);
 											$aVoc    = array();
