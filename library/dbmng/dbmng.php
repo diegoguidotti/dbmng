@@ -223,6 +223,7 @@ function dbmng_create_form($aForm, $aParam)
 					$vals      = $result->fetchObject();
 				}
 
+
 			$html .= "<form method='POST' action='?' >\n".$hv."";
 			foreach ( $aForm['fields'] as $x => $x_value )
 				{
@@ -248,7 +249,9 @@ function dbmng_create_form($aForm, $aParam)
 										{
 											$value = $x_value['default'];
 										}
-									elseif( $x_value['type'] == "select" )
+									
+
+									if( $x_value['type'] == "select" )
 										{
 											$sVoc    = str_replace("id_", "voc_", $x);
 											$voc_sql = "select * from $sVoc";
@@ -258,10 +261,13 @@ function dbmng_create_form($aForm, $aParam)
 											$v       = 0;
 											foreach($Voc_val as $val)
 											{
-												// print_r($val);
-												// gestire i campi indipendentemente dal nome!!
-												$aVoc[$v][0] = $val->id_voc_sex;
-												$aVoc[$v][1] = $val->sex;
+												//print_r($val);
+												$keys=array_keys((array)$val);
+
+												//print_r($keys);
+												$aVoc[$v][0] = $val->$keys[0];
+												$aVoc[$v][1] = $val->$keys[1];
+
 												
 												$v++;
 											}
@@ -287,7 +293,12 @@ function dbmng_create_form($aForm, $aParam)
 										$nLen = count($aVoc);
 										for( $i=0; $i < $nLen; $i++ )
 										{
-											$html .= "<option value='" . $aVoc[$i][0] . "'>" . $aVoc[$i][1] . "</option> \n";	
+											$s="";
+											if($value==$aVoc[$i][0]){
+												$s=" selected='true' ";
+											}
+
+											$html .= "<option $s value='" . $aVoc[$i][0] . "'>" . $aVoc[$i][1] . "</option> \n";	
 										}
 										$html .= "</select>\n";
 
@@ -303,22 +314,7 @@ function dbmng_create_form($aForm, $aParam)
 
 									$html.="<br />\n";
 								}
-							else
-								{
-									// [MM] can be deleted if the type is hidden
-									//$html .= "<label for='$x'>" . t($x_value['label']) . "</label>";
-									//$html .= "<input name='" . $x . "' ";
-									//$html .= "id='$x' ";
-									//if( !is_null($x_value['default']) && !isset($_GET["upd_" . $aForm['table_name']]) )
-									//	$html .= "value='" . $x_value['default']. "'";
-		              //
-									//$html .= "type='hidden' ";
-									//$html .= "disabled ";
-								}
 						}
-
-					//if( $x_value['value'] == null )
-				  //	$html .= "value='" . $x_value['default'] . "' ";
 					
 				}
 
