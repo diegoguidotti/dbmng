@@ -257,6 +257,7 @@ function dbmng_create_form($aForm, $aParam)
 											$v       = 0;
 											foreach($Voc_val as $val)
 											{
+												// gestire i campi indipendentemente dal nome!!
 												$aVoc[$v][0] = $val->id_voc_sex;
 												$aVoc[$v][1] = $val->sex;
 												
