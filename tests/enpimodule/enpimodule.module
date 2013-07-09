@@ -77,10 +77,14 @@ function say_hello_world() {
 			$aForm    = dbmng_get_form_array($id_table);
 
 			//the param array stores some custom variable used by the renderer
-			$aParam = array();
 			//hidden_vars are some hidden variables used by the form creation
+			$aParam = array();
 			$aParam['hidden_vars']=array();
 			$aParam['hidden_vars']['tbl']	=  $_REQUEST['tbl'];		
+			$aParam['user_function']['ins']	=  1;		
+			$aParam['user_function']['upd']	=  1;		
+			$aParam['user_function']['del']	=  1;		
+			$aParam['user_function']['dup']	=  1;		
 
 	
 			// update record
