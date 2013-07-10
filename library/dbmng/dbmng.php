@@ -79,7 +79,8 @@ function dbmng_get_form_array($id_table)
 																					 'nullable' => $fld->nullable, 
 																					 'default' => $fld->default_value,
 																					 'field_function' => $fld->field_function,
-																					 'label_long' => $sLabelLong );
+																					 'label_long' => $sLabelLong,
+																					 'skip_in_tbl' => $fld->skip_in_tbl );
 			}
 
 		$aForm['primary_key'] = $aPK; 
@@ -159,7 +160,8 @@ function dbmng_create_table($aForm, $aParam)
 		$html .= "<tr>\n";
 		foreach ( $aForm['fields'] as $x => $x_value )
 			{
-				$html .= "<th>" . $x_value['label'] . "</th>\n";
+				if( $x_value['skip_in_tbl'] == 0 )
+					$html .= "<th>" . $x_value['label'] . "</th>\n";
 			}
 		$html .= "<th>" . t('actions') . "</th></tr></thead>\n";
 		
@@ -170,8 +172,8 @@ function dbmng_create_table($aForm, $aParam)
 				$html .= "<tfoot>\n<tr>\n";
 				foreach ( $aForm['fields'] as $x => $x_value )
 					{
-						//$html .= "<td>" . $x_value['label'] . "</td>\n";
-						$html .= "<td><input type='text' name='$x' id='$x' /></td>\n";
+						if( $x_value['skip_in_tbl'] == 0 )
+							$html .= "<td><input type='text' name='$x' id='$x' /></td>\n";
 					}
 				$html .= "<td>&nbsp;</td>";
 				$html .= "</tr>\n</tfoot>\n";
@@ -187,7 +189,8 @@ function dbmng_create_table($aForm, $aParam)
 				//get the query results for each field
 				foreach ( $aForm['fields'] as $x => $x_value )
 					{
-						$html.= "<td>".$record->$x."</td>";
+						if( $x_value['skip_in_tbl'] == 0 )
+							$html.= "<td>".$record->$x."</td>";
 					}
 				
 				// available functionalities
