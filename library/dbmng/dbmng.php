@@ -200,11 +200,12 @@ function dbmng_create_table($aForm, $aParam)
 								if( $x_value['type'] == "select" )
 									{
 										$sWhere = "where $x=" . $record->$x;
+										//Diego: it gives me an error if voc_sql is not set. Seems that we do not need it
 										if( !isset($x_value['voc_sql']) ) 
 											{
 												// sql automatically generated throught standard coding tables definition
 												$sVoc    = str_replace("id_", "", $x);
-												$voc_sql = "select * from $sVoc " . $sWhere;
+												$voc_sql = "select * from $sVoc ";// . $sWhere;
 											}
 										else 
 											{
