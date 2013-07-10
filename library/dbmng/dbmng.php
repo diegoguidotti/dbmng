@@ -155,8 +155,11 @@ function dbmng_create_table($aForm, $aParam)
 		$result = db_query($sql);
 	  
 		$html = "<h1>" . $aForm['table_name'] . "</h1>\n";
-
+		
+		// Table generation
 		$html .= "<table>\n";
+		
+		// write HEAD row
 		$html .= "<thead>\n";
 		$html .= "<tr>\n";
 		foreach ( $aForm['fields'] as $x => $x_value )
@@ -166,6 +169,7 @@ function dbmng_create_table($aForm, $aParam)
 			}
 		$html .= "<th>" . t('actions') . "</th></tr></thead>\n";
 		
+		// write FOOTER row
 		if( isset($aParam['tbl_footer']) )
 		{
 			if( $aParam['tbl_footer'] == 1 )
@@ -181,6 +185,7 @@ function dbmng_create_table($aForm, $aParam)
 			}
 		}
 		
+		// write BODY content 
 		$html .= "<tbody>\n";
 		foreach ($result as $record) 
 			{
@@ -191,7 +196,34 @@ function dbmng_create_table($aForm, $aParam)
 				foreach ( $aForm['fields'] as $x => $x_value )
 					{
 						if( $x_value['skip_in_tbl'] == 0 )
-							$html.= "<td>".$record->$x."</td>";
+							{
+								if( $x_value['type'] == "select" )
+									{
+										$sWhere = "where $x=" . $record->$x;
+										if( !isset($x_value['voc_sql']) ) 
+											{
+												// sql automatically generated throught standard coding tables definition
+												$sVoc    = str_replace("id_", "", $x);
+												$voc_sql = "select * from $sVoc " . $sWhere;
+											}
+										else 
+											{
+												// sql written in dbmng_fields
+												$voc_sql = $x_value['voc_sql'];
+												$voc_sql = str_replace("where 1", $sWhere, $voc_sql);
+											}
+											
+										$Voc_val = db_query($voc_sql); //$val->$keys[0]
+										$fo_val = $Voc_val->fetchObject();
+
+										$aKey    = array_keys((array)$fo_val);
+										$html .= "<td>" . $fo_val->$aKey[1] . "</td>";
+									}
+								else
+									{
+										$html.= "<td>".$record->$x."</td>";
+									}
+							}
 					}
 				
 				// available functionalities
@@ -284,16 +316,20 @@ function dbmng_create_form($aForm, $aParam)
 											$value = $x_value['default'];
 										}
 									
-
 									if( $x_value['type'] == "select" )
 										{
-											if( !isset($x_value['voc_sql']) )
+											//
+											// choose from where the system fill the combobox
+											//
+											if( !isset($x_value['voc_sql']) ) 
 												{
+													// sql automatically generated throught standard coding tables definition
 													$sVoc    = str_replace("id_", "", $x);
 													$voc_sql = "select * from $sVoc";
 												}
-											else
+											else 
 												{
+													// sql written in dbmng_fields
 													$voc_sql = $x_value['voc_sql'];
 												}
 
@@ -302,15 +338,15 @@ function dbmng_create_form($aForm, $aParam)
 
 											$v       = 0;
 											foreach($Voc_val as $val)
-											{
-												//print_r($val);
-												$keys=array_keys((array)$val);
-
-												//print_r($keys);
-												$aVoc[$v][0] = $val->$keys[0];
-												$aVoc[$v][1] = $val->$keys[1];
-												$v++;
-											}
+												{
+													//print_r($val);
+													$keys=array_keys((array)$val);
+	
+													//print_r($keys);
+													$aVoc[$v][0] = $val->$keys[0];
+													$aVoc[$v][1] = $val->$keys[1];
+													$v++;
+												}
 										} 
 
 									$other="";		
