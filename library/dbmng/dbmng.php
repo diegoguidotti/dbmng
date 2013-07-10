@@ -138,35 +138,43 @@ function dbmng_create_table($aForm, $aParam)
 
 				if( isset($aParam['filters']) )
 				{
-						foreach ( $aParam['filters'] as $x => $x_value )
-							{				
-									$where.=" AND $x=$x_value ";
-							}					
+					foreach ( $aParam['filters'] as $x => $x_value )
+						{				
+								$where.=" AND $x = $x_value ";
+						}					
 				}
-
-
 			}
 
-
 	  $sql = 'select * from ' . $aForm['table_name'].' '.$where;
-
-		//print($sql);
-
 
 		$result = db_query($sql);
 	  
 		$html = "<h1>" . $aForm['table_name'] . "</h1>\n";
-	
-	
-		
-		$html .= "<table>";
-		$html .= "<tr>";
+
+		$html .= "<table>\n";
+		$html .= "<thead>\n";
+		$html .= "<tr>\n";
 		foreach ( $aForm['fields'] as $x => $x_value )
 			{
-				$html .= "<th>" . $x_value['label'] . "</th>";
+				$html .= "<th>" . $x_value['label'] . "</th>\n";
 			}
-		$html .= "<th>" . t('functions') . "</th></tr>\n";
+		$html .= "<th>" . t('functions') . "</th></tr></thead>\n";
 		
+		if( isset($aParam['tbl_footer']) )
+		{
+			if( $aParam['tbl_footer'] == 1 )
+			{
+				$html .= "<tfoot>\n<tr>\n";
+				foreach ( $aForm['fields'] as $x => $x_value )
+					{
+						$html .= "<td>" . $x_value['label'] . "</td>\n";
+					}
+				$html .= "<td>&nbsp;</td>";
+				$html .= "</tr>\n</tfoot>\n";
+			}
+		}
+		
+		$html .= "<tbody>\n";
 		foreach ($result as $record) 
 			{
 				// table value
@@ -188,8 +196,9 @@ function dbmng_create_table($aForm, $aParam)
 						$html .= "<a href='?dup_" . $aForm['table_name'] . "=" . $record->$aForm['primary_key'][0] .$hv."'>" . t('Duplicate') . "</a>" . "&nbsp;";
 				$html .= "</td>\n";
 				
-				$html .= "</tr>";
+				$html .= "</tr>\n";
 			}
+		$html .= "</tbody>\n";
 	  $html .= "</table>\n";
 		
 		if( $nIns == 1)
@@ -384,20 +393,18 @@ function dbmng_create_form_duplicate($aForm, $aParam)
 				$sWhat .= $x . ", ";
 		}
 
-
-			if( isset($aParam) )
+	if( isset($aParam) )
+	{
+		if( isset($aParam['filters']) )
 			{
-				if( isset($aParam['filters']) )
-					{
-							foreach ( $aParam['filters'] as $x => $x_value )
-								{				
-									$sWhat.=$x.", ";
-								}					
-					}
+					foreach ( $aParam['filters'] as $x => $x_value )
+						{				
+							$sWhat.=$x.", ";
+						}					
 			}
+	}
 
 	$sWhat = substr($sWhat, 0, strlen($sWhat)-2);
-
 	
 	if(isset($_REQUEST["dup_" . $aForm['table_name']]))
 		{
@@ -430,19 +437,17 @@ function dbmng_create_form_insert($aForm, $aParam)
 						}
 				}
 
-
 			if( isset($aParam) )
-			{
-				if( isset($aParam['filters']) )
-					{
+				{
+					if( isset($aParam['filters']) )
+						{
 							foreach ( $aParam['filters'] as $x => $x_value )
 								{				
 									$sWhat.=$x.", ";
 									$sVal.=$x_value.", ";
 								}					
-					}
-			}
-
+						}
+				}
 
 			$sWhat = substr($sWhat, 0, strlen($sWhat)-2);
 			$sVal  = substr($sVal, 0, strlen($sVal)-2);
