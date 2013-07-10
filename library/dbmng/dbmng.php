@@ -80,7 +80,8 @@ function dbmng_get_form_array($id_table)
 																					 'default' => $fld->default_value,
 																					 'field_function' => $fld->field_function,
 																					 'label_long' => $sLabelLong,
-																					 'skip_in_tbl' => $fld->skip_in_tbl );
+																					 'skip_in_tbl' => $fld->skip_in_tbl,
+																					 'voc_sql' => $fld->voc_sql );
 			}
 
 		$aForm['primary_key'] = $aPK; 
@@ -286,8 +287,16 @@ function dbmng_create_form($aForm, $aParam)
 
 									if( $x_value['type'] == "select" )
 										{
-											$sVoc    = str_replace("id_", "", $x);
-											$voc_sql = "select * from $sVoc";
+											if( !isset($x_value['voc_sql']) )
+												{
+													$sVoc    = str_replace("id_", "", $x);
+													$voc_sql = "select * from $sVoc";
+												}
+											else
+												{
+													$voc_sql = $x_value['voc_sql'];
+												}
+
 											$Voc_val = db_query($voc_sql);
 											$aVoc    = array();
 
@@ -300,8 +309,6 @@ function dbmng_create_form($aForm, $aParam)
 												//print_r($keys);
 												$aVoc[$v][0] = $val->$keys[0];
 												$aVoc[$v][1] = $val->$keys[1];
-
-												
 												$v++;
 											}
 										} 
