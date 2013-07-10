@@ -165,7 +165,7 @@ function dbmng_create_table($aForm, $aParam)
 		foreach ( $aForm['fields'] as $x => $x_value )
 			{
 				if( $x_value['skip_in_tbl'] == 0 )
-					$html .= "<th>" . $x_value['label'] . "</th>\n";
+					$html .= "<th>" . t($x_value['label']) . "</th>\n";
 			}
 		$html .= "<th>" . t('actions') . "</th></tr></thead>\n";
 		
@@ -178,7 +178,7 @@ function dbmng_create_table($aForm, $aParam)
 				foreach ( $aForm['fields'] as $x => $x_value )
 					{
 						if( $x_value['skip_in_tbl'] == 0 )
-							$html .= "<td><input type='text' name='$x' id='$x' /></td>\n";
+							$html .= "<td><input type='text' name='$x' id='$x' placeholder='" . t("Search") . " " . t($x_value['label']) . "' /></td>\n"; //placeholder="First name"
 					}
 				$html .= "<td>&nbsp;</td>";
 				$html .= "</tr>\n</tfoot>\n";
@@ -366,11 +366,12 @@ function dbmng_create_form($aForm, $aParam)
 									else if ($x_value['type']=='select')
 									{
 										$html .= "<select  name='$id' id='$id'  $other >\n";
+										$html .= "<option value='-1'>" . t("--- SELECT ---") . "</option> \n";	
 										$nLen = count($aVoc);
 										for( $i=0; $i < $nLen; $i++ )
 										{
 											$s="";
-											if($value==$aVoc[$i][0]){
+											if($do_update && $value==$aVoc[$i][0]){
 												$s=" selected='true' ";
 											}
 
