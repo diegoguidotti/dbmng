@@ -66,6 +66,7 @@ function enpimodule_menu() {
 }
 
 function say_hello_world() {
+	drupal_add_css( "sites/all/modules/enpimodule/enpimodule.css" );
 
 		$table = 'test';
 		
@@ -78,16 +79,16 @@ function say_hello_world() {
 
 			//the param array stores some custom variable used by the renderer
 			//hidden_vars are some hidden variables used by the form creation
-			$aParam = array();
-			$aParam['hidden_vars']=array();
-			$aParam['hidden_vars']['tbl']	=  $_REQUEST['tbl'];		
+			$aParam                         = array();
+			$aParam['hidden_vars']          = array();
+			$aParam['hidden_vars']['tbl']	  = $_REQUEST['tbl'];		
 
 			//test filter records with a specific uid
-			$aParam['filters']=array();
 			global $user;
-			$aParam['filters']['id_user']	=   $user->uid;		
+			$aParam['filters']              = array();
+			$aParam['filters']['id_user']	  = $user->uid;		
 
-
+			$aParam['tbl_footer']           = 1;
 /*
 			$aParam['user_function']['dup']	=  0;		
 			$aParam['user_function']['ins']	=  0;		
