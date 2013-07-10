@@ -18,7 +18,8 @@ Associative array with all the characteristics to manage a table
 				'fields' => array(
 					array(
 							'field_name' => 'name',
-							'label' => 'Nome',
+							'label' => 'Name',
+							'label_long' => "What your name?"
 							'type' => 'text',
 							'default' => 'default',
 							'field_function' => 'name function'
@@ -70,13 +71,15 @@ function dbmng_get_form_array($id_table)
 					$aPK[] = $fld->field_name;
 				}
 //				$aForm['primary_key'] = $fld->field_name; 
-	
+
+				$sLabelLong = ( strlen($fld->field_label_long)>0 ? $fld->field_label_long : $fld->field_label );
 				$aFields[$fld->field_name] = array('label' => $fld->field_label, 
 																					 'type' => $fld->id_field_type, 
 																					 'value' => null, 
 																					 'nullable' => $fld->nullable, 
 																					 'default' => $fld->default_value,
-																					 'field_function' => $fld->field_function);
+																					 'field_function' => $fld->field_function,
+																					 'label_long' => $sLabelLong );
 			}
 
 		$aForm['primary_key'] = $aPK; 
@@ -158,7 +161,7 @@ function dbmng_create_table($aForm, $aParam)
 			{
 				$html .= "<th>" . $x_value['label'] . "</th>\n";
 			}
-		$html .= "<th>" . t('functions') . "</th></tr></thead>\n";
+		$html .= "<th>" . t('actions') . "</th></tr></thead>\n";
 		
 		if( isset($aParam['tbl_footer']) )
 		{
@@ -167,7 +170,8 @@ function dbmng_create_table($aForm, $aParam)
 				$html .= "<tfoot>\n<tr>\n";
 				foreach ( $aForm['fields'] as $x => $x_value )
 					{
-						$html .= "<td>" . $x_value['label'] . "</td>\n";
+						//$html .= "<td>" . $x_value['label'] . "</td>\n";
+						$html .= "<td><input type='text' name='$x' id='$x' /></td>\n";
 					}
 				$html .= "<td>&nbsp;</td>";
 				$html .= "</tr>\n</tfoot>\n";
@@ -265,7 +269,7 @@ function dbmng_create_form($aForm, $aParam)
 									
 									//create the form element
 									$id=$x;
-									$label=t($x_value['label']);
+									$label=t($x_value['label_long']);
 									$value="";
 									if($do_update)
 										{
