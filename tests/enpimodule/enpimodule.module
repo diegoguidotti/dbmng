@@ -88,7 +88,7 @@ function say_hello_world() {
 			$aParam['filters']              = array();
 			$aParam['filters']['id_user']	  = $user->uid;		
 
-			$aParam['tbl_footer']           = 1;
+			$aParam['tbl_footer']           = 1; //allow to add filtering
 /*
 			$aParam['user_function']['dup']	=  0;		
 			$aParam['user_function']['ins']	=  0;		

@@ -178,9 +178,9 @@ function dbmng_create_table($aForm, $aParam)
 				foreach ( $aForm['fields'] as $x => $x_value )
 					{
 						if( $x_value['skip_in_tbl'] == 0 )
-							$html .= "<td><input type='text' name='$x' id='$x' placeholder='" . t("Search") . " " . t($x_value['label']) . "' /></td>\n"; //placeholder="First name"
+							$html .= "<td><input type='text' name='$x' id='$x' placeholder='" . t("Search") . " " . t($x_value['label']) . "' /></td>\n";
 					}
-				$html .= "<td>&nbsp;</td>";
+				$html .= "<td>" . t("Clear filtering") . "</td>";
 				$html .= "</tr>\n</tfoot>\n";
 			}
 		}
