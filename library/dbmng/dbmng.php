@@ -365,7 +365,6 @@ function dbmng_create_form($aForm, $aParam)
 										$html .= "<option value='-1'>" . t("--- SELECT ---") . "</option> \n";	
 										$nLen = count($aVoc);
 										
-										
 										for( $i=1; $i <= $nLen; $i++ )
 										{
 											$s="";
