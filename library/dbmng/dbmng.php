@@ -375,7 +375,7 @@ function dbmng_create_form($aForm, $aParam)
 										} 
 
 									$other="";		
-									if($x_value['nullable'] == 1)
+									if($x_value['nullable'] == 0)
 										$other .= "required ";			
 
 
