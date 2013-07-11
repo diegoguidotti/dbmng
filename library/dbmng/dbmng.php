@@ -419,6 +419,20 @@ function dbmng_create_form($aForm, $aParam)
 		return $html;
 }
 
+
+function dbmng_create_form_process($aForm, $aParam) 
+{
+
+		// update record
+		dbmng_create_form_update($aForm, $aParam);
+		// insert record
+		dbmng_create_form_insert($aForm, $aParam);		
+		// delete record
+		dbmng_create_form_delete($aForm, $aParam);		
+		// duplicate record
+		dbmng_create_form_duplicate($aForm, $aParam);
+}
+
 /////////////////////////////////////////////////////////////////////////////
 // dbmng_create_form_delete
 // ======================

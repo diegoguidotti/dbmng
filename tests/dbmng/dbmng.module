@@ -90,16 +90,7 @@ function dbmng()
 		//print_r ($aParam['filters']);
 
 		// update record
-		dbmng_create_form_update($aForm, $aParam);
-
-		// insert record
-		dbmng_create_form_insert($aForm, $aParam);
-		
-		// delete record
-		dbmng_create_form_delete($aForm, $aParam);
-		
-		// duplicate record
-		dbmng_create_form_duplicate($aForm, $aParam);
+		dbmng_create_form_process($aForm, $aParam);
 
 		$html .= dbmng_create_table($aForm, $aParam);
 
