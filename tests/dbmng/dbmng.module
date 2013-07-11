@@ -61,7 +61,8 @@ return $html;
 function dbmng() 
 {
 	drupal_add_css( "sites/all/modules/dbmng/dbmng.css" );
-	
+	$id_table_table=8;
+
 	$html = "";
 	if( isset($_REQUEST['tbl']) )
 	{
@@ -95,6 +96,21 @@ function dbmng()
 		$html .= dbmng_create_table($aForm, $aParam);
 
 		$html .= dbmng_create_form($aForm, $aParam);
+	}
+	else{
+
+		$aForm    = dbmng_get_form_array($id_table_table);
+		$aParam                            = array();
+		$aParam['user_function']['dup']	   = 0;	              // allow to enabled=1 or disabled=0 the duplication function
+		$aParam['user_function']['del']	   = 0;	              // allow to enabled=1 or disabled=0 the delate function
+		$aParam['custom_function'][0]['custom_variable']  = 'show_fields';
+		$aParam['custom_function'][0]['custom_label']  = t('Show Fields');
+
+
+		// update record
+		dbmng_create_form_process($aForm, $aParam);
+		$html .= dbmng_create_table($aForm, $aParam);
+			
 	}
   return ($html);
 }

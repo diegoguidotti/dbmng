@@ -257,14 +257,34 @@ function dbmng_create_table($aForm, $aParam)
 									}
 							}
 						
+
+
+
 						// available functionalities
 						$html .= "<td>";
+
+							$id_record=$record->$aForm['primary_key'][0];
+
 							if( $nDel == 1 )
-								$html .= "<a href='?del_" . $aForm['table_name'] . "=" . $record->$aForm['primary_key'][0] .$hv."'>" . t('Delete') . "</a>" . "&nbsp;";
+								$html .= "<a href='?del_" . $aForm['table_name'] . "=" . $id_record .$hv."'>" . t('Delete') . "</a>" . "&nbsp;";
 							if( $nUpd == 1 ) 
-								$html .= "<a href='?upd_" . $aForm['table_name'] . "=" . $record->$aForm['primary_key'][0] .$hv."'>" . t('Update') . "</a>" . "&nbsp;";
+								$html .= "<a href='?upd_" . $aForm['table_name'] . "=" . $id_record .$hv."'>" . t('Update') . "</a>" . "&nbsp;";
 							if( $nDup == 1 )
-								$html .= "<a href='?dup_" . $aForm['table_name'] . "=" . $record->$aForm['primary_key'][0] .$hv."'>" . t('Duplicate') . "</a>" . "&nbsp;";
+								$html .= "<a href='?dup_" . $aForm['table_name'] . "=" . $id_record .$hv."'>" . t('Duplicate') . "</a>" . "&nbsp;";
+
+							
+							if(isset($aParam['custom_function']))
+							{
+								foreach($aParam['custom_function'] as $aCustom )								
+								{	
+									$html.="<a href='?$aCustom[custom_variable]=$id_record$hv'>$aCustom[custom_label]</a>";
+									
+	
+								}
+
+							}
+
+
 						$html .= "</td>\n";
 						
 						$html .= "</tr>\n";
