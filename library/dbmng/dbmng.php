@@ -109,6 +109,13 @@ function dbmng_get_form_array($id_table)
 								//print_r($keys);
 								$aFVoc[$val->$keys[0]] = $val->$keys[1];
 							}
+						
+						$sortAux = array();
+						foreach($aFVoc as $res)
+							$sortAux[] = $res[0];
+						
+						array_multisort($sortAux, SORT_ASC, $aFVoc);
+						
 						$aFields[$fld->field_name]['voc_val'] = $aFVoc;
 					}
 			}
