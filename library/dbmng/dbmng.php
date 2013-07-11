@@ -154,7 +154,7 @@ function dbmng_create_table($aForm, $aParam)
 
 		$result = db_query($sql);
 	  
-		$html = "<h1>" . $aForm['table_name'] . "</h1>\n";
+		$html = "<h1>" . $aForm['table_name'] . " [" . $result->rowCount() . " " . t("recs") . "]</h1>\n";
 		
 		// Table generation
 		$html .= "<table>\n";
@@ -170,21 +170,23 @@ function dbmng_create_table($aForm, $aParam)
 		$html .= "<th>" . t('actions') . "</th></tr></thead>\n";
 		
 		// write FOOTER row
-		if( isset($aParam['tbl_footer']) )
+		if( $result->rowCount() > 1 )
 		{
-			if( $aParam['tbl_footer'] == 1 )
+			if( isset($aParam['tbl_footer']) )
 			{
-				$html .= "<tfoot>\n<tr>\n";
-				foreach ( $aForm['fields'] as $x => $x_value )
-					{
-						if( $x_value['skip_in_tbl'] == 0 )
-							$html .= "<td><input type='text' name='$x' id='$x' placeholder='" . t("Search") . " " . t($x_value['label']) . "' /></td>\n";
-					}
-				$html .= "<td>" . t("Clear filtering") . "</td>";
-				$html .= "</tr>\n</tfoot>\n";
+				if( $aParam['tbl_footer'] == 1 )
+				{
+					$html .= "<tfoot>\n<tr>\n";
+					foreach ( $aForm['fields'] as $x => $x_value )
+						{
+							if( $x_value['skip_in_tbl'] == 0 )
+								$html .= "<td><input type='text' name='$x' id='$x' placeholder='" . t("Search") . " " . t($x_value['label']) . "' /></td>\n";
+						}
+					$html .= "<td>" . t("Clear filtering") . "</td>";
+					$html .= "</tr>\n</tfoot>\n";
+				}
 			}
-		}
-		
+		}		
 		// write BODY content 
 		$html .= "<tbody>\n";
 		foreach ($result as $record) 
