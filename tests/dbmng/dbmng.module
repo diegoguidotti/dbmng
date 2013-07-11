@@ -105,9 +105,11 @@ function dbmng()
 			$aForm    = dbmng_get_form_array($id_table_field);
 			$aParam                            = array();
 			$aParam['filters']['id_table']	   = $_REQUEST['show_fields']; 
+			$aParam['hidden_vars']['show_fields']  = $_REQUEST['show_fields'];
 
 			dbmng_create_form_process($aForm, $aParam);
 			$html .= dbmng_create_table($aForm, $aParam);
+			$html .= dbmng_create_form($aForm, $aParam);
 
 		}
 		else{
@@ -124,6 +126,7 @@ function dbmng()
 			// update record
 			dbmng_create_form_process($aForm, $aParam);
 			$html .= dbmng_create_table($aForm, $aParam);
+      $html .= dbmng_create_form($aForm, $aParam);
 		}
 			
 	}
