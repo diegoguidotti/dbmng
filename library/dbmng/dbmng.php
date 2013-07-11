@@ -63,7 +63,7 @@ function dbmng_get_form_array($id_table)
 		//TODO: ['primary key shoud be an array to manage multiples key']
 		$aFields = array();
 		$aPK     = array(); // Array to store information about the primary key
-		$fields = db_query("select * from dbmng_fields where id_table=".$id_table." order by field_order ASC");
+		$fields = db_query("select * from dbmng_fields where id_table=" . $id_table . " order by field_order ASC");
 		foreach ($fields as $fld)
 			{
 				if($fld->pk == 1)
@@ -82,6 +82,35 @@ function dbmng_get_form_array($id_table)
 																					 'label_long' => $sLabelLong,
 																					 'skip_in_tbl' => $fld->skip_in_tbl,
 																					 'voc_sql' => $fld->voc_sql );
+				
+				if( $fld->id_field_type == 'select' )
+					{
+						if( !isset($fld->voc_sql) )
+							{
+								// sql automatically generated throught standard coding tables definition
+								$sVoc = str_replace("id_", "", $fld->field_name);
+								$sql  = "select * from $sVoc";
+							}
+						else
+							{
+								// sql written in dbmng_fields
+								$sql  = $fld->voc_sql;							
+							}
+
+						$rVoc  = db_query($sql);
+						$aFVoc = array();
+
+						$v       = 0;
+						foreach($rVoc as $val)
+							{
+								//print_r($val);
+								$keys=array_keys((array)$val);
+
+								//print_r($keys);
+								$aFVoc[$val->$keys[0]] = $val->$keys[1];
+							}
+						$aFields[$fld->field_name]['voc_val'] = $aFVoc;
+					}
 			}
 
 		$aForm['primary_key'] = $aPK; 
@@ -99,6 +128,7 @@ function dbmng_get_form_array($id_table)
 		*/
 		
 		$aForm['fields']=$aFields;
+		//print_r($aForm);
 		
 		return $aForm;
 	}
@@ -151,11 +181,11 @@ function dbmng_create_table($aForm, $aParam)
 			}
 
 	  $sql = 'select * from ' . $aForm['table_name'].' '.$where;
-
 		$result = db_query($sql);
 	  
-		$html = "<h1>" . $aForm['table_name'] . " [" . $result->rowCount() . " " . t("recs") . "]</h1>\n";
-		
+	  $tblLbl = (!is_null($aForm['table_label']) ? t($aForm['table_label']) : $aForm['table_name']);
+		$html   = "<h1>" . $tblLbl . "</h1>\n";
+		$html  .= "<h4>" . t("Record number") . ": " . $result->rowCount() . " " . t("recs") . "</h4>\n";
 		// Table generation
 		$html .= "<table>\n";
 		
@@ -201,26 +231,16 @@ function dbmng_create_table($aForm, $aParam)
 							{
 								if( $x_value['type'] == "select" )
 									{
-										$sWhere = "where $x=" . $record->$x;
-										//Diego: it gives me an error if voc_sql is not set. Seems that we do not need it
-										if( !isset($x_value['voc_sql']) ) 
+										$aVoc = array();
+										$aVoc = $x_value['voc_val'];
+										$nLen = count($aVoc);
+										for( $i=1; $i <= $nLen; $i++ )
 											{
-												// sql automatically generated throught standard coding tables definition
-												$sVoc    = str_replace("id_", "", $x);
-												$voc_sql = "select * from $sVoc ";// . $sWhere;
+												if($record->$x == $i)
+													{
+														$html.= "<td>" . $aVoc[$i] . "</td>";
+													}
 											}
-										else 
-											{
-												// sql written in dbmng_fields
-												$voc_sql = $x_value['voc_sql'];
-												$voc_sql = str_replace("where 1", $sWhere, $voc_sql);
-											}
-											
-										$Voc_val = db_query($voc_sql); //$val->$keys[0]
-										$fo_val = $Voc_val->fetchObject();
-
-										$aKey    = array_keys((array)$fo_val);
-										$html .= "<td>" . $fo_val->$aKey[1] . "</td>";
 									}
 								else
 									{
@@ -321,35 +341,8 @@ function dbmng_create_form($aForm, $aParam)
 									
 									if( $x_value['type'] == "select" )
 										{
-											//
-											// choose from where the system fill the combobox
-											//
-											if( !isset($x_value['voc_sql']) ) 
-												{
-													// sql automatically generated throught standard coding tables definition
-													$sVoc    = str_replace("id_", "", $x);
-													$voc_sql = "select * from $sVoc";
-												}
-											else 
-												{
-													// sql written in dbmng_fields
-													$voc_sql = $x_value['voc_sql'];
-												}
-
-											$Voc_val = db_query($voc_sql);
-											$aVoc    = array();
-
-											$v       = 0;
-											foreach($Voc_val as $val)
-												{
-													//print_r($val);
-													$keys=array_keys((array)$val);
-	
-													//print_r($keys);
-													$aVoc[$v][0] = $val->$keys[0];
-													$aVoc[$v][1] = $val->$keys[1];
-													$v++;
-												}
+											$aVoc = array();
+											$aVoc = $x_value['voc_val'];
 										} 
 
 									$other="";		
@@ -371,14 +364,16 @@ function dbmng_create_form($aForm, $aParam)
 										$html .= "<select  name='$id' id='$id'  $other >\n";
 										$html .= "<option value='-1'>" . t("--- SELECT ---") . "</option> \n";	
 										$nLen = count($aVoc);
-										for( $i=0; $i < $nLen; $i++ )
+										
+										
+										for( $i=1; $i <= $nLen; $i++ )
 										{
 											$s="";
-											if($do_update && $value==$aVoc[$i][0]){
+											if($do_update && $value==$i){
 												$s=" selected='true' ";
 											}
 
-											$html .= "<option $s value='" . $aVoc[$i][0] . "'>" . $aVoc[$i][1] . "</option> \n";	
+											$html .= "<option $s value='" . $i . "'>" . $aVoc[$i] . "</option> \n";	
 										}
 										$html .= "</select>\n";
 
