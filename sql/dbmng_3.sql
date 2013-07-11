@@ -1,0 +1,29 @@
+alter table dbmng_tables change id_table_type id_table_type INT( 11 ) NULL DEFAULT  1;
+update dbmng_tables set id_table_type = 1;
+
+
+-- insert into dbmng_tables
+insert into dbmng_tables (id_table, id_table_type, table_name, table_label) values (8, 2, 'dbmng_tables', 'Tables name');
+insert into dbmng_tables (id_table, id_table_type, table_name, table_label) values (9, 2, 'dbmng_fields', 'Fields name');
+
+-- insert into dbmng_fields                                                                                                                                                  type      name           siz nu  def    label          label long        or  pk  skip
+insert into dbmng_fields (id_table, id_field_type, field_name, field_size, nullable, default_value, field_label, field_label_long, field_order, pk, skip_in_tbl) values (8, 'bigint', 'id_table'     , 20, 0, null, 'ID'         , 'ID'               , 1, 1, 0);
+insert into dbmng_fields (id_table, id_field_type, field_name, field_size, nullable, default_value, field_label, field_label_long, field_order, pk, skip_in_tbl) values (8, 'int'   , 'id_table_type', 11, 0, null, 'Table type' , 'Table type'       , 2, 0, 0);
+insert into dbmng_fields (id_table, id_field_type, field_name, field_size, nullable, default_value, field_label, field_label_long, field_order, pk, skip_in_tbl) values (8, 'char'  , 'table_name'   , 50, 0, null, 'Table name' , 'Table name'       , 3, 0, 0);
+insert into dbmng_fields (id_table, id_field_type, field_name, field_size, nullable, default_value, field_label, field_label_long, field_order, pk, skip_in_tbl) values (8, 'text'  , 'table_desc'   , 11, 0, null, 'Table desc' , 'Table description', 4, 0, 1);
+insert into dbmng_fields (id_table, id_field_type, field_name, field_size, nullable, default_value, field_label, field_label_long, field_order, pk, skip_in_tbl) values (8, 'text'  , 'table_label'  , 11, 0, null, 'Table label', 'Table label'      , 5, 0, 0);
+insert into dbmng_fields (id_table, id_field_type, field_name, field_size, nullable, default_value, field_label, field_label_long, field_order, pk, skip_in_tbl) values (9, 'bigint' , 'id_field'        , 20 , 0, null, 'ID'         , 'ID'               , 1 , 1, 0);
+insert into dbmng_fields (id_table, id_field_type, field_name, field_size, nullable, default_value, field_label, field_label_long, field_order, pk, skip_in_tbl) values (9, 'int'    , 'id_table'        , 11 , 1, null, 'ID Tbl'     , 'ID Table'         , 2 , 0, 1);
+insert into dbmng_fields (id_table, id_field_type, field_name, field_size, nullable, default_value, field_label, field_label_long, field_order, pk, skip_in_tbl) values (9, 'varchar', 'id_field_type'   , 11 , 0, null, 'Type'       , 'Field Type'       , 3 , 0, 0);
+insert into dbmng_fields (id_table, id_field_type, field_name, field_size, nullable, default_value, field_label, field_label_long, field_order, pk, skip_in_tbl) values (9, 'char'   , 'field_name'      , 50 , 0, null, 'Name'       , 'Field Name'       , 4 , 0, 0);
+insert into dbmng_fields (id_table, id_field_type, field_name, field_size, nullable, default_value, field_label, field_label_long, field_order, pk, skip_in_tbl) values (9, 'int'    , 'field_size'      , 11 , 1, null, 'Size'       , 'Field Size'       , 5 , 0, 1);
+insert into dbmng_fields (id_table, id_field_type, field_name, field_size, nullable, default_value, field_label, field_label_long, field_order, pk, skip_in_tbl) values (9, 'int'    , 'nulable'         , 20 , 1, null, 'Null'       , 'Nullable'         , 6 , 0, 1);
+insert into dbmng_fields (id_table, id_field_type, field_name, field_size, nullable, default_value, field_label, field_label_long, field_order, pk, skip_in_tbl) values (9, 'text'   , 'field_note'      , 20 , 1, null, 'Note'       , 'Field Note'       , 7 , 0, 1);
+insert into dbmng_fields (id_table, id_field_type, field_name, field_size, nullable, default_value, field_label, field_label_long, field_order, pk, skip_in_tbl) values (9, 'char'   , 'default_value'   , 100, 1, null, 'Default'    , 'Default value'    , 8 , 0, 1);
+insert into dbmng_fields (id_table, id_field_type, field_name, field_size, nullable, default_value, field_label, field_label_long, field_order, pk, skip_in_tbl) values (9, 'varchar', 'field_label'     , 100, 0, null, 'Label'      , 'Field Label'      , 9 , 0, 1);
+insert into dbmng_fields (id_table, id_field_type, field_name, field_size, nullable, default_value, field_label, field_label_long, field_order, pk, skip_in_tbl) values (9, 'varchar', 'field_label_long', 100, 0, null, 'Long'       , 'Long Label'       , 10, 0, 1);
+insert into dbmng_fields (id_table, id_field_type, field_name, field_size, nullable, default_value, field_label, field_label_long, field_order, pk, skip_in_tbl) values (9, 'int'    , 'field_order'     , 11 , 1, null, 'Order'      , 'Field Order'      , 11, 0, 0);
+insert into dbmng_fields (id_table, id_field_type, field_name, field_size, nullable, default_value, field_label, field_label_long, field_order, pk, skip_in_tbl) values (9, 'int'    , 'pk'              , 1  , 1, 0   , 'pk'         , 'Primary key'      , 12, 0, 1);
+insert into dbmng_fields (id_table, id_field_type, field_name, field_size, nullable, default_value, field_label, field_label_long, field_order, pk, skip_in_tbl) values (9, 'varchar', 'field_function'  , 100, 1, null, 'Fnc'        , 'Field function'    , 13, 0, 1);
+insert into dbmng_fields (id_table, id_field_type, field_name, field_size, nullable, default_value, field_label, field_label_long, field_order, pk, skip_in_tbl) values (9, 'int'    , 'skip_in_tbl'     , 11 , 1, 0   , 'Skip'       , 'Skip in table view', 14, 0, 1);
+insert into dbmng_fields (id_table, id_field_type, field_name, field_size, nullable, default_value, field_label, field_label_long, field_order, pk, skip_in_tbl) values (9, 'varchar', 'voc_sql'         , 255, 1, null, 'sql'        , 'Voc sql'           , 15, 0, 1);
