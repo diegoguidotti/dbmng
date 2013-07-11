@@ -186,92 +186,96 @@ function dbmng_create_table($aForm, $aParam)
 						}					
 				}
 			}
-
-	  $sql = 'select * from ' . $aForm['table_name'].' '.$where;
-		$result = db_query($sql);
-	  
-	  $tblLbl = (!is_null($aForm['table_label']) ? t($aForm['table_label']) : $aForm['table_name']);
-		$html   = "<h1>" . $tblLbl . "</h1>\n";
-		$html  .= "<h4>" . t("Record number") . ": " . $result->rowCount() . " " . t("recs") . "</h4>\n";
-		// Table generation
-		$html .= "<table>\n";
 		
-		// write HEAD row
-		$html .= "<thead>\n";
-		$html .= "<tr>\n";
-		foreach ( $aForm['fields'] as $x => $x_value )
+		$html = "";
+		if( !isset($_GET["ins_" . $aForm['table_name']]) && !isset($_GET["upd_" . $aForm['table_name']]) )
 			{
-				if( $x_value['skip_in_tbl'] == 0 )
-					$html .= "<th>" . t($x_value['label']) . "</th>\n";
-			}
-		$html .= "<th>" . t('actions') . "</th></tr></thead>\n";
-		
-		// write FOOTER row
-		if( $result->rowCount() > 1 )
-		{
-			if( isset($aParam['tbl_footer']) )
-			{
-				if( $aParam['tbl_footer'] == 1 )
-				{
-					$html .= "<tfoot>\n<tr>\n";
-					foreach ( $aForm['fields'] as $x => $x_value )
-						{
-							if( $x_value['skip_in_tbl'] == 0 )
-								$html .= "<td><input type='text' name='$x' id='$x' placeholder='" . t("Search") . " " . t($x_value['label']) . "' /></td>\n";
-						}
-					$html .= "<td>" . t("Clear filtering") . "</td>";
-					$html .= "</tr>\n</tfoot>\n";
-				}
-			}
-		}		
-		// write BODY content 
-		$html .= "<tbody>\n";
-		foreach ($result as $record) 
-			{
-				// table value
-				$html .= "<tr>";
+			  $sql = 'select * from ' . $aForm['table_name'].' '.$where;
+				$result = db_query($sql);
+			  
+			  $tblLbl = (!is_null($aForm['table_label']) ? t($aForm['table_label']) : $aForm['table_name']);
+				$html   = "<h1>" . $tblLbl . "</h1>\n";
+				$html  .= "<h4>" . t("Record number") . ": " . $result->rowCount() . " " . t("recs") . "</h4>\n";
+				// Table generation
+				$html .= "<table>\n";
 				
-				//get the query results for each field
+				// write HEAD row
+				$html .= "<thead>\n";
+				$html .= "<tr>\n";
 				foreach ( $aForm['fields'] as $x => $x_value )
 					{
 						if( $x_value['skip_in_tbl'] == 0 )
+							$html .= "<th>" . t($x_value['label']) . "</th>\n";
+					}
+				$html .= "<th>" . t('actions') . "</th></tr></thead>\n";
+				
+				// write FOOTER row
+				if( $result->rowCount() > 1 )
+				{
+					if( isset($aParam['tbl_footer']) )
+					{
+						if( $aParam['tbl_footer'] == 1 )
+						{
+							$html .= "<tfoot>\n<tr>\n";
+							foreach ( $aForm['fields'] as $x => $x_value )
+								{
+									if( $x_value['skip_in_tbl'] == 0 )
+										$html .= "<td><input type='text' name='$x' id='$x' placeholder='" . t("Search") . " " . t($x_value['label']) . "' /></td>\n";
+								}
+							$html .= "<td>" . t("Clear filtering") . "</td>";
+							$html .= "</tr>\n</tfoot>\n";
+						}
+					}
+				}		
+				// write BODY content 
+				$html .= "<tbody>\n";
+				foreach ($result as $record) 
+					{
+						// table value
+						$html .= "<tr>";
+						
+						//get the query results for each field
+						foreach ( $aForm['fields'] as $x => $x_value )
 							{
-								if( $x_value['type'] == "select" )
+								if( $x_value['skip_in_tbl'] == 0 )
 									{
-										$aVoc = array();
-										$aVoc = $x_value['voc_val'];
-										if(isset($aVoc[$record->$x])){
-											$html.= "<td>" . $aVoc[$record->$x] . "</td>";
-										}
-										else{
-											$html.= "<td></td>";
-										}
-									}
-								else
-									{
-										$html.= "<td>".$record->$x."</td>";
+										if( $x_value['type'] == "select" )
+											{
+												$aVoc = array();
+												$aVoc = $x_value['voc_val'];
+												if(isset($aVoc[$record->$x])){
+													$html.= "<td>" . $aVoc[$record->$x] . "</td>";
+												}
+												else{
+													$html.= "<td></td>";
+												}
+											}
+										else
+											{
+												$html.= "<td>".$record->$x."</td>";
+											}
 									}
 							}
+						
+						// available functionalities
+						$html .= "<td>";
+							if( $nDel == 1 )
+								$html .= "<a href='?del_" . $aForm['table_name'] . "=" . $record->$aForm['primary_key'][0] .$hv."'>" . t('Delete') . "</a>" . "&nbsp;";
+							if( $nUpd == 1 ) 
+								$html .= "<a href='?upd_" . $aForm['table_name'] . "=" . $record->$aForm['primary_key'][0] .$hv."'>" . t('Update') . "</a>" . "&nbsp;";
+							if( $nDup == 1 )
+								$html .= "<a href='?dup_" . $aForm['table_name'] . "=" . $record->$aForm['primary_key'][0] .$hv."'>" . t('Duplicate') . "</a>" . "&nbsp;";
+						$html .= "</td>\n";
+						
+						$html .= "</tr>\n";
 					}
+				$html .= "</tbody>\n";
+			  $html .= "</table>\n";
 				
-				// available functionalities
-				$html .= "<td>";
-					if( $nDel == 1 )
-						$html .= "<a href='?del_" . $aForm['table_name'] . "=" . $record->$aForm['primary_key'][0] .$hv."'>" . t('Delete') . "</a>" . "&nbsp;";
-					if( $nUpd == 1 ) 
-						$html .= "<a href='?upd_" . $aForm['table_name'] . "=" . $record->$aForm['primary_key'][0] .$hv."'>" . t('Update') . "</a>" . "&nbsp;";
-					if( $nDup == 1 )
-						$html .= "<a href='?dup_" . $aForm['table_name'] . "=" . $record->$aForm['primary_key'][0] .$hv."'>" . t('Duplicate') . "</a>" . "&nbsp;";
-				$html .= "</td>\n";
-				
-				$html .= "</tr>\n";
+				if( $nIns == 1)
+					$html .= "<a href='?ins_" . $aForm['table_name'] . $hv. "'>" . t('Insert new data') . "</a><br />";
 			}
-		$html .= "</tbody>\n";
-	  $html .= "</table>\n";
-		
-		if( $nIns == 1)
-			$html .= "<a href='?ins_" . $aForm['table_name'] . $hv. "'>" . t('Insert new data') . "</a><br />";
-		return $html;
+			return $html;
 	}
 
 
