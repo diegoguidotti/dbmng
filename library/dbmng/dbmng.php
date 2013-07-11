@@ -233,14 +233,12 @@ function dbmng_create_table($aForm, $aParam)
 									{
 										$aVoc = array();
 										$aVoc = $x_value['voc_val'];
-										$nLen = count($aVoc);
-										for( $i=1; $i <= $nLen; $i++ )
-											{
-												if($record->$x == $i)
-													{
-														$html.= "<td>" . $aVoc[$i] . "</td>";
-													}
-											}
+										if(isset($aVoc[$record->$x])){
+											$html.= "<td>" . $aVoc[$record->$x] . "</td>";
+										}
+										else{
+											$html.= "<td></td>";
+										}
 									}
 								else
 									{
