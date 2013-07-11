@@ -360,17 +360,19 @@ function dbmng_create_form($aForm, $aParam)
 									else if ($x_value['type']=='select')
 									{
 										$html .= "<select  name='$id' id='$id'  $other >\n";
-										$html .= "<option value='-1'>" . t("--- SELECT ---") . "</option> \n";	
+										$html .= "<option/> \n";	
 										$nLen = count($aVoc);
 										
-										for( $i=1; $i <= $nLen; $i++ )
+			
+										
+										foreach ( $aVoc as $vocKey => $vocValue )
 										{
 											$s="";
-											if($do_update && $value==$i){
+											if($do_update && $value==$vocKey){
 												$s=" selected='true' ";
 											}
 
-											$html .= "<option $s value='" . $i . "'>" . $aVoc[$i] . "</option> \n";	
+											$html .= "<option $s value='" . $vocKey . "'>" . $vocValue . "</option> \n";	
 										}
 										$html .= "</select>\n";
 
