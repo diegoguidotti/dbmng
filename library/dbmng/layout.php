@@ -226,4 +226,30 @@ function layout_table_body( $result, $aForm, $aParam )
 
   return $html;
 }
+
+function layout_table( $result, $aForm, $aParam )
+{
+	$html = "";
+	$html .= "<table>\n";
+	
+	$html .= layout_table_head( $aForm['fields'] );
+	
+	// write FOOTER row
+	if( $result->rowCount() > 1 )
+	{
+		if( isset($aParam['tbl_footer']) )
+		{
+			if( $aParam['tbl_footer'] == 1 )
+			{
+				$html .= layout_table_footer( $aForm['fields'] );
+			}
+		}
+	}		
+	$html .= layout_table_body($result, $aForm, $aParam);
+  $html .= "</table>\n";
+	
+	$html .= layout_table_insert($aForm, $aParam);
+	
+	return $html;
+}
 ?>

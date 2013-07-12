@@ -175,26 +175,8 @@ function dbmng_create_table($aForm, $aParam)
 			  $tblLbl = (!is_null($aForm['table_label']) ? t($aForm['table_label']) : $aForm['table_name']);
 				$html   = "<h1>" . $tblLbl . "</h1>\n";
 				$html  .= "<h4>" . t("Record number") . ": " . $result->rowCount() . " " . t("recs") . "</h4>\n";
-				// Table generation
-				$html .= "<table>\n";
 				
-				$html .= layout_table_head( $aForm['fields'] );
-				
-				// write FOOTER row
-				if( $result->rowCount() > 1 )
-				{
-					if( isset($aParam['tbl_footer']) )
-					{
-						if( $aParam['tbl_footer'] == 1 )
-						{
-							$html .= layout_table_footer( $aForm['fields'] );
-						}
-					}
-				}		
-				$html .= layout_table_body($result, $aForm, $aParam);
-			  $html .= "</table>\n";
-				
-				$html .= layout_table_insert($aForm, $aParam);
+				$html .= layout_table( $result, $aForm, $aParam );
 			}
 			return $html;
 	}
