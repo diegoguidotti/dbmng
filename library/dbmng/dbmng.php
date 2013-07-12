@@ -1,6 +1,6 @@
 <?php
 include_once "sites/all/library/dbmng/dbmng_extend_functions.php";
-include_once "sites/all/library/layout/layout.php";
+include_once "sites/all/library/dbmng/layout.php";
 /*
 Convention to be used in code:
 
