@@ -13,6 +13,7 @@ function prepare_hidden_var($aParam)
 	return $hv;
 }
 
+//This is a comment
 function layout_form_input( $fld, $fld_value, $value )
 {
 	$other = "";		
