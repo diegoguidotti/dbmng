@@ -110,35 +110,6 @@ function layout_table_footer($aField)
 	return $html;
 }
 
-function layout_table_select( $fld_value, $value )
-{
-	$html = "";
-	if( $fld_value['skip_in_tbl'] == 0 )
-		{
-			if( $fld_value['widget'] == "select" )
-				{
-					$aVoc = array();
-					$aVoc = $fld_value['voc_val'];
-					if(isset($aVoc[$value])){
-						$html.= "<td>" . $aVoc[$value] . "</td>";
-					}
-					else{
-						$html.= "<td></td>";
-					}
-				}
-		}
-	return $html;
-}
-
-function layout_table_cell( $fld_value, $value )
-{
-	$html = "";
-	if( $fld_value['skip_in_tbl'] == 0 && $fld_value['widget'] != "select" )
-		{
-			$html.= "<td>".$value."</td>";
-		}
-	return $html;
-}
 
 function layout_table_action( $aForm, $aParam, $id_record )
 {
@@ -207,8 +178,13 @@ function layout_table_body( $result, $aForm, $aParam )
 			//get the query results for each field
 			foreach ( $aForm['fields'] as $fld => $fld_value )
 				{
-					$html .= layout_table_select( $fld_value, $record->$fld );
-					$html .= layout_table_cell( $fld_value, $record->$fld );
+
+					$value=dbmng_value_prepare_html($fld_value, $record->$fld);
+					if( $fld_value['skip_in_tbl'] == 0 )
+						{
+							$html.= "<td class='dbmng_field_$fld'>".$value."</td>";
+						}
+
 				}
 
 			// available functionalities
