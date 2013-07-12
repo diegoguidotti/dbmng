@@ -344,82 +344,44 @@ function dbmng_create_form($aForm, $aParam)
 
 
 			$html .= "<form method='POST' action='?' >\n".$hv."";
-			foreach ( $aForm['fields'] as $x => $x_value )
+			foreach ( $aForm['fields'] as $fld => $fld_value )
 				{
-					if( isset($x_value['field_function']) )
+					if( isset($fld_value['field_function']) )
 						{
-							if( function_exists($x_value['field_function']) )
-								$html .= call_user_func($x_value['field_function']);
+							if( function_exists($fld_value['field_function']) )
+								$html .= call_user_func($fld_value['field_function']);
 						}
 					else
 						{
-							if( $aForm['primary_key'][0] != $x )
+							if( $aForm['primary_key'][0] != $fld )
 								{
 									
-									//create the form element
-									$id=$x;
-									$label=t($x_value['label_long']);
-									$value="";
+									$value= null;
 									if($do_update)
 										{
-											$value = $vals->$x;
+											$value = $vals->$fld;
 										}
-									elseif( !is_null($x_value['default'])  )
+									elseif( !is_null($fld_value['default'])  )
 										{
-											$value = $x_value['default'];
+											$value = $fld_value['default'];
 										}
 									
-									if( $x_value['type'] == "select" )
-										{
-											$aVoc = array();
-											$aVoc = $x_value['voc_val'];
-										} 
-
-									$other="";		
-									if($x_value['nullable'] == 0)
-										$other .= "required ";			
-
-
-
-									$html .= "<label for='$id'>" . $label . "</label>\n";
-
-									if ($x_value['type']=='text')
+									if ($fld_value['type']=='text')
 									{
-										$html .= layout_textarea( $id, $other, $value );
-										//$html .= "<textarea  name='$id' id='$id'  $other >";
-										//$html .= " $value ";	
-										//$html .= "</textarea>\n";
+										$html .= layout_textarea( $fld, $fld_value, $value );
 									}
-									else if ($x_value['type']=='select')
+									else if ($fld_value['type']=='select')
 									{
-										$html .= layout_select($id, $other, $aVoc, $value, $do_update);
-										//$html .= "<select  name='$id' id='$id'  $other >\n";
-										//$html .= "<option/> \n";	
-										//$nLen = count($aVoc);
-										//
-										//foreach ( $aVoc as $vocKey => $vocValue )
-										//{
-										//	$s="";
-										//	if($do_update && $value==$vocKey){
-										//		$s=" selected='true' ";
-										//	}
-                    //
-										//	$html .= "<option $s value='" . $vocKey . "'>" . $vocValue . "</option> \n";	
-										//}
-										//$html .= "</select>\n";
+										$html .= layout_select( $fld, $fld_value, $value );
 									}
 									else //varchar and integer
-									{									
-										$html .= "<input type='text' name='$id' id='$id' ";
-										$html .= " value= '$value' ";	
-										$html .= " $other ";	
-										$html .= " />\n";
+									{
+										$html .= layout_input( $fld, $fld_value, $value );		
 									}
 
 									$html.="<br />\n";
 								}
 						}
-					
 				}
 
 			if( isset($_GET["upd_" . $aForm['table_name']] ))
