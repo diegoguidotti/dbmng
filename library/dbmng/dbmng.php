@@ -212,14 +212,7 @@ function dbmng_create_table($aForm, $aParam)
 					{
 						if( $aParam['tbl_footer'] == 1 )
 						{
-							$html .= "<tfoot>\n<tr>\n";
-							foreach ( $aForm['fields'] as $x => $x_value )
-								{
-									if( $x_value['skip_in_tbl'] == 0 )
-										$html .= "<td><input type='text' name='$x' id='$x' placeholder='" . t("Search") . " " . t($x_value['label']) . "' /></td>\n";
-								}
-							$html .= "<td>" . t("Clear filtering") . "</td>";
-							$html .= "</tr>\n</tfoot>\n";
+							$html .= layout_table_footer( $aForm['fields'] );
 						}
 					}
 				}		
@@ -231,54 +224,32 @@ function dbmng_create_table($aForm, $aParam)
 						$html .= "<tr>";
 						
 						//get the query results for each field
-						foreach ( $aForm['fields'] as $x => $x_value )
+						foreach ( $aForm['fields'] as $fld => $fld_value )
 							{
-								if( $x_value['skip_in_tbl'] == 0 )
-									{
-										if( $x_value['type'] == "select" )
-											{
-												$aVoc = array();
-												$aVoc = $x_value['voc_val'];
-												if(isset($aVoc[$record->$x])){
-													$html.= "<td>" . $aVoc[$record->$x] . "</td>";
-												}
-												else{
-													$html.= "<td></td>";
-												}
-											}
-										else
-											{
-												$html.= "<td>".$record->$x."</td>";
-											}
-									}
+								$html .= layout_table_select( $fld_value, $record->$fld );
+								$html .= layout_table_cell( $fld_value, $record->$fld );
 							}
-						
-
-
 
 						// available functionalities
 						$html .= "<td>";
 
-							$id_record=$record->$aForm['primary_key'][0];
+						$id_record=$record->$aForm['primary_key'][0];
 
-							if( $nDel == 1 )
-								$html .= "<a href='?del_" . $aForm['table_name'] . "=" . $id_record .$hv."'>" . t('Delete') . "</a>" . "&nbsp;";
-							if( $nUpd == 1 ) 
-								$html .= "<a href='?upd_" . $aForm['table_name'] . "=" . $id_record .$hv."'>" . t('Update') . "</a>" . "&nbsp;";
-							if( $nDup == 1 )
-								$html .= "<a href='?dup_" . $aForm['table_name'] . "=" . $id_record .$hv."'>" . t('Duplicate') . "</a>" . "&nbsp;";
+						if( $nDel == 1 )
+							$html .= "<a href='?del_" . $aForm['table_name'] . "=" . $id_record .$hv."'>" . t('Delete') . "</a>" . "&nbsp;";
+						if( $nUpd == 1 ) 
+							$html .= "<a href='?upd_" . $aForm['table_name'] . "=" . $id_record .$hv."'>" . t('Update') . "</a>" . "&nbsp;";
+						if( $nDup == 1 )
+							$html .= "<a href='?dup_" . $aForm['table_name'] . "=" . $id_record .$hv."'>" . t('Duplicate') . "</a>" . "&nbsp;";
 
 							
-							if(isset($aParam['custom_function']))
-							{
-								foreach($aParam['custom_function'] as $aCustom )								
-								{	
-									$html.="<a href='?$aCustom[custom_variable]=$id_record$hv'>$aCustom[custom_label]</a>";
-									
-	
-								}
-
+						if(isset($aParam['custom_function']))
+						{
+							foreach($aParam['custom_function'] as $aCustom )								
+							{	
+								$html.="<a href='?$aCustom[custom_variable]=$id_record$hv'>$aCustom[custom_label]</a>";
 							}
+						}
 
 
 						$html .= "</td>\n";
@@ -364,15 +335,15 @@ function dbmng_create_form($aForm, $aParam)
 									
 									if ($fld_value['type']=='text')
 									{
-										$html .= layout_textarea( $fld, $fld_value, $value );
+										$html .= layout_form_textarea( $fld, $fld_value, $value );
 									}
 									else if ($fld_value['type']=='select')
 									{
-										$html .= layout_select( $fld, $fld_value, $value );
+										$html .= layout_form_select( $fld, $fld_value, $value );
 									}
 									else //varchar and integer
 									{
-										$html .= layout_input( $fld, $fld_value, $value );		
+										$html .= layout_form_input( $fld, $fld_value, $value );		
 									}
 
 									$html.="<br />\n";
