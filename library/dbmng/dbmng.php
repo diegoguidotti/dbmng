@@ -114,7 +114,7 @@ function dbmng_get_form_array($id_table)
 						foreach($aFVoc as $res)
 							$sortAux[] = $res[0];
 						
-						array_multisort($sortAux, SORT_ASC, $aFVoc);
+						//array_multisort($sortAux, SORT_ASC, $aFVoc);
 						
 						$aFields[$fld->field_name]['voc_val'] = $aFVoc;
 					}
