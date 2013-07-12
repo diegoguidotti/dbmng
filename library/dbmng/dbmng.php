@@ -75,6 +75,7 @@ function dbmng_get_form_array($id_table)
 				$sLabelLong = ( strlen($fld->field_label_long)>0 ? $fld->field_label_long : $fld->field_label );
 				$aFields[$fld->field_name] = array('label' => $fld->field_label, 
 																					 'type' => $fld->id_field_type, 
+																					 'widget' => $fld->field_widget, 
 																					 'value' => null, 
 																					 'nullable' => $fld->nullable, 
 																					 'default' => $fld->default_value,
@@ -83,7 +84,7 @@ function dbmng_get_form_array($id_table)
 																					 'skip_in_tbl' => $fld->skip_in_tbl,
 																					 'voc_sql' => $fld->voc_sql );
 				
-				if( $fld->id_field_type == 'select' )
+				if( $fld->field_widget == 'select' )
 					{
 						if( !isset($fld->voc_sql) )
 							{
@@ -173,10 +174,17 @@ function dbmng_create_table($aForm, $aParam)
 				$result = db_query($sql);
 			  
 			  $tblLbl = (!is_null($aForm['table_label']) ? t($aForm['table_label']) : $aForm['table_name']);
-				$html   = "<h1>" . $tblLbl . "</h1>\n";
-				$html  .= "<h4>" . t("Record number") . ": " . $result->rowCount() . " " . t("recs") . "</h4>\n";
+
+				$html  .= "<div class='dbmng_div' id='dbmng_".$aForm['table_name']."'>";
+
+				
+				$html  .= "<h1 class='dbmng_table_label'>" . $tblLbl . "</h1>\n";
 				
 				$html .= layout_table( $result, $aForm, $aParam );
+
+				$html  .= "<div class='dbmng_record_number'>" . t("Record number") . ": " . $result->rowCount() . " " . t("recs") . "</div>\n";
+				$html  .= '</div>';
+
 			}
 			return $html;
 	}
@@ -249,15 +257,15 @@ function dbmng_create_form($aForm, $aParam)
 											$value = $fld_value['default'];
 										}
 									
-									if ($fld_value['type']=='text')
+									if ($fld_value['widget']=='textarea')
 									{
 										$html .= layout_form_textarea( $fld, $fld_value, $value );
 									}
-									else if ($fld_value['type']=='select')
+									else if ($fld_value['widget']=='select')
 									{
 										$html .= layout_form_select( $fld, $fld_value, $value );
 									}
-									else //varchar and integer
+									else //use input by default
 									{
 										$html .= layout_form_input( $fld, $fld_value, $value );		
 									}
@@ -462,7 +470,7 @@ function dbmng_value_prepare($x_value, $sValue)
 
 			switch ($sType)
 				{
-					case ($sType=="int" || $sType=="double") :
+					case ($sType=="int" || $sType=="bigint" || $sType=="float"  || $sType=="double") :
 						$sVal  .= $sValue . ", ";							
 						break;
 				

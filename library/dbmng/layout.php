@@ -49,7 +49,7 @@ function layout_form_select( $fld, $fld_value, $value )
 	if( !is_null($value) )
 		$do_update = true;
 	
-	if( $fld_value['type'] == "select" )
+	if( $fld_value['widget'] == "select" )
 		{
 			$aVoc = array();
 			$aVoc = $fld_value['voc_val'];
@@ -86,9 +86,9 @@ function layout_table_head($aField)
 	foreach ( $aField as $fld => $fld_value )
 		{
 			if( $fld_value['skip_in_tbl'] == 0 )
-				$html .= "<th>" . t($fld_value['label']) . "</th>\n";
+				$html .= "<th class='dbmng_field_$fld'>" . t($fld_value['label']) . "</th>\n";
 		}
-	$html .= "<th>" . t('actions') . "</th>\n";
+	$html .= "<th class='dbmng_functions'>" . t('actions') . "</th>\n";
 	$html .= "</tr>\n";
 	$html .= "</thead>\n";
 	return $html;
@@ -115,7 +115,7 @@ function layout_table_select( $fld_value, $value )
 	$html = "";
 	if( $fld_value['skip_in_tbl'] == 0 )
 		{
-			if( $fld_value['type'] == "select" )
+			if( $fld_value['widget'] == "select" )
 				{
 					$aVoc = array();
 					$aVoc = $fld_value['voc_val'];
@@ -133,7 +133,7 @@ function layout_table_select( $fld_value, $value )
 function layout_table_cell( $fld_value, $value )
 {
 	$html = "";
-	if( $fld_value['skip_in_tbl'] == 0 && $fld_value['type'] != "select" )
+	if( $fld_value['skip_in_tbl'] == 0 && $fld_value['widget'] != "select" )
 		{
 			$html.= "<td>".$value."</td>";
 		}
@@ -212,7 +212,7 @@ function layout_table_body( $result, $aForm, $aParam )
 				}
 
 			// available functionalities
-			$html .= "<td>";
+			$html .= "<td class='dbmng_functions'>";
 
 			$id_record = $record->$aForm['primary_key'][0];
 
