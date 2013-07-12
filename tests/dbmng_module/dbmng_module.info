@@ -1,4 +1,4 @@
-name = dbmng
+name = dbmng_module
 description = database management module
 package = public-action
 version = VERSION

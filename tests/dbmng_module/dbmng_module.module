@@ -60,7 +60,7 @@ return $html;
 
 function dbmng() 
 {
-	drupal_add_css( "sites/all/modules/dbmng/dbmng.css" );
+	drupal_add_css( "sites/all/modules/dbmng_module/dbmng_module.css" );
 	$id_table_table=8;
 	$id_table_field=9;
 
@@ -106,6 +106,8 @@ function dbmng()
 			$aParam                            = array();
 			$aParam['filters']['id_table']	   = $_REQUEST['show_fields']; 
 			$aParam['hidden_vars']['show_fields']  = $_REQUEST['show_fields'];
+			$aParam['user_function']['dup']	   = 0;	              // allow to enabled=1 or disabled=0 the duplication function
+			$aParam['user_function']['del']	   = 0;	              // allow to enabled=1 or disabled=0 the delate function
 
 			dbmng_create_form_process($aForm, $aParam);
 			$html .= dbmng_create_table($aForm, $aParam);
