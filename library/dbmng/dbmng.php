@@ -191,33 +191,7 @@ function dbmng_create_table($aForm, $aParam)
 						}
 					}
 				}		
-				// write BODY content 
-				$html .= "<tbody>\n";
-				foreach ($result as $record) 
-					{
-						// table value
-						$html .= "<tr>";
-						
-						//get the query results for each field
-						foreach ( $aForm['fields'] as $fld => $fld_value )
-							{
-								$html .= layout_table_select( $fld_value, $record->$fld );
-								$html .= layout_table_cell( $fld_value, $record->$fld );
-							}
-
-						// available functionalities
-						$html .= "<td>";
-
-						$id_record = $record->$aForm['primary_key'][0];
-
-						$html .= layout_table_action( $aForm, $aParam, $id_record );
-						$html .= layout_table_custom_function($aParam, $id_record);
-
-						$html .= "</td>\n";
-						
-						$html .= "</tr>\n";
-					}
-				$html .= "</tbody>\n";
+				$html .= layout_table_body($result, $aForm, $aParam);
 			  $html .= "</table>\n";
 				
 				$html .= layout_table_insert($aForm, $aParam);
