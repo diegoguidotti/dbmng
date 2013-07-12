@@ -150,38 +150,13 @@ function dbmng_get_form_array($id_table)
 \return           HTML generated code
 */
 function dbmng_create_table($aForm, $aParam)
-	{
-	  // Initialization of user function variable
-	  $nIns = 1;
-	  $nUpd = 1;
-	  $nDel = 1;
-	  $nDup = 1;
-	  
-	  // Initialize where clause and hidden variables
-		$where = " WHERE 1 ";
-		$hv = "";
+{
+  
+  // Initialize where clause and hidden variables
+	$where = " WHERE 1 ";
 
 		if(isset($aParam))
 			{
-				//get some hidden variables if exists()
-				if(isset($aParam['hidden_vars']))
-					{
-						foreach ( $aParam['hidden_vars'] as $x => $x_value )
-							{				
-								$hv.= ('&amp;'.$x.'='.$x_value);
-							}
-					}
-				
-				// get user function parameters
-				if( isset($aParam['user_function']) )
-				{
-				  $nIns = (isset($aParam['user_function']['ins']) ? $aParam['user_function']['ins'] : 1 );
-				  $nUpd = (isset($aParam['user_function']['upd']) ? $aParam['user_function']['upd'] : 1 );
-				  $nDel = (isset($aParam['user_function']['del']) ? $aParam['user_function']['del'] : 1 );
-				  $nDup = (isset($aParam['user_function']['dup']) ? $aParam['user_function']['dup'] : 1 );				
-				}
-				
-				// get filters
 				if( isset($aParam['filters']) )
 				{
 					foreach ( $aParam['filters'] as $x => $x_value )
@@ -194,7 +169,7 @@ function dbmng_create_table($aForm, $aParam)
 		$html = "";
 		if( !isset($_GET["ins_" . $aForm['table_name']]) && !isset($_GET["upd_" . $aForm['table_name']]) )
 			{
-			  $sql = 'select * from ' . $aForm['table_name'].' '.$where;
+			  $sql = 'select * from ' . $aForm['table_name'].' '. $where;
 				$result = db_query($sql);
 			  
 			  $tblLbl = (!is_null($aForm['table_label']) ? t($aForm['table_label']) : $aForm['table_name']);
@@ -233,24 +208,10 @@ function dbmng_create_table($aForm, $aParam)
 						// available functionalities
 						$html .= "<td>";
 
-						$id_record=$record->$aForm['primary_key'][0];
+						$id_record = $record->$aForm['primary_key'][0];
 
-						if( $nDel == 1 )
-							$html .= "<a href='?del_" . $aForm['table_name'] . "=" . $id_record .$hv."'>" . t('Delete') . "</a>" . "&nbsp;";
-						if( $nUpd == 1 ) 
-							$html .= "<a href='?upd_" . $aForm['table_name'] . "=" . $id_record .$hv."'>" . t('Update') . "</a>" . "&nbsp;";
-						if( $nDup == 1 )
-							$html .= "<a href='?dup_" . $aForm['table_name'] . "=" . $id_record .$hv."'>" . t('Duplicate') . "</a>" . "&nbsp;";
-
-							
-						if(isset($aParam['custom_function']))
-						{
-							foreach($aParam['custom_function'] as $aCustom )								
-							{	
-								$html.="<a href='?$aCustom[custom_variable]=$id_record$hv'>$aCustom[custom_label]</a>";
-							}
-						}
-
+						$html .= layout_table_action( $aForm, $aParam, $id_record );
+						$html .= layout_table_custom_function($aParam, $id_record);
 
 						$html .= "</td>\n";
 						
@@ -259,8 +220,7 @@ function dbmng_create_table($aForm, $aParam)
 				$html .= "</tbody>\n";
 			  $html .= "</table>\n";
 				
-				if( $nIns == 1)
-					$html .= "<a href='?ins_" . $aForm['table_name'] . $hv. "'>" . t('Insert new data') . "</a><br />";
+				$html .= layout_table_insert($aForm, $aParam);
 			}
 			return $html;
 	}

@@ -125,4 +125,87 @@ function layout_table_cell( $fld_value, $value )
 	return $html;
 }
 
+function layout_table_action( $aForm, $aParam, $id_record )
+{
+  // Initialization of user function variable
+  //$nUpd = 1;
+  //$nDel = 1;
+  //$nDup = 1;
+  
+  // Initialize where clause and hidden variables
+	$hv = "";
+	//get some hidden variables if exists()
+	if(isset($aParam['hidden_vars']))
+		{
+			foreach ( $aParam['hidden_vars'] as $x => $x_value )
+				{				
+					$hv.= ('&amp;'.$x.'='.$x_value);
+				}
+		}
+			
+		// get user function parameters
+		if( isset($aParam['user_function']) )
+		{
+		  $nUpd = (isset($aParam['user_function']['upd']) ? $aParam['user_function']['upd'] : 1 );
+		  $nDel = (isset($aParam['user_function']['del']) ? $aParam['user_function']['del'] : 1 );
+		  $nDup = (isset($aParam['user_function']['dup']) ? $aParam['user_function']['dup'] : 1 );				
+		}
+	
+	$html = "";
+	if( $nDel == 1 )
+		$html .= "<a href='?del_" . $aForm['table_name'] . "=" . $id_record .$hv."'>" . t('Delete') . "</a>" . "&nbsp;";
+	if( $nUpd == 1 ) 
+		$html .= "<a href='?upd_" . $aForm['table_name'] . "=" . $id_record .$hv."'>" . t('Update') . "</a>" . "&nbsp;";
+	if( $nDup == 1 )
+		$html .= "<a href='?dup_" . $aForm['table_name'] . "=" . $id_record .$hv."'>" . t('Duplicate') . "</a>" . "&nbsp;";
+
+	return $html;
+}
+
+function layout_table_custom_function($aParam, $id_record)
+{
+	$hv = "";
+	//get some hidden variables if exists()
+	if(isset($aParam['hidden_vars']))
+	{
+		foreach ( $aParam['hidden_vars'] as $x => $x_value )
+		{				
+			$hv.= ('&amp;'.$x.'='.$x_value);
+		}
+	}
+
+	$html = "";
+	if(isset($aParam['custom_function']))
+	{
+		foreach($aParam['custom_function'] as $aCustom )								
+		{	
+			$html.="<a href='?$aCustom[custom_variable]=$id_record$hv'>$aCustom[custom_label]</a>";
+		}
+	}
+	return $html;
+}
+
+function layout_table_insert($aForm, $aParam)
+{
+  // Initialization of user function variable
+  // $nIns = 1;
+	if( isset($aParam['user_function']) )
+	  $nIns = (isset($aParam['user_function']['ins']) ? $aParam['user_function']['ins'] : 1 );
+
+	$hv = "";
+	//get some hidden variables if exists()
+	if(isset($aParam['hidden_vars']))
+	{
+		foreach ( $aParam['hidden_vars'] as $x => $x_value )
+		{				
+			$hv.= ('&amp;'.$x.'='.$x_value);
+		}
+	}
+	
+	$html = "";
+	if( $nIns == 1)
+		$html .= "<a href='?ins_" . $aForm['table_name'] . $hv. "'>" . t('Insert new data') . "</a><br />";
+	
+	return $html;
+}
 ?>
