@@ -37,7 +37,7 @@ function layout_form_textarea( $fld, $fld_value, $value )
 	$html  = "";
 	$html .= "<label for='$fld'>" . t($fld_value['label_long']) . "</label>\n";
 	$html .= "<textarea  name='$fld' id='$fld'  $other >";
-	$html .= " $value ";	
+	$html .= $value;	
 	$html .= "</textarea>\n";
 	return $html;
 }
