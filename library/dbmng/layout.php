@@ -65,4 +65,17 @@ function layout_select( $fld, $fld_value, $value )
 	return $html;
 }
 
+function layout_table_head($aField)
+{
+	$html  = ""; 
+	$html .= "<thead>\n";
+	$html .= "<tr>\n";
+	foreach ( $aField as $fld => $fld_value )
+		{
+			if( $fld_value['skip_in_tbl'] == 0 )
+				$html .= "<th>" . t($fld_value['label']) . "</th>\n";
+		}
+	$html .= "<th>" . t('actions') . "</th></tr></thead>\n";
+	return $html;
+}
 ?>

@@ -151,16 +151,19 @@ function dbmng_get_form_array($id_table)
 */
 function dbmng_create_table($aForm, $aParam)
 	{
+	  // Initialization of user function variable
 	  $nIns = 1;
 	  $nUpd = 1;
 	  $nDel = 1;
 	  $nDup = 1;
 	  
-		$where=' WHERE 1 ';
-		//get some hidden variables if exists()
-		$hv='';
+	  // Initialize where clause and hidden variables
+		$where = " WHERE 1 ";
+		$hv = "";
+
 		if(isset($aParam))
 			{
+				//get some hidden variables if exists()
 				if(isset($aParam['hidden_vars']))
 					{
 						foreach ( $aParam['hidden_vars'] as $x => $x_value )
@@ -169,6 +172,7 @@ function dbmng_create_table($aForm, $aParam)
 							}
 					}
 				
+				// get user function parameters
 				if( isset($aParam['user_function']) )
 				{
 				  $nIns = (isset($aParam['user_function']['ins']) ? $aParam['user_function']['ins'] : 1 );
@@ -176,7 +180,8 @@ function dbmng_create_table($aForm, $aParam)
 				  $nDel = (isset($aParam['user_function']['del']) ? $aParam['user_function']['del'] : 1 );
 				  $nDup = (isset($aParam['user_function']['dup']) ? $aParam['user_function']['dup'] : 1 );				
 				}
-
+				
+				// get filters
 				if( isset($aParam['filters']) )
 				{
 					foreach ( $aParam['filters'] as $x => $x_value )
@@ -198,15 +203,7 @@ function dbmng_create_table($aForm, $aParam)
 				// Table generation
 				$html .= "<table>\n";
 				
-				// write HEAD row
-				$html .= "<thead>\n";
-				$html .= "<tr>\n";
-				foreach ( $aForm['fields'] as $x => $x_value )
-					{
-						if( $x_value['skip_in_tbl'] == 0 )
-							$html .= "<th>" . t($x_value['label']) . "</th>\n";
-					}
-				$html .= "<th>" . t('actions') . "</th></tr></thead>\n";
+				$html .= layout_table_head( $aForm['fields'] );
 				
 				// write FOOTER row
 				if( $result->rowCount() > 1 )
@@ -313,7 +310,6 @@ function dbmng_create_form($aForm, $aParam)
 	$do_update = false;
   //get some hidden variables if exists()
 	$hv = '';
-	
 	
 	if(isset($aParam))
 		{
