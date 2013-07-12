@@ -1,3 +1,5 @@
+ALTER TABLE  `dbmng_fields` ADD  `field_widget` VARCHAR( 50 ) NOT NULL AFTER  `id_field_type`;
+
 CREATE TABLE  dbmng_type_table (
 id_dbmng_type_table INT NOT NULL AUTO_INCREMENT ,
 type_table VARCHAR( 100 ) NOT NULL ,
