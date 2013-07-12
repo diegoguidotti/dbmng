@@ -1,6 +1,6 @@
 <?php
 include_once "sites/all/library/dbmng/dbmng_extend_functions.php";
-
+include_once "sites/all/library/layout/layout.php";
 /*
 Convention to be used in code:
 
@@ -133,7 +133,6 @@ function dbmng_get_form_array($id_table)
 		print_r($aForm['primary_key']);
 		echo "<br />";
 		*/
-		
 		$aForm['fields']=$aFields;
 		//print_r($aForm);
 		
@@ -314,20 +313,22 @@ function dbmng_create_form($aForm, $aParam)
 	$do_update = false;
   //get some hidden variables if exists()
 	$hv = '';
+	
+	
 	if(isset($aParam))
-	{
-		if(isset($aParam['hidden_vars']))
 		{
-			foreach ( $aParam['hidden_vars'] as $x => $x_value )
-			{				
-				$hv.= ("<input type='hidden' name='".$x."' value='".$x_value."' />\n");
+			if(isset($aParam['hidden_vars']))
+			{
+				foreach ( $aParam['hidden_vars'] as $x => $x_value )
+				{				
+					$hv.= ("<input type='hidden' name='".$x."' value='".$x_value."' />\n");
+				}
 			}
 		}
-	}
 	
 	if(isset($_GET["upd_" . $aForm['table_name']]))
 		{
-			$do_update=true;
+			$do_update = true;
 		}
 
 	if ( isset($_GET["ins_" . $aForm['table_name']]) || $do_update )
@@ -384,29 +385,28 @@ function dbmng_create_form($aForm, $aParam)
 
 									if ($x_value['type']=='text')
 									{
-										$html .= "<textarea  name='$id' id='$id'  $other >";
-										$html .= " $value ";	
-										$html .= "</textarea>\n";
+										$html .= layout_textarea( $id, $other, $value );
+										//$html .= "<textarea  name='$id' id='$id'  $other >";
+										//$html .= " $value ";	
+										//$html .= "</textarea>\n";
 									}
 									else if ($x_value['type']=='select')
 									{
-										$html .= "<select  name='$id' id='$id'  $other >\n";
-										$html .= "<option/> \n";	
-										$nLen = count($aVoc);
-										
-			
-										
-										foreach ( $aVoc as $vocKey => $vocValue )
-										{
-											$s="";
-											if($do_update && $value==$vocKey){
-												$s=" selected='true' ";
-											}
-
-											$html .= "<option $s value='" . $vocKey . "'>" . $vocValue . "</option> \n";	
-										}
-										$html .= "</select>\n";
-
+										$html .= layout_select($id, $other, $aVoc, $value, $do_update);
+										//$html .= "<select  name='$id' id='$id'  $other >\n";
+										//$html .= "<option/> \n";	
+										//$nLen = count($aVoc);
+										//
+										//foreach ( $aVoc as $vocKey => $vocValue )
+										//{
+										//	$s="";
+										//	if($do_update && $value==$vocKey){
+										//		$s=" selected='true' ";
+										//	}
+                    //
+										//	$html .= "<option $s value='" . $vocKey . "'>" . $vocValue . "</option> \n";	
+										//}
+										//$html .= "</select>\n";
 									}
 									else //varchar and integer
 									{									
@@ -415,7 +415,6 @@ function dbmng_create_form($aForm, $aParam)
 										$html .= " $other ";	
 										$html .= " />\n";
 									}
-
 
 									$html.="<br />\n";
 								}
@@ -440,9 +439,17 @@ function dbmng_create_form($aForm, $aParam)
 }
 
 
+/////////////////////////////////////////////////////////////////////////////
+// dbmng_create_form_process
+// ======================
+/// This function prepare the form process (update, insert, delete, duplicate)
+/**
+\param $aForm  		Associative array with all the characteristics
+\param $aParam  		Associative array with some custom variable used by the renderer
+\return           HTML generated code
+*/
 function dbmng_create_form_process($aForm, $aParam) 
-{
-
+	{
 		// update record
 		dbmng_create_form_update($aForm, $aParam);
 		// insert record
@@ -451,7 +458,7 @@ function dbmng_create_form_process($aForm, $aParam)
 		dbmng_create_form_delete($aForm, $aParam);		
 		// duplicate record
 		dbmng_create_form_duplicate($aForm, $aParam);
-}
+	}
 
 /////////////////////////////////////////////////////////////////////////////
 // dbmng_create_form_delete
