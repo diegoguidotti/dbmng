@@ -33,7 +33,7 @@ function dbmng_menu() {
 
     $items['dbmng/dbmng'] = array(
         'title' => 'Database Management',
-        'page callback' => 'dbmng',
+        'page callback' => 'dbmng_manager',
         'access arguments' => array('access content'),
         'type' => MENU_CALLBACK,
      );
@@ -58,7 +58,7 @@ $result = db_query('SELECT distinct id_table, table_label, table_name FROM dbmng
 return $html;
 }
 
-function dbmng() 
+function dbmng_manager() 
 {
 	drupal_add_css( "sites/all/modules/dbmng_module/dbmng_module.css" );
 	$id_table_table=8;
@@ -109,9 +109,7 @@ function dbmng()
 			$aParam['user_function']['dup']	   = 0;	              // allow to enabled=1 or disabled=0 the duplication function
 			$aParam['user_function']['del']	   = 0;	              // allow to enabled=1 or disabled=0 the delate function
 
-			dbmng_create_form_process($aForm, $aParam);
-			$html .= dbmng_create_table($aForm, $aParam);
-			$html .= dbmng_create_form($aForm, $aParam);
+			dbmng_crud($aForm, $aParam);
 
 		}
 		else{
@@ -126,9 +124,7 @@ function dbmng()
 
 
 			// update record
-			dbmng_create_form_process($aForm, $aParam);
-			$html .= dbmng_create_table($aForm, $aParam);
-      $html .= dbmng_create_form($aForm, $aParam);
+			dbmng_crud($aForm, $aParam);
 		}
 			
 	}

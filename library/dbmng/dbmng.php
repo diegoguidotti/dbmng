@@ -44,6 +44,9 @@ function getVersion()
 	}
 
 
+
+
+
 /////////////////////////////////////////////////////////////////////////////
 // dbmng_get_form_array
 // ======================
@@ -142,6 +145,24 @@ function dbmng_get_form_array($id_table)
 		return $aForm;
 	}
 
+
+
+/////////////////////////////////////////////////////////////////////////////
+// dbmng_crud
+// ======================
+/// This function create all the CRUD interface
+/**
+\param $aForm  		Associative array with all the characteristics of the table
+\param $aParam  		Associative array with some custom variable used by the renderer
+\return           HTML generated code
+*/
+function dbmng_crud(){
+			$html  = "";
+      $html .= dbmng_create_form_process($aForm, $aParam);
+			$html .= dbmng_create_table($aForm, $aParam);
+      $html .= dbmng_create_form($aForm, $aParam);
+			return $html;
+}
 
 /////////////////////////////////////////////////////////////////////////////
 // dbmng_create_table
