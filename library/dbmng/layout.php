@@ -43,6 +43,27 @@ function layout_form_textarea( $fld, $fld_value, $value )
 	return $html;
 }
 
+
+function layout_form_checkbox( $fld, $fld_value, $value )
+{
+	$other = "";		
+	if($fld_value['nullable'] == 0)
+		$other .= "required ";			
+
+	$html  = "";
+	$html .= "<label for='$fld'>" . t($fld_value['label_long']) . "</label>\n";
+	$html .= "<input class='dbmng_checkbox' type='checkbox' name='$fld' id='$fld' ";
+	if($value==1 || ($value<>0 &&  $fld_value['default']=="1"))
+    {
+			$html .= " checked='true' ";
+		}	
+	 
+	$html .= " $other ";	
+	$html .= " />\n";
+
+	return $html;
+}
+
 function layout_form_select( $fld, $fld_value, $value )
 {
 	$do_update = false;

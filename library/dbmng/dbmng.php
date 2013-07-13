@@ -239,12 +239,19 @@ function dbmng_create_form($aForm, $aParam)
 			$html .= "<div class='dbmng_form' id='dbmng_form_".$aForm['table_name']."' >\n<form method='POST' action='?' >\n".$hv."";
 			foreach ( $aForm['fields'] as $fld => $fld_value )
 				{
+
+					$custom_function_exists=false;
 					if( isset($fld_value['field_function']) )
 						{
-							if( function_exists($fld_value['field_function']) )
-								$html .= call_user_func($fld_value['field_function']);
+							if( function_exists($fld_value['field_function']) ) 
+								{
+									$html .= call_user_func($fld_value['field_function']);
+									$custom_function_exists=true;
+								}
 						}
-					else
+
+
+				if(!$custom_function_exists)
 						{
 							if( $aForm['primary_key'][0] != $fld )
 								{
@@ -260,9 +267,15 @@ function dbmng_create_form($aForm, $aParam)
 										}
 									
 									$html.='<div class="dbmng_form_row dbmng_form_field_'.$fld.'">';
+
+
 									if ($fld_value['widget']=='textarea')
 									{
 										$html .= layout_form_textarea( $fld, $fld_value, $value );
+									}
+									else if ($fld_value['widget']=='checkbox')
+									{
+										$html .= layout_form_checkbox( $fld, $fld_value, $value );
 									}
 									else if ($fld_value['widget']=='select')
 									{
@@ -305,17 +318,30 @@ function dbmng_create_form($aForm, $aParam)
 \param $sValue  		The value obtained by the request
 \return             Value
 */
-function dbmng_value_prepare($x_value, $sValue)
+function dbmng_value_prepare($x_value, $x, $post)
 {
+
+  $sValue=null;
+	if(isset($post[$x])){
+	  $sValue=$post[$x];
+	}
+	
+  if($x_value['widget']=='checkbox'){
+    if(is_null($sValue))
+			$sValue="0";
+		else
+			$sValue="1";
+	}
+
 	$sVal='';
 	$sType=$x_value['type'];
 
-	//echo($sType.'|'.$sValue.'|'.is_null($x_value['default']).'|<br/>');
+	echo($sType.'|'.$sValue.'|'.is_null($x_value['default']).'|<br/>');
 
 	//if exists a default value use the default values instead of null
 	if(strlen($sValue)==0 && is_null($x_value['default']) )
 		{
-			$sVal  .= "NULL, ";
+			$sVal  .= "NULL";
 		}
 	else
 		{
@@ -324,14 +350,11 @@ function dbmng_value_prepare($x_value, $sValue)
 					$sValue=$x_value['default'];
 				}
 
-			switch ($sType)
-				{
-					case ($sType=="int" || $sType=="bigint" || $sType=="float"  || $sType=="double") :
-						$sVal  .= $sValue . ", ";							
-						break;
-				
-					default:
-						$sVal  .= "'" . $sValue . "', ";
+				if ($sType=="int" || $sType=="bigint" || $sType=="float"  || $sType=="double") {
+					$sVal  .= $sValue;							
+				}
+				else {
+					$sVal  .= "'" . $sValue . "'";
 				}
 		}
   return $sVal;
@@ -359,6 +382,21 @@ function dbmng_value_prepare_html($fld_value, $value){
 				else{
 					$ret = null;
 				}
+			}
+		elseif( $fld_value['widget'] == "checkbox" )
+			{
+				if($value=="1")
+					{
+						$ret = '<span class="dbmng_check_true">'.t('true').'<span>';
+					}
+				elseif($value=="0")
+					{
+						$ret = '<span class="dbmng_check_false">'.t('false').'<span>';
+					}
+				else
+					{
+						$ret = "";
+					}
 			}
 		else
 		{
