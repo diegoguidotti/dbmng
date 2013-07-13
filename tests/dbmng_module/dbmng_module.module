@@ -109,7 +109,7 @@ function dbmng_manager()
 			$aParam['user_function']['dup']	   = 0;	              // allow to enabled=1 or disabled=0 the duplication function
 			$aParam['user_function']['del']	   = 0;	              // allow to enabled=1 or disabled=0 the delate function
 
-			dbmng_crud($aForm, $aParam);
+			$html .= dbmng_crud($aForm, $aParam);
 
 		}
 		else{
@@ -124,7 +124,14 @@ function dbmng_manager()
 
 
 			// update record
-			dbmng_crud($aForm, $aParam);
+			$html .= dbmng_crud($aForm, $aParam);
+
+
+			
+
+
+
+
 		}
 			
 	}

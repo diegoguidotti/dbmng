@@ -156,7 +156,7 @@ function dbmng_get_form_array($id_table)
 \param $aParam  		Associative array with some custom variable used by the renderer
 \return           HTML generated code
 */
-function dbmng_crud(){
+function dbmng_crud($aForm, $aParam){
 			$html  = "";
       $html .= dbmng_create_form_process($aForm, $aParam);
 			$html .= dbmng_create_table($aForm, $aParam);
