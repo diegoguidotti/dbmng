@@ -3,15 +3,15 @@ DBMNG
 
 DBMNG is a proposed library to Create Read Update and Delete a database table. 
 
-To generate the interface of an existing cell you need to define in an associative array some metadata:
+To generate the interface of an existing table you need to define in an associative array with few metadata:
 
 ``` php
 $aForm=array(  
   'table_name' => 'test' ,
 	'primary_key'=> array('id_test'), 
 	'fields'     => array(
-		'nome' => array('label' => 'Name', 'type' => 'varchar') ,
-		'eta'  => array('label'   => 'Et&agrave;' , 'type' => 'int'    )
+		'name' => array('label'   => 'Name', 'type' => 'varchar') ,
+		'age'  => array('label'   => 'Age' , 'type' => 'int'    )
 	)
 );
 $aParam=array();
