@@ -22,8 +22,9 @@ The table metadata can be stored in the database. In that case the CRUD interfac
 the key of the desidered table.
 
 ``` php
-$aForm    = dbmng_get_form_array(1); //get the array storing the table metadata from record 1 in table dbmng_tables
-$aParam   = array();                 //associative array storing custom parameters (if needed)
+//get the array storing the table metadata from record 1 in table dbmng_tables
+$aForm    = dbmng_get_form_array(1); 
+$aParam   = array();                 //associative array storing custom parameters
 
 echo dbmng_crud($aForm, $aParam);
 ``` 
@@ -51,6 +52,6 @@ functions for user and adding custom function
   $aParam['tbl_footer']              = 1;               
   
   //add a custom function to each record calling show_fields=id_record 
-  $aParam['custom_function'][0]['custom_variable'] = 'show_fields';   s
+  $aParam['custom_function'][0]['custom_variable'] = 'show_fields';
   $aParam['custom_function'][0]['custom_label']    = 'Show Fields';
 ```
