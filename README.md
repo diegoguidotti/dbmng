@@ -1,43 +1,56 @@
 DBMNG
 =====
 
-DBMNG is a proposed library to Create Read Update and Delete a database table. The table metadata can be stored 
-in the database or can be provided manually from the code.
+DBMNG is a proposed library to Create Read Update and Delete a database table. 
+
+To generate the interface of an existing cell you need to define in an associative array some metadata:
 
 ``` php
-$aForm    = dbmng_get_form_array(1); //associative array storing the table metadata
+$aForm=array(  
+  'table_name' => 'test' ,
+	'primary_key'=> array('id_test'), 
+	'fields'     => array(
+		'nome' => array('label' => 'Name', 'type' => 'varchar') ,
+		'eta'  => array('label'   => 'Et&agrave;' , 'type' => 'int'    )
+	)
+);
+$aParam=array();
+echo dbmng_crud($aForm, $aParam);
+```
+
+The table metadata can be stored in the database. In that case the CRUD interface can be generated just using 
+the key of the desidered table.
+
+``` php
+$aForm    = dbmng_get_form_array(1); //get the array storing the table metadata from record 1 in table dbmng_tables
 $aParam   = array();                 //associative array storing custom parameters (if needed)
 
-dbmng($aForm, $aParam);
+echo dbmng_crud($aForm, $aParam);
 ``` 
 
+The $aParam value allows to filter the records, add hidden variables to the POST and GET call, define the available 
+functions for user and adding custom function
 
-La libreria opera principalmente su due array associativi: 
-* $aForm e 
-* $aParam
 
-L'array $aForm viene generato dinamicamente a partire dalle tabelle di metadb presenti nel database: 
-* dbmng_tables e 
-* dbmng_fields
-
-L'array $aParam fornisce alla libreria funzionalità aggiuntive. La struttura attuale dell'array è la seguente:
-
-``` php
-  $aParam                          = array();
-  
+``` php  
   //filter records where the fields contain a specific value
-  $aParam['filters']['id_user']     = $user->uid;      // save the user id
+  $aParam['filters']['id_user']      = 1;         //Filter record of user 1
 
 
-  $aParam['hidden_vars']           = array();
-  $aParam['hidden_vars']['tbl']	   = $_REQUEST['tbl']; //save the table id
-  $aParam['hidden_vars']['type_tbl'] = 1;             //table type (1: content table; 2: system table)
+  //add "&lang=en&section=News" to all the call
+  $aParam['hidden_vars']['lang']	   = 'en';      
+  $aParam['hidden_vars']['section']  = 'News';    
 
-  $aParam['tbl_footer']            = 1;               // allow to add filtering
-  $aParam['user_function']['dup']	 = 1;	              // allow to enabled=1 or disabled=0 the duplication function
-  $aParam['user_function']['ins']	 = 1;	              // allow to enabled=1 or disabled=0 the insert function
-  $aParam['user_function']['upd']	 = 1;               // allow to enabled=1 or disabled=0 the update function
-  $aParam['user_function']['del']	 = 1;	              // allow to enabled=1 or disabled=0 the delate function
-  $aParam['custom_function'][0]['custom_variable']= 'show_fields';   // allow to add the button show_fields
-  $aParam['custom_function'][0]['custom_label']   = t('Show Fields');
+  //define if a specific function is enables (1) or disabled (0)
+  $aParam['user_function']['dup']    = 1;	        // record duplication
+  $aParam['user_function']['ins']	   = 1;	        // insert
+  $aParam['user_function']['upd']	   = 1;         // update
+  $aParam['user_function']['del']	   = 1;	        // delete
+
+  //activate a table footer with filter sections
+  $aParam['tbl_footer']              = 1;               
+  
+  //add a custom function to each record calling show_fields=id_record 
+  $aParam['custom_function'][0]['custom_variable'] = 'show_fields';   s
+  $aParam['custom_function'][0]['custom_label']    = 'Show Fields';
 ```
