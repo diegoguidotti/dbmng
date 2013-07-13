@@ -1,5 +1,16 @@
-dbmng
+DBMNG
 =====
+
+DBMNG is a proposed library to Create Read Update and Delete a database table. The table metadata can be stored 
+in the database or can be provided manually from the code.
+
+``` php
+$aForm    = dbmng_get_form_array(1); //associative array storing the table metadata
+$aParam   = array();                 //associative array storing custom parameters (if needed)
+
+dbmng($aForm, $aParam);
+``` 
+
 
 La libreria opera principalmente su due array associativi: 
 * $aForm e 
