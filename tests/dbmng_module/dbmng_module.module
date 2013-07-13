@@ -38,6 +38,13 @@ function dbmng_menu() {
         'type' => MENU_CALLBACK,
      );
 
+ 		$items['dbmng/edit_tables'] = array(
+        'title' => 'Edit Table',
+        'page callback' => 'dbmng_edit_tables',
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+     );
+
     return $items;
 }
 
@@ -100,40 +107,108 @@ function dbmng_manager()
 	}
 	else{
 
-		if( isset($_REQUEST['show_fields']) ){
 
-			$aForm    = dbmng_get_form_array($id_table_field);
-			$aParam                            = array();
-			$aParam['filters']['id_table']	   = $_REQUEST['show_fields']; 
-			$aParam['hidden_vars']['show_fields']  = $_REQUEST['show_fields'];
-			$aParam['user_function']['dup']	   = 0;	              // allow to enabled=1 or disabled=0 the duplication function
-			$aParam['user_function']['del']	   = 0;	              // allow to enabled=1 or disabled=0 the delate function
+		if( isset($_REQUEST['test']) )
+			{
 
-			$html .= dbmng_crud($aForm, $aParam);
+				$aForm=array(  
+					'table_name' => 'test' ,
+					'primary_key'=> array('id_test'), 
+					'fields'     => array(
+						'nome' => array('label' => 'Name', 'type' => 'varchar') ,
+						'eta'  => array('label'   => 'Et&agrave;' , 'type' => 'int'    )
+					)
+        );
+				$aParam=array();
+				$aParam['hidden_vars']['test']  = $_REQUEST['test'];
+				$html .= dbmng_crud($aForm, $aParam);
 
-		}
-		else{
+			}
+		elseif( isset($_REQUEST['show_fields']) )
+			{
+
+				$aForm    = dbmng_get_form_array($id_table_field);
+				$aParam                            = array();
+				$aParam['filters']['id_table']	   = $_REQUEST['show_fields']; 
+				$aParam['hidden_vars']['show_fields']  = $_REQUEST['show_fields'];
+				$aParam['user_function']['dup']	   = 0;	              // allow to enabled=1 or disabled=0 the duplication function
+				$aParam['user_function']['del']	   = 0;	              // allow to enabled=1 or disabled=0 the delate function
+
+				$html .= dbmng_crud($aForm, $aParam);
+
+			}
+		else
+			{
 
 
-			$aForm    = dbmng_get_form_array($id_table_table);
-			$aParam                            = array();
-			$aParam['user_function']['dup']	   = 0;	              // allow to enabled=1 or disabled=0 the duplication function
-			$aParam['user_function']['del']	   = 0;	              // allow to enabled=1 or disabled=0 the delate function
-			$aParam['custom_function'][0]['custom_variable']  = 'show_fields';
-			$aParam['custom_function'][0]['custom_label']  = t('Show Fields');
+				$aForm    = dbmng_get_form_array($id_table_table);
+				$aParam                            = array();
+				$aParam['user_function']['dup']	   = 0;	              // allow to enabled=1 or disabled=0 the duplication function
+				$aParam['user_function']['del']	   = 0;	              // allow to enabled=1 or disabled=0 the delate function
+				$aParam['custom_function'][0]['custom_variable']  = 'show_fields';
+				$aParam['custom_function'][0]['custom_label']  = t('Show Fields');
 
 
-			// update record
-			$html .= dbmng_crud($aForm, $aParam);
-
-
-			
-
-
-
-
+				// update record
+				$html .= dbmng_crud($aForm, $aParam);
 		}
 			
 	}
   return ($html);
 }
+
+
+
+
+function dbmng_edit_tables() {
+	drupal_add_css( "sites/all/modules/enpimodule/enpimodule.css" );
+
+		$table = 'test';
+		
+		$html  = t('Document page');
+		if( isset($_REQUEST['tbl']) )
+		{
+			//get the form!!!
+			$id_table = $_REQUEST['tbl'];
+			$aForm    = dbmng_get_form_array($id_table);
+
+			//the param array stores some custom variable used by the renderer
+			//hidden_vars are some hidden variables used by the form creation
+			global $user;
+			unset($aParam);
+			$aParam                          = array();
+			$aParam['filters']               = array();
+			$aParam['hidden_vars']           = array();
+			$aParam['hidden_vars']['tbl']	   = $_REQUEST['tbl']; //save the table id
+		$aParam['hidden_vars']['type_tbl'] = 1; //table type (1: content table; 2: system table)
+
+			//test filter records with a specific uid
+			$aParam['filters']['id_user']	   = $user->uid;       // save the user id
+			$aParam['tbl_footer']            = 1;                // allow to add filtering
+			$aParam['user_function']['dup']	 = 1;	              // allow to enabled=1 or disabled=0 the duplication function
+			$aParam['user_function']['ins']	 = 1;	              // allow to enabled=1 or disabled=0 the insert function
+			$aParam['user_function']['upd']	 = 1;                // allow to enabled=1 or disabled=0 the update function
+			$aParam['user_function']['del']	 = 1;	              // allow to enabled=1 or disabled=0 the delate function
+
+			//print_r ($aParam['filters']);
+	
+			// update record
+			dbmng_create_form_update($aForm, $aParam);
+	
+			// insert record
+			dbmng_create_form_insert($aForm, $aParam);
+			
+			// delete record
+			dbmng_create_form_delete($aForm, $aParam);
+			
+			// duplicate record
+			dbmng_create_form_duplicate($aForm, $aParam);
+	
+			$html .= dbmng_create_table($aForm, $aParam);
+	
+			$html .= dbmng_create_form($aForm, $aParam);
+		}
+	    return ($html);
+
+}
+

@@ -13,31 +13,41 @@ function prepare_hidden_var($aParam)
 	return $hv;
 }
 
+function layout_get_nullable($fld_value)
+	{
+		$ht = "";
+		if(isset($fld_value['nullable']) && $fld_value['nullable'] == 0)
+				$ht .= "required ";			
+		return $ht;
+	}
+
+
+function layout_get_label($fld, $fld_value)
+	{
+		$lb = $fld_value['label'];
+		if( isset( $fld_value['label_long'] ) )
+				$lb =  $fld_value['label_long'];			
+
+		return "<label for='$fld'>" . t($lb) . "</label>\n";
+	}
+
+
 //This is a comment
 function layout_form_input( $fld, $fld_value, $value )
 {
-	$other = "";		
-	if($fld_value['nullable'] == 0)
-		$other .= "required ";			
-
-	$html  = "";
-	$html .= "<label for='$fld'>" . t($fld_value['label_long']) . "</label>\n";
-	$html .= "<input type='text' name='$fld' id='$fld' ";
+	$html  = "<input type='text' name='$fld' id='$fld' ";
 	$html .= " value= '$value' ";	
-	$html .= " $other ";	
+	$html .= layout_get_nullable($fld_value);	
 	$html .= " />\n";
 	return $html;
 }
 
-function layout_form_textarea( $fld, $fld_value, $value )
-{
-	$other = "";		
-	if($fld_value['nullable'] == 0)
-		$other .= "required ";			
 
-	$html  = "";
-	$html .= "<label for='$fld'>" . t($fld_value['label_long']) . "</label>\n";
-	$html .= "<textarea  name='$fld' id='$fld'  $other >";
+	
+
+function layout_form_textarea( $fld, $fld_value, $value )
+{		
+	$html  = "<textarea  name='$fld' id='$fld'  ".layout_get_nullable($fld_value)." >";
 	$html .= $value;	
 	$html .= "</textarea>\n";
 	return $html;
@@ -46,19 +56,13 @@ function layout_form_textarea( $fld, $fld_value, $value )
 
 function layout_form_checkbox( $fld, $fld_value, $value )
 {
-	$other = "";		
-	if($fld_value['nullable'] == 0)
-		$other .= "required ";			
-
-	$html  = "";
-	$html .= "<label for='$fld'>" . t($fld_value['label_long']) . "</label>\n";
-	$html .= "<input class='dbmng_checkbox' type='checkbox' name='$fld' id='$fld' ";
+	$html = "<input class='dbmng_checkbox' type='checkbox' name='$fld' id='$fld' ";
 	if($value==1 || ($value<>0 &&  $fld_value['default']=="1"))
     {
 			$html .= " checked='true' ";
 		}	
 	 
-	$html .= " $other ";	
+	$html .= layout_get_nullable($fld_value);	
 	$html .= " />\n";
 
 	return $html;
@@ -75,14 +79,7 @@ function layout_form_select( $fld, $fld_value, $value )
 			$aVoc = array();
 			$aVoc = $fld_value['voc_val'];
 		} 
-
-	$other = "";		
-	if($fld_value['nullable'] == 0)
-		$other .= "required ";			
-
-	$html  = "";
-	$html .= "<label for='$fld'>" . t($fld_value['label_long']) . "</label>\n";
-	$html .= "<select  name='$fld' id='$fld'  $other >\n";
+	$html = "<select  name='$fld' id='$fld'  ".layout_get_nullable($fld_value)." >\n";
 	$html .= "<option/> \n";	
 	$nLen  = count($aVoc);
 	
@@ -106,7 +103,8 @@ function layout_table_head($aField)
 	$html .= "<tr>\n";
 	foreach ( $aField as $fld => $fld_value )
 		{
-			if( $fld_value['skip_in_tbl'] == 0 )
+			
+			if( layout_view_field_table($fld_value) )
 				$html .= "<th class='dbmng_field_$fld'>" . t($fld_value['label']) . "</th>\n";
 		}
 	$html .= "<th class='dbmng_functions'>" . t('actions') . "</th>\n";
@@ -122,7 +120,7 @@ function layout_table_footer($aField)
 	$html .= "<tr>\n";
 	foreach ( $aField as $fld => $fld_value )
 		{
-			if( $fld_value['skip_in_tbl'] == 0 )
+			if( layout_view_field_table($fld_value) )
 				$html .= "<td><input type='text' name='$fld' id='$fld' placeholder='" . t("Search") . " " . t($fld_value['label']) . "' /></td>\n";
 		}
 	$html .= "<td>" . t("Clear filtering") . "</td>";
@@ -131,10 +129,20 @@ function layout_table_footer($aField)
 	return $html;
 }
 
+function layout_view_field_table($fld_value){
+	$ret=true;	
+	if( isset($fld_value['skip_in_tbl']) ) {
+		if($fld_value['skip_in_tbl'] == 0){
+			$ret=false;
+		}
+	}
+	return $ret;
+}
+
 
 function layout_table_action( $aForm, $aParam, $id_record )
 {
-		
+	$nDel = 1;	$nUpd=1; 	$nDup=1; 
 	// get user function parameters
 	if( isset($aParam['user_function']) )
 	{
@@ -173,7 +181,7 @@ function layout_table_custom_function($aParam, $id_record)
 function layout_table_insert($aForm, $aParam)
 {
   // Initialization of user function variable
-  // $nIns = 1;
+  $nIns = 1;
 	if( isset($aParam['user_function']) )
 	  $nIns = (isset($aParam['user_function']['ins']) ? $aParam['user_function']['ins'] : 1 );
 
@@ -201,7 +209,7 @@ function layout_table_body( $result, $aForm, $aParam )
 				{
 
 					$value=dbmng_value_prepare_html($fld_value, $record->$fld);
-					if( $fld_value['skip_in_tbl'] == 0 )
+					if( layout_view_field_table($fld_value) )
 						{
 							$html.= "<td class='dbmng_field_$fld'>".$value."</td>";
 						}

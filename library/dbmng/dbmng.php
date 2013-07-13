@@ -196,12 +196,13 @@ function dbmng_create_table($aForm, $aParam)
 			  $sql = 'select * from ' . $aForm['table_name'].' '. $where;
 				$result = db_query($sql);
 			  
-			  $tblLbl = (!is_null($aForm['table_label']) ? t($aForm['table_label']) : $aForm['table_name']);
-
 				$html  .= "<div class='dbmng_table' id='dbmng_".$aForm['table_name']."'>";
 
-				
-				$html  .= "<h1 class='dbmng_table_label'>" . $tblLbl . "</h1>\n";
+				if(isset($aForm['table_label']))
+					{
+					  $tblLbl = (!is_null($aForm['table_label']) ? t($aForm['table_label']) : $aForm['table_name']);
+						$html  .= "<h1 class='dbmng_table_label'>" . $tblLbl . "</h1>\n";
+					}
 				
 				$html .= layout_table( $result, $aForm, $aParam );
 
@@ -282,23 +283,29 @@ function dbmng_create_form($aForm, $aParam)
 										{
 											$value = $vals->$fld;
 										}
-									elseif( !is_null($fld_value['default'])  )
+									elseif( isset($fld_value['default']) && !is_null($fld_value['default'])  )
 										{
 											$value = $fld_value['default'];
 										}
 									
 									$html.='<div class="dbmng_form_row dbmng_form_field_'.$fld.'">';
+									
+									$widget='input';
+									if(isset($fld_value['widget']))
+										$widget=$fld_value['widget'];
 
+									//generate the form label
+									$html .= layout_get_label($fld, $fld_value);
 
-									if ($fld_value['widget']=='textarea')
+									if ($widget==='textarea')
 									{
 										$html .= layout_form_textarea( $fld, $fld_value, $value );
 									}
-									else if ($fld_value['widget']=='checkbox')
+									else if ($widget==='checkbox')
 									{
 										$html .= layout_form_checkbox( $fld, $fld_value, $value );
 									}
-									else if ($fld_value['widget']=='select')
+									else if ($widget==='select')
 									{
 										$html .= layout_form_select( $fld, $fld_value, $value );
 									}
@@ -347,7 +354,13 @@ function dbmng_value_prepare($x_value, $x, $post)
 	  $sValue=$post[$x];
 	}
 	
-  if($x_value['widget']=='checkbox'){
+	$widget='input';
+	if(isset($x_value['widget']))
+		{
+			$widget=$x_value['widget'];
+		}
+	
+  if($widget=='checkbox'){
     if(is_null($sValue))
 			$sValue="0";
 		else
@@ -357,7 +370,7 @@ function dbmng_value_prepare($x_value, $x, $post)
 	$sVal='';
 	$sType=$x_value['type'];
 
-	echo($sType.'|'.$sValue.'|'.is_null($x_value['default']).'|<br/>');
+	//echo($sType.'|'.$sValue.'|'.is_null($x_value['default']).'|<br/>');
 
 	//if exists a default value use the default values instead of null
 	if(strlen($sValue)==0 && is_null($x_value['default']) )
@@ -393,7 +406,14 @@ function dbmng_value_prepare($x_value, $x, $post)
 function dbmng_value_prepare_html($fld_value, $value){
 
 		$ret=null;
-		if( $fld_value['widget'] == "select" )
+
+		$widget='input';
+		if(isset($fld_value['widget'])){
+			$widget=$fld_value['widget'];
+		}		
+		
+
+		if( $widget == "select" )
 			{
 				$aVoc = array();
 				$aVoc = $fld_value['voc_val'];
@@ -404,7 +424,7 @@ function dbmng_value_prepare_html($fld_value, $value){
 					$ret = null;
 				}
 			}
-		elseif( $fld_value['widget'] == "checkbox" )
+		elseif($widget == "checkbox" )
 			{
 				if($value=="1")
 					{

@@ -11,32 +11,6 @@ table tfoot tr td{
 }
 
 
-div.dbmng_form_row{
-  clear: both;
-  padding:3px;
-}
-
-div.dbmng_form label {
-  display: block;
-	float:left;
-  width:150px;
-}
-
-div.dbmng_form_row input, div.dbmng_form_row select, div.dbmng_form_row textarea  {
-  width:300px;
-}
-
-/* do not change width of checkbox */
-div.dbmng_form_row input.dbmng_checkbox {
-  width: auto;
-}
-
-
-div.dbmng_form_field_id_voc_type select{
-  width:30px!important;
-}
-
-
 
 
 
