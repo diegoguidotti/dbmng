@@ -311,7 +311,12 @@ function dbmng_create_form($aForm, $aParam)
 									}
 									else //use input by default
 									{
-										$html .= layout_form_input( $fld, $fld_value, $value );		
+                    $more='';
+										if(dbmng_is_field_type_numeric($fld_value['type']))
+											{
+												$more="onkeypress=\"dbmng_validate_numeric(event)\"";		
+											}   
+										$html .= layout_form_input( $fld, $fld_value, $value, $more );		
 									}
 									$html.='</div>';
 
@@ -336,6 +341,11 @@ function dbmng_create_form($aForm, $aParam)
 		return $html;
 }
 
+
+function dbmng_is_field_type_numeric($sType)
+	{
+   	return ($sType=="int" || $sType=="bigint" || $sType=="float"  || $sType=="double");
+	}
 
 /////////////////////////////////////////////////////////////////////////////
 // dbmng_value_prepare
@@ -384,7 +394,7 @@ function dbmng_value_prepare($x_value, $x, $post)
 					$sValue=$x_value['default'];
 				}
 
-				if ($sType=="int" || $sType=="bigint" || $sType=="float"  || $sType=="double") {
+				if (dbmng_is_field_type_numeric($sType)) {
 					$sVal  .= $sValue;							
 				}
 				else {

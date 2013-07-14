@@ -68,6 +68,8 @@ return $html;
 function dbmng_manager() 
 {
 	drupal_add_css( "sites/all/modules/dbmng_module/dbmng_module.css" );
+	drupal_add_css( "sites/all/library/dbmng/assets/dbmng.css" );
+	drupal_add_js ( "sites/all/library/dbmng/assets/dbmng.js" );
 	$id_table_table=8;
 	$id_table_field=9;
 
@@ -161,7 +163,9 @@ function dbmng_manager()
 
 
 function dbmng_edit_tables() {
-	drupal_add_css( "sites/all/modules/enpimodule/enpimodule.css" );
+	drupal_add_css( "sites/all/modules/dbmng_module/dbmng_module.css" );
+	drupal_add_css( "sites/all/library/dbmng/assets/dbmng.css" );
+	drupal_add_js ( "sites/all/library/dbmng/assets/dbmng.js" );
 
 		$table = 'test';
 		

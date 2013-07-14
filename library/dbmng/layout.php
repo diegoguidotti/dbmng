@@ -33,9 +33,9 @@ function layout_get_label($fld, $fld_value)
 
 
 //This is a comment
-function layout_form_input( $fld, $fld_value, $value )
+function layout_form_input( $fld, $fld_value, $value, $more='' )
 {
-	$html  = "<input type='text' name='$fld' id='$fld' ";
+	$html  = "<input type='text' name='$fld' id='$fld' $more";
 	$html .= " value= '$value' ";	
 	$html .= layout_get_nullable($fld_value);	
 	$html .= " />\n";
