@@ -309,6 +309,10 @@ function dbmng_create_form($aForm, $aParam)
 									{
 										$html .= layout_form_select( $fld, $fld_value, $value );
 									}
+									else if ($widget==='date')
+									{
+										$html .= layout_form_date( $fld, $fld_value, $value );
+									}
 									else //use input by default
 									{
                     $more='';
@@ -381,6 +385,10 @@ function dbmng_value_prepare($x_value, $x, $post)
 	$sType=$x_value['type'];
 
 	//echo($sType.'|'.$sValue.'|'.is_null($x_value['default']).'|<br/>');
+	//Fix: date widget cam not have a default empty value
+	if($widget=='date' && $x_value['default']==''){
+		$x_value['default']=null;
+	}
 
 	//if exists a default value use the default values instead of null
 	if(strlen($sValue)==0 && is_null($x_value['default']) )
@@ -432,6 +440,13 @@ function dbmng_value_prepare_html($fld_value, $value){
 				}
 				else{
 					$ret = null;
+				}
+			}
+		elseif($widget == "date" )
+			{
+				if(!is_null($value) && $value!=''){
+					$datetime = DateTime::createFromFormat('Y-m-d', $value);
+					$ret = $datetime->format('d-m-Y');
 				}
 			}
 		elseif($widget == "checkbox" )

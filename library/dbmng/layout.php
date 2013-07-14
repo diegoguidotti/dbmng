@@ -31,6 +31,28 @@ function layout_get_label($fld, $fld_value)
 		return "<label for='$fld'>" . t($lb) . "</label>\n";
 	}
 
+function layout_form_date( $fld, $fld_value, $value )
+{
+
+	$datetime_str='';
+
+	//format the date string 
+	if(!is_null($value) && $value!=''){
+		$datetime = DateTime::createFromFormat('Y-m-d', $value);
+		$datetime_str= $datetime->format('d-m-Y');
+	}
+
+	//add a new input field for the datapicker ui
+	$html  = "<input type='text' name='$fld'_tmp id='".$fld."_tmp' value='".$datetime_str."' />";
+	//keep hidden the "real" input form
+	$html .= "<input type='hidden' name='$fld' id='".$fld."' ";
+	$html .= " value= '$value' ";	
+	$html .= layout_get_nullable($fld_value);	
+	$html .= " />\n";
+	$html .='<script>  jQuery(function() { jQuery( "#'.$fld.'_tmp" ).datepicker({altField: \'#'.$fld.'\', dateFormat:\'dd-mm-yy\' , altFormat: \'yy-mm-dd\'});  });  </script>';
+	return $html;
+}
+
 
 //This is a comment
 function layout_form_input( $fld, $fld_value, $value, $more='' )
