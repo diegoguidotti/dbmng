@@ -132,7 +132,7 @@ function layout_table_footer($aField)
 function layout_view_field_table($fld_value){
 	$ret=true;	
 	if( isset($fld_value['skip_in_tbl']) ) {
-		if($fld_value['skip_in_tbl'] == 0){
+		if($fld_value['skip_in_tbl'] == 1){
 			$ret=false;
 		}
 	}
