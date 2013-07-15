@@ -2,7 +2,7 @@
 include_once "sites/all/library/dbmng/dbmng_extend_functions.php";
 include_once "sites/all/library/dbmng/dbmng_crud.php";
 include_once "sites/all/library/dbmng/layout.php";
-include_once "sites/all/library/dbmng/sql_functions.php";
+include_once "sites/all/library/dbmng/dbmng_sql_functions.php";
 
 /*
 Convention to be used in code:
@@ -60,16 +60,16 @@ function dbmng_get_form_array($id_table)
 	{
 		$aForm = array();
 
-		$table             = sql_query("select * from dbmng_tables where id_table=".$id_table);
+		$table             = dbmng_query("select * from dbmng_tables where id_table=".$id_table);
 		$aForm['id_table'] = $id_table;
-		$fo                = sql_fetch_object($table);
+		$fo                = dbmng_fetch_object($table);
 		$aForm['table_name']  = $fo->table_name;
 		$aForm['table_label'] = $fo->table_label;
 
 		//TODO: ['primary key shoud be an array to manage multiples key']
 		$aFields = array();
 		$aPK     = array(); // Array to store information about the primary key
-		$fields = sql_query("select * from dbmng_fields where id_table=" . $id_table . " order by field_order ASC");
+		$fields = dbmng_query("select * from dbmng_fields where id_table=" . $id_table . " order by field_order ASC");
 		foreach ($fields as $fld)
 			{
 				if($fld->pk == 1)
@@ -104,7 +104,7 @@ function dbmng_get_form_array($id_table)
 								$sql  = $fld->voc_sql;							
 							}
 
-						$rVoc  = sql_query($sql);
+						$rVoc  = dbmng_query($sql);
 						$aFVoc = array();
 
 						$v       = 0;
@@ -133,15 +133,15 @@ function dbmng_get_form_array($id_table)
 				$aForm['primary_key'] = array('id_' . $aForm['table_name']);	
 			}
 		
-		/*	
+/*
 		echo "aPK: ";
 		print_r($aPK);
 		echo "<br />";
 		print_r($aForm['primary_key']);
 		echo "<br />";
-		*/
+*/
 		$aForm['fields']=$aFields;
-		//print_r($aForm);
+//		print_r($aForm);
 		
 		return $aForm;
 	}
@@ -195,7 +195,7 @@ function dbmng_create_table($aForm, $aParam)
 		if( !isset($_GET["ins_" . $aForm['table_name']]) && !isset($_GET["upd_" . $aForm['table_name']]) )
 			{
 			  $sql = 'select * from ' . $aForm['table_name'].' '. $where;
-				$result = sql_query($sql);
+				$result = dbmng_query($sql);
 			  
 				$html  .= "<div class='dbmng_table' id='dbmng_".$aForm['table_name']."'>";
 
@@ -207,7 +207,7 @@ function dbmng_create_table($aForm, $aParam)
 				
 				$html .= layout_table( $result, $aForm, $aParam );
 
-				$html  .= "<div class='dbmng_record_number'>" . t("Record number") . ": " . $result->rowCount() . " " . t("recs") . "</div>\n";
+				$html  .= "<div class='dbmng_record_number'>" . t("Record number") . ": " . dbmng_num_rows($result) . " " . t("recs") . "</div>\n";
 				$html  .= '</div>';
 
 			}
@@ -254,8 +254,8 @@ function dbmng_create_form($aForm, $aParam)
 					$id_upd    = $_GET["upd_" . $aForm['table_name']];
 
 					$sql       = "select * from " . $aForm['table_name'] . " where " . $aForm['primary_key'][0] . "=" . intval($id_upd);
-					$result    = sql_query($sql );		
-					$vals      = sql_fetch_object($result); //$result->fetchObject();
+					$result    = dbmng_query($sql );		
+					$vals      = dbmng_fetch_object($result); //$result->fetchObject();
 				}
 
 
