@@ -38,12 +38,13 @@ function dbmng_query($sql)
 			$res = db_query($sql);
 			break;
 	}
+/* // per verificare cosa hai in uscita abilita questi commenti
 	echo "function <b>dbmng_query</b><br />";
 	echo "CMS <b>".DBMNG_CMS."</b><br />";
 	echo "DB <b>".DBMNG_DB."</b><br />";
 	print_r( $res );
 	echo "<br /><br />";
-
+*/
 	return $res;
 }
 
