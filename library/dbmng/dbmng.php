@@ -1,8 +1,19 @@
 <?php
-include_once "sites/all/library/dbmng/dbmng_extend_functions.php";
-include_once "sites/all/library/dbmng/dbmng_crud.php";
-include_once "sites/all/library/dbmng/layout.php";
-include_once "sites/all/library/dbmng/dbmng_sql_functions.php";
+
+
+//use by default the Drupal location for library
+if(!defined( 'DBMNG_LIB_PATH'))
+	{
+		define( 'DBMNG_LIB_PATH', 'sites/all/library/dbmng/' ); 
+	}
+
+
+include_once DBMNG_LIB_PATH."dbmng_extend_functions.php";
+include_once DBMNG_LIB_PATH."dbmng_crud.php";
+include_once DBMNG_LIB_PATH."layout.php";
+include_once DBMNG_LIB_PATH."dbmng_sql_functions.php";
+
+
 
 /*
 Convention to be used in code:

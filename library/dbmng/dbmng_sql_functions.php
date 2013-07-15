@@ -1,5 +1,5 @@
 <?php
-include_once "sites/all/library/dbmng/dbmng_cfg.php";
+include_once DBMNG_LIB_PATH."dbmng_cfg.php";
 
 function dbmng_query($sql)
 {

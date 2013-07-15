@@ -1,31 +1,28 @@
+<html>
+<head></head>
+<body>
 <?
 
-//0.include the library
-//include('.../lib/dbmng.php');
+  //we need to define some global variable to use dbmg independently by Drupal
+	define( 'DBMNG_LIB_PATH'    , '../library/dbmng/' );
+	define( 'DBMNG_CMS'         , 'none' );
+	define( 'DBMNG_DB'          , 'pdo' );
 
-//1.create an array with all the metadata
-$aDBZ= array(				
-		'table_name' => 'test',
-		'primary_key' => 'id_test',
-		'fields' => array(
-			array(
-					'field_name' => 'name',
-					'field_label' => 'Nome',								
-				),
-			array(
-					'field_name' => 'eta',
-					'field_label' => 'Et&agrave',								
-				),
-		)
+	//0.include the library
+	include('../library/dbmng/dbmng.php');
+
+	$aForm=array(  
+		'table_name' => 'test' ,
+		  'primary_key'=> array('id_test'), 
+		  'fields'     => array(
+		      'name' => array('label'   => 'Name', 'type' => 'varchar') ,
+		      'age'  => array('label'   => 'Age' , 'type' => 'int'    )
+		  )
 	);
+	$aParam=array();
+	echo dbmng_crud($aForm, $aParam);
 
-//2. create the object
-//$tab = new DBMng($aDBZ);
+?>
 
-//3. the render function will print the HTML interface
-//$output = $tab->render();
-
-//4. echo $output (or use in drupal or ther CMS)
-//echo $output;
-
->
+</body>
+</html>
