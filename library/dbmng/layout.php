@@ -263,7 +263,7 @@ function layout_table( $result, $aForm, $aParam )
 	$html .= layout_table_head( $aForm['fields'] );
 	
 	// write FOOTER row
-	if( $result->rowCount() > 1 )
+	if( dbmng_num_rows($result) > 1 )
 	{
 		if( isset($aParam['tbl_footer']) )
 		{

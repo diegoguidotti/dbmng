@@ -61,6 +61,7 @@ function dbmng_get_form_array($id_table)
 		$aForm = array();
 
 		$table             = dbmng_query("select * from dbmng_tables where id_table=".$id_table);
+		//print_r( $table );
 		$aForm['id_table'] = $id_table;
 		$fo                = dbmng_fetch_object($table);
 		$aForm['table_name']  = $fo->table_name;

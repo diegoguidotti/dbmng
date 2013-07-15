@@ -9,19 +9,37 @@ function dbmng_query($sql)
 			switch( DBMNG_DB )
 			{
 				case "mysql":
-					$link = mysql_connect(DBMNG_DB_HOST, DBMNG_DB_USER, DBMNG_DB_PASS);
-					mysql_select_db(DBMNG_DB_NAME, $link);
-					$res = mysql_query($sql, $link);
+					$link = mysqli_connect(DBMNG_DB_HOST, DBMNG_DB_USER, DBMNG_DB_PASS);
+					mysql_selecti_db(DBMNG_DB_NAME, $link);
+					$res = mysqli_query($sql, $link);
+					break;
+
+				case "pdo":
+					$sConnection = "mysql:dbname=".DBMNG_DB_NAME.";host=".DBMNG_DB_HOST.";charset=utf8";
+					$link = new PDO($sConnection, DBMNG_DB_USER, DBMNG_DB_PASS);
+					$link->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+					$link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+					
+		      $res = $link->prepare($sql);
+		      $res->execute();
 					break;
 					
 				case "postgres":
 					break;
 			}
+			break;
 			
 		case "drupal":
 			$res = db_query($sql);
 			break;
 	}
+	/*
+	echo "function <b>dbmng_query</b><br />";
+	echo "CMS <b>".DBMNG_CMS."</b><br />";
+	echo "DB <b>".DBMNG_DB."</b><br />";
+	print_r( $res );
+	echo "<br /><br />";
+	*/
 	return $res;
 }
 
@@ -36,6 +54,10 @@ function dbmng_fetch_object($res)
 					$fo = mysql_fetch_object($res);
 					break;
 					
+				case "pdo":
+					$fo = $res->fetch();
+					break;
+
 				case "postgres":
 				break;
 			}
@@ -50,7 +72,7 @@ function dbmng_fetch_object($res)
 
 function dbmng_num_rows($res)
 {
-	switch(DBMNG_CMS)
+	switch( DBMNG_CMS )
 	{
 		case "none":  // to be developed
 			switch( DBMNG_DB )
@@ -59,9 +81,15 @@ function dbmng_num_rows($res)
 					$nr = mysql_num_rows($res);
 					break;
 					
+				case "pdo":
+					$nr = 1000;
+					break;
+
 				case "postgres":
-				break;
+					$nr = 2000;
+					break;
 			}
+			break;
 			
 		case "drupal":
 			$nr = $res->rowCount();
