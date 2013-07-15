@@ -268,6 +268,7 @@ function dbmng_create_form($aForm, $aParam)
 					$sql       = "select * from " . $aForm['table_name'] . " where " . $aForm['primary_key'][0] . "=" . intval($id_upd);
 					$result    = dbmng_query($sql );		
 					$vals      = dbmng_fetch_object($result); //$result->fetchObject();
+					//print_r($vals);
 				}
 
 

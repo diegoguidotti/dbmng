@@ -20,16 +20,35 @@ function dbmng_query($sql)
 					break;
 
 				case "pdo":
-					$sConnection = "mysql:dbname=".DBMNG_DB_NAME.";host=".DBMNG_DB_HOST.";charset=utf8";
-					$link = new PDO($sConnection, DBMNG_DB_USER, DBMNG_DB_PASS);
-					$link->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-					$link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-					
-		      $res0 = $link->prepare($sql);
-		      $res0->execute();
-					$res=$res0;
-					$res=$res0->fetchAll(PDO::FETCH_CLASS);
 
+					try 
+						{
+							$sConnection = "mysql:dbname=".DBMNG_DB_NAME.";host=".DBMNG_DB_HOST.";charset=utf8";
+							$link = new PDO($sConnection, DBMNG_DB_USER, DBMNG_DB_PASS);
+							$link->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+							$link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+					
+
+						  $res0 = $link->prepare($sql);
+						  $res0->execute();
+							
+							//Temporary Fix: you can not fetch data after UPDATE INSERT and DELETE 
+							if(startsWithL($sql,"update") || startsWithL($sql,"insert") || startsWithL($sql,"delete") )
+								{
+									$res=$res0;
+								}
+							else
+								{
+									$res=$res0->fetchAll(PDO::FETCH_CLASS);									
+								}
+						}	
+					catch( PDOException $Exception ) {
+						// PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
+						// String.
+						echo ('PDO Exception: '.$Exception->getMessage( ).'<br/>');
+						echo ('Query: '.$sql.'<br/>');
+
+				}
 					
 
 					break;
@@ -70,7 +89,7 @@ function dbmng_fetch_object($res)
 					break;
 
 				case "pdo":
-					$fo = $res;
+					$fo = $res[0];
 					break;
 
 				case "postgres":
@@ -117,4 +136,9 @@ function dbmng_num_rows($res)
 	
 	return $nr;
 }
+
+function startsWithL($haystack, $needle)
+	{
+    return !strncmp(strtolower($haystack), $needle, strlen($needle));
+	}
 ?>
