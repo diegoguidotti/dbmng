@@ -3,6 +3,7 @@
 <body>
 <?
 
+
   //we need to define some global variable to use dbmg independently by Drupal
 	define( 'DBMNG_LIB_PATH'    , '../library/dbmng/' );
 	define( 'DBMNG_CMS'         , 'none' );
