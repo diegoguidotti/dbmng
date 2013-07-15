@@ -33,7 +33,7 @@ function dbmng_create_form_delete($aForm, $aParam)
 	if(isset($_REQUEST["del_" . $aForm['table_name']]))
 		{
 			$id_del = intval($_REQUEST["del_" . $aForm['table_name']]);
-			$result = db_query("delete from " . $aForm['table_name'] . " WHERE " . $aForm['primary_key'][0] . " = " . $id_del);
+			$result = dbmng_query("delete from " . $aForm['table_name'] . " WHERE " . $aForm['primary_key'][0] . " = " . $id_del);
 		}
 }
 
@@ -70,7 +70,7 @@ function dbmng_create_form_duplicate($aForm, $aParam)
 	if(isset($_REQUEST["dup_" . $aForm['table_name']]))
 		{
 			$id_dup = intval($_REQUEST["dup_" . $aForm['table_name']]);
-			$result = db_query("insert into " . $aForm['table_name'] . " (" . $sWhat . ") select " . $sWhat . " from " . $aForm['table_name'] . " where " . $aForm['primary_key'][0] . " = " . $id_dup);
+			$result = dbmng_query("insert into " . $aForm['table_name'] . " (" . $sWhat . ") select " . $sWhat . " from " . $aForm['table_name'] . " where " . $aForm['primary_key'][0] . " = " . $id_dup);
 		}
 }
 
@@ -114,7 +114,7 @@ function dbmng_create_form_insert($aForm, $aParam)
 			$sVal  = substr($sVal, 0, strlen($sVal)-2);
 	
 			$sql    = "insert into " . $aForm['table_name'] . " (" . $sWhat . ") values (" . $sVal . ")";
-			$result = db_query($sql);
+			$result = dbmng_query($sql);
 		}
 }
 
@@ -144,7 +144,7 @@ function dbmng_create_form_update($aForm, $aParam)
 	
 			$id_upd = intval($_REQUEST["upd_" . $aForm['table_name']]);
 			$sql    = "update " . $aForm['table_name'] . " set " . $sSet . " where " . $aForm['primary_key'][0] . " = " . $id_upd;
-			$result = db_query($sql);
+			$result = dbmng_query($sql);
 		}
 }
 

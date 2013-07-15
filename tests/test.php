@@ -1,5 +1,10 @@
 <html>
-<head></head>
+<head>
+<script type="text/javascript" src="../library/dbmng/assets/dbmng.js?mpvqml"></script>
+<style type="text/css" media="all">
+	@import url("../library/dbmng/assets/dbmng.css");
+</style>
+</head>
 <body>
 <?
 
@@ -10,14 +15,23 @@
 	define( 'DBMNG_DB'          , 'pdo' );
 
 	//0.include the library
-	include('../library/dbmng/dbmng.php');
+	include(DBMNG_LIB_PATH.'dbmng.php');
+	include(DBMNG_LIB_PATH.'dbmng_standalone.php');
+
+
+	$rs=dbmng_query("select * from test");
+	foreach($rs as $r){
+		//print_r($r);
+		//echo('_'.$r->id_test.'_<br/>');
+	}
+
 
 	$aForm=array(  
 		'table_name' => 'test' ,
 		  'primary_key'=> array('id_test'), 
 		  'fields'     => array(
-		      'name' => array('label'   => 'Name', 'type' => 'varchar') ,
-		      'age'  => array('label'   => 'Age' , 'type' => 'int'    )
+		      'nome' => array('label'   => 'Name', 'type' => 'varchar') ,
+		      'eta'  => array('label'   => 'Age' , 'type' => 'int'    )
 		  )
 	);
 	$aParam=array();

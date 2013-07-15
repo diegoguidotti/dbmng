@@ -25,8 +25,13 @@ function dbmng_query($sql)
 					$link->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 					$link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 					
-		      $res = $link->prepare($sql);
-		      $res->execute();
+		      $res0 = $link->prepare($sql);
+		      $res0->execute();
+					$res=$res0;
+					$res=$res0->fetchAll(PDO::FETCH_CLASS);
+
+					
+
 					break;
 					
 				case "postgres":
@@ -36,6 +41,7 @@ function dbmng_query($sql)
 			
 		case "drupal":
 			$res = db_query($sql);
+
 			break;
 	}
 /* // per verificare cosa hai in uscita abilita questi commenti
@@ -64,7 +70,7 @@ function dbmng_fetch_object($res)
 					break;
 
 				case "pdo":
-					$fo = $res->fetch();
+					$fo = $res;
 					break;
 
 				case "postgres":

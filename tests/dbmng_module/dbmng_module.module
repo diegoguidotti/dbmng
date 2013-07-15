@@ -120,6 +120,14 @@ function dbmng_manager()
 		if( isset($_REQUEST['test']) )
 			{
 
+
+				$rs=dbmng_query("select * from test");
+					foreach($rs as $r){
+						//print_r($r);
+						//echo('_'.$r->id_test.'_<br/>');
+					}
+
+
 				$aForm=array(  
 					'table_name' => 'test' ,
 					'primary_key'=> array('id_test'), 

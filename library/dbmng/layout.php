@@ -230,6 +230,7 @@ function layout_table_body( $result, $aForm, $aParam )
 			foreach ( $aForm['fields'] as $fld => $fld_value )
 				{
 
+					//echo '!'.$record->$fld.'!'.$fld.'<br/>';
 					$value=dbmng_value_prepare_html($fld_value, $record->$fld);
 					if( layout_view_field_table($fld_value) )
 						{
