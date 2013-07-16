@@ -153,7 +153,6 @@ function dbmng_get_form_array($id_table)
 		echo "<br />";
 */
 		$aForm['fields']=$aFields;
-		print_r($aForm);
 		
 		return $aForm;
 	}

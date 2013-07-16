@@ -43,9 +43,9 @@ function layout_form_date( $fld, $fld_value, $value )
 	}
 
 	//add a new input field for the datapicker ui
-	$html  = "<input type='text' name='$fld'_tmp id='".$fld."_tmp' value='".$datetime_str."' />";
+	$html  = "<input type='text' name='".$fld."_tmp' id='".$fld."_tmp' value='".$datetime_str."' />";
 	//keep hidden the "real" input form
-	$html .= "<input type='hidden' name='$fld' id='".$fld."' ";
+	$html .= "<input type='inpu' name='$fld' id='".$fld."' ";
 	$html .= " value= '$value' ";	
 	$html .= layout_get_nullable($fld_value);	
 	$html .= " />\n";

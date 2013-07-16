@@ -8,17 +8,6 @@ function dbmng_query($sql)
 		case "none": // to be developed
 			switch( DBMNG_DB )
 			{
-				case "mysql":
-					$link = mysqli_connect(DBMNG_DB_HOST, DBMNG_DB_USER, DBMNG_DB_PASS);
-					mysql_selecti_db(DBMNG_DB_NAME, $link);
-					$res = mysqli_query($sql, $link);
-					break;
-
-				case "mysqli":
-					$mysqli = new mysqli(DBMNG_DB_HOST, DBMNG_DB_USER, DBMNG_DB_PASS, DBMNG_DB_NAME);
-					$res = $mysqli->query($sql);
-					break;
-
 				case "pdo":
 
 					try 
@@ -48,12 +37,8 @@ function dbmng_query($sql)
 						echo ('PDO Exception: '.$Exception->getMessage( ).'<br/>');
 						echo ('Query: '.$sql.'<br/>');
 					}
-					
-
 					break;
 					
-				case "postgres":
-					break;
 			}
 			break;
 			
@@ -79,20 +64,9 @@ function dbmng_fetch_object($res)
 		case "none":  // to be developed
 			switch( DBMNG_DB )
 			{
-				case "mysql":
-					$fo = mysql_fetch_object($res);
-					break;
-					
-				case "mysqli":
-					$fo = $res->fetch_object();
-					break;
-
 				case "pdo":
 					$fo = $res[0];
 					break;
-
-				case "postgres":
-				break;
 			}
 			break;
 			
@@ -110,20 +84,8 @@ function dbmng_num_rows($res)
 		case "none":  // to be developed
 			switch( DBMNG_DB )
 			{
-				case "mysql":
-					$nr = mysql_num_rows($res);
-					break;
-					
-				case "mysqli":
-					$nr = 1;
-					break;
-
 				case "pdo":
-					$nr = 1000;
-					break;
-
-				case "postgres":
-					$nr = 2000;
+					$nr = 1000; //todo
 					break;
 			}
 			break;
