@@ -148,10 +148,19 @@ function dbmng_manager()
 						'table_name' => 'dbmng_fields' ,
 							'primary_key'=> array('id_field'), 
 							'fields'     => array(
-									'field_name'  => array('label'   => 'Field Name' , 'type' => 'varchar'    ), 
-									'field_label'  => array('label'   => 'Field Label' , 'type' => 'varchar'    ), 
+									'field_name'  => 
+										array('label'   => t('Name') , 
+													'label_long' => t('Field Name'),
+													'type' => 'varchar'    
+										), 
+									'field_label'  => 
+										array('label'   => t('Label') , 
+													'label_long' => t('Field Label'),
+													'type' => 'varchar'    
+										), 
 									'id_field_type'     => 
-										array('label'   => 'Field Type', 
+										array('label'   => t('Type'), 
+													'label_long' => t('Field Type'),
 													'type' => 'varchar', 
 													'widget'=>'select' ,
 													'voc_val' => array(
@@ -162,50 +171,57 @@ function dbmng_manager()
 													)
 										) ,
 									'field_widget'     => 
-										array('label'   => 'Widget', 
-											'type' => 'varchar', 
-											'widget'=>'select' ,
-											'voc_val' => array(
-													'input'=> t('Input Box'),	
-													'select'=> t('Select'),	
-													'text'=> t('Text Area'),	
-													'date'=> t('Date')	
-											)
+										array('label'   => t('Widget'), 
+													'label_long' => t('Widget'),
+													'type' => 'varchar', 
+													'widget'=>'select' ,
+													'voc_val' => array(
+															'input'=> t('Input Box'),	
+															'select'=> t('Select'),	
+															'textarea'=> t('Text Area'),	
+															'date'=> t('Date')	
+													)
 										),
 									'nullable'     => 
-										array('label'   => 'Nullable', 
-											'type' => 'int', 
-											'widget'=>'select' ,
-											'voc_val' => array(
-													'1'=> t('yes'),	
-													'0'=> t('no')	
-											)
+										array('label'   => t('Null'), 
+													'label_long' => t('Nullable'),
+													'type' => 'int', 
+													'widget'=>'select' ,
+													'voc_val' => array(
+															'1'=> t('yes'),	
+															'0'=> t('no')	
+													)
 										),
 									'default_value' =>
-										array( 'label' => 'Default value',
+										array( 'label' => t('Default'),
+													 'label_long' => t('Default value'),
 													 'type'  => 'varchar'
 										),
 									'field_function' =>
-										array( 'label' => 'Field function',
+										array( 'label' => t('Fnc'),
+													 'label_long' => t('Field function'),
 													 'type'  => 'varchar'
 										),
 									'field_label_long' =>
-										array( 'label' => 'Long Label',
+										array( 'label' => t('Long'),
+													 'label_long' => t('Long Label'),
 													 'type'  => 'varchar'
 										),
 									'skip_in_tbl'     => 
-										array('label'   => 'Skip in table view', 
-											'type' => 'varchar', 
-											'widget'=>'select' ,
-											'voc_val' => array(
-													'1'=> t('yes'),	
-													'0'=> t('no')	
+										array('label'   => t('Skip'), 
+													'label_long' => t('Skip in table view'),
+													'type' => 'varchar', 
+													'widget'=>'select' ,
+													'voc_val' => array(
+															'1'=> t('yes'),	
+															'0'=> t('no')	
 											)
 										),
 									'voc_sql' =>
-										array( 'label' => 'Vocabulary SQL',
+										array( 'label' => t('SQL'),
+													 'label_long' => t('Vocabulary SQL'),
 													 'type'  => 'text',
-													 'widget' => 'text'
+													 'widget' => 'textarea'
 										)							
 							)
 					);
@@ -228,6 +244,7 @@ function dbmng_manager()
 				$aParam['custom_function'][0]['custom_label']  = t('Show Fields');
 
 				// update record
+				$html .= "Michele <br/>";
 				$html .= dbmng_crud($aForm, $aParam);
 		}
 	}
