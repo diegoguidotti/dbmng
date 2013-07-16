@@ -144,7 +144,36 @@ function dbmng_manager()
 		elseif( isset($_REQUEST['show_fields']) )
 			{
 
-				$aForm    = dbmng_get_form_array($id_table_field);
+				//$aForm    = dbmng_get_form_array($id_table_field);
+
+				$aForm=array(  
+						'table_name' => 'dbmng_fields' ,
+							'primary_key'=> array('id_field'), 
+							'fields'     => array(
+									'field_name'  => array('label'   => 'Field Name' , 'type' => 'varchar'    ), 
+									'field_label'  => array('label'   => 'Field Label' , 'type' => 'varchar'    ), 
+									'id_field_type'     => 
+										array('label'   => 'Field Type', 'type' => 'varchar', 'widget'=>'select' ,
+										'voc_val' => array(
+												'int'=> t('Integer'),	
+												'varchar'=> t('Short Text'),	
+												'text'=> t('Long Text'),	
+												'date'=> t('Date')	
+										)) ,
+									'field_widget'     => 
+										array('label'   => 'Widget', 
+											'type' => 'varchar', 'widget'=>'select' ,
+											'voc_val' => array(
+													'input'=> t('Input Box'),	
+													'select'=> t('Select'),	
+													'text'=> t('Text Area'),	
+													'date'=> t('Date')	
+											)
+										) 
+
+							)
+					);
+
 				$aParam                            = array();
 				$aParam['filters']['id_table']	   = $_REQUEST['show_fields']; 
 				$aParam['hidden_vars']['show_fields']  = $_REQUEST['show_fields'];
@@ -198,10 +227,10 @@ function dbmng_edit_tables()
 			$aParam['filters']               = array();
 			$aParam['hidden_vars']           = array();
 			$aParam['hidden_vars']['tbl']	   = $_REQUEST['tbl']; //save the table id
-		$aParam['hidden_vars']['type_tbl'] = 1; //table type (1: content table; 2: system table)
+		  $aParam['hidden_vars']['type_tbl'] = 1; //table type (1: content table; 2: system table)
 
 			//test filter records with a specific uid
-			$aParam['filters']['id_user']	   = $user->uid;       // save the user id
+			//$aParam['filters']['id_user']	   = $user->uid;       // save the user id
 			$aParam['tbl_footer']            = 1;                // allow to add filtering
 			$aParam['user_function']['dup']	 = 1;	              // allow to enabled=1 or disabled=0 the duplication function
 			$aParam['user_function']['ins']	 = 1;	              // allow to enabled=1 or disabled=0 the insert function

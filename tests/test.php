@@ -26,6 +26,13 @@
 	}
 
 
+	//get the array storing the table metadata from record 1 in table dbmng_tables
+	$aForm    = dbmng_get_form_array(11); 
+	$aParam   = array();                 //associative array storing custom parameters
+
+	echo dbmng_crud($aForm, $aParam);
+
+/*
 	$aForm=array(  
 		'table_name' => 'test' ,
 		  'primary_key'=> array('id_test'), 
@@ -36,6 +43,7 @@
 	);
 	$aParam=array();
 	echo dbmng_crud($aForm, $aParam);
+*/
 
 ?>
 
