@@ -143,6 +143,15 @@ function dbmng_manager()
 			{
 
 				//$aForm    = dbmng_get_form_array($id_table_field);
+				
+				$fields=db_query('select COLUMN_NAME as colname FROM information_schema.columns c, dbmng_tables t WHERE t.table_name=c.table_name AND t.id_table ='.$_REQUEST['show_fields'].';');
+				$varField= array();
+				foreach($fields as $f)
+					{				
+						$cn=	 $f->colname;
+
+						$varField[$cn] = $cn ;
+					}		
 
 				$aForm=array(  
 						'table_name' => 'dbmng_fields' ,
@@ -151,12 +160,15 @@ function dbmng_manager()
 									'field_name'  => 
 										array('label'   => t('Name') , 
 													'label_long' => t('Field Name'),
-													'type' => 'varchar'    
+													'type' => 'varchar',
+													'widget'=>'select' ,
+											    'voc_val' => $varField
+    
 										), 
 									'field_label'  => 
 										array('label'   => t('Label') , 
 													'label_long' => t('Field Label'),
-													'type' => 'varchar'    
+													'type' => 'varchar'
 										), 
 									'id_field_type'     => 
 										array('label'   => t('Type'), 
@@ -179,6 +191,7 @@ function dbmng_manager()
 															'input'=> t('Input Box'),	
 															'select'=> t('Select'),	
 															'textarea'=> t('Text Area'),	
+															'checkbox'=> t('CheckBox'),	
 															'date'=> t('Date')	
 													)
 										),
