@@ -398,14 +398,19 @@ function dbmng_value_prepare($x_value, $x, $post)
 	$sVal='';
 	$sType=$x_value['type'];
 
+	$sDefault=null;
+	if(isset($x_value['default'])){
+		$sDefault=$x_value['default'];
+	}
+
 	//echo($sType.'|'.$sValue.'|'.is_null($x_value['default']).'|<br/>');
 	//Fix: date widget cam not have a default empty value
-	if($widget=='date' && $x_value['default']==''){
-		$x_value['default']=null;
+	if($widget=='date' && $sDefault==''){
+		$sDefault=null;
 	}
 
 	//if exists a default value use the default values instead of null
-	if(strlen($sValue)==0 && is_null($x_value['default']) )
+	if(strlen($sValue)==0 && is_null($sDefault) )
 		{
 			$sVal  .= "NULL";
 		}
@@ -413,7 +418,7 @@ function dbmng_value_prepare($x_value, $x, $post)
 		{
 			if(strlen($sValue)==0)
 				{
-					$sValue=$x_value['default'];
+					$sValue=$sDefault;
 				}
 
 				if (dbmng_is_field_type_numeric($sType)) {
