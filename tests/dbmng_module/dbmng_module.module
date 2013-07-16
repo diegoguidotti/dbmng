@@ -199,38 +199,45 @@ function dbmng_manager()
 										array('label'   => t('Null'), 
 													'label_long' => t('Nullable'),
 													'type' => 'int', 
-													'widget'=>'checkbox'
+													'widget'=>'checkbox',
+													'skip_in_tbl' => '1'
 										),
 									'default_value' =>
 										array( 'label' => t('Default'),
 													 'label_long' => t('Default value'),
-													 'type'  => 'varchar'
+													 'type'  => 'varchar',
+													 'skip_in_tbl' => '1'
 										),
 									'field_function' =>
 										array( 'label' => t('Fnc'),
 													 'label_long' => t('Field function'),
-													 'type'  => 'varchar'
+													 'type'  => 'varchar',
+													 'skip_in_tbl' => '1'
 										),
 									'field_label_long' =>
 										array( 'label' => t('Long'),
 													 'label_long' => t('Long Label'),
-													 'type'  => 'varchar'
+													 'type'  => 'varchar',
+													 'skip_in_tbl' => '1'
 										),
 									'skip_in_tbl'     => 
 										array('label'   => t('Skip'), 
 													'label_long' => t('Skip in table view'),
 													'type' => 'int', 
-													'widget'=>'checkbox'
+													'widget'=>'checkbox',
+													'skip_in_tbl' => '1'
 										),
 									'voc_sql' =>
 										array( 'label' => t('SQL'),
 													 'label_long' => t('Vocabulary SQL'),
 													 'type'  => 'text',
-													 'widget' => 'textarea'
+													 'widget' => 'textarea',
+													 'skip_in_tbl' => '1'
 										)							
 							)
 					);
 
+				unset($aParam);
 				$aParam                            = array();
 				$aParam['filters']['id_table']	   = $_REQUEST['show_fields']; 
 				$aParam['hidden_vars']['show_fields']  = $_REQUEST['show_fields'];
@@ -241,7 +248,42 @@ function dbmng_manager()
 			}
 		else
 			{
-				$aForm    = dbmng_get_form_array($id_table_table);
+				// $aForm    = dbmng_get_form_array($id_table_table);
+				$aForm=array(  
+						'table_name' => 'dbmng_tables' ,
+							'primary_key'=> array('id_table'), 
+							'fields'     => array(
+									'table_name'  => 
+										array('label'   => t('Name') , 
+													'label_long' => t('Table Name'),
+													'type' => 'varchar'
+										), 
+									'id_table_type'     => 
+										array('label'   => t('Type'), 
+													'label_long' => t('Table Type'),
+													'type' => 'varchar', 
+													'widget'=>'select' ,
+													'voc_val' => array(
+														'1'=> t('Content Table'),	
+														'2'=> t('System Table')
+													)
+										) ,
+									'table_label'  => 
+										array('label'   => t('Label') , 
+													'label_long' => t('Table Label'),
+													'type' => 'varchar',
+													'skip_in_tbl' => '1'
+										), 
+									'table_desc'  => 
+										array('label'   => t('Desc') , 
+													'label_long' => t('Table Description'),
+													'type' => 'varchar',
+													'skip_in_tbl' => '1'
+										)
+							)
+					);
+
+				unset($aParam);
 				$aParam                            = array();
 				$aParam['user_function']['dup']	   = 0;	              // allow to enabled=1 or disabled=0 the duplication function
 				$aParam['user_function']['del']	   = 0;	              // allow to enabled=1 or disabled=0 the delate function
@@ -249,7 +291,6 @@ function dbmng_manager()
 				$aParam['custom_function'][0]['custom_label']  = t('Show Fields');
 
 				// update record
-				$html .= "Michele <br/>";
 				$html .= dbmng_crud($aForm, $aParam);
 		}
 	}
