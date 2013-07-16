@@ -47,8 +47,7 @@ function dbmng_query($sql)
 						// String.
 						echo ('PDO Exception: '.$Exception->getMessage( ).'<br/>');
 						echo ('Query: '.$sql.'<br/>');
-
-				}
+					}
 					
 
 					break;
