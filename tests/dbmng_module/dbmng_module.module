@@ -186,11 +186,7 @@ function dbmng_manager()
 										array('label'   => t('Null'), 
 													'label_long' => t('Nullable'),
 													'type' => 'int', 
-													'widget'=>'select' ,
-													'voc_val' => array(
-															'1'=> t('yes'),	
-															'0'=> t('no')	
-													)
+													'widget'=>'checkbox'
 										),
 									'default_value' =>
 										array( 'label' => t('Default'),
@@ -210,12 +206,8 @@ function dbmng_manager()
 									'skip_in_tbl'     => 
 										array('label'   => t('Skip'), 
 													'label_long' => t('Skip in table view'),
-													'type' => 'varchar', 
-													'widget'=>'select' ,
-													'voc_val' => array(
-															'1'=> t('yes'),	
-															'0'=> t('no')	
-											)
+													'type' => 'int', 
+													'widget'=>'checkbox'
 										),
 									'voc_sql' =>
 										array( 'label' => t('SQL'),
