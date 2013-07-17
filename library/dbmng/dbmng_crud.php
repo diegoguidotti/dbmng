@@ -88,13 +88,13 @@ function dbmng_create_form_insert($aForm, $aParam)
 		{
 			$sWhat = "";
 			$sVal  = "";
-			foreach ( $aForm['fields'] as $x => $x_value )
+			foreach ( $aForm['fields'] as $fld => $fld_value )
 				{
-					if($x !== $aForm['primary_key'][0])
+					if($fld !== $aForm['primary_key'][0])
 						{
-							$sWhat .= $x . ", ";
+							$sWhat .= $fld . ", ";
 							
-							$sVal.=dbmng_value_prepare($x_value,$x,$_POST)." ,";							
+							$sVal.=dbmng_value_prepare($fld_value,$fld,$_POST)." ,";							
 						}
 				}
 
@@ -102,10 +102,10 @@ function dbmng_create_form_insert($aForm, $aParam)
 				{
 					if( isset($aParam['filters']) )
 						{
-							foreach ( $aParam['filters'] as $x => $x_value )
+							foreach ( $aParam['filters'] as $fld => $fld_value )
 								{				
-									$sWhat.=$x.", ";
-									$sVal.=$x_value.", ";
+									$sWhat.=$fld.", ";
+									$sVal.=$fld_value.", ";
 								}					
 						}
 				}

@@ -188,11 +188,12 @@ function dbmng_manager()
 													'type' => 'varchar', 
 													'widget'=>'select' ,
 													'voc_val' => array(
+															'checkbox'=> t('CheckBox'),	
+															'date'=> t('Date'),	
+															'file'=> t('File'),
 															'input'=> t('Input Box'),	
 															'select'=> t('Select'),	
-															'textarea'=> t('Text Area'),	
-															'checkbox'=> t('CheckBox'),	
-															'date'=> t('Date')	
+															'textarea'=> t('Text Area')	
 													)
 										),
 									'nullable'     => 
@@ -201,6 +202,12 @@ function dbmng_manager()
 													'type' => 'int', 
 													'widget'=>'checkbox',
 													'skip_in_tbl' => '1'
+										),
+									'pk'     => 
+										array('label'   => t('Pk'), 
+													'label_long' => t('Primary Key'),
+													'type' => 'int', 
+													'widget'=>'checkbox'
 										),
 									'default_value' =>
 										array( 'label' => t('Default'),
