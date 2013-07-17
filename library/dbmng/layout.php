@@ -64,14 +64,17 @@ function layout_form_input( $fld, $fld_value, $value, $more='' )
 	return $html;
 }
 
-
-	
-
 function layout_form_textarea( $fld, $fld_value, $value )
 {		
 	$html  = "<textarea  name='$fld' id='$fld'  ".layout_get_nullable($fld_value)." >";
 	$html .= $value;	
 	$html .= "</textarea>\n";
+	return $html;
+}
+
+function layout_form_file( $fld, $fld_value, $value )
+{		
+	$html  = "<input type='file' name='$fld' id='$fld' >";
 	return $html;
 }
 

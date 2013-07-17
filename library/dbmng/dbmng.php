@@ -326,6 +326,10 @@ function dbmng_create_form($aForm, $aParam)
 									{
 										$html .= layout_form_date( $fld, $fld_value, $value );
 									}
+									//else if ($widget==='file')
+									//{
+									//	$html .= layout_form_file( $fld, $fld_value, $value );
+									//}
 									else //use input by default
 									{
                     $more='';
