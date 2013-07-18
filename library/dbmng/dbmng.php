@@ -122,18 +122,17 @@ function dbmng_get_form_array($id_table)
 						$v       = 0;
 						foreach($rVoc as $val)
 							{
-								//print_r($val);
 								$keys=array_keys((array)$val);
-
-								//print_r($keys);
 								$aFVoc[$val->$keys[0]] = $val->$keys[1];
 							}
 						
+						/*
 						$sortAux = array();
 						foreach($aFVoc as $res)
 							$sortAux[] = $res[0];
 						
 						//array_multisort($sortAux, SORT_ASC, $aFVoc);
+						*/
 						
 						$aFields[$fld->field_name]['voc_val'] = $aFVoc;
 					}
@@ -486,6 +485,7 @@ function dbmng_value_prepare($x_value, $x, $post)
 			$sValue = $dir_upd_file . $_FILES[$x]['name'];
 			if( $_FILES[$x]["error"] == 0 )
 				{
+					//$sValue=dbmng_uploadfile($_FILES[$x]['name'], $dir_upd_file, $_FILES[$x]["tmp_name"]);
 			  	move_uploaded_file($_FILES[$x]["tmp_name"], $dir_upd_file . $_FILES[$x]["name"]);
 			  }
 		}
@@ -525,6 +525,41 @@ function dbmng_value_prepare($x_value, $x, $post)
 		}
   return $sVal;
 }
+
+
+/*
+
+function dbmng_uploadfile($origin, $dest, $tmp_name)
+	{
+		$origin = strtolower(basename($origin));
+		$fulldest = $dest.$origin;
+		$filename = $origin;
+		if (file_exists($fulldest))
+		{
+			
+		  $fileext = (strpos($origin,'.')===false?'':'.'.substr(strrchr($origin, "."), 1));
+			
+			$i="2";
+		  $newfilename = substr($origin, 0, strlen($origin)-strlen($fileext)).'.'.$i_''.$fileext;
+		  $fulldest = $dest.$newfilename;
+		}
+
+
+			echo("|$fulldest|");
+
+		
+		if (move_uploaded_file($tmp_name, $fulldest)) 
+			{
+			  return $filename;
+			}
+		else
+			{
+				echo("|error|<br/>");
+				return false;
+			}
+	}
+*/
+
 
 /////////////////////////////////////////////////////////////////////////////
 // dbmng_is_picture
