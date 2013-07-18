@@ -480,14 +480,14 @@ function dbmng_value_prepare($x_value, $x, $post)
 		{
 			$dir_upd_file = realpath('.') . "/docs/";
 			if( isset($aParam['file']) )
-				$dir_upd_file = "";
+				$dir_upd_file = $aParam['file'];
 				
 			$sValue = $_FILES[$x]['name'];
 			if ($_FILES["file"]["error"] == 0)
 			  {
 				  //if (file_exists("/sites/default/upload/" . $_FILES["file"]["name"]))
 					//	{
-						  move_uploaded_file($_FILES["file"]["tmp_name"], $dir_upd_file . $_FILES["file"]["name"]);
+						  move_uploaded_file($_FILES[$x]["tmp_name"], $dir_upd_file . $_FILES[$x]["name"]);
 				  //	}
 			  }
 			 //echo "real path: ".realpath('.');
