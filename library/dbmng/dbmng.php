@@ -480,7 +480,6 @@ function dbmng_value_prepare($x_value, $x, $post)
 		{
 			// $dir_upd_file = str_replace("\\", "/", realpath('.')) . "/docs/";
 			$dir_upd_file = "docs/";
-			echo "dir_upd_file: " . $dir_upd_file;
 			
 			if( isset($aParam['file']) )
 				$dir_upd_file = $aParam['file'];
@@ -491,7 +490,7 @@ function dbmng_value_prepare($x_value, $x, $post)
 			  	move_uploaded_file($_FILES[$x]["tmp_name"], $dir_upd_file . $_FILES[$x]["name"]);
 			  }
 		}
-	
+		print_r( $_FILES );
 	$sVal='';
 	$sType=$x_value['type'];
 
@@ -526,6 +525,33 @@ function dbmng_value_prepare($x_value, $x, $post)
 				}
 		}
   return $sVal;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// dbmng_is_picture
+// ======================
+/// This function allow to know if a file is a picture
+/**
+\param $fn  			the filename
+\return           boolean
+*/
+function dbmng_is_picture($fn){
+	$is_picture = false;
+	
+	$allowedExts = array("gif", "jpeg", "jpg", "png");
+	$temp = explode(".", $_FILES[$fn]["name"]);
+	$extension = end($temp);
+	if ((($_FILES[$fn]["type"] == "image/gif")
+	|| ($_FILES[$fn]["type"] == "image/jpeg")
+	|| ($_FILES[$fn]["type"] == "image/jpg")
+	|| ($_FILES[$fn]["type"] == "image/pjpeg")
+	|| ($_FILES[$fn]["type"] == "image/x-png")
+	|| ($_FILES[$fn]["type"] == "image/png"))
+	&& in_array($extension, $allowedExts))
+		{
+			$is_picture = false;
+		}
+	return $is_picture;
 }
 
 /////////////////////////////////////////////////////////////////////////////
