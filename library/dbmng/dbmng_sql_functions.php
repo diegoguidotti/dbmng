@@ -1,7 +1,7 @@
 <?php
 include_once DBMNG_LIB_PATH."dbmng_cfg.php";
 
-function dbmng_query($sql)
+function dbmng_query($sql, $var=null)
 {
 	switch(DBMNG_CMS)
 	{
@@ -19,7 +19,7 @@ function dbmng_query($sql)
 					
 
 						  $res0 = $link->prepare($sql);
-						  $res0->execute();
+						  $res0->execute($var);
 							
 							//Temporary Fix: you can not fetch data after UPDATE INSERT and DELETE 
 							if(startsWithL($sql,"update") || startsWithL($sql,"insert") || startsWithL($sql,"delete") )
@@ -43,7 +43,14 @@ function dbmng_query($sql)
 			break;
 			
 		case "drupal":
-			$res = db_query($sql);
+
+			if(isset($var)){
+				$res = db_query($sql, $var);
+			}
+			else 
+				{
+					$res = db_query($sql);
+				}
 
 			break;
 	}
@@ -85,7 +92,7 @@ function dbmng_num_rows($res)
 			switch( DBMNG_DB )
 			{
 				case "pdo":
-					$nr = 1000; //todo
+					$nr = count($res); //todo
 					break;
 			}
 			break;

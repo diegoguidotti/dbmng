@@ -81,7 +81,7 @@ function dbmng_get_form_array($id_table)
 		//TODO: ['primary key shoud be an array to manage multiples key']
 		$aFields = array();
 		$aPK     = array(); // Array to store information about the primary key
-		$fields = dbmng_query("select * from dbmng_fields where id_table=" . $id_table . " order by field_order ASC");
+		$fields = dbmng_query("select * from dbmng_fields where id_table=:id_table order by field_order ASC", array(':id_table'=>intval($id_table)));
 		foreach ($fields as $fld)
 			{
 				if($fld->pk == 1)
