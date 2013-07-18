@@ -169,7 +169,6 @@ function dbmng_get_form_array($id_table)
 \return           HTML generated code
 */
 function dbmng_crud($aForm, $aParam){
-			print_r( $aParam );
 			$html  = "";
 			$html .= dbmng_data2JSarray($aForm, $aParam);
       $html .= dbmng_create_form_process($aForm, $aParam);
@@ -479,19 +478,18 @@ function dbmng_value_prepare($x_value, $x, $post)
 	
 	if( $widget=='file' )
 		{
-			$dir_upd_file = realpath('.') . "/docs/";
+			// $dir_upd_file = str_replace("\\", "/", realpath('.')) . "/docs/";
+			$dir_upd_file = "docs/";
+			echo "dir_upd_file: " . $dir_upd_file;
+			
 			if( isset($aParam['file']) )
 				$dir_upd_file = $aParam['file'];
 				
-			$sValue = $_FILES[$x]['name'];
+			$sValue = $dir_upd_file . $_FILES[$x]['name'];
 			if( $_FILES[$x]["error"] == 0 )
-			  {
-				  //if (file_exists("/sites/default/upload/" . $_FILES["file"]["name"]))
-					//	{
-						  move_uploaded_file($_FILES[$x]["tmp_name"], $dir_upd_file . $_FILES[$x]["name"]);
-				  //	}
+				{
+			  	move_uploaded_file($_FILES[$x]["tmp_name"], $dir_upd_file . $_FILES[$x]["name"]);
 			  }
-			 //echo "real path: ".realpath('.');
 		}
 	
 	$sVal='';

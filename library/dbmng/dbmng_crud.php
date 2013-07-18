@@ -115,7 +115,7 @@ function dbmng_create_form_insert($aForm, $aParam)
 	
 			$sql    = "insert into " . $aForm['table_name'] . " (" . $sWhat . ") values (" . $sVal . ")";
 			$result = dbmng_query($sql);
-			print_r( $_FILES );
+			//print_r( $_FILES );
 		}
 }
 
