@@ -490,7 +490,7 @@ function dbmng_value_prepare($x_value, $x, $post)
 			  	move_uploaded_file($_FILES[$x]["tmp_name"], $dir_upd_file . $_FILES[$x]["name"]);
 			  }
 		}
-		print_r( $_FILES );
+
 	$sVal='';
 	$sType=$x_value['type'];
 
