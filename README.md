@@ -14,8 +14,7 @@ $aForm=array(
 		'age'  => array('label'   => 'Age' , 'type' => 'int'    )
 	)
 );
-$aParam=array();
-echo dbmng_crud($aForm, $aParam);
+echo dbmng_crud($aForm);
 ```
 
 The table metadata can be stored in the database. In that case the CRUD interface can be generated just using 
@@ -24,9 +23,7 @@ the key of the desidered table.
 ``` php
 //get the array storing the table metadata from record 1 in table dbmng_tables
 $aForm    = dbmng_get_form_array(1); 
-$aParam   = array();                 //associative array storing custom parameters
-
-echo dbmng_crud($aForm, $aParam);
+echo dbmng_crud($aForm);
 ``` 
 
 The $aParam value allows to filter the records, add hidden variables to the POST and GET call, define the available 
@@ -54,4 +51,7 @@ functions for user and adding custom function
   //add a custom function to each record calling show_fields=id_record 
   $aParam['custom_function'][0]['custom_variable'] = 'show_fields';
   $aParam['custom_function'][0]['custom_label']    = 'Show Fields';
+  
+  //Create the CRUD interface using the custom parameters
+  echo dbmng_crud($aForm, $aParam);
 ```
