@@ -281,11 +281,11 @@ function dbmng_data2JSarray($aForm, $aParam)
 				
 								}
 							$sObj = substr($sObj, 0, strlen($sObj)-2);
-							$sObj .= "}, \n";
+							$sObj .= "}, ";
 						}
-					$sObj = substr($sObj, 0, strlen($sObj)-4);
+					$sObj = substr($sObj, 0, strlen($sObj)-2);
 					
-					$html .= $sObj . "]};\n";
+					$html .= $sObj . "\n]};\n";
 				}
 				$html .= "//-->\n";
 				$html .= "</script>\n";
@@ -478,7 +478,19 @@ function dbmng_value_prepare($x_value, $x, $post)
 	
 	if( $widget=='file' )
 		{
+			$dir_upd_file = realpath('.') . "/docs/";
+			if( isset($aParam['file']) )
+				$dir_upd_file = "";
+				
 			$sValue = $_FILES[$x]['name'];
+			if ($_FILES["file"]["error"] == 0)
+			  {
+				  //if (file_exists("/sites/default/upload/" . $_FILES["file"]["name"]))
+					//	{
+						  move_uploaded_file($_FILES["file"]["tmp_name"], $dir_upd_file . $_FILES["file"]["name"]);
+				  //	}
+			  }
+			 //echo "real path: ".realpath('.');
 		}
 	
 	$sVal='';
