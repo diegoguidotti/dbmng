@@ -74,7 +74,8 @@ function layout_form_textarea( $fld, $fld_value, $value )
 
 function layout_form_file( $fld, $fld_value, $value )
 {		
-	$html  = "<input type='file' name='$fld' id='$fld' >";
+	// $html  = layout_form_input( $fld, $fld_value, $value, $more='' );
+	$html = "<input type='file' name='$fld' id='$fld' >";
 	return $html;
 }
 

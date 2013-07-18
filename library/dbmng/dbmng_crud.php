@@ -94,7 +94,7 @@ function dbmng_create_form_insert($aForm, $aParam)
 						{
 							$sWhat .= $fld . ", ";
 							
-							$sVal.=dbmng_value_prepare($fld_value,$fld,$_POST)." ,";							
+							$sVal.=dbmng_value_prepare($fld_value,$fld,$_POST)." ,";	
 						}
 				}
 
@@ -115,6 +115,36 @@ function dbmng_create_form_insert($aForm, $aParam)
 	
 			$sql    = "insert into " . $aForm['table_name'] . " (" . $sWhat . ") values (" . $sVal . ")";
 			$result = dbmng_query($sql);
+			print_r( $_FILES );
+		}
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// dbmng_create_form_upload_file
+// ======================
+/// This function upload the selected file in the server
+/**
+\param $aForm  		Associative array with all the characteristics
+*/
+function dbmng_create_form_upload_file($aForm, $aParam) 
+{
+	foreach ( $aForm['fields'] as $fld => $fld_value )
+		{
+			if( $fld_value['widget'] == 'file' )
+				{
+					if( $_FILES["file"]["error"] == 0 )
+					  {
+						  if (file_exists("upload/" . $_FILES[$fld]["name"]))
+						  	{
+						  		// $html .= $_FILES["file"]["name"] . " already exists. ";
+						  	}
+						  else
+						  	{
+								  move_uploaded_file($_FILES[$fld]["tmp_name"], "upload/" . $_FILES[$fld]["name"]);
+								  // $html .= "Stored in: " . "upload/" . $_FILES["file"]["name"];
+						  	}
+					  }
+				}
 		}
 }
 

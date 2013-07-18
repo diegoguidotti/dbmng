@@ -326,10 +326,10 @@ function dbmng_create_form($aForm, $aParam)
 									{
 										$html .= layout_form_date( $fld, $fld_value, $value );
 									}
-									//else if ($widget==='file')
-									//{
-									//	$html .= layout_form_file( $fld, $fld_value, $value );
-									//}
+									else if ($widget==='file')
+									{
+										$html .= layout_form_file( $fld, $fld_value, $value );
+									}
 									else //use input by default
 									{
                     $more='';
@@ -397,7 +397,12 @@ function dbmng_value_prepare($x_value, $x, $post)
 		else
 			$sValue="1";
 	}
-
+	
+	if( $widget=='file' )
+		{
+			$sValue = $_FILES[$x]['name'];
+		}
+	
 	$sVal='';
 	$sType=$x_value['type'];
 
