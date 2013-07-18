@@ -170,6 +170,7 @@ function dbmng_get_form_array($id_table)
 */
 function dbmng_crud($aForm, $aParam){
 			$html  = "";
+			$html .= dbmng_data2JSarray($aForm, $aParam);
       $html .= dbmng_create_form_process($aForm, $aParam);
 			$html .= dbmng_create_table($aForm, $aParam);
       $html .= dbmng_create_form($aForm, $aParam);
@@ -226,6 +227,69 @@ function dbmng_create_table($aForm, $aParam)
 	}
 
 
+/////////////////////////////////////////////////////////////////////////////
+// dbmng_data2JSarray
+// ======================
+/// This function allow to have an array of data
+/**
+\param $aForm  		Associative array with all the characteristics of the table
+\param $aParam  	Associative array with some custom variable used by the renderer
+\return           Array
+*/
+function dbmng_data2JSarray($aForm, $aParam)
+{
+  
+  // Initialize where clause and hidden variables
+	$where = " WHERE 1 ";
+	$aData = array();
+
+		if(isset($aParam))
+			{
+				if( isset($aParam['filters']) )
+				{
+					foreach ( $aParam['filters'] as $x => $x_value )
+						{				
+								$where.=" AND $x = $x_value ";
+						}					
+				}
+			}
+		
+		$html = "";
+		if( !isset($_GET["ins_" . $aForm['table_name']]) && !isset($_GET["upd_" . $aForm['table_name']]) )
+			{
+			  $sql = 'select * from ' . $aForm['table_name'].' '. $where;
+				$result = dbmng_query($sql);
+				
+				$AName = "_aTblVal";
+				$html .= "\n<script type='text/javascript'>\n";
+				$html .= "<!--\n";
+				$html .= "// $sql\n";
+				$html .= "$AName = {'records':[\n";
+				
+				foreach( $result as $record )
+					{
+						$html .= "{";
+						//get the query results for each field
+						foreach ( $aForm['fields'] as $fld => $fld_value )
+							{
+								//echo '!'.$record->$fld.'!'.$fld.'<br/>';
+								$value=dbmng_value_prepare_html($fld_value, $record->$fld);
+								if( layout_view_field_table($fld_value) )
+									{
+										$html .= "'" . $fld . "':" . $value . ", ";
+										//$html .= "<td class='dbmng_field_$fld'>".$value."</td>";
+									}
+			
+							}
+						$html .= "}\n";
+					}
+				
+				$html .= "]};";
+			}
+			$html .= "//-->\n";
+			$html .= "</script>\n";
+			return $html;
+	}
 /////////////////////////////////////////////////////////////////////////////
 // dbmng_create_form
 // ======================
