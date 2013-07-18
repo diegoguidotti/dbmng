@@ -1,5 +1,6 @@
 <?php
 include_once "sites/all/library/dbmng/dbmng.php";
+include_once "sites/all/library/dbmng/dbmng_sql_functions.php";
 
 //******************************************************************************
 // Drupal Module 
@@ -50,7 +51,7 @@ function dbmng_menu() {
 
 function dbmng_list_table_view() {
 $html='';
-$result = db_query('SELECT distinct id_table, table_label, table_name FROM dbmng_tables where id_table_type=2 order by table_label ');
+$result = dbmng_query('SELECT distinct id_table, table_label, table_name FROM dbmng_tables where id_table_type=2 order by table_label ');
 	$html.="<ul>";
 		foreach ($result as $record) {
 
@@ -144,7 +145,7 @@ function dbmng_manager()
 
 				//$aForm    = dbmng_get_form_array($id_table_field);
 				
-				$fields=db_query('select COLUMN_NAME as colname FROM information_schema.columns c, dbmng_tables t WHERE t.table_name=c.table_name AND t.id_table ='.$_REQUEST['show_fields'].';');
+				$fields=dbmng_query('select COLUMN_NAME as colname FROM information_schema.columns c, dbmng_tables t WHERE t.table_name=c.table_name AND t.id_table ='.$_REQUEST['show_fields'].';');
 				$varField= array();
 				foreach($fields as $f)
 					{				
@@ -226,6 +227,11 @@ function dbmng_manager()
 													 'label_long' => t('Long Label'),
 													 'type'  => 'varchar',
 													 'skip_in_tbl' => '1'
+										),
+									'field_order' =>
+										array( 'label' => t('Order'),
+													 'label_long' => t('Order'),
+													 'type'  => 'int',
 										),
 									'skip_in_tbl'     => 
 										array('label'   => t('Skip'), 
