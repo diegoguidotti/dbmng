@@ -180,7 +180,10 @@ function layout_table_action( $aForm, $aParam, $id_record )
 	$html = "";
 	$hv   = prepare_hidden_var($aParam);
 	if( $nDel == 1 )
-		$html .= "<a href='?del_" . $aForm['table_name'] . "=" . $id_record .$hv."'>" . t('Delete') . "</a>" . "&nbsp;";
+		{
+			$jsc = "return confirm('".t('Are you sure?')."')";
+			$html .= '<a onclick="'.$jsc.'" href="?del_' . $aForm['table_name'] . '=' . $id_record .$hv.'">' . t('Delete') . '</a>' . "&nbsp;";
+		}
 	if( $nUpd == 1 ) 
 		$html .= "<a href='?upd_" . $aForm['table_name'] . "=" . $id_record .$hv."'>" . t('Update') . "</a>" . "&nbsp;";
 	if( $nDup == 1 )
