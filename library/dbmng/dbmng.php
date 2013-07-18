@@ -480,7 +480,6 @@ function dbmng_value_prepare($x_value, $x, $post)
 		{
 			// $dir_upd_file = str_replace("\\", "/", realpath('.')) . "/docs/";
 			$dir_upd_file = "docs/";
-			
 			if( isset($aParam['file']) )
 				$dir_upd_file = $aParam['file'];
 				
@@ -554,6 +553,29 @@ function dbmng_is_picture($fn){
 	return $is_picture;
 }
 
+
+function dbmng_file_create_link($value){
+
+  $ret="";
+	//echo realpath('.').'/'.$value;
+	if(!is_null($value) && $value!='')
+		{
+			$link= base_path() . ''. $value;
+
+			//if(in_array( substr(strrchr($value, '.'), 1), $allowedExts ))
+			if( preg_match('/\.(gif|jpe?g|png)$/i',strtolower($value)) )
+				{					
+					$ret='<a class="dbmng_image_link" target="_NEW" href="'.$link.'"><img class="dbmng_image_thumb" src="'.$link.'" /></a>';					
+				}
+			else
+				{
+					$ret='<a class="dbmng_file_link" target="_NEW" href="'. base_path() . ''. $value.'">'.t("download").'</a>';					
+				}
+		}
+
+	return $ret;
+}
+
 /////////////////////////////////////////////////////////////////////////////
 // dbmng_value_prepare_html
 // ======================
@@ -584,7 +606,11 @@ function dbmng_value_prepare_html($fld_value, $value){
 					$ret = null;
 				}
 			}
-		elseif($widget == "date" )
+		elseif($widget == "file" )
+			{
+				$ret=dbmng_file_create_link($value);
+			}
+      elseif($widget == "date" )
 			{
 				if(!is_null($value) && $value!=''){
 					$datetime = DateTime::createFromFormat('Y-m-d', $value);

@@ -25,3 +25,7 @@ div.dbmng_form_field_id_voc_type select{
   width:30px!important;
 }
 
+
+img.dbmng_image_thumb {
+	width:200px;
+}

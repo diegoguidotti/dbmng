@@ -54,7 +54,6 @@ function layout_form_date( $fld, $fld_value, $value )
 }
 
 
-//This is a comment
 function layout_form_input( $fld, $fld_value, $value, $more='' )
 {
 	$html  = "<input type='text' name='$fld' id='$fld' $more";
@@ -74,8 +73,9 @@ function layout_form_textarea( $fld, $fld_value, $value )
 
 function layout_form_file( $fld, $fld_value, $value )
 {		
-	// $html  = layout_form_input( $fld, $fld_value, $value, $more='' );
-	$html = "<input type='file' name='$fld' id='$fld' >";
+  $html  = dbmng_file_create_link($value).'';
+
+	$html .= "<input type='file' name='$fld' id='$fld' >";
 	return $html;
 }
 
