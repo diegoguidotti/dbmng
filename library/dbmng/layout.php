@@ -73,9 +73,16 @@ function layout_form_textarea( $fld, $fld_value, $value )
 
 function layout_form_file( $fld, $fld_value, $value )
 {		
-  $html  = dbmng_file_create_link($value).'';
+  $html  = dbmng_file_create_link($value).'<br/>';
+	$html .= "<div class='dbmng_file_hide_this'><input type='file' name='$fld' id='$fld' ></div>";
 
-	$html .= "<input type='file' name='$fld' id='$fld' >";
+	$html .= '<input class="dbmng_file_text" type="text" name="'.$fld.'_tmp_choosebox" id="'.$fld.'_tmp_choosebox" value="'.$value.'" />';
+	$html .= '<a href="#" id="'.$fld.'_tmp_choose">'.t('Choose').'</a>';
+	$html .= '<a href="#" id="'.$fld.'_tmp_remove">'.t('Remove').'</a>';
+
+	$html .= "<script type=\"text/javascript\">dbmng_style_fileform('".$fld."');</script>";
+
+
 	return $html;
 }
 
@@ -143,6 +150,7 @@ function layout_table_footer($aField)
 {
 	$html  = "";
 	$html .= "<tfoot>\n";
+/*
 	$html .= "<tr>\n";
 	foreach ( $aField as $fld => $fld_value )
 		{
@@ -151,6 +159,7 @@ function layout_table_footer($aField)
 		}
 	$html .= "<td>" . t("Clear filtering") . "</td>";
 	$html .= "</tr>\n";
+*/
 	$html .= "</tfoot>\n";
 	return $html;
 }

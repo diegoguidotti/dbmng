@@ -386,6 +386,7 @@ function dbmng_create_form($aForm, $aParam)
 
 									//generate the form label
 									$html .= layout_get_label($fld, $fld_value);
+									$html.='<div class="dbmbg_form_element">';
 
 									if ($widget==='textarea')
 									{
@@ -417,6 +418,7 @@ function dbmng_create_form($aForm, $aParam)
 										$html .= layout_form_input( $fld, $fld_value, $value, $more );		
 									}
 									$html.='</div>';
+									$html.='</div>';
 
 								}
 						}
@@ -425,12 +427,12 @@ function dbmng_create_form($aForm, $aParam)
 			if( isset($_GET["upd_" . $aForm['table_name']] ))
 				{
 					$html .= "<input type='hidden' name='upd_" . $aForm['table_name'] . "' value='" . $_GET["upd_" . $aForm['table_name']] . "' />\n";
-					$html .= "<input type='submit' value='". t('Update') ."' />\n";
+					$html .= "<div class='dbmng_form_button'><input  type='submit' value='". t('Update') ."' /></div>\n";
 				}
 			else
 				{
 					$html .= "<input type='hidden' name='ins_" . $aForm['table_name'] . "' />\n";
-					$html .= "<input type='submit' value='" . t('Insert') . "' />\n";
+					$html .= "<div class='dbmng_form_button'><input class='dbmng_form_button' type='submit' value='" . t('Insert') . "' /></div>\n";
 				}
 
 	    $html .= "</form>\n";
@@ -482,11 +484,16 @@ function dbmng_value_prepare($x_value, $x, $post)
 				$dir_upd_file = $aParam['file'];
 				
 			$sValue = $dir_upd_file . $_FILES[$x]['name'];
+
 			if( $_FILES[$x]["error"] == 0 )
 				{
 					$sValue = dbmng_uploadfile($_FILES[$x]['name'], $dir_upd_file, $_FILES[$x]["tmp_name"]);
 			  	// move_uploaded_file($_FILES[$x]["tmp_name"], $dir_upd_file . $_FILES[$x]["name"]);
 			  }
+			else if ($_FILES[$x]["error"] == 4)
+				{ //if the file is null use the text in the checkbox
+					$sValue = $post[$x.'_tmp_choosebox'];
+				}		
 		}
 
 	$sVal='';
@@ -596,14 +603,7 @@ function dbmng_file_create_link($value){
 				{
 					$ret="<a class='dbmng_file_link' target='_NEW' href='". base_path() . "" . $value."'>".t("download")."</a>\n";					
 				}
-
-			$info = pathinfo($value);
-			$fn = $info['filename'] . "." . $info['extension'];
-
-			$ret .= "&nbsp;";
-			
-			// TODO: passare id del record come in layout_table_action
-			$ret .= "<a class='dbmng_file_remove' href='?rm_file=" . $fn . "'>" . t("remove") . "</a> \n";
+			$ret .= "&nbsp;";			
 		}
 	return $ret;
 }

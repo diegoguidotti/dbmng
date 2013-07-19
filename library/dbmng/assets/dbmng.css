@@ -5,10 +5,22 @@ div.dbmng_form_row{
   padding:3px;
 }
 
+
+div.dbmbg_form_element{
+	float:left;
+}
+
 div.dbmng_form label {
   display: block;
 	float:left;
   width:150px;
+}
+
+div.dbmng_form_button {
+	width:450px;
+	text-align: center;
+	clear: both;
+  padding: 15px;
 }
 
 div.dbmng_form_row input, div.dbmng_form_row select, div.dbmng_form_row textarea  {
@@ -20,7 +32,6 @@ div.dbmng_form_row input.dbmng_checkbox {
   width: auto;
 }
 
-
 div.dbmng_form_field_id_voc_type select{
   width:30px!important;
 }
@@ -29,3 +40,15 @@ div.dbmng_form_field_id_voc_type select{
 img.dbmng_image_thumb {
 	width:200px;
 }
+
+
+div.dbmng_file_hide_this{
+    position: absolute;
+    left:-1000px;
+    top:-1000px;
+}
+
+div.dbmng_form_row input.dbmng_file_text  {
+  width: 200px;
+}
+
