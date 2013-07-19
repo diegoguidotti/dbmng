@@ -3,6 +3,13 @@ include_once DBMNG_LIB_PATH."dbmng_cfg.php";
 
 function dbmng_query($sql, $var=null)
 {
+
+	if(is_null($var))
+		{
+			$callers=debug_backtrace();
+			trigger_error("Warning! execute dbmng query with no array (line ".$callers[1]['line']." of ".$callers[1]['file']." )", E_USER_WARNING);
+
+		}
 	switch(DBMNG_CMS)
 	{
 		case "none": // to be developed
