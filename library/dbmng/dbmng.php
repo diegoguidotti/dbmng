@@ -590,14 +590,21 @@ function dbmng_file_create_link($value){
 			//if(in_array( substr(strrchr($value, '.'), 1), $allowedExts ))
 			if( preg_match('/\.(gif|jpe?g|png)$/i',strtolower($value)) )
 				{					
-					$ret='<a class="dbmng_image_link" target="_NEW" href="'.$link.'"><img class="dbmng_image_thumb" src="'.$link.'" /></a>';					
+					$ret="<a class='dbmng_image_link' target='_NEW' href='".$link."'><img class='dbmng_image_thumb' src='".$link."' /></a>\n";					
 				}
 			else
 				{
-					$ret='<a class="dbmng_file_link" target="_NEW" href="'. base_path() . ''. $value.'">'.t("download").'</a>';					
+					$ret="<a class='dbmng_file_link' target='_NEW' href='". base_path() . "" . $value."'>".t("download")."</a>\n";					
 				}
-		}
 
+			$info = pathinfo($value);
+			$fn = $info['filename'] . "." . $info['extension'];
+
+			$ret .= "&nbsp;";
+			
+			// TODO: passare id del record come in layout_table_action
+			$ret .= "<a class='dbmng_file_remove' href='?rm_file=" . $fn . "'>" . t("remove") . "</a> \n";
+		}
 	return $ret;
 }
 
@@ -635,7 +642,7 @@ function dbmng_value_prepare_html($fld_value, $value){
 			{
 				$ret=dbmng_file_create_link($value);
 			}
-      elseif($widget == "date" )
+    elseif($widget == "date" )
 			{
 				if(!is_null($value) && $value!=''){
 					$datetime = DateTime::createFromFormat('Y-m-d', $value);
