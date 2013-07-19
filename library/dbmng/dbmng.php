@@ -81,7 +81,7 @@ function dbmng_get_form_array($id_table)
 		//TODO: ['primary key shoud be an array to manage multiples key']
 		$aFields = array();
 		$aPK     = array(); // Array to store information about the primary key
-		$fields = dbmng_query("select * from dbmng_fields where id_table=:id_table order by field_order ASC", array(':id_table'=>intval($id_table)));
+		$fields  = dbmng_query("select * from dbmng_fields where id_table=:id_table order by field_order ASC", array(':id_table'=>intval($id_table)));
 		foreach ($fields as $fld)
 			{
 				if($fld->pk == 1)
@@ -477,7 +477,6 @@ function dbmng_value_prepare($x_value, $x, $post)
 	
 	if( $widget=='file' )
 		{
-			// $dir_upd_file = str_replace("\\", "/", realpath('.')) . "/docs/";
 			$dir_upd_file = "docs/";
 			if( isset($aParam['file']) )
 				$dir_upd_file = $aParam['file'];
@@ -485,8 +484,8 @@ function dbmng_value_prepare($x_value, $x, $post)
 			$sValue = $dir_upd_file . $_FILES[$x]['name'];
 			if( $_FILES[$x]["error"] == 0 )
 				{
-					//$sValue=dbmng_uploadfile($_FILES[$x]['name'], $dir_upd_file, $_FILES[$x]["tmp_name"]);
-			  	move_uploaded_file($_FILES[$x]["tmp_name"], $dir_upd_file . $_FILES[$x]["name"]);
+					$sValue = dbmng_uploadfile($_FILES[$x]['name'], $dir_upd_file, $_FILES[$x]["tmp_name"]);
+			  	// move_uploaded_file($_FILES[$x]["tmp_name"], $dir_upd_file . $_FILES[$x]["name"]);
 			  }
 		}
 
@@ -527,38 +526,29 @@ function dbmng_value_prepare($x_value, $x, $post)
 }
 
 
-/*
-
+/////////////////////////////////////////////////////////////////////////////
+// dbmng_uploadfile
+// ======================
+/// This function allow to rename a file if exist adding timestamp
+/**
+\param $origin  			the filename
+\param $dest    			the destination directory
+\param $tmp_name 			the temporary filename
+\return           		the new path
+*/
 function dbmng_uploadfile($origin, $dest, $tmp_name)
 	{
-		$origin = strtolower(basename($origin));
-		$fulldest = $dest.$origin;
-		$filename = $origin;
-		if (file_exists($fulldest))
-		{
-			
-		  $fileext = (strpos($origin,'.')===false?'':'.'.substr(strrchr($origin, "."), 1));
-			
-			$i="2";
-		  $newfilename = substr($origin, 0, strlen($origin)-strlen($fileext)).'.'.$i_''.$fileext;
-		  $fulldest = $dest.$newfilename;
-		}
-
-
-			echo("|$fulldest|");
-
-		
-		if (move_uploaded_file($tmp_name, $fulldest)) 
+		$fullpath = $dest . $origin;
+	  if (file_exists( $fullpath ))
 			{
-			  return $filename;
+				$additional = time();
+				$info = pathinfo($fullpath);
+				$fullpath = $info['dirname'] . '/' . $info['filename'] . '_' . $additional . '.' . $info['extension'];
 			}
-		else
-			{
-				echo("|error|<br/>");
-				return false;
-			}
+			
+		move_uploaded_file($tmp_name, $fullpath);
+		return $fullpath;
 	}
-*/
 
 
 /////////////////////////////////////////////////////////////////////////////
