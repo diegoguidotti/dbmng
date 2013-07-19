@@ -7,7 +7,7 @@ function dbmng_query($sql, $var=null)
 	if(is_null($var))
 		{
 			$callers=debug_backtrace();
-			trigger_error("Warning! execute dbmng query with no array (line ".$callers[1]['line']." of ".$callers[1]['file']." )", E_USER_WARNING);
+			trigger_error("Warning! execute dbmng query with no array (line ".$callers[0]['line']." of ".$callers[0]['file']." )", E_USER_WARNING);
 
 		}
 	switch(DBMNG_CMS)

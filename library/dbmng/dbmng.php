@@ -71,7 +71,7 @@ function dbmng_get_form_array($id_table)
 	{
 		$aForm = array();
 
-		$table             = dbmng_query("select * from dbmng_tables where id_table=".$id_table);
+		$table             = dbmng_query("select * from dbmng_tables where id_table=:id_table", array(':id_table' => intval($id_table)));
 		//print_r( $table );
 		$aForm['id_table'] = $id_table;
 		$fo                = dbmng_fetch_object($table);
@@ -116,7 +116,8 @@ function dbmng_get_form_array($id_table)
 								$sql  = $fld->voc_sql;							
 							}
 
-						$rVoc  = dbmng_query($sql);
+						//TODO: review the safety of this query
+						$rVoc  = dbmng_query($sql, array());
 						$aFVoc = array();
 
 						$v       = 0;
@@ -169,7 +170,7 @@ function dbmng_get_form_array($id_table)
 */
 function dbmng_crud($aForm, $aParam){
 			$html  = "";
-			$html .= dbmng_data2JSarray($aForm, $aParam);
+			//$html .= dbmng_data2JSarray($aForm, $aParam);
       $html .= dbmng_create_form_process($aForm, $aParam);
 			$html .= dbmng_create_table($aForm, $aParam);
       $html .= dbmng_create_form($aForm, $aParam);
@@ -187,6 +188,8 @@ function dbmng_crud($aForm, $aParam){
 */
 function dbmng_create_table($aForm, $aParam)
 {
+
+	$var=array();
   
   // Initialize where clause and hidden variables
 	$where = " WHERE 1 ";
@@ -197,7 +200,8 @@ function dbmng_create_table($aForm, $aParam)
 				{
 					foreach ( $aParam['filters'] as $x => $x_value )
 						{				
-								$where.=" AND $x = $x_value ";
+								$where.=" AND $x = :$x ";
+								array_merge($var, array(":$x" => $x_value));
 						}					
 				}
 			}
@@ -206,7 +210,8 @@ function dbmng_create_table($aForm, $aParam)
 		if( !isset($_GET["ins_" . $aForm['table_name']]) && !isset($_GET["upd_" . $aForm['table_name']]) )
 			{
 			  $sql = 'select * from ' . $aForm['table_name'].' '. $where;
-				$result = dbmng_query($sql);
+
+				$result = dbmng_query($sql, $var);
 			  
 				$html  .= "<div class='dbmng_table' id='dbmng_".$aForm['table_name']."'>";
 
@@ -329,8 +334,11 @@ function dbmng_create_form($aForm, $aParam)
 		    {
 					$id_upd    = $_GET["upd_" . $aForm['table_name']];
 
-					$sql       = "select * from " . $aForm['table_name'] . " where " . $aForm['primary_key'][0] . "=" . intval($id_upd);
-					$result    = dbmng_query($sql );		
+					$pkfield=$aForm['primary_key'][0];
+
+
+					$sql       = "select * from " . $aForm['table_name'] . " where " . $pkfield . "= :$pkfield" ;
+					$result    = dbmng_query($sql, array(":$pkfield" => intval($id_upd)) );		
 					$vals      = dbmng_fetch_object($result); //$result->fetchObject();
 					//print_r($vals);
 				}

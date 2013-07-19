@@ -51,7 +51,7 @@ function dbmng_menu() {
 
 function dbmng_list_table_view() {
 $html='';
-$result = dbmng_query('SELECT distinct id_table, table_label, table_name FROM dbmng_tables where id_table_type=2 order by table_label ');
+$result = dbmng_query('SELECT distinct id_table, table_label, table_name FROM dbmng_tables where id_table_type=:id_table_type order by table_label ',array(':id_table_type'=>2));
 	$html.="<ul>";
 		foreach ($result as $record) {
 
