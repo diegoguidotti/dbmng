@@ -52,6 +52,7 @@ function dbmng_create_form_remove_file($aForm, $aParam)
 			if(isset($_REQUEST["del_" . $aForm['table_name']]))
 				{
 					$id_del = intval($_REQUEST["del_" . $aForm['table_name']]);
+					// TODO: identificare il campo con il nome del file (potrebbero esserne presenti più di uno)
 					$result = dbmng_query("update " . $aForm['table_name'] . "set file=null where " . $aForm['primary_key'][0] . " = " . $id_del);
 				}
 		}
