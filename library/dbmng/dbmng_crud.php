@@ -37,6 +37,26 @@ function dbmng_create_form_delete($aForm, $aParam)
 		}
 }
 
+/////////////////////////////////////////////////////////////////////////////
+// dbmng_create_form_remove_file
+// ======================
+/// This function remove a file
+/**
+\param $aForm  		Associative array with all the characteristics
+*/
+function dbmng_create_form_remove_file($aForm, $aParam) 
+{
+	// TODO: finire!!!
+	if(isset($_REQUEST["rm_file"]))
+		{
+			if(isset($_REQUEST["del_" . $aForm['table_name']]))
+				{
+					$id_del = intval($_REQUEST["del_" . $aForm['table_name']]);
+					$result = dbmng_query("update " . $aForm['table_name'] . "set file=null where " . $aForm['primary_key'][0] . " = " . $id_del);
+				}
+		}
+}
+
 
 /////////////////////////////////////////////////////////////////////////////
 // dbmng_create_form_duplicate
@@ -48,19 +68,19 @@ function dbmng_create_form_delete($aForm, $aParam)
 function dbmng_create_form_duplicate($aForm, $aParam) 
 {
 	$sWhat = "";
-	foreach ( $aForm['fields'] as $x => $x_value )
+	foreach ( $aForm['fields'] as $fld => $fld_value )
 		{
-			if($x !== $aForm['primary_key'][0])
-				$sWhat .= $x . ", ";
+			if($fld !== $aForm['primary_key'][0])
+				$sWhat .= $fld . ", ";
 		}
 
 	if( isset($aParam) )
 	{
 		if( isset($aParam['filters']) )
 			{
-					foreach ( $aParam['filters'] as $x => $x_value )
+					foreach ( $aParam['filters'] as $fld => $fld_value )
 						{				
-							$sWhat.=$x.", ";
+							$sWhat.=$fld.", ";
 						}					
 			}
 	}
