@@ -95,7 +95,9 @@ function layout_form_checkbox( $fld, $fld_value, $value )
 			$html .= " checked='true' ";
 		}	
 	 
-	$html .= layout_get_nullable($fld_value);	
+  //the field will never reply with a null value (true or false)
+	//if setted as a non_nullable it will accept only true values
+	//$html .= layout_get_nullable($fld_value);	
 	$html .= " />\n";
 
 	return $html;
