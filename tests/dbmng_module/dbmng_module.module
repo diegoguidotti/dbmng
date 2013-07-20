@@ -145,7 +145,7 @@ function dbmng_manager()
 
 				//$aForm    = dbmng_get_form_array($id_table_field);
 				
-				$fields=dbmng_query('select COLUMN_NAME as colname FROM information_schema.columns c, dbmng_tables t WHERE t.table_name=c.table_name AND t.id_table ='.$_REQUEST['show_fields'].';');
+				$fields=dbmng_query('select COLUMN_NAME as colname FROM information_schema.columns c, dbmng_tables t WHERE t.table_name=c.table_name AND t.id_table =:id_table;', array(':id_table' => $_REQUEST['show_fields']));
 				$varField= array();
 				foreach($fields as $f)
 					{				

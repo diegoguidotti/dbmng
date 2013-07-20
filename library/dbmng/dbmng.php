@@ -201,7 +201,7 @@ function dbmng_create_table($aForm, $aParam)
 					foreach ( $aParam['filters'] as $x => $x_value )
 						{				
 								$where.=" AND $x = :$x ";
-								array_merge($var, array(":$x" => $x_value));
+								$var = array_merge($var, array(":$x" => $x_value));
 						}					
 				}
 			}
@@ -480,9 +480,9 @@ function dbmng_value_prepare($x_value, $x, $post)
 	
   if($widget=='checkbox'){
     if(is_null($sValue))
-			$sValue="0";
+			$sValue=0;
 		else
-			$sValue="1";
+			$sValue=1;
 	}
 	
 	if( $widget=='file' )
@@ -504,7 +504,7 @@ function dbmng_value_prepare($x_value, $x, $post)
 				}		
 		}
 
-	$sVal='';
+	$sVal=null;
 	$sType=$x_value['type'];
 
 	$sDefault=null;
@@ -521,7 +521,7 @@ function dbmng_value_prepare($x_value, $x, $post)
 	//if exists a default value use the default values instead of null
 	if(strlen($sValue)==0 && is_null($sDefault) )
 		{
-			$sVal  .= "NULL";
+			$sVal  = null;
 		}
 	else
 		{
@@ -531,10 +531,16 @@ function dbmng_value_prepare($x_value, $x, $post)
 				}
 
 				if (dbmng_is_field_type_numeric($sType)) {
-					$sVal  .= $sValue;							
+
+					if($sType=="int" || $sType=="bigint")
+						$sVal  = intval($sValue);							
+					else if($sType=="float" || $sType=="double")
+						$sVal  = doubleval($sValue);			
+					else 
+						$sVal  = doubleval($sValue);							
 				}
 				else {
-					$sVal  .= "'" . $sValue . "'";
+					$sVal  = $sValue;
 				}
 		}
   return $sVal;

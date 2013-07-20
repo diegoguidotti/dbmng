@@ -92,13 +92,15 @@ function dbmng_create_form_insert($aForm, $aParam)
 		{
 			$sWhat = "";
 			$sVal  = "";
+
+			$var = array();
 			foreach ( $aForm['fields'] as $fld => $fld_value )
 				{
 					if($fld !== $aForm['primary_key'][0])
 						{
 							$sWhat .= $fld . ", ";
-							
-							$sVal.=dbmng_value_prepare($fld_value,$fld,$_POST)." ,";	
+							$sVal.=":$fld ,";	
+							$var = array_merge($var, array(":".$fld => dbmng_value_prepare($fld_value,$fld,$_POST)));
 						}
 				}
 
@@ -109,7 +111,11 @@ function dbmng_create_form_insert($aForm, $aParam)
 							foreach ( $aParam['filters'] as $fld => $fld_value )
 								{				
 									$sWhat.=$fld.", ";
-									$sVal.=$fld_value.", ";
+									$sVal.=":$fld, ";
+
+									$var = array_merge($var, array(":".$fld =>  $fld_value ));
+
+
 								}					
 						}
 				}
@@ -118,7 +124,7 @@ function dbmng_create_form_insert($aForm, $aParam)
 			$sVal  = substr($sVal, 0, strlen($sVal)-2);
 	
 			$sql    = "insert into " . $aForm['table_name'] . " (" . $sWhat . ") values (" . $sVal . ")";
-			$result = dbmng_query($sql);
+			$result = dbmng_query($sql, $var);
 			//print_r( $_FILES );
 		}
 }
@@ -164,21 +170,28 @@ function dbmng_create_form_update($aForm, $aParam)
 	if(isset($_POST["upd_" . $aForm['table_name']]))
 		{
 			$sSet = "";
+			$var = array();
+
 			foreach ( $aForm['fields'] as $x => $x_value )
 				{
 					if($x !== $aForm['primary_key'][0])
 						{
-							$sSet .= $x . " = ";
+							$sSet .= $x . " = :$x, ";
 
-							$sSet.=dbmng_value_prepare($x_value,$x,$_POST).", ";
+							$var = array_merge($var, array(":".$x => dbmng_value_prepare($x_value,$x,$_POST)));
+							//$sSet.=dbmng_value_prepare($x_value,$x,$_POST).", ";
 						}
 				}
 		
 			$sSet = substr($sSet, 0, strlen($sSet)-2);
 	
 			$id_upd = intval($_REQUEST["upd_" . $aForm['table_name']]);
-			$sql    = "update " . $aForm['table_name'] . " set " . $sSet . " where " . $aForm['primary_key'][0] . " = " . $id_upd;
-			$result = dbmng_query($sql);
+
+			$pk=$aForm['primary_key'][0] ;
+			$var = array_merge($var, array(":$pk" => intval($id_upd)));
+			
+			$sql    = "update " . $aForm['table_name'] . " set " . $sSet . " where " . $pk . " = :$pk " ;
+			$result = dbmng_query($sql, $var);
 		}
 }
 
