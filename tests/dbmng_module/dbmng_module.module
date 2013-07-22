@@ -161,6 +161,7 @@ function dbmng_manager()
 									'field_name'  => 
 										array('label'   => t('Name') , 
 													'label_long' => t('Field Name'),
+													'nullable' => false,
 													'type' => 'varchar',
 													'widget'=>'select' ,
 											    'voc_val' => $varField
@@ -169,6 +170,7 @@ function dbmng_manager()
 									'field_label'  => 
 										array('label'   => t('Label') , 
 													'label_long' => t('Field Label'),
+													'nullable' => false,
 													'type' => 'varchar'
 										), 
 									'id_field_type'     => 
@@ -176,6 +178,7 @@ function dbmng_manager()
 													'label_long' => t('Field Type'),
 													'type' => 'varchar', 
 													'widget'=>'select' ,
+													'nullable' => false,
 													'voc_val' => array(
 														'int'=> t('Integer'),	
 														'varchar'=> t('Short Text'),	
@@ -188,6 +191,7 @@ function dbmng_manager()
 													'label_long' => t('Widget'),
 													'type' => 'varchar', 
 													'widget'=>'select' ,
+													'nullable' => false,
 													'voc_val' => array(
 															'checkbox'=> t('CheckBox'),	
 															'date'=> t('Date'),	
