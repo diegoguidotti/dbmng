@@ -1,4 +1,12 @@
 <?php // 
+/////////////////////////////////////////////////////////////////////////////
+// prepare_hidden_var
+// ======================
+/// This function prepare the hidden var string
+/**
+\param $aParam  		parameter array
+\return             string
+*/
 function prepare_hidden_var($aParam)
 {
 	$hv = "";
@@ -13,6 +21,15 @@ function prepare_hidden_var($aParam)
 	return $hv;
 }
 
+
+/////////////////////////////////////////////////////////////////////////////
+// layout_get_nullable
+// ======================
+/// This function add a required attribute 
+/**
+\param $fld_value		field value
+\return             html attribute
+*/
 function layout_get_nullable($fld_value)
 	{
 		$ht = "";
@@ -22,6 +39,15 @@ function layout_get_nullable($fld_value)
 	}
 
 
+/////////////////////////////////////////////////////////////////////////////
+// layout_get_label
+// ======================
+/// This function get the label to shows in form 
+/**
+\param $fld					field name
+\param $fld_value		field value
+\return             html
+*/
 function layout_get_label($fld, $fld_value)
 	{
 		$lb = $fld_value['label'];
@@ -31,6 +57,17 @@ function layout_get_label($fld, $fld_value)
 		return "<label for='$fld'>" . t($lb) . "</label>\n";
 	}
 
+
+/////////////////////////////////////////////////////////////////////////////
+// layout_form_date
+// ======================
+/// This function allow to add the data widget to the form
+/**
+\param $fld					field name
+\param $fld_value		field value
+\param $value				stored value
+\return             html
+*/
 function layout_form_date( $fld, $fld_value, $value )
 {
 
@@ -54,6 +91,17 @@ function layout_form_date( $fld, $fld_value, $value )
 }
 
 
+/////////////////////////////////////////////////////////////////////////////
+// layout_form_input
+// ======================
+/// This function allow to add the widget input (html tag)
+/**
+\param $fld					field name
+\param $fld_value		field value
+\param $value				existing value
+\param $more 				allow to insert other attributes
+\return             html
+*/
 function layout_form_input( $fld, $fld_value, $value, $more='' )
 {
 	$html  = "<input type='text' name='$fld' id='$fld' $more";
@@ -63,6 +111,17 @@ function layout_form_input( $fld, $fld_value, $value, $more='' )
 	return $html;
 }
 
+
+/////////////////////////////////////////////////////////////////////////////
+// layout_form_textarea
+// ======================
+/// This function allow to add the widget textarea (html tag) 
+/**
+\param $fld					field name
+\param $fld_value		field value
+\param $value				existing value
+\return             html
+*/
 function layout_form_textarea( $fld, $fld_value, $value )
 {		
 	$html  = "<textarea  name='$fld' id='$fld'  ".layout_get_nullable($fld_value)." >";
@@ -71,6 +130,17 @@ function layout_form_textarea( $fld, $fld_value, $value )
 	return $html;
 }
 
+
+/////////////////////////////////////////////////////////////////////////////
+// layout_form_file
+// ======================
+/// This function allow to add the widget file (html tag) 
+/**
+\param $fld					field name
+\param $fld_value		field value
+\param $value				existing value
+\return             html
+*/
 function layout_form_file( $fld, $fld_value, $value )
 {		
   $html  = dbmng_file_create_link($value).'<br/>';
@@ -87,6 +157,16 @@ function layout_form_file( $fld, $fld_value, $value )
 }
 
 
+/////////////////////////////////////////////////////////////////////////////
+// layout_form_checkbox
+// ======================
+/// This function allow to add the widget checkbox (html tag) 
+/**
+\param $fld					field name
+\param $fld_value		field value
+\param $value				existing value
+\return             html
+*/
 function layout_form_checkbox( $fld, $fld_value, $value )
 {
 	$html = "<input class='dbmng_checkbox' type='checkbox' name='$fld' id='$fld' ";
@@ -103,6 +183,17 @@ function layout_form_checkbox( $fld, $fld_value, $value )
 	return $html;
 }
 
+
+/////////////////////////////////////////////////////////////////////////////
+// layout_form_select
+// ======================
+/// This function allow to add the widget select (html tag) 
+/**
+\param $fld					field name
+\param $fld_value		field value
+\param $value				existing value
+\return             html
+*/
 function layout_form_select( $fld, $fld_value, $value )
 {
 	$do_update = false;
@@ -131,6 +222,15 @@ function layout_form_select( $fld, $fld_value, $value )
 	return $html;
 }
 
+
+/////////////////////////////////////////////////////////////////////////////
+// layout_table_head
+// ======================
+/// This function allow to add the table head (<thead> and <th> attributes)
+/**
+\param $aField			field name
+\return             html
+*/
 function layout_table_head($aField)
 {
 	$html  = ""; 
@@ -148,6 +248,15 @@ function layout_table_head($aField)
 	return $html;
 }
 
+
+/////////////////////////////////////////////////////////////////////////////
+// layout_table_footer
+// ======================
+/// This function allow to add the table head (<tfoot> attribute)
+/**
+\param $aField			field name
+\return             html
+*/
 function layout_table_footer($aField)
 {
 	$html  = "";
@@ -166,6 +275,15 @@ function layout_table_footer($aField)
 	return $html;
 }
 
+
+/////////////////////////////////////////////////////////////////////////////
+// layout_view_field_table
+// ======================
+/// This function allow to add the table head (<tfoot> attribute)
+/**
+\param $fld_value  	field value
+\return             html
+*/
 function layout_view_field_table($fld_value){
 	$ret=true;	
 	if( isset($fld_value['skip_in_tbl']) ) {
@@ -177,6 +295,16 @@ function layout_view_field_table($fld_value){
 }
 
 
+/////////////////////////////////////////////////////////////////////////////
+// layout_table_action
+// ======================
+/// This function allow to add the record actions
+/**
+\param $aForm  			metadata table array 
+\param $aParam  	  parameter array
+\param $id_record  	id record
+\return             html
+*/
 function layout_table_action( $aForm, $aParam, $id_record )
 {
 	$nDel = 1;	$nUpd=1; 	$nDup=1; 
@@ -203,6 +331,16 @@ function layout_table_action( $aForm, $aParam, $id_record )
 	return $html;
 }
 
+
+/////////////////////////////////////////////////////////////////////////////
+// layout_table_custom_function
+// ======================
+/// This function allow to add costum function
+/**
+\param $aParam  	  parameter array
+\param $id_record  	id record
+\return             html
+*/
 function layout_table_custom_function($aParam, $id_record)
 {
 	$hv = prepare_hidden_var($aParam);
@@ -218,6 +356,16 @@ function layout_table_custom_function($aParam, $id_record)
 	return $html;
 }
 
+
+/////////////////////////////////////////////////////////////////////////////
+// layout_table_insert
+// ======================
+/// This function allow to add the link "Insert new data"
+/**
+\param $aForm  			metadata table array 
+\param $aParam  	  parameter array
+\return             html
+*/
 function layout_table_insert($aForm, $aParam)
 {
   // Initialization of user function variable
@@ -234,6 +382,17 @@ function layout_table_insert($aForm, $aParam)
 	return $html;
 }
 
+
+/////////////////////////////////////////////////////////////////////////////
+// layout_table_body
+// ======================
+/// This function allow to add the link "Insert new data"
+/**
+\param $result 			A prepared statement object, already executed 
+\param $aForm  			metadata table array 
+\param $aParam  	  parameter array
+\return             html
+*/
 function layout_table_body( $result, $aForm, $aParam )
 {
 	$html ="";
@@ -274,6 +433,17 @@ function layout_table_body( $result, $aForm, $aParam )
   return $html;
 }
 
+
+/////////////////////////////////////////////////////////////////////////////
+// layout_table
+// ======================
+/// This function allow to add the link "Insert new data"
+/**
+\param $result 			A prepared statement object, already executed 
+\param $aForm  			metadata table array 
+\param $aParam  	  parameter array
+\return             html
+*/
 function layout_table( $result, $aForm, $aParam )
 {
 	$html = "";
