@@ -16,6 +16,10 @@ div.dbmng_form label {
   width:150px;
 }
 
+span.dbmng_required {
+  color:red;
+}
+
 div.dbmng_form_button {
 	width:450px;
 	text-align: center;

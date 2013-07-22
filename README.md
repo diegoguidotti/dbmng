@@ -52,6 +52,9 @@ functions for user and adding custom function
   $aParam['custom_function'][0]['custom_variable'] = 'show_fields';
   $aParam['custom_function'][0]['custom_label']    = 'Show Fields';
   
+  //order the table records basic on the field indicated in this variable
+  $aParam['tbl_order']        = 'field_order';
+  
   //Create the CRUD interface using the custom parameters
   echo dbmng_crud($aForm, $aParam);
 ```

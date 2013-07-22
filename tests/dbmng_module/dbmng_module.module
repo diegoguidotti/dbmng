@@ -106,6 +106,8 @@ function dbmng_manager()
 		$aParam['user_function']['upd']	   = 1;                // allow to enabled=1 or disabled=0 the update function
 		$aParam['user_function']['del']	   = 0;	              // allow to enabled=1 or disabled=0 the delate function
 		$aParam['file']                    = "sites/default/upload/";
+		$aParam['tbl_order']               = 'nome';
+
 		//print_r ($aParam['filters']);
 
 		// update record
@@ -144,8 +146,15 @@ function dbmng_manager()
 			{
 
 				//$aForm    = dbmng_get_form_array($id_table_field);
-				
-				$fields=dbmng_query('select COLUMN_NAME as colname FROM information_schema.columns c, dbmng_tables t WHERE t.table_name=c.table_name AND t.id_table =:id_table;', array(':id_table' => $_REQUEST['show_fields']));
+				$sql    = 'select COLUMN_NAME as colname FROM information_schema.columns c, dbmng_tables t WHERE t.table_name=c.table_name AND t.id_table =:id_table;';
+				if( isset($_REQUEST['upd_dbmng_fields']) ) //$_REQUEST["upd_" . $aForm['table_name']]
+					{
+						$sql    = 'select COLUMN_NAME as colname ';
+						$sql   .= 'FROM information_schema.columns c, ' . DBMNG_DB_TBL_PREFIX . '.dbmng_tables t ';
+						$sql   .= 'WHERE COLUMN_NAME not in( select field_name from ' . DBMNG_DB_TBL_PREFIX . '.dbmng_fields where id_table = :id_table ) ';
+						$sql   .= 'AND t.table_name=c.table_name AND t.id_table =:id_table;';
+					}
+				$fields = dbmng_query($sql, array(':id_table' => $_REQUEST['show_fields']));
 				$varField= array();
 				foreach($fields as $f)
 					{				
@@ -250,7 +259,13 @@ function dbmng_manager()
 													 'type'  => 'text',
 													 'widget' => 'textarea',
 													 'skip_in_tbl' => '1'
-										)							
+										),							
+									'field_function'     => 
+										array('label'   => t('Fnc'), 
+													'label_long' => t('Field function'),
+													'type' => 'varchar', 
+													'skip_in_tbl' => '1'
+										),
 							)
 					);
 
@@ -260,7 +275,7 @@ function dbmng_manager()
 				$aParam['hidden_vars']['show_fields']  = $_REQUEST['show_fields'];
 				$aParam['user_function']['dup']	   = 0;	              // allow to enabled=1 or disabled=0 the duplication function
 				$aParam['user_function']['del']	   = 0;	              // allow to enabled=1 or disabled=0 the delate function
-
+				$aParam['tbl_order']               = 'field_order';
 				$html .= dbmng_crud($aForm, $aParam);
 			}
 		else
