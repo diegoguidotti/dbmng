@@ -541,9 +541,9 @@ function dbmng_value_prepare($x_value, $x, $post)
 				if (dbmng_is_field_type_numeric($sType)) {
 
 					if($sType=="int" || $sType=="bigint")
-						$sVal  = intval($sValue);							
+						$sVal  = intval($sValue);
 					else if($sType=="float" || $sType=="double")
-						$sVal  = doubleval($sValue);			
+						$sVal  = doubleval($sValue);
 					else 
 						$sVal  = doubleval($sValue);							
 				}
