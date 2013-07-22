@@ -1,6 +1,15 @@
 <?php
 include_once DBMNG_LIB_PATH."dbmng_cfg.php";
 
+/////////////////////////////////////////////////////////////////////////////
+// dbmng_query
+// ======================
+/// Executes an arbitrary query string 
+/**
+\param 						$sql  query string
+\param 						$var  An array of values to substitute into the query
+\return           A prepared statement object, already executed 
+*/
 function dbmng_query($sql, $var=null)
 {
 
@@ -71,6 +80,14 @@ function dbmng_query($sql, $var=null)
 	return $res;
 }
 
+/////////////////////////////////////////////////////////////////////////////
+// dbmng_fetch_object
+// ======================
+/// Returns the current row of a result set as an object
+/**
+\param 						$res  A result set identifier returned by dbmng_query
+\return           Returns an object with string properties that corresponds to the fetched row 
+*/
 function dbmng_fetch_object($res)
 {
 	switch( DBMNG_CMS )
@@ -91,6 +108,14 @@ function dbmng_fetch_object($res)
 	return $fo;
 }
 
+/////////////////////////////////////////////////////////////////////////////
+// dbmng_num_rows
+// ======================
+/// Get number of rows in result 
+/**
+\param 						$res  A result set identifier returned by dbmng_query
+\return           The number of rows in a result set 
+*/
 function dbmng_num_rows($res)
 {
 	switch( DBMNG_CMS )
@@ -112,6 +137,15 @@ function dbmng_num_rows($res)
 	return $nr;
 }
 
+/////////////////////////////////////////////////////////////////////////////
+// startsWithL
+// ======================
+/// TODO [Diego]: add description 
+/**
+\param 						$haystack
+\param 						$needle
+\return           [Diego]
+*/
 function startsWithL($haystack, $needle)
 	{
     return !strncmp(strtolower($haystack), $needle, strlen($needle));
