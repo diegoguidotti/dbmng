@@ -206,7 +206,11 @@ function dbmng_create_table($aForm, $aParam)
 		$html = "";
 		if( !isset($_GET["ins_" . $aForm['table_name']]) && !isset($_GET["upd_" . $aForm['table_name']]) )
 			{
-			  $sql = 'select * from ' . $aForm['table_name'].' '. $where;
+				$order_by = '';
+				if( isset($aParam['tbl_order']) )
+					$order_by = 'order by ' . $aParam['tbl_order'];
+					
+			  $sql = 'select * from ' . $aForm['table_name'].' '. $where . ' ' . $order_by;
 
 				$result = dbmng_query($sql, $var);
 			  

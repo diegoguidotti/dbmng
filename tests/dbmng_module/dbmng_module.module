@@ -106,6 +106,8 @@ function dbmng_manager()
 		$aParam['user_function']['upd']	   = 1;                // allow to enabled=1 or disabled=0 the update function
 		$aParam['user_function']['del']	   = 0;	              // allow to enabled=1 or disabled=0 the delate function
 		$aParam['file']                    = "sites/default/upload/";
+		$aParam['tbl_order']               = 'nome';
+
 		//print_r ($aParam['filters']);
 
 		// update record
@@ -269,7 +271,7 @@ function dbmng_manager()
 				$aParam['hidden_vars']['show_fields']  = $_REQUEST['show_fields'];
 				$aParam['user_function']['dup']	   = 0;	              // allow to enabled=1 or disabled=0 the duplication function
 				$aParam['user_function']['del']	   = 0;	              // allow to enabled=1 or disabled=0 the delate function
-
+				$aParam['tbl_order']               = 'field_order';
 				$html .= dbmng_crud($aForm, $aParam);
 			}
 		else
