@@ -246,7 +246,13 @@ function dbmng_manager()
 													 'type'  => 'text',
 													 'widget' => 'textarea',
 													 'skip_in_tbl' => '1'
-										)							
+										),							
+									'field_function'     => 
+										array('label'   => t('Fnc'), 
+													'label_long' => t('Field function'),
+													'type' => 'varchar', 
+													'skip_in_tbl' => '1'
+										),
 							)
 					);
 
