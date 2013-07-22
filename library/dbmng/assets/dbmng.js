@@ -27,6 +27,8 @@ function dbmng_style_fileform(file){
     
     jQuery("#"+file+"_tmp_remove").click(function(){
         jQuery("#"+file+"_tmp_choosebox").val("");
+				jQuery("#"+file+"_link_container").hide();
+
     });
 
 }

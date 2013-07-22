@@ -150,8 +150,8 @@ function dbmng_manager()
 				if( isset($_REQUEST['upd_dbmng_fields']) ) //$_REQUEST["upd_" . $aForm['table_name']]
 					{
 						$sql    = 'select COLUMN_NAME as colname ';
-						$sql   .= 'FROM information_schema.columns c, ' . DBMNG_DB_TBL_PREFIX . '.dbmng_tables t ';
-						$sql   .= 'WHERE COLUMN_NAME not in( select field_name from ' . DBMNG_DB_TBL_PREFIX . '.dbmng_fields where id_table = :id_table ) ';
+						$sql   .= 'FROM information_schema.columns c, ' . DBMNG_DB_NAME . '.dbmng_tables t ';
+						$sql   .= 'WHERE COLUMN_NAME not in( select field_name from ' . DBMNG_DB_NAME . '.dbmng_fields where id_table = :id_table ) ';
 						$sql   .= 'AND t.table_name=c.table_name AND t.id_table =:id_table;';
 					}
 				$fields = dbmng_query($sql, array(':id_table' => $_REQUEST['show_fields']));
