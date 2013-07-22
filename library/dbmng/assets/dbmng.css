@@ -16,7 +16,7 @@ div.dbmng_form label {
   width:150px;
 }
 
-div.dbmng_required {
+span.dbmng_required {
   color:red;
 }
 

@@ -56,7 +56,7 @@ function layout_get_label($fld, $fld_value)
 		
 		$sRequired = "";
 		if(isset($fld_value['nullable']) && $fld_value['nullable'] == 0)
-			$sRequired = "<div class='dbmng_required'>*</div>";
+			$sRequired = "<span class='dbmng_required'>*</span>";
 			
 		return "<label for='$fld'>" . t($lb) . $sRequired . "</label>\n";
 	}
