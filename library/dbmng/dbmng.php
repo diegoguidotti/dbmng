@@ -56,9 +56,6 @@ function getVersion()
 	}
 
 
-
-
-
 /////////////////////////////////////////////////////////////////////////////
 // dbmng_get_form_array
 // ======================
@@ -158,7 +155,6 @@ function dbmng_get_form_array($id_table)
 	}
 
 
-
 /////////////////////////////////////////////////////////////////////////////
 // dbmng_crud
 // ======================
@@ -176,6 +172,7 @@ function dbmng_crud($aForm, $aParam){
       $html .= dbmng_create_form($aForm, $aParam);
 			return $html;
 }
+
 
 /////////////////////////////////////////////////////////////////////////////
 // dbmng_create_table
@@ -296,6 +293,8 @@ function dbmng_data2JSarray($aForm, $aParam)
 				return $html;
 		}
 }
+
+
 /////////////////////////////////////////////////////////////////////////////
 // dbmng_create_form
 // ======================
@@ -450,10 +449,19 @@ function dbmng_create_form($aForm, $aParam)
 }
 
 
+/////////////////////////////////////////////////////////////////////////////
+// dbmng_is_field_type_numeric
+// ======================
+/// This function return true if a type is numeric one
+/**
+\param $sType  		type of data: int, bigint, float, double
+\return           boolean
+*/
 function dbmng_is_field_type_numeric($sType)
 	{
    	return ($sType=="int" || $sType=="bigint" || $sType=="float"  || $sType=="double");
 	}
+
 
 /////////////////////////////////////////////////////////////////////////////
 // dbmng_value_prepare
@@ -600,6 +608,14 @@ function dbmng_is_picture($fn){
 }
 
 
+/////////////////////////////////////////////////////////////////////////////
+// dbmng_file_create_link
+// ======================
+/// This function allow to create an hypertext link with the uploaded file
+/**
+\param 		$value  value
+\return           html
+*/
 function dbmng_file_create_link($value){
 
   $ret="";
@@ -621,6 +637,7 @@ function dbmng_file_create_link($value){
 		}
 	return $ret;
 }
+
 
 /////////////////////////////////////////////////////////////////////////////
 // dbmng_value_prepare_html
