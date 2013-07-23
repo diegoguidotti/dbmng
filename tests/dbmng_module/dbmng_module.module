@@ -147,15 +147,13 @@ function dbmng_manager()
 
 				//$aForm    = dbmng_get_form_array($id_table_field);
 				$sql    = 'select COLUMN_NAME as colname FROM information_schema.columns c, dbmng_tables t WHERE t.table_name=c.table_name AND t.id_table =:id_table;';
-				/*
-				if( isset($_REQUEST['upd_dbmng_fields']) ) //$_REQUEST["upd_" . $aForm['table_name']]
+				if( isset($_REQUEST['ins_dbmng_fields']) ) //$_REQUEST["upd_" . $aForm['table_name']]
 					{
 						$sql    = 'select COLUMN_NAME as colname ';
 						$sql   .= 'FROM information_schema.columns c, ' . DBMNG_DB_NAME . '.dbmng_tables t ';
 						$sql   .= 'WHERE COLUMN_NAME not in( select field_name from ' . DBMNG_DB_NAME . '.dbmng_fields where id_table = :id_table ) ';
 						$sql   .= 'AND t.table_name=c.table_name AND t.id_table =:id_table;';
 					}
-				*/
 				$fields = dbmng_query($sql, array(':id_table' => $_REQUEST['show_fields']));
 				$varField= array();
 				foreach($fields as $f)
