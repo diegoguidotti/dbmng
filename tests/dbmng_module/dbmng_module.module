@@ -207,7 +207,8 @@ function dbmng_manager()
 															'checkbox'=> t('CheckBox'),	
 															'date'=> t('Date'),	
 															'file'=> t('File'),
-															'input'=> t('Input Box'),	
+															'input'=> t('Input Box'),
+															'password'=> t('Password'),	
 															'select'=> t('Select'),	
 															'textarea'=> t('Text Area')	
 													)

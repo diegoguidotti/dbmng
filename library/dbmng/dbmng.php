@@ -419,6 +419,10 @@ function dbmng_create_form($aForm, $aParam)
 									{
 										$html .= layout_form_file( $fld, $fld_value, $value );
 									}
+									else if ($widget==='password')
+									{
+										$html .= layout_form_password( $fld, $fld_value, $value );
+									}
 									else //use input by default
 									{
                     $more='';
@@ -676,6 +680,10 @@ function dbmng_value_prepare_html($fld_value, $value){
 		elseif($widget == "file" )
 			{
 				$ret=dbmng_file_create_link($value);
+			}
+		elseif($widget == "password" )
+			{
+				$ret="****";
 			}
     elseif($widget == "date" )
 			{

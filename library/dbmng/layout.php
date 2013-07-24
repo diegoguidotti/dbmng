@@ -117,6 +117,27 @@ function layout_form_input( $fld, $fld_value, $value, $more='' )
 
 
 /////////////////////////////////////////////////////////////////////////////
+// layout_form_password
+// ======================
+/// This function allow to add the widget password 
+/**
+\param $fld					field name
+\param $fld_value		field value
+\param $value				existing value
+\param $more 				allow to insert other attributes
+\return             html
+*/
+function layout_form_password( $fld, $fld_value, $value, $more='' )
+{
+	$html  = "<input type='password' name='$fld' id='$fld' $more";
+	$html .= " value= '$value' ";	
+	$html .= layout_get_nullable($fld_value);	
+	$html .= " />\n";
+	return $html;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////
 // layout_form_textarea
 // ======================
 /// This function allow to add the widget textarea (html tag) 
