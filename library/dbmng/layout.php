@@ -483,7 +483,7 @@ function layout_table( $result, $aForm, $aParam )
 		foreach ( $aForm['fields'] as $fld => $fld_value )
 			{
 				if( layout_view_field_table($fld_value) )
-					$nColumn = $nColumn + 1;
+					$nColumn++;
 			}
 		$add_js  = "<script type=\"text/javascript\">dbmng_tablesorter('".$aForm['table_name']."',".$nColumn.");</script>\n";
 	}
