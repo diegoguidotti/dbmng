@@ -169,14 +169,14 @@ function dbmng_num_columns($res)
 /////////////////////////////////////////////////////////////////////////////
 // startsWithL
 // ======================
-/// TODO [Diego]: add description 
+/// Check if a string (haystack) starts with an other string (needle)
 /**
 \param 						$haystack
 \param 						$needle
-\return           [Diego]
+\return           boolean
 */
 function startsWithL($haystack, $needle)
 	{
-    return !strncmp(strtolower($haystack), $needle, strlen($needle));
+    return !strncmp(trim(strtolower($haystack)), $needle, strlen($needle));
 	}
 ?>

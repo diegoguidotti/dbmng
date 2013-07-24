@@ -1,3 +1,22 @@
+
+function dbmng_create_table (data, aForm) {
+	
+  console.log(data);
+
+	
+
+	var html='<h1>Table'+aForm.table_name+'</h1><table>';
+	jQuery.each(data.records, function(index, value) {		
+			html+='<tr><td>'+value.id_test+'</td><td>'+value.nome+'</td><td>'+value.eta+'</td></tr>';						
+  		console.log(value);
+	});
+	html+='</table>';
+	return html;
+}
+
+
+
+
 function dbmng_validate_numeric (evt) {
   var theEvent = evt || window.event;
   var key = theEvent.keyCode || theEvent.which;

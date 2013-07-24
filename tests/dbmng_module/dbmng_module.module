@@ -39,7 +39,7 @@ function dbmng_menu() {
     $items['dbmng/dbmng'] = array(
         'title' => 'Database Management',
         'page callback' => 'dbmng_manager',
-        'access arguments' => array('access content'),
+        'access arguments' => array('dbmng manager'),
         'type' => MENU_NORMAL_ITEM,
      );
 
@@ -127,14 +127,6 @@ function dbmng_manager()
 		if( isset($_REQUEST['test']) )
 			{
 
-
-				$rs=dbmng_query("select * from test");
-					foreach($rs as $r){
-						//print_r($r);
-						//echo('_'.$r->id_test.'_<br/>');
-					}
-
-
 				$aForm=array(  
 					'table_name' => 'test' ,
 					'primary_key'=> array('id_test'), 
@@ -145,7 +137,7 @@ function dbmng_manager()
         );
 				$aParam=array();
 				$aParam['hidden_vars']['test']  = $_REQUEST['test'];
-				$html .= dbmng_crud($aForm, $aParam);
+				$html .= dbmng_crud_js($aForm, $aParam);
 
 			}
 		elseif( isset($_REQUEST['show_fields']) )

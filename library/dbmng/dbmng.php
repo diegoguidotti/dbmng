@@ -52,7 +52,7 @@ Associative array with all the characteristics to manage a table
 
 function getVersion()
 	{
-		return "0.0.1";
+		return "0.0.3";
 	}
 
 
@@ -158,7 +158,7 @@ function dbmng_get_form_array($id_table)
 /////////////////////////////////////////////////////////////////////////////
 // dbmng_crud
 // ======================
-/// This function create all the CRUD interface
+/// This function create all the CRUD interface in plain HTML
 /**
 \param $aForm  		Associative array with all the characteristics of the table
 \param $aParam  		Associative array with some custom variable used by the renderer
@@ -166,11 +166,49 @@ function dbmng_get_form_array($id_table)
 */
 function dbmng_crud($aForm, $aParam){
 			$html  = "";
-			//$html .= dbmng_data2JSarray($aForm, $aParam);
       $html .= dbmng_create_form_process($aForm, $aParam);
 			$html .= dbmng_create_table($aForm, $aParam);
       $html .= dbmng_create_form($aForm, $aParam);
 			return $html;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////
+// dbmng_get_data
+// ======================
+/// execute the query returning all the records filtered and ordered according to aForm and aParam
+/**
+\param $aForm  		Associative array with all the characteristics of the table
+\param $aParam  		Associative array with some custom variable used by the renderer
+\return           HTML generated code
+*/
+function dbmng_get_data($aForm, $aParam) 
+	{
+	$var=array();
+	// Initialize where clause and hidden variables
+	$where = " WHERE 1=1 ";
+		if(isset($aParam))
+			{
+				if( isset($aParam['filters']) )
+				{
+					foreach ( $aParam['filters'] as $x => $x_value )
+						{				
+								$where.=" AND $x = :$x ";
+								$var = array_merge($var, array(":$x" => $x_value));
+						}					
+				}
+		}
+
+
+		$order_by = '';
+		if( isset($aParam['tbl_order']) )
+			$order_by = 'order by ' . $aParam['tbl_order'];
+			
+	  $sql = 'select * from ' . $aForm['table_name'].' '. $where . ' ' . $order_by;
+
+		$result = dbmng_query($sql, $var);
+
+		return $result;
 }
 
 
@@ -185,35 +223,12 @@ function dbmng_crud($aForm, $aParam){
 */
 function dbmng_create_table($aForm, $aParam)
 {
-
-	$var=array();
-  
-  // Initialize where clause and hidden variables
-	$where = " WHERE 1 ";
-
-		if(isset($aParam))
-			{
-				if( isset($aParam['filters']) )
-				{
-					foreach ( $aParam['filters'] as $x => $x_value )
-						{				
-								$where.=" AND $x = :$x ";
-								$var = array_merge($var, array(":$x" => $x_value));
-						}					
-				}
-			}
-		
 		$html = "";
 		if( !isset($_GET["ins_" . $aForm['table_name']]) && !isset($_GET["upd_" . $aForm['table_name']]) )
 			{
-				$order_by = '';
-				if( isset($aParam['tbl_order']) )
-					$order_by = 'order by ' . $aParam['tbl_order'];
-					
-			  $sql = 'select * from ' . $aForm['table_name'].' '. $where . ' ' . $order_by;
+				//execute the query returning all the records filtered and ordered according to aForm and aParam
+				$result= dbmng_get_data($aForm, $aParam);			  
 
-				$result = dbmng_query($sql, $var);
-			  
 				$html  .= "<div class='dbmng_table' id='dbmng_".$aForm['table_name']."'>";
 
 				if(isset($aForm['table_label']))
@@ -231,9 +246,34 @@ function dbmng_create_table($aForm, $aParam)
 			return $html;
 	}
 
+/////////////////////////////////////////////////////////////////////////////
+// dbmng_crud_js
+// ======================
+/// This function create all the CRUD interface javascript generated
+/**
+\param $aForm  		Associative array with all the characteristics of the table
+\param $aParam  		Associative array with some custom variable used by the renderer
+\return           HTML generated code
+*/
+function dbmng_crud_js($aForm, $aParam){
+
+			$html  = '';
+
+
+			$html .= '<div id="table_container"></div>';
+
+			$html .= "\n<script type='text/javascript'>\n";
+			$html .= "var data=".dbmng_get_js_array($aForm, $aParam).";";
+			$html .= "var aForm=".json_encode($aForm).";";
+			$html .= "jQuery('#table_container').html(dbmng_create_table(data,aForm));";
+			$html .= "</script>\n";
+			return $html;
+}
+
+
 
 /////////////////////////////////////////////////////////////////////////////
-// dbmng_data2JSarray
+// dbmng_get_js_array
 // ======================
 /// This function allow to define a JS array 
 /**
@@ -241,62 +281,37 @@ function dbmng_create_table($aForm, $aParam)
 \param $aParam  	Associative array with some custom variable used by the renderer
 \return           html
 */
-function dbmng_data2JSarray($aForm, $aParam)
-{
-	if( !isset($_GET["upd_" . $aForm['table_name']]) &&  !isset($_GET["ins_" . $aForm['table_name']]) )
+function dbmng_get_js_array($aForm, $aParam)
 	{
-	  // Initialize where clause and hidden variables
-		$where = " WHERE 1 ";
-	
-			if(isset($aParam))
-				{
-					if( isset($aParam['filters']) )
-					{
-						foreach ( $aParam['filters'] as $x => $x_value )
-							{				
-									$where.=" AND $x = $x_value ";
-							}					
-					}
-				}
 			
-			$html = "";
-			if( !isset($_GET["ins_" . $aForm['table_name']]) && !isset($_GET["upd_" . $aForm['table_name']]) )
-				{
-				  $sql = 'select * from ' . $aForm['table_name'].' '. $where;
-					$result = dbmng_query($sql);
-					
-					$AName = "_aTblVal";
-					$html .= "\n<script type='text/javascript'>\n";
-					$html .= "<!--\n";
-					$html .= "// $sql\n";
-					$html .= "$AName = {'records':[\n";
-					
-					$sObj  = "";
-					foreach( $result as $record )
-						{
-							$sObj .= "{";
-							//get the query results for each field
-							foreach ( $aForm['fields'] as $fld => $fld_value )
-								{
-									$value=dbmng_value_prepare_html($fld_value, $record->$fld);
-									if( layout_view_field_table($fld_value) )
-										{
-											$sObj .= "'" . $fld . "':" . $value . ", ";
-										}
-				
-								}
-							$sObj = substr($sObj, 0, strlen($sObj)-2);
-							$sObj .= "}, ";
-						}
-					$sObj = substr($sObj, 0, strlen($sObj)-2);
-					
-					$html .= $sObj . "\n]};\n";
-				}
-				$html .= "//-->\n";
-				$html .= "</script>\n";
-				return $html;
-		}
-}
+		$html = "";
+
+		$result = dbmng_get_data($aForm, $aParam);			
+		$html .= "{'records':[\n";
+			
+		$sObj  = "";
+		foreach( $result as $record )
+			{
+				$sObj .= "{";
+				//get the query results for each field
+				foreach ( $aForm['fields'] as $fld => $fld_value )
+					{
+						$value=dbmng_value_prepare_html($fld_value, $record->$fld);
+
+						if( layout_view_field_table($fld_value) )
+							{
+								$sObj .= "'" . $fld . "':'" . $value . "', ";
+							}
+	
+					}
+				$sObj = substr($sObj, 0, strlen($sObj)-2);
+				$sObj .= "}, ";
+			}
+		$sObj = substr($sObj, 0, strlen($sObj)-2);
+		
+		$html .= $sObj . "\n]}\n";
+		return $html;
+	}
 
 
 /////////////////////////////////////////////////////////////////////////////
