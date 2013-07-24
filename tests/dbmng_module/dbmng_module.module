@@ -71,6 +71,7 @@ function dbmng_add_libraries()
 		drupal_add_css( "sites/all/modules/dbmng_module/dbmng_module.css" );
 		drupal_add_css( "sites/all/library/dbmng/assets/dbmng.css" );
 		drupal_add_js ( "sites/all/library/dbmng/assets/dbmng.js" );
+		drupal_add_js ( "sites/all/library/dbmng/assets/jquery.tablesorter.js" );
 		drupal_add_library('system','ui.datepicker');
 	}
 
@@ -107,6 +108,7 @@ function dbmng_manager()
 		$aParam['user_function']['del']	   = 0;	              // allow to enabled=1 or disabled=0 the delate function
 		$aParam['file']                    = "sites/default/upload/";
 		$aParam['tbl_order']               = 'nome';
+		$aParam['tbl_sorter']              = '1';
 
 		//print_r ($aParam['filters']);
 
@@ -276,6 +278,8 @@ function dbmng_manager()
 				$aParam['user_function']['dup']	   = 0;	              // allow to enabled=1 or disabled=0 the duplication function
 				$aParam['user_function']['del']	   = 0;	              // allow to enabled=1 or disabled=0 the delate function
 				$aParam['tbl_order']               = 'field_order';
+				$aParam['tbl_sorter']              = '1';
+				
 				$html .= dbmng_crud($aForm, $aParam);
 			}
 		else
@@ -321,6 +325,7 @@ function dbmng_manager()
 				$aParam['user_function']['del']	   = 0;	              // allow to enabled=1 or disabled=0 the delate function
 				$aParam['custom_function'][0]['custom_variable']  = 'show_fields';
 				$aParam['custom_function'][0]['custom_label']  = t('Show Fields');
+				$aParam['tbl_sorter']              = '1';
 
 				// update record
 				$html .= dbmng_crud($aForm, $aParam);
@@ -360,6 +365,7 @@ function dbmng_edit_tables()
 			$aParam['user_function']['upd']	 = 1;                // allow to enabled=1 or disabled=0 the update function
 			$aParam['user_function']['del']	 = 1;	              // allow to enabled=1 or disabled=0 the delate function
 			$aParam['file']                  = "sites/default/upload/";
+			$aParam['tbl_sorter']              = '1';
 			// update record
 			$html .= dbmng_crud($aForm, $aParam);
 		}
