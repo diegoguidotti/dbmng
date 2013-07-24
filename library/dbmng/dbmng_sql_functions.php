@@ -138,6 +138,35 @@ function dbmng_num_rows($res)
 }
 
 /////////////////////////////////////////////////////////////////////////////
+// dbmng_num_columns
+// ======================
+/// Get number of columns in result 
+/**
+\param 						$res  A result set identifier returned by dbmng_query
+\return           The number of columns in a result set 
+*/
+function dbmng_num_columns($res)
+{
+	switch( DBMNG_CMS )
+	{
+		case "none":  // to be developed
+			switch( DBMNG_DB )
+			{
+				case "pdo":
+					$nr = $res->columnCount(); //todo
+					break;
+			}
+			break;
+			
+		case "drupal":
+			$nr = $res->columnCount();
+			break;
+	}
+	
+	return $nr;
+}
+
+/////////////////////////////////////////////////////////////////////////////
 // startsWithL
 // ======================
 /// TODO [Diego]: add description 
