@@ -55,6 +55,9 @@ functions for user and adding custom function
   //order the table records basic on the field indicated in this variable
   $aParam['tbl_order']        = 'field_order';
   
+  //allow to add the field sorter functionality
+  $aParam['tbl_sorter']        = '1';
+  
   //Create the CRUD interface using the custom parameters
   echo dbmng_crud($aForm, $aParam);
 ```
