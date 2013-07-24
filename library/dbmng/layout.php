@@ -381,7 +381,7 @@ function layout_table_insert($aForm, $aParam)
 	
 	$html = "";
 	if( $nIns == 1)
-		$html .= "<a href='?ins_" . $aForm['table_name'] . $hv. "'>" . t('Insert new data') . "</a><br />";
+		$html .= "<a href='?ins_" . $aForm['table_name'] . $hv. "'>" . t('Insert new data') . "</a><br />\n";
 	
 	return $html;
 }
@@ -450,8 +450,25 @@ function layout_table_body( $result, $aForm, $aParam )
 */
 function layout_table( $result, $aForm, $aParam )
 {
+	$id_tbl  = "";
+	$class   = "";
+	$add_js  = "";
+	if( isset($aParam['tbl_sorter']) )
+	{
+		$id_tbl  = "id='" . $aForm['table_name'] . "'";
+		$class   = "class='tablesorter'";
+		
+		$nColumn = 0;
+		foreach ( $aForm['fields'] as $fld => $fld_value )
+			{
+				if( layout_view_field_table($fld_value) )
+					$nColumn = $nColumn + 1;
+			}
+		$add_js  = "<script type=\"text/javascript\">dbmng_tablesorter('".$aForm['table_name']."',".$nColumn.");</script>\n";
+	}
+
 	$html = "";
-	$html .= "<table>\n";
+	$html .= "<table $id_tbl $class>\n";
 	
 	$html .= layout_table_head( $aForm['fields'] );
 	
@@ -470,6 +487,7 @@ function layout_table( $result, $aForm, $aParam )
   $html .= "</table>\n";
 	
 	$html .= layout_table_insert($aForm, $aParam);
+	$html .= $add_js;
 	
 	return $html;
 }
