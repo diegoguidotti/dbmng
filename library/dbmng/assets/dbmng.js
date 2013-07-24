@@ -32,3 +32,15 @@ function dbmng_style_fileform(file){
     });
 
 }
+
+function dbmng_tablesorter(id_tbl, nCol){
+	var exclude_sorter;
+	nCol = nCol;
+	exclude_sorter = "{headers: {"+nCol+": {sorter: false}}}";
+	exclude_sorter = eval('(' + exclude_sorter + ')'); 
+	jQuery(document).ready(function() 
+    { 
+        jQuery("#"+id_tbl).tablesorter(exclude_sorter); 
+    } 
+	);
+}
