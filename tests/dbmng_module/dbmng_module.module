@@ -39,15 +39,15 @@ function dbmng_menu() {
     $items['dbmng/dbmng'] = array(
         'title' => 'Database Management',
         'page callback' => 'dbmng_manager',
-        'access arguments' => array('dbmng manager'),
-        'type' => MENU_CALLBACK,
+        'access arguments' => array('access content'),
+        'type' => MENU_NORMAL_ITEM,
      );
 
  		$items['dbmng/edit_tables'] = array(
         'title' => 'Edit Table',
         'page callback' => 'dbmng_edit_tables',
         'access arguments' => array('dbmng manager'),
-        'type' => MENU_CALLBACK,
+        'type' => MENU_NORMAL_ITEM,
      );
 
     return $items;
