@@ -29,20 +29,24 @@ switch($delta) {
 return $block;
 }
 
+function dbmng_permission() {
+	return array('dbmng manager' => array('title'=>t('Manage all meta tables')));
+}
+
 function dbmng_menu() {
     $items = array();
 
     $items['dbmng/dbmng'] = array(
         'title' => 'Database Management',
         'page callback' => 'dbmng_manager',
-        'access arguments' => array('access content'),
+        'access arguments' => array('dbmng manager'),
         'type' => MENU_CALLBACK,
      );
 
  		$items['dbmng/edit_tables'] = array(
         'title' => 'Edit Table',
         'page callback' => 'dbmng_edit_tables',
-        'access arguments' => array('access content'),
+        'access arguments' => array('dbmng manager'),
         'type' => MENU_CALLBACK,
      );
 
