@@ -139,7 +139,9 @@ function dbmng_manager()
         $id_table = 1;
 				$aForm    = dbmng_get_form_array($id_table);
 				$aParam   = array();
-				$aParam['hidden_vars']['test']  = $_REQUEST['test'];
+				$aParam['hidden_vars']['tbl']	     = $_REQUEST['test']; //save the table id
+			  $aParam['hidden_vars']['type_tbl'] = 1; //table type (1: content table; 2: system table)
+
 				$html .= dbmng_crud_js($aForm, $aParam);
 
 			}

@@ -252,18 +252,20 @@ function dbmng_create_table($aForm, $aParam)
 /// This function create all the CRUD interface javascript generated
 /**
 \param $aForm  		Associative array with all the characteristics of the table
-\param $aParam  		Associative array with some custom variable used by the renderer
+\param $aParam  	Associative array with some custom variable used by the renderer
 \return           HTML generated code
 */
 function dbmng_crud_js($aForm, $aParam)
 {
-			$html  = '';
-			$html .= '<div id="table_container"></div>';
+			$html  = "";
+      $html .= dbmng_create_form_process($aForm, $aParam);
+			$html .= "<div id='table_container'></div>\n";
 
 			$html .= "\n<script type='text/javascript'>\n";
-			$html .= "var data=".dbmng_get_js_array($aForm, $aParam).";";
-			$html .= "var aForm=".json_encode($aForm).";";
-			$html .= "jQuery('#table_container').html(dbmng_create_table(data,aForm));";
+			$html .= "var data=".dbmng_get_js_array($aForm, $aParam).";\n";
+			$html .= "var aForm=".json_encode($aForm).";\n";
+			$html .= "var aParam=".json_encode($aParam).";\n";
+			$html .= "jQuery('#table_container').html(dbmng_create_table(data, aForm, aParam));\n";
 			$html .= "</script>\n";
 			return $html;
 }
