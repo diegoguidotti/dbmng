@@ -346,12 +346,12 @@ function layout_table_action( $aForm, $aParam, $id_record )
 	if( $nDel == 1 )
 		{
 			$jsc = "return confirm('".t('Are you sure?')."')";
-			$html .= '<a onclick="'.$jsc.'" href="?del_' . $aForm['table_name'] . '=' . $id_record .$hv.'">' . t('Delete') . '</a>' . "&nbsp;";
+			$html .= '<a class="dbmng_delete_button" onclick="'.$jsc.'" href="?del_' . $aForm['table_name'] . '=' . $id_record .$hv.'">' . t('Delete') . '</a>' . "&nbsp;";
 		}
 	if( $nUpd == 1 ) 
-		$html .= "<a href='?upd_" . $aForm['table_name'] . "=" . $id_record .$hv."'>" . t('Update') . "</a>" . "&nbsp;";
+		$html .= "<a class='dbmng_update_button' href='?upd_" . $aForm['table_name'] . "=" . $id_record .$hv."'>" . t('Update') . "</a>" . "&nbsp;";
 	if( $nDup == 1 )
-		$html .= "<a href='?dup_" . $aForm['table_name'] . "=" . $id_record .$hv."'>" . t('Duplicate') . "</a>" . "&nbsp;";
+		$html .= "<a class='dbmng_duplicate_button' href='?dup_" . $aForm['table_name'] . "=" . $id_record .$hv."'>" . t('Duplicate') . "</a>" . "&nbsp;";
 
 	return $html;
 }

@@ -45,25 +45,62 @@ function layout_table_action( aForm, aParam, id_record )
 		}
 	}
 	
-	html = "";
-	hv   = prepare_hidden_var(aParam);
+	html = jQuery('<div></div>');
+
+	//probably we do not need this
+	//hv   = prepare_hidden_var(aParam);
 	if( nDel == 1 )
 		{
-			jsc = "return confirm('" + t('Are you sure?') + "')";
-			html += '<a onclick="' + jsc + '" href="?del_' + aForm['table_name'] + '=' + id_record + hv + '">' + t('Delete') + '</a>' + "&nbsp;";
+
+		function handler() { alert('hello'); }
+		html.append(function() {
+			return jQuery('<a>Click here</a>').click(handler);
+		})
+
+/*
+
+//Primo tentativo
+				var removeLink = jQuery("<a id='remove' href='#'>remove</a>").delegate('a','click', function(e) {
+						alert('a');
+						//Click event handler here.
+				});
+				html.append(removeLink);  //Add the remove link.
+//Secondo tentativo
+			var del=jQuery('<a>',{
+					text: 'This is blah',
+					title: 'Blah',
+					//click:function(){alert('test');return false;}
+//					click: function(){ dbmng_delete(aForm, aParam, id_record); return false;}
+			});
+			html.append(del);
+			del.live('click', function(){ alert('a') });
+
+//terzo tentativo
+
+			el = jQuery('<a class="" >' + t('Delete') + '</a>');			
+			el.click ( function(){
+				dbmng_delete(aForm, aParam, id_record);
+			});
+			html += el[0].outerHTML + "&nbsp;";
+*/
 		}
+/*
 	if( nUpd == 1 ) 
 		{
-			html += "<a href='?upd_" + aForm['table_name'] + "=" + id_record + hv + "'>" + t('Update') + "</a>" + "&nbsp;";
+			jsc = "dbmng_update("+id_record+")";
+			html += '<a onclick="' + jsc + '" >' + t('Update') + '</a>' + "&nbsp;";
 		}
 	if( nDup == 1 )
 		{
-			html += "<a href='?dup_" + aForm['table_name'] + "=" + id_record + hv + "'>" + t('Duplicate') + "</a>" + "&nbsp;";
+			jsc = "dbmng_duplicate("+id_record+")";
+			html += '<a onclick="' + jsc + '" >' + t('Duplicate') + '</a>' + "&nbsp;";
 		}
+*/
 		
-	return html;
+	return html.html();
 }
 
+/* probably we do not need this (at least for CRUD operators) we do not reload the page
 function prepare_hidden_var(aParam)
 {
 	hv = "";
@@ -78,6 +115,32 @@ function prepare_hidden_var(aParam)
 		}
 	return hv;
 }
+*/
+
+//call the ajax file to communicate the record deletion
+function dbmng_delete( aForm, aParam, id_record){
+	ok= confirm(t('Are you sure?'));
+	if(ok){
+		alert('We need to implement the delete function '+id_record+' table '+aForm.table_name );
+		//href="?del_' + aForm['table_name'] + '=' + id_record + hv + '"
+	}
+}
+
+//call the ajax file to communicate the record update
+function dbmng_update(id_record){
+		alert('We need to implement the UPDATE function');
+}
+
+
+function dbmng_duplicate(id_record){
+		alert('We need to implement the DUPLICATE function');
+}
+
+function dbmng_insert(id_record){
+		alert('We need to implement the INSERT function');
+}
+
+
 
 
 /*GENERAL LIBRARY*/
