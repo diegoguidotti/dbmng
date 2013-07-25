@@ -296,11 +296,13 @@ function dbmng_get_js_array($aForm, $aParam)
 				//get the query results for each field
 				foreach ( $aForm['fields'] as $fld => $fld_value )
 					{
-						$value=dbmng_value_prepare_html($fld_value, $record->$fld);
+						//Probably it is better to use the raw data instead of the formatted ones
+						//$value=dbmng_value_prepare_html($fld_value, $record->$fld);
+						$value=$record->$fld;
 
 						if( layout_view_field_table($fld_value) )
-							{
-								$sObj .= "'" . $fld . "':'" . $value . "', ";
+							{ //important! use json_encode to escape special characters
+								$sObj .= "'" . $fld . "': " . json_encode($value) . ", ";
 							}
 	
 					}
