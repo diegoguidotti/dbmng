@@ -126,7 +126,7 @@ function dbmng_manager()
 	else{
 		if( isset($_REQUEST['test']) )
 			{
-
+				/*
 				$aForm=array(  
 					'table_name' => 'test' ,
 					'primary_key'=> array('id_test'), 
@@ -135,7 +135,10 @@ function dbmng_manager()
 						'eta'  => array('label'   => 'Et&agrave;' , 'type' => 'int'    )
 					)
         );
-				$aParam=array();
+        */
+        $id_table = 1;
+				$aForm    = dbmng_get_form_array($id_table);
+				$aParam   = array();
 				$aParam['hidden_vars']['test']  = $_REQUEST['test'];
 				$html .= dbmng_crud_js($aForm, $aParam);
 

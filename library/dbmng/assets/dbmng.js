@@ -1,21 +1,42 @@
 
 function dbmng_create_table (data, aForm) {
-	
-  console.log(data);
+  // console.log(data);
 
+	var html="<h1>Table: " + aForm.table_name + "</h1>\n";
+	html += "<table>\n";
 	
-
-	var html='<h1>Table'+aForm.table_name+'</h1><table>';
-	jQuery.each(data.records, function(index, value) {		
-			html+='<tr><td>'+value.id_test+'</td><td>'+value.nome+'</td><td>'+value.eta+'</td></tr>';						
-  		console.log(value);
+	// >>>>> start layout_table_head
+	html += "<thead>\n";
+	html += "<tr>\n";
+	
+	jQuery.each(aForm['fields'], function(index, field){ 
+			var f = field;
+			console.log(f.label);    
+			//if( layout_view_field_table($fld_value) )
+				html += "<th class='dbmng_field_$fld'>" + f.label + "</th>\n";
 	});
-	html+='</table>';
+	html += "<th class='dbmng_functions'>" + ('actions') + "</th>\n";
+	html += "</tr>\n";
+	html += "</thead>\n";
+	// <<<<<<< finish layout_table_head
+	
+	jQuery.each(data.records, function(index, value) {	
+			var o = value;
+			html += "<tr>";
+			for( var key in o )
+			{
+				if (o.hasOwnProperty(key))
+				{
+					html += "<td>" + o[key] + "</td>";
+				}
+			}
+			html += "<td> fnc </td>";
+			html += "</tr>\n";
+  		//console.log(value);
+	});
+	html+='</table>\n';
 	return html;
 }
-
-
-
 
 function dbmng_validate_numeric (evt) {
   var theEvent = evt || window.event;

@@ -218,7 +218,7 @@ function dbmng_get_data($aForm, $aParam)
 /// This function create a table starting from a structured array
 /**
 \param $aForm  		Associative array with all the characteristics of the table
-\param $aParam  		Associative array with some custom variable used by the renderer
+\param $aParam  	Associative array with some custom variable used by the renderer
 \return           HTML generated code
 */
 function dbmng_create_table($aForm, $aParam)
@@ -255,11 +255,9 @@ function dbmng_create_table($aForm, $aParam)
 \param $aParam  		Associative array with some custom variable used by the renderer
 \return           HTML generated code
 */
-function dbmng_crud_js($aForm, $aParam){
-
+function dbmng_crud_js($aForm, $aParam)
+{
 			$html  = '';
-
-
 			$html .= '<div id="table_container"></div>';
 
 			$html .= "\n<script type='text/javascript'>\n";
