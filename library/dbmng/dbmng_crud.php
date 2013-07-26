@@ -99,7 +99,8 @@ function dbmng_insert($aForm, $aParam)
 			$var = array();
 			foreach ( $aForm['fields'] as $fld => $fld_value )
 				{
-					if($fld !== $aForm['primary_key'][0])
+					//if($fld !== $aForm['primary_key'][0])
+					if($fld_value['key'] != 1)
 						{
 							$sWhat .= $fld . ", ";
 							$sVal.=":$fld ,";	
