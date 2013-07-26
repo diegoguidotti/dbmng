@@ -20,15 +20,15 @@ function dbmng_create_table (data, aForm, aParam) {
 				//get the field parameters
         var f = aForm.fields[key];
 
-			  if( layout_view_field_table(f.skip_in_tbl) ){
+				if( id_record == 0 && key == aForm.primary_key[0] )
+					{
+						id_record = o[key];
+					}
 
+			  if( layout_view_field_table(f.skip_in_tbl) ){
 					if (o.hasOwnProperty(key))
 					{
 						html += "<td>" + o[key] + "</td>";
-						if( id_record == 0 && key == aForm.primary_key[0] )
-						{
-							id_record = o[key];
-						}
 					}
 					else{
 						html += "<td>-</td>";
@@ -41,6 +41,7 @@ function dbmng_create_table (data, aForm, aParam) {
 			
 			console.log(o);
 			console.log(aForm.primary_key[0]);
+			console.log(id_record);
 			html += layout_table_action( aForm, aParam, id_record );
 
 			html += "</td>\n";
