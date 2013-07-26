@@ -225,8 +225,19 @@ function dbmng_manager()
 										array('label'   => t('Pk'), 
 													'label_long' => t('Primary Key'),
 													'type' => 'int', 
-													'widget'=>'checkbox'
+													'widget'=>'select',
+													'voc_val' => array(
+															0 => t('Normal field'),
+															1 => t('Auto-increment primary key'),
+															2 => t('Standard primary key')
+													)
 										),
+//									'pk'     => 
+//										array('label'   => t('Pk'), 
+//													'label_long' => t('Primary Key'),
+//													'type' => 'int', 
+//													'widget'=>'checkbox'
+//										),
 									'default_value' =>
 										array( 'label' => t('Default'),
 													 'label_long' => t('Default value'),
