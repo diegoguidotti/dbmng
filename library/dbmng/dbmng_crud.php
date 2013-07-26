@@ -73,8 +73,11 @@ function dbmng_duplicate($aForm, $aParam)
 	
 	if(isset($_REQUEST["dup_" . $aForm['table_name']]))
 		{
-			$id_dup = intval($_REQUEST["dup_" . $aForm['table_name']]);
-			$result = dbmng_query("insert into " . $aForm['table_name'] . " (" . $sWhat . ") select " . $sWhat . " from " . $aForm['table_name'] . " where " . $aForm['primary_key'][0] . " = " . $id_dup);
+			$id_dup  = intval($_REQUEST["dup_" . $aForm['table_name']]);
+               
+			$pkfield = $aForm['primary_key'][0];
+			$var     = array(":".$pkfield =>  $id_dup );
+			$result  = dbmng_query("insert into " . $aForm['table_name'] . " (" . $sWhat . ") select " . $sWhat . " from " . $aForm['table_name'] . " where " . $pkfield . " = :" . $pkfield, $var);
 		}
 }
 
