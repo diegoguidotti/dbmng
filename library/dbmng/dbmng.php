@@ -302,11 +302,9 @@ function dbmng_get_js_array($aForm, $aParam)
 						//$value=dbmng_value_prepare_html($fld_value, $record->$fld);
 						$value=$record->$fld;
 
-						if( layout_view_field_table($fld_value) )
-							{ //important! use json_encode to escape special characters
-								$sObj .= "'" . $fld . "': " . json_encode($value) . ", ";
-							}
-	
+						//important! use json_encode to escape special characters
+						$sObj .= "'" . $fld . "': " . json_encode($value) . ", ";
+							
 					}
 				$sObj = substr($sObj, 0, strlen($sObj)-2);
 				$sObj .= "}, ";

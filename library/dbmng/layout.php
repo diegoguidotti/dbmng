@@ -402,7 +402,7 @@ function layout_table_insert($aForm, $aParam)
 	
 	$html = "";
 	if( $nIns == 1)
-		$html .= "<a href='?ins_" . $aForm['table_name'] . $hv. "'>" . t('Insert new data') . "</a><br />\n";
+		$html .= "<a class='dbmng_insert_button' href='?ins_" . $aForm['table_name'] . $hv. "'>" . t('Insert new data') . "</a><br />\n";
 	
 	return $html;
 }

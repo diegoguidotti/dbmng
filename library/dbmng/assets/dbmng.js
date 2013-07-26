@@ -1,4 +1,84 @@
+
+
+
+/*DBMNG LIBRARY*/
+function dbmng_create_table (data, aForm, aParam) {
+  //console.log(data);
+
+	var html="<h1 class='dbmng_table_label'>" + t('Table') + ": " + aForm.table_name + "</h1>\n";
+	html += "<table>\n";
+	
+	html += layout_table_head(aForm['fields']);
+	
+	jQuery.each(data.records, function(index, value) {	
+			var o = value;
+			html += "<tr>";
+			var id_record = 0;
+
+			for( var key in o )
+			{        
+				//get the field parameters
+        var f = aForm.fields[key];
+
+			  if( layout_view_field_table(f.skip_in_tbl) ){
+
+					if (o.hasOwnProperty(key))
+					{
+						html += "<td>" + o[key] + "</td>";
+						if( id_record == 0 && key == aForm.primary_key[0] )
+						{
+							id_record = o[key];
+						}
+					}
+					else{
+						html += "<td>-</td>";
+					}
+				}
+			}
+
+			// available functionalities
+			html += "<td class='dbmng_functions'>";
+			
+			console.log(o);
+			console.log(aForm.primary_key[0]);
+			html += layout_table_action( aForm, aParam, id_record );
+
+			html += "</td>\n";
+			html += "</tr>\n";
+  		//console.log(value);
+	});
+	html+='</table>\n';
+
+
+	var nIns=1;
+
+	if (typeof aParam['user_function'] != 'undefined')
+		{
+			if (typeof aParam['user_function']['ins'] != 'undefined'){
+				nIns = aParam['user_function']['ins'];		
+			}
+		}
+
+  if( nIns == 1) 
+		{
+		  var base_code = aForm.table_name;
+			html += '<a href="#" class="dbmng_insert_button" id="'+base_code+'_ins" >' + t('Insert') + '</a>' + "&nbsp;";
+
+		  jQuery(document).delegate('#'+base_code+'_ins', 'click', function(){ 
+	       	dbmng_insert( aForm, aParam);
+					return false;			//to avoi to reload the page
+		  }); 
+		}
+
+	return html;
+}
+
+
+
+
+
 /*LAYOUT LIBRARY*/
+
 function layout_view_field_table(fld_value){
 	ret=true;	
 	if (typeof fld_value != 'undefined') {
@@ -28,6 +108,9 @@ function layout_table_head(aFields){
 
 function layout_table_action( aForm, aParam, id_record )
 {
+
+  var base_code = aForm.table_name+'_'+id_record;
+
 	var nDel = 1;	
 	var nUpd = 1; 	
 	var nDup = 1; 
@@ -45,59 +128,40 @@ function layout_table_action( aForm, aParam, id_record )
 		}
 	}
 	
-	html = jQuery('<div></div>');
+	html = '';
 
 	//probably we do not need this
 	//hv   = prepare_hidden_var(aParam);
 	if( nDel == 1 )
 		{
+				html += '<a href="#" class="dbmng_delete_button" id="'+base_code+'_del" >' + t('Del') + '</a>' + "&nbsp;";
 
-		function handler() { alert('hello'); }
-		html.append(function() {
-			return jQuery('<a>Click here</a>').click(handler);
-		})
-
-/*
-
-//Primo tentativo
-				var removeLink = jQuery("<a id='remove' href='#'>remove</a>").delegate('a','click', function(e) {
-						alert('a');
-						//Click event handler here.
-				});
-				html.append(removeLink);  //Add the remove link.
-//Secondo tentativo
-			var del=jQuery('<a>',{
-					text: 'This is blah',
-					title: 'Blah',
-					//click:function(){alert('test');return false;}
-//					click: function(){ dbmng_delete(aForm, aParam, id_record); return false;}
-			});
-			html.append(del);
-			del.live('click', function(){ alert('a') });
-
-//terzo tentativo
-
-			el = jQuery('<a class="" >' + t('Delete') + '</a>');			
-			el.click ( function(){
-				dbmng_delete(aForm, aParam, id_record);
-			});
-			html += el[0].outerHTML + "&nbsp;";
-*/
+			  jQuery(document).delegate('#'+base_code+'_del', 'click', function(){ 
+		       	dbmng_delete( aForm, aParam, id_record);
+						return false;			//to avoi to reload the page
+			  }); 
 		}
-/*
 	if( nUpd == 1 ) 
 		{
-			jsc = "dbmng_update("+id_record+")";
-			html += '<a onclick="' + jsc + '" >' + t('Update') + '</a>' + "&nbsp;";
+				html += '<a href="#" class="dbmng_update_button" id="'+base_code+'_upd" >' + t('Upd') + '</a>' + "&nbsp;";
+
+			  jQuery(document).delegate('#'+base_code+'_upd', 'click', function(){ 
+		       	dbmng_update( aForm, aParam, id_record);
+						return false;			//to avoi to reload the page
+			  }); 
+
 		}
 	if( nDup == 1 )
 		{
-			jsc = "dbmng_duplicate("+id_record+")";
-			html += '<a onclick="' + jsc + '" >' + t('Duplicate') + '</a>' + "&nbsp;";
+			html += '<a href="#" class="dbmng_duplicate_button" id="'+base_code+'_dup" >' + t('Dup') + '</a>' + "&nbsp;";
+
+			  jQuery(document).delegate('#'+base_code+'_dup', 'click', function(){ 
+		       	dbmng_update( aForm, aParam, id_record);
+						return false;			//to avoi to reload the page
+			  }); 
 		}
-*/
 		
-	return html.html();
+	return html;
 }
 
 /* probably we do not need this (at least for CRUD operators) we do not reload the page
@@ -127,16 +191,16 @@ function dbmng_delete( aForm, aParam, id_record){
 }
 
 //call the ajax file to communicate the record update
-function dbmng_update(id_record){
+function dbmng_update(aForm, aParam,id_record){
 		alert('We need to implement the UPDATE function');
 }
 
 
-function dbmng_duplicate(id_record){
+function dbmng_duplicate(aForm, aParam,id_record){
 		alert('We need to implement the DUPLICATE function');
 }
 
-function dbmng_insert(id_record){
+function dbmng_insert(aForm, aParam){
 		alert('We need to implement the INSERT function');
 }
 
@@ -148,45 +212,6 @@ function t (value){
 	return Drupal.t(value);
 }
 
-/*DBMNG LIBRARY*/
-function dbmng_create_table (data, aForm, aParam) {
-  // console.log(data);
-
-	var html="<h1 class='dbmng_table_label'>" + t('Table') + ": " + aForm.table_name + "</h1>\n";
-	html += "<table>\n";
-	
-	html += layout_table_head(aForm['fields']);
-	
-	jQuery.each(data.records, function(index, value) {	
-			var o = value;
-			html += "<tr>";
-			var id_record = 0;
-			for( var key in o )
-			{
-				if (o.hasOwnProperty(key))
-				{
-					html += "<td>" + o[key] + "</td>";
-					if( id_record == 0 && key == aForm.primary_key[0] )
-					{
-						id_record = o[key];
-					}
-				}
-			}
-
-			// available functionalities
-			html += "<td class='dbmng_functions'>";
-			
-			console.log(o);
-			console.log(aForm.primary_key[0]);
-			html += layout_table_action( aForm, aParam, id_record );
-
-			html += "</td>\n";
-			html += "</tr>\n";
-  		//console.log(value);
-	});
-	html+='</table>\n';
-	return html;
-}
 
 function dbmng_validate_numeric (evt) {
   var theEvent = evt || window.event;
