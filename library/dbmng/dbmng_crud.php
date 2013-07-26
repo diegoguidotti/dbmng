@@ -12,23 +12,23 @@
 function dbmng_create_form_process($aForm, $aParam) 
 	{
 		// update record
-		dbmng_create_form_update($aForm, $aParam);
+		dbmng_update($aForm, $aParam);
 		// insert record
-		dbmng_create_form_insert($aForm, $aParam);		
+		dbmng_insert($aForm, $aParam);		
 		// delete record
-		dbmng_create_form_delete($aForm, $aParam);		
+		dbmng_delete($aForm, $aParam);		
 		// duplicate record
-		dbmng_create_form_duplicate($aForm, $aParam);
+		dbmng_duplicate($aForm, $aParam);
 	}
 
 /////////////////////////////////////////////////////////////////////////////
-// dbmng_create_form_delete
+// dbmng_delete
 // ======================
 /// This function delete the selected record
 /**
 \param $aForm  		Associative array with all the characteristics
 */
-function dbmng_create_form_delete($aForm, $aParam) 
+function dbmng_delete($aForm, $aParam) 
 {
 	if(isset($_REQUEST["del_" . $aForm['table_name']]))
 		{
@@ -43,13 +43,13 @@ function dbmng_create_form_delete($aForm, $aParam)
 
 
 /////////////////////////////////////////////////////////////////////////////
-// dbmng_create_form_duplicate
+// dbmng_duplicate
 // ======================
 /// This function duplicate the selected record
 /**
 \param $aForm  		Associative array with all the characteristics
 */
-function dbmng_create_form_duplicate($aForm, $aParam) 
+function dbmng_duplicate($aForm, $aParam) 
 {
 	$sWhat = "";
 	foreach ( $aForm['fields'] as $fld => $fld_value )
@@ -80,13 +80,13 @@ function dbmng_create_form_duplicate($aForm, $aParam)
 
 
 /////////////////////////////////////////////////////////////////////////////
-// dbmng_create_form_insert
+// dbmng_insert
 // ======================
 /// This function insert a new record
 /**
 \param $aForm  		Associative array with all the characteristics
 */
-function dbmng_create_form_insert($aForm, $aParam) 
+function dbmng_insert($aForm, $aParam) 
 {
 	if(isset($_POST["ins_" . $aForm['table_name']]))
 		{
@@ -159,13 +159,13 @@ function dbmng_create_form_upload_file($aForm, $aParam)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// dbmng_create_form_update
+// dbmng_update
 // ======================
 /// This function update an existing record
 /**
 \param $aForm  		Associative array with all the characteristics
 */
-function dbmng_create_form_update($aForm, $aParam) 
+function dbmng_update($aForm, $aParam) 
 {
 	if(isset($_POST["upd_" . $aForm['table_name']]))
 		{
