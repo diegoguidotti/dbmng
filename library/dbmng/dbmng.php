@@ -81,8 +81,9 @@ function dbmng_get_form_array($id_table)
 		$fields  = dbmng_query("select * from dbmng_fields where id_table=:id_table order by field_order ASC", array(':id_table'=>intval($id_table)));
 		foreach ($fields as $fld)
 			{
-				if($fld->pk == 1)
+				if($fld->pk == 1 || $fld->pk == 2 )
 				{
+					// $aPK[] = array($fld->pk, $fld->field_name);
 					$aPK[] = $fld->field_name;
 				}
 //				$aForm['primary_key'] = $fld->field_name; 
@@ -94,6 +95,7 @@ function dbmng_get_form_array($id_table)
 																					 'value' => null, 
 																					 'nullable' => $fld->nullable, 
 																					 'default' => $fld->default_value,
+																					 'key' => $fld->pk, //MM [26-07-13]
 																					 'field_function' => $fld->field_function,
 																					 'label_long' => $sLabelLong,
 																					 'skip_in_tbl' => $fld->skip_in_tbl,
@@ -327,6 +329,7 @@ function dbmng_get_js_array($aForm, $aParam)
 */
 function dbmng_create_form($aForm, $aParam) 
 {
+	//print_r($aForm);
 	$html      = "";
 	$do_update = false;
   //get some hidden variables if exists()
@@ -353,12 +356,17 @@ function dbmng_create_form($aForm, $aParam)
       if( $do_update )
 		    {
 					$id_upd    = $_GET["upd_" . $aForm['table_name']];
-
+					
 					$pkfield=$aForm['primary_key'][0];
-
+					//echo $pkfield;
+					print_r( $aForm['fields'][$pkfield]);
 
 					$sql       = "select * from " . $aForm['table_name'] . " where " . $pkfield . "= :$pkfield" ;
-					$result    = dbmng_query($sql, array(":$pkfield" => intval($id_upd)) );		
+					if( $aForm['fields'][$pkfield]['type'] == "varchar" )
+						$result    = dbmng_query($sql, array(":$pkfield" => ($id_upd)) );		
+					else
+						$result    = dbmng_query($sql, array(":$pkfield" => intval($id_upd)) );		
+
 					$vals      = dbmng_fetch_object($result); //$result->fetchObject();
 					//print_r($vals);
 				}
@@ -393,7 +401,8 @@ function dbmng_create_form($aForm, $aParam)
 
 				if(!$custom_function_exists)
 						{
-							if( $aForm['primary_key'][0] != $fld )
+							// if( $aForm['primary_key'][0] != $fld ) // $aForm['primary_key'][0][0] != 1 && $aForm['primary_key'][0][1] != $fld
+							if( $fld_value['key'] != 1 )
 								{
 									
 									$value= null;
@@ -451,7 +460,6 @@ function dbmng_create_form($aForm, $aParam)
 									}
 									$html.='</div>';
 									$html.='</div>';
-
 								}
 						}
 				}
