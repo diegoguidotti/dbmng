@@ -61,8 +61,11 @@ function dbmng_duplicate($aForm, $aParam)
 	$sWhat = "";
 	foreach ( $aForm['fields'] as $fld => $fld_value )
 		{
-			if($fld !== $aForm['primary_key'][0])
-				$sWhat .= $fld . ", ";
+			// if($fld !== $aForm['primary_key'][0])
+			if($fld_value['key'] != 1)
+				{
+					$sWhat .= $fld . ", ";
+				}
 		}
 
 	if( isset($aParam) )
@@ -82,7 +85,14 @@ function dbmng_duplicate($aForm, $aParam)
 		{
 			$id_dup  = intval($_REQUEST["dup_" . $aForm['table_name']]);
                
-			$pkfield = $aForm['primary_key'][0];
+			$pkfield = "";
+			foreach ( $aForm['fields'] as $fld => $fld_value )
+				{
+					if($fld_value['key'] == 1)
+						{
+							$pkfield = $fld;
+						}
+				}
 			$var     = array(":".$pkfield =>  $id_dup );
 			$result  = dbmng_query("insert into " . $aForm['table_name'] . " (" . $sWhat . ") select " . $sWhat . " from " . $aForm['table_name'] . " where " . $pkfield . " = :" . $pkfield, $var);
 		}
@@ -183,13 +193,13 @@ function dbmng_update($aForm, $aParam)
 			$sSet = "";
 			$var = array();
 
-			foreach ( $aForm['fields'] as $x => $x_value )
+			foreach ( $aForm['fields'] as $fld => $fld_value )
 				{
-					if($x !== $aForm['primary_key'][0])
+					if($fld_value['key'] != 1)
 						{
-							$sSet .= $x . " = :$x, ";
+							$sSet .= $fld . " = :$fld, ";
 
-							$var = array_merge($var, array(":".$x => dbmng_value_prepare($x_value,$x,$_POST)));
+							$var = array_merge($var, array(":".$fld => dbmng_value_prepare($fld_value,$fld,$_POST)));
 							//$sSet.=dbmng_value_prepare($x_value,$x,$_POST).", ";
 						}
 				}
