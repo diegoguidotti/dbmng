@@ -170,24 +170,32 @@ function dbmng_manager()
 						'table_name' => 'dbmng_fields' ,
 							'primary_key'=> array('id_field'), 
 							'fields'     => array(
+									'id_field'  => 
+										array('label'   => t('ID') , 
+													'label_long' => t('ID Field'),
+													'type' => 'bigint',
+													'key' => 1,
+										), 
 									'field_name'  => 
 										array('label'   => t('Name') , 
 													'label_long' => t('Field Name'),
 													'nullable' => false,
 													'type' => 'varchar',
 													'widget'=>'select' ,
+													'key' => 0,
 											    'voc_val' => $varField
-    
 										), 
 									'field_label'  => 
 										array('label'   => t('Label') , 
 													'label_long' => t('Field Label'),
 													'nullable' => false,
+													'key' => 0,
 													'type' => 'varchar'
 										), 
 									'id_field_type'     => 
 										array('label'   => t('Type'), 
 													'label_long' => t('Field Type'),
+													'key' => 0,
 													'type' => 'varchar', 
 													'widget'=>'select' ,
 													'nullable' => false,
@@ -201,6 +209,7 @@ function dbmng_manager()
 									'field_widget'     => 
 										array('label'   => t('Widget'), 
 													'label_long' => t('Widget'),
+													'key' => 0,
 													'type' => 'varchar', 
 													'widget'=>'select' ,
 													'nullable' => false,
@@ -217,6 +226,7 @@ function dbmng_manager()
 									'nullable'     => 
 										array('label'   => t('Null'), 
 													'label_long' => t('Nullable'),
+													'key' => 0,
 													'type' => 'int', 
 													'widget'=>'checkbox',
 													'skip_in_tbl' => '1'
@@ -224,6 +234,7 @@ function dbmng_manager()
 									'pk'     => 
 										array('label'   => t('Pk'), 
 													'label_long' => t('Primary Key'),
+													'key' => 0,
 													'type' => 'int', 
 													'widget'=>'select',
 													'voc_val' => array(
@@ -241,29 +252,34 @@ function dbmng_manager()
 									'default_value' =>
 										array( 'label' => t('Default'),
 													 'label_long' => t('Default value'),
+													 'key' => 0,
 													 'type'  => 'varchar',
 													 'skip_in_tbl' => '1'
 										),
 									'field_function' =>
 										array( 'label' => t('Fnc'),
 													 'label_long' => t('Field function'),
+													 'key' => 0,
 													 'type'  => 'varchar',
 													 'skip_in_tbl' => '1'
 										),
 									'field_label_long' =>
 										array( 'label' => t('Long'),
 													 'label_long' => t('Long Label'),
+													 'key' => 0,
 													 'type'  => 'varchar',
 													 'skip_in_tbl' => '1'
 										),
 									'field_order' =>
 										array( 'label' => t('Order'),
 													 'label_long' => t('Order'),
+													 'key' => 0,
 													 'type'  => 'int',
 										),
 									'skip_in_tbl'     => 
 										array('label'   => t('Skip'), 
 													'label_long' => t('Skip in table view'),
+													'key' => 0,
 													'type' => 'int', 
 													'widget'=>'checkbox',
 													'skip_in_tbl' => '1'
@@ -271,6 +287,7 @@ function dbmng_manager()
 									'voc_sql' =>
 										array( 'label' => t('SQL'),
 													 'label_long' => t('Vocabulary SQL'),
+													 'key' => 0,
 													 'type'  => 'text',
 													 'widget' => 'textarea',
 													 'skip_in_tbl' => '1'
@@ -278,6 +295,7 @@ function dbmng_manager()
 									'field_function'     => 
 										array('label'   => t('Fnc'), 
 													'label_long' => t('Field function'),
+													'key' => 0,
 													'type' => 'varchar', 
 													'skip_in_tbl' => '1'
 										),
@@ -302,16 +320,25 @@ function dbmng_manager()
 						'table_name' => 'dbmng_tables' ,
 							'primary_key'=> array('id_table'), 
 							'fields'     => array(
+									'id_table'  => 
+										array('label'   => t('ID') , 
+													'label_long' => t('ID Table'),
+													'type' => 'bigint',
+													'skip_in_tbl' => '1',
+													'key' => 1
+										), 
 									'table_name'  => 
 										array('label'   => t('Name') , 
 													'label_long' => t('Table Name'),
-													'type' => 'varchar'
+													'type' => 'varchar',
+													'key' => 0
 										), 
 									'id_table_type'     => 
 										array('label'   => t('Type'), 
 													'label_long' => t('Table Type'),
 													'type' => 'varchar', 
 													'widget'=>'select' ,
+													'key' => 0,
 													'voc_val' => array(
 														'1'=> t('Content Table'),	
 														'2'=> t('System Table')
@@ -321,12 +348,14 @@ function dbmng_manager()
 										array('label'   => t('Label') , 
 													'label_long' => t('Table Label'),
 													'type' => 'varchar',
+													'key' => 0,
 													'skip_in_tbl' => '1'
 										), 
 									'table_desc'  => 
 										array('label'   => t('Desc') , 
 													'label_long' => t('Table Description'),
 													'type' => 'varchar',
+													'key' => 0,
 													'skip_in_tbl' => '1'
 										)
 							)
