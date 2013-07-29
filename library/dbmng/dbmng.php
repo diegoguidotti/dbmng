@@ -144,14 +144,8 @@ function dbmng_get_form_array($id_table)
 				$aForm['primary_key'] = array('id_' . $aForm['table_name']);	
 			}
 		
-/*
-		echo "aPK: ";
-		print_r($aPK);
-		echo "<br />";
-		print_r($aForm['primary_key']);
-		echo "<br />";
-*/
 		$aForm['fields']=$aFields;
+		//print_r($aForm);
 		
 		return $aForm;
 	}
