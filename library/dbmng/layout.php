@@ -346,8 +346,8 @@ function layout_table_action( $aForm, $aParam, $id_record )
 	if( $nDel == 1 )
 		{
 			$jsc = "return confirm('".t('Are you sure?')."')";
-			$html .= '<a class="dbmng_delete_button" onclick="'.$jsc.'" href="?del_' . $aForm['table_name'] . '=' . $id_record .$hv.'">' . t('Delete') . '</a>' . "&nbsp;";
-			//$html .= '<a class="dbmng_delete_button" onclick="'.$jsc.'" href="?act=del&tbl=' . $aForm['table_name'] . '=' . $id_record .$hv.'">' . t('Delete') . '</a>' . "&nbsp;";
+			//$html .= '<a class="dbmng_delete_button" onclick="'.$jsc.'" href="?del_' . $aForm['table_name'] . '=' . $id_record .$hv.'">' . t('Delete') . '</a>' . "&nbsp;";
+			$html .= '<a class="dbmng_delete_button" onclick="'.$jsc.'" href="?act=del&tbl=' . $aForm['table_name'] . '&' . $id_record .$hv.'">' . t('Delete') . '</a>' . "&nbsp;";
 		}
 	if( $nUpd == 1 ) 
 		$html .= "<a class='dbmng_update_button' href='?upd_" . $aForm['table_name'] . "=" . $id_record .$hv."'>" . t('Update') . "</a>" . "&nbsp;";
@@ -446,15 +446,17 @@ function layout_table_body( $result, $aForm, $aParam )
 			$html .= "<td class='dbmng_functions'>";
 
 			$pkfield = "";
+			$id_record = "";
 			foreach ( $aForm['fields'] as $fld => $fld_value )
 				{
 				if($fld_value['key'] == 1 || $fld_value['key'] == 2 )
 					{
 						$pkfield = $fld;
+						$id_record .= $fld . "=" . $record->$fld . "&";
 					}
 				}
 			// $id_record = $record->$aForm['primary_key'][0];
-			$id_record = $record->$pkfield;
+			//$id_record = $record->$pkfield;
 
 			$html .= layout_table_action( $aForm, $aParam, $id_record );
 			$html .= layout_table_custom_function($aParam, $id_record);
