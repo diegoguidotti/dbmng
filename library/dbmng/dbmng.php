@@ -337,9 +337,9 @@ function dbmng_create_form($aForm, $aParam)
 		{
 			if(isset($aParam['hidden_vars']))
 			{
-				foreach ( $aParam['hidden_vars'] as $x => $x_value )
+				foreach ( $aParam['hidden_vars'] as $fld => $fld_value )
 				{				
-					$hv.= ("<input type='hidden' name='".$x."' value='".$x_value."' />\n");
+					$hv.= ("<input type='hidden' name='".$fld."' value='".$fld_value."' />\n");
 				}
 			}
 		}
@@ -355,15 +355,24 @@ function dbmng_create_form($aForm, $aParam)
 		    {
 					$id_upd    = $_GET["upd_" . $aForm['table_name']];
 					
-					$pkfield=$aForm['primary_key'][0];
+					//$pkfield=$aForm['primary_key'][0];
+					$pkfield = "";
+					foreach ( $aForm['fields'] as $fld => $fld_value )
+						{
+						if($fld_value['key'] == 1 || $fld_value['key'] == 2 )
+							{
+								$pkfield = $fld;
+							}
+						}
+						
 					//echo $pkfield;
-					print_r( $aForm['fields'][$pkfield]);
+					//print_r( $aForm['fields'][$pkfield]);
 
 					$sql       = "select * from " . $aForm['table_name'] . " where " . $pkfield . "= :$pkfield" ;
-					if( $aForm['fields'][$pkfield]['type'] == "varchar" )
-						$result    = dbmng_query($sql, array(":$pkfield" => ($id_upd)) );		
-					else
+					if( dbmng_is_field_type_numeric($aForm['fields'][$pkfield]['type']) ) //$aForm['fields'][$pkfield]['type'] == "varchar" ) 
 						$result    = dbmng_query($sql, array(":$pkfield" => intval($id_upd)) );		
+					else
+						$result    = dbmng_query($sql, array(":$pkfield" => ($id_upd)) );		
 
 					$vals      = dbmng_fetch_object($result); //$result->fetchObject();
 					//print_r($vals);
@@ -400,7 +409,7 @@ function dbmng_create_form($aForm, $aParam)
 				if(!$custom_function_exists)
 						{
 							// if( $aForm['primary_key'][0] != $fld ) // $aForm['primary_key'][0][0] != 1 && $aForm['primary_key'][0][1] != $fld
-							if( $fld_value['key'] != 1 )
+							if( $fld_value['key'] != 1 ) // 1 means: Auto-increment primary key (must be removed from the form.
 								{
 									
 									$value= null;
