@@ -30,6 +30,25 @@ function dbmng_create_form_process($aForm, $aParam)
 */
 function dbmng_delete($aForm, $aParam) 
 {
+	if( isset($_REQUEST['act']) )
+		{
+			if( $_REQUEST['act'] == 'del' )
+				{
+					$where = "";
+					$var = array();
+					foreach ( $aForm['fields'] as $fld => $fld_value )
+						{
+							if( $fld_value['key'] == 2 )
+								{
+									$where .= "$fld = :$fld and ";
+									$var = array_merge($var, array(":".$fld => $_REQUEST[$fld] ));
+								}
+						}
+					$where = substr($where, 0, strlen($where)-4);
+					$result = dbmng_query("delete from " . $aForm['table_name'] . " WHERE $where ", $var);
+				}
+		}
+	/*
 	if(isset($_REQUEST["del_" . $aForm['table_name']]))
 		{
 			$id_del = intval($_REQUEST["del_" . $aForm['table_name']]);
@@ -45,6 +64,7 @@ function dbmng_delete($aForm, $aParam)
 
 			$result = dbmng_query("delete from " . $aForm['table_name'] . " WHERE $pkfield = :$pkfield ", array( ":$pkfield" => intval($id_del)));
 		}
+	*/
 }
 
 
