@@ -34,7 +34,14 @@ function dbmng_delete($aForm, $aParam)
 		{
 			$id_del = intval($_REQUEST["del_" . $aForm['table_name']]);
 			
-			$pkfield=$aForm['primary_key'][0];
+			//$pkfield=$aForm['primary_key'][0];
+			foreach ( $aForm['fields'] as $fld => $fld_value )
+				{
+					if($fld_value['key'] == 1 || $fld_value['key'] == 2 )
+						{
+							$pkfield = $fld;
+						}
+				}
 
 			$result = dbmng_query("delete from " . $aForm['table_name'] . " WHERE $pkfield = :$pkfield ", array( ":$pkfield" => intval($id_del)));
 		}
