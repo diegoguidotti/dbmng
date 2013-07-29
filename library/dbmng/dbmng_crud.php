@@ -196,10 +196,26 @@ function dbmng_update($aForm, $aParam)
 		
 			$sSet = substr($sSet, 0, strlen($sSet)-2);
 	
-			$id_upd = intval($_REQUEST["upd_" . $aForm['table_name']]);
 
-			$pk=$aForm['primary_key'][0] ;
-			$var = array_merge($var, array(":$pk" => intval($id_upd)));
+			// $pk=$aForm['primary_key'][0] ;
+			foreach ( $aForm['fields'] as $fld => $fld_value )
+				{
+					if($fld_value['key'] == 1 || $fld_value['key'] == 2 )
+						{
+							$pk = $fld;
+						}
+				}
+
+			if( dbmng_is_field_type_numeric($aForm['fields'][$pk]['type']) )  
+				{
+					$id_upd = intval($_REQUEST["upd_" . $aForm['table_name']]);
+					$var = array_merge($var, array(":$pk" => ($id_upd)));
+				}
+			else
+				{
+					$id_upd = $_REQUEST["upd_" . $aForm['table_name']];
+					$var = array_merge($var, array(":$pk" => $id_upd));
+				}
 			
 			$sql    = "update " . $aForm['table_name'] . " set " . $sSet . " where " . $pk . " = :$pk " ;
 			$result = dbmng_query($sql, $var);
