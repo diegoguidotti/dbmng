@@ -346,13 +346,12 @@ function layout_table_action( $aForm, $aParam, $id_record )
 	if( $nDel == 1 )
 		{
 			$jsc = "return confirm('".t('Are you sure?')."')";
-			//$html .= '<a class="dbmng_delete_button" onclick="'.$jsc.'" href="?del_' . $aForm['table_name'] . '=' . $id_record .$hv.'">' . t('Delete') . '</a>' . "&nbsp;";
-			$html .= '<a class="dbmng_delete_button" onclick="'.$jsc.'" href="?act=del&tbl=' . $aForm['table_name'] . '&' . $id_record .$hv.'">' . t('Delete') . '</a>' . "&nbsp;";
+			$html .= '<a class="dbmng_delete_button" onclick="'.$jsc.'" href="?act=del&amp;tbln=' . $aForm['table_name'] . '&amp;' . $id_record .$hv.'">' . t('Delete') . '</a>' . "&nbsp;";
 		}
 	if( $nUpd == 1 ) 
-		$html .= "<a class='dbmng_update_button' href='?upd_" . $aForm['table_name'] . "=" . $id_record .$hv."'>" . t('Update') . "</a>" . "&nbsp;";
+		$html .= "<a class='dbmng_update_button' href='?act=upd&amp;tbln=" . $aForm['table_name'] . "&amp;" . $id_record .$hv."'>" . t('Update') . "</a>" . "&nbsp;";
 	if( $nDup == 1 )
-		$html .= "<a class='dbmng_duplicate_button' href='?dup_" . $aForm['table_name'] . "=" . $id_record .$hv."'>" . t('Duplicate') . "</a>" . "&nbsp;";
+		$html .= "<a class='dbmng_duplicate_button' href='?act=dup&amp;tbln=" . $aForm['table_name'] . "&amp;" . $id_record .$hv."'>" . t('Duplicate') . "</a>" . "&nbsp;";
 
 	return $html;
 }
@@ -403,7 +402,7 @@ function layout_table_insert($aForm, $aParam)
 	
 	$html = "";
 	if( $nIns == 1)
-		$html .= "<a class='dbmng_insert_button' href='?ins_" . $aForm['table_name'] . $hv. "'>" . t('Insert new data') . "</a><br />\n";
+		$html .= "<a class='dbmng_insert_button' href='?act=ins&amp;tbln=" . $aForm['table_name'] . $hv. "'>" . t('Insert new data') . "</a><br />\n";
 	
 	return $html;
 }
