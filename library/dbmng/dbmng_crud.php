@@ -38,7 +38,7 @@ function dbmng_delete($aForm, $aParam)
 					$var = array();
 					foreach ( $aForm['fields'] as $fld => $fld_value )
 						{
-							if( $fld_value['key'] == 2 )
+							if( $fld_value['key'] == 1 || $fld_value['key'] == 2 )
 								{
 									$where .= "$fld = :$fld and ";
 									$var = array_merge($var, array(":".$fld => $_REQUEST[$fld] ));
@@ -101,6 +101,26 @@ function dbmng_duplicate($aForm, $aParam)
 
 	$sWhat = substr($sWhat, 0, strlen($sWhat)-2);
 	
+	if( isset($_REQUEST['act']) )
+		{
+			if( $_REQUEST['act'] == 'dup' )
+				{
+					$where = "";
+					$var = array();
+					foreach ( $aForm['fields'] as $fld => $fld_value )
+						{
+							if( $fld_value['key'] == 1 || $fld_value['key'] == 2 )
+								{
+									$where .= "$fld = :$fld and ";
+									$var = array_merge($var, array(":".$fld => $_REQUEST[$fld] ));
+								}
+						}
+					$where = substr($where, 0, strlen($where)-4);
+					// $result = dbmng_query("delete from " . $aForm['table_name'] . " WHERE $where ", $var);
+					$result = dbmng_query("insert into " . $aForm['table_name'] . " (" . $sWhat . ") select " . $sWhat . " from " . $aForm['table_name'] . " where $where ", $var);
+				}
+		}
+	/*
 	if(isset($_REQUEST["dup_" . $aForm['table_name']]))
 		{
 			$id_dup  = intval($_REQUEST["dup_" . $aForm['table_name']]);
@@ -116,6 +136,7 @@ function dbmng_duplicate($aForm, $aParam)
 			$var     = array(":".$pkfield =>  $id_dup );
 			$result  = dbmng_query("insert into " . $aForm['table_name'] . " (" . $sWhat . ") select " . $sWhat . " from " . $aForm['table_name'] . " where " . $pkfield . " = :" . $pkfield, $var);
 		}
+	*/
 }
 
 
