@@ -38,7 +38,7 @@ function dbmng_delete($aForm, $aParam)
 					$var = array();
 					foreach ( $aForm['fields'] as $fld => $fld_value )
 						{
-							if( $fld_value['key'] == 1 || $fld_value['key'] == 2 )
+							if( dbmng_check_is_pk($fld_value) )
 								{
 									$where .= "$fld = :$fld and ";
 									$var = array_merge($var, array(":".$fld => $_REQUEST[$fld] ));
@@ -48,26 +48,17 @@ function dbmng_delete($aForm, $aParam)
 					$result = dbmng_query("delete from " . $aForm['table_name'] . " WHERE $where ", $var);
 				}
 		}
-	/*
-	if(isset($_REQUEST["del_" . $aForm['table_name']]))
-		{
-			$id_del = intval($_REQUEST["del_" . $aForm['table_name']]);
-			
-			//$pkfield=$aForm['primary_key'][0];
-			foreach ( $aForm['fields'] as $fld => $fld_value )
-				{
-					if($fld_value['key'] == 1 || $fld_value['key'] == 2 )
-						{
-							$pkfield = $fld;
-						}
-				}
-
-			$result = dbmng_query("delete from " . $aForm['table_name'] . " WHERE $pkfield = :$pkfield ", array( ":$pkfield" => intval($id_del)));
-		}
-	*/
 }
 
-
+function dbmng_check_is_pk($fld_value){
+	$ret=false;
+	if(!isset($fld_value['key']))
+		$ret = false;
+	elseif ($fld_value['key'] == 1 || $fld_value['key'] == 2)
+		$ret=true;
+		
+	return $ret;
+}
 
 /////////////////////////////////////////////////////////////////////////////
 // dbmng_duplicate

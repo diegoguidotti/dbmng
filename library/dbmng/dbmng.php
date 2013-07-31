@@ -163,8 +163,21 @@ function dbmng_get_form_array($id_table)
 function dbmng_crud($aForm, $aParam){
 			$html  = "";
       $html .= dbmng_create_form_process($aForm, $aParam);
-			$html .= dbmng_create_table($aForm, $aParam);
-      $html .= dbmng_create_form($aForm, $aParam);
+
+			//show table if there is no act or it's working on update or duplicate
+			$view_table = true;
+			if( isset($_GET["act"]) )
+				{
+					if($_GET["act"]=='del' || $_GET["act"]=='dup' )
+						$view_table = true;
+					else
+						$view_table = false;
+				}
+
+			if($view_table)
+				$html .= dbmng_create_table($aForm, $aParam);
+			else
+	      $html .= dbmng_create_form($aForm, $aParam);
 			return $html;
 }
 
@@ -220,8 +233,8 @@ function dbmng_get_data($aForm, $aParam)
 function dbmng_create_table($aForm, $aParam)
 {
 		$html = "";
-		if( !isset($_GET["act"]) )
-			{
+		//if( !isset($_GET["act"]) )
+		//	{
 				//if( !isset($_GET["ins_" . $aForm['table_name']]) && !isset($_GET["upd_" . $aForm['table_name']]) )
 				//if( $_GET["act"] !== "ins" && $_GET["act"] !== "upd" )
 				//	{
@@ -242,7 +255,7 @@ function dbmng_create_table($aForm, $aParam)
 						$html  .= '</div>';
 		
 				//	}
-			}
+			//}
 			return $html;
 	}
 
