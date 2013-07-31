@@ -11,14 +11,28 @@
 */
 function dbmng_create_form_process($aForm, $aParam) 
 	{
-		// update record
-		dbmng_update($aForm, $aParam);
-		// insert record
-		dbmng_insert($aForm, $aParam);		
-		// delete record
-		dbmng_delete($aForm, $aParam);		
-		// duplicate record
-		dbmng_duplicate($aForm, $aParam);
+		if(isset($_REQUEST['tbln']) && isset($_REQUEST['act']))
+			{
+			//check if the table correspond to the table requested in the form
+			if($aForm['table_name']==$_REQUEST['tbln']){
+				// update record
+
+				if($_REQUEST['act']=='do_upd')
+					dbmng_update($aForm, $aParam);
+				// insert record
+				if($_REQUEST['act']=='do_ins')
+					dbmng_insert($aForm, $aParam);		
+				// delete record
+				if($_REQUEST['act']=='del')
+					dbmng_delete($aForm, $aParam);		
+				if($_REQUEST['act']=='dup')
+					dbmng_duplicate($aForm, $aParam);
+			}
+			else{
+				//TODO: update error message
+				echo 'You have not the right to delete the table you request!';
+			}
+		}
 	}
 
 /////////////////////////////////////////////////////////////////////////////
@@ -44,8 +58,14 @@ function dbmng_delete($aForm, $aParam)
 									$var = array_merge($var, array(":".$fld => $_REQUEST[$fld] ));
 								}
 						}
-					$where = substr($where, 0, strlen($where)-4);
-					$result = dbmng_query("delete from " . $aForm['table_name'] . " WHERE $where ", $var);
+
+					
+
+						$where = substr($where, 0, strlen($where)-4);
+						//TODO: add also filter fields in delete/update
+						$result = dbmng_query("delete from " . $aForm['table_name'] . " WHERE $where ", $var);
+					
+					
 				}
 		}
 }
@@ -123,8 +143,8 @@ function dbmng_duplicate($aForm, $aParam)
 */
 function dbmng_insert($aForm, $aParam) 
 {
-	if(isset($_POST["ins_" . $aForm['table_name']]))
-		{
+	//if(isset($_POST["ins_" . $aForm['table_name']]))
+	//	{
 			$sWhat = "";
 			$sVal  = "";
 
@@ -162,7 +182,7 @@ function dbmng_insert($aForm, $aParam)
 			$sql    = "insert into " . $aForm['table_name'] . " (" . $sWhat . ") values (" . $sVal . ")";
 			$result = dbmng_query($sql, $var);
 			//print_r( $_FILES );
-		}
+		//}
 }
 
 /////////////////////////////////////////////////////////////////////////////

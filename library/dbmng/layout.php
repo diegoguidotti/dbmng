@@ -22,6 +22,22 @@ function prepare_hidden_var($aParam)
 }
 
 
+function prepare_hidden_var_form($aParam)
+{
+	$hv = "";
+
+	if(isset($aParam['hidden_vars']))
+		{
+			foreach ( $aParam['hidden_vars'] as $fld => $fld_value )
+				{				
+					$hv.= ('<input type="hidden" name="' . $fld . '" value="' . $fld_value.'" />');
+				}
+		}
+	return $hv;
+}
+
+
+
 /////////////////////////////////////////////////////////////////////////////
 // layout_get_nullable
 // ======================
@@ -448,14 +464,12 @@ function layout_table_body( $result, $aForm, $aParam )
 			$id_record = "";
 			foreach ( $aForm['fields'] as $fld => $fld_value )
 				{
-				if($fld_value['key'] == 1 || $fld_value['key'] == 2 )
+				if(dbmng_check_is_pk($fld_value) )
 					{
 						$pkfield = $fld;
 						$id_record .= $fld . "=" . $record->$fld . "&";
 					}
 				}
-			// $id_record = $record->$aForm['primary_key'][0];
-			//$id_record = $record->$pkfield;
 
 			$html .= layout_table_action( $aForm, $aParam, $id_record );
 			$html .= layout_table_custom_function($aParam, $id_record);

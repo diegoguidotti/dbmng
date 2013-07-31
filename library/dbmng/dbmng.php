@@ -161,23 +161,41 @@ function dbmng_get_form_array($id_table)
 \return           HTML generated code
 */
 function dbmng_crud($aForm, $aParam){
+
+       //echo($_REQUEST["act"]." ".$view_table." ".$do_update);
+
 			$html  = "";
       $html .= dbmng_create_form_process($aForm, $aParam);
 
+
+
 			//show table if there is no act or it's working on update or duplicate
 			$view_table = true;
-			if( isset($_GET["act"]) )
+			$do_update = false;
+
+			if( isset($_REQUEST["act"]) )
 				{
-					if($_GET["act"]=='del' || $_GET["act"]=='dup' )
-						$view_table = true;
+					if($_REQUEST["act"]=='ins' || $_REQUEST["act"]=='upd' )
+						{
+							$view_table = false;
+							if($_REQUEST["act"]=='upd')
+								$do_update=true;							
+						}
 					else
-						$view_table = false;
+						{
+							$view_table = true;
+						}
 				}
+
+			//echo($_REQUEST["act"]." ".$view_table." ".$do_update);
+
+			
 
 			if($view_table)
 				$html .= dbmng_create_table($aForm, $aParam);
 			else
-	      $html .= dbmng_create_form($aForm, $aParam);
+	      $html .= dbmng_create_form($aForm, $aParam, $do_update);
+
 			return $html;
 }
 
@@ -336,171 +354,147 @@ function dbmng_get_js_array($aForm, $aParam)
 \param $aParam  		Associative array with some custom variable used by the renderer
 \return           HTML generated code
 */
-function dbmng_create_form($aForm, $aParam) 
+function dbmng_create_form($aForm, $aParam, $do_update) 
 {
-	//print_r($aForm);
 	$html      = "";
-	$do_update = false;
-  //get some hidden variables if exists()
-	$hv = '';
 	
-	if(isset($aParam))
-		{
-			if(isset($aParam['hidden_vars']))
-			{
-				foreach ( $aParam['hidden_vars'] as $fld => $fld_value )
-				{				
-					$hv.= ("<input type='hidden' name='".$fld."' value='".$fld_value."' />\n");
+	
+	//create the $val array storing all the record data
+  if( $do_update )
+    {
+			$where = "";
+			$var = array();
+			foreach ( $aForm['fields'] as $fld => $fld_value )
+				{
+					if( dbmng_check_is_pk($fld_value) )
+						{
+							$where .= "$fld = :$fld and ";
+							$var = array_merge($var, array(":".$fld => $_REQUEST[$fld] ));
+						}
 				}
+			if($aForm['table_name']==$_REQUEST['tbln']){
+					$where = substr($where, 0, strlen($where)-4);			
+
+					$result = dbmng_query("select * FROM " . $aForm['table_name'] . " WHERE $where ", $var);
+					$vals   = dbmng_fetch_object($result); //$result->fetchObject();
 			}
+			//print_r($vals);
 		}
-	
-	// if(isset($_GET["upd_" . $aForm['table_name']]))
-	if( isset($_GET["act"]) )
-		{
-			if($_GET["act"] == "upd")
-				{
-					$do_update = true;
-				}
-		
-			// if ( isset($_GET["ins_" . $aForm['table_name']]) || $do_update )
-			if ( $_GET["act"] == "ins" || $do_update )
-				{
-		      if( $do_update )
-				    {
-							$id_upd    = $_GET["upd_" . $aForm['table_name']];
-							
-							//$pkfield=$aForm['primary_key'][0];
-							$pkfield = "";
-							foreach ( $aForm['fields'] as $fld => $fld_value )
-								{
-								if($fld_value['key'] == 1 || $fld_value['key'] == 2 )
-									{
-										$pkfield = $fld;
-									}
-								}
-								
-							//echo $pkfield;
-							//print_r( $aForm['fields'][$pkfield]);
-		
-							$sql       = "select * from " . $aForm['table_name'] . " where " . $pkfield . "= :$pkfield" ;
-							if( dbmng_is_field_type_numeric($aForm['fields'][$pkfield]['type']) ) //$aForm['fields'][$pkfield]['type'] == "varchar" ) 
-								$result    = dbmng_query($sql, array(":$pkfield" => intval($id_upd)) );		
-							else
-								$result    = dbmng_query($sql, array(":$pkfield" => ($id_upd)) );		
-		
-							$vals      = dbmng_fetch_object($result); //$result->fetchObject();
-							//print_r($vals);
-						}
 						
-					$more = "";
-					foreach ( $aForm['fields'] as $fld => $fld_value )
+		//if exists at least 1 file widget add enctype to form
+		$more = "";
+		foreach ( $aForm['fields'] as $fld => $fld_value )
+			{
+				if( isset($fld_value['widget']) )
+					{
+						if( $fld_value['widget'] == 'file' )
+							{
+								$more = "enctype='multipart/form-data'";
+							}
+					}
+			}
+
+			//add the hidden fields to the form
+			$hv =  prepare_hidden_var_form($aParam);
+		
+			//render the form
+			$html .= "<div class='dbmng_form' id='dbmng_form_".$aForm['table_name']."' >\n<form method='POST' $more action='?' >\n".$hv."";
+			foreach ( $aForm['fields'] as $fld => $fld_value )
+				{
+
+					//render the form field
+
+					$custom_function_exists=false;
+					if( isset($fld_value['field_function']) )
 						{
-							if( isset($fld_value['widget']) )
+							if( function_exists($fld_value['field_function']) ) 
 								{
-									if( $fld_value['widget'] == 'file' )
-										{
-											$more = "enctype='multipart/form-data'";
-										}
+									$html .= call_user_func($fld_value['field_function']);
+									$custom_function_exists=true;
 								}
 						}
-		
-		
-					$html .= "<div class='dbmng_form' id='dbmng_form_".$aForm['table_name']."' >\n<form method='POST' $more action='?' >\n".$hv."";
-					foreach ( $aForm['fields'] as $fld => $fld_value )
-						{
-		
-							$custom_function_exists=false;
-							if( isset($fld_value['field_function']) )
-								{
-									if( function_exists($fld_value['field_function']) ) 
-										{
-											$html .= call_user_func($fld_value['field_function']);
-											$custom_function_exists=true;
-										}
-								}
 		
 		
 						if(!$custom_function_exists)
-								{
-									// if( $aForm['primary_key'][0] != $fld ) // $aForm['primary_key'][0][0] != 1 && $aForm['primary_key'][0][1] != $fld
-									if( $fld_value['key'] != 1 ) // 1 means: Auto-increment primary key (must be removed from the form.
+							{
+								// if( $aForm['primary_key'][0] != $fld ) // $aForm['primary_key'][0][0] != 1 && $aForm['primary_key'][0][1] != $fld
+								if( $fld_value['key'] != 1 ) // 1 means: Auto-increment primary key (must be removed from the form.
+									{										
+										$value= null;
+										if($do_update)
+											{
+												$value = $vals->$fld;
+											}
+										elseif( isset($fld_value['default']) && !is_null($fld_value['default'])  )
+											{
+												$value = $fld_value['default'];
+											}
+										
+										$html.='<div class="dbmng_form_row dbmng_form_field_'.$fld.'">';
+										
+										$widget='input';
+										if(isset($fld_value['widget']))
+											$widget=$fld_value['widget'];
+	
+										//generate the form label
+										$html .= layout_get_label($fld, $fld_value);
+										$html.='<div class="dbmbg_form_element">';
+	
+										if ($widget==='textarea')
 										{
-											
-											$value= null;
-											if($do_update)
-												{
-													$value = $vals->$fld;
-												}
-											elseif( isset($fld_value['default']) && !is_null($fld_value['default'])  )
-												{
-													$value = $fld_value['default'];
-												}
-											
-											$html.='<div class="dbmng_form_row dbmng_form_field_'.$fld.'">';
-											
-											$widget='input';
-											if(isset($fld_value['widget']))
-												$widget=$fld_value['widget'];
-		
-											//generate the form label
-											$html .= layout_get_label($fld, $fld_value);
-											$html.='<div class="dbmbg_form_element">';
-		
-											if ($widget==='textarea')
-											{
-												$html .= layout_form_textarea( $fld, $fld_value, $value );
-											}
-											else if ($widget==='checkbox')
-											{
-												$html .= layout_form_checkbox( $fld, $fld_value, $value );
-											}
-											else if ($widget==='select')
-											{
-												$html .= layout_form_select( $fld, $fld_value, $value );
-											}
-											else if ($widget==='date')
-											{
-												$html .= layout_form_date( $fld, $fld_value, $value );
-											}
-											else if ($widget==='file')
-											{
-												$html .= layout_form_file( $fld, $fld_value, $value );
-											}
-											else if ($widget==='password')
-											{
-												$html .= layout_form_password( $fld, $fld_value, $value );
-											}
-											else //use input by default
-											{
-		                    $more='';
-												if(dbmng_is_field_type_numeric($fld_value['type']))
-													{
-														$more="onkeypress=\"dbmng_validate_numeric(event)\"";		
-													}   
-												$html .= layout_form_input( $fld, $fld_value, $value, $more );		
-											}
-											$html.='</div>';
-											$html.='</div>';
+											$html .= layout_form_textarea( $fld, $fld_value, $value );
 										}
-								}
-						}
+										else if ($widget==='checkbox')
+										{
+											$html .= layout_form_checkbox( $fld, $fld_value, $value );
+										}
+										else if ($widget==='select')
+										{
+											$html .= layout_form_select( $fld, $fld_value, $value );
+										}
+										else if ($widget==='date')
+										{
+											$html .= layout_form_date( $fld, $fld_value, $value );
+										}
+										else if ($widget==='file')
+										{
+											$html .= layout_form_file( $fld, $fld_value, $value );
+										}
+										else if ($widget==='password')
+										{
+											$html .= layout_form_password( $fld, $fld_value, $value );
+										}
+										else //use input by default
+										{
+	                    $more='';
+											if(dbmng_is_field_type_numeric($fld_value['type']))
+												{
+													$more="onkeypress=\"dbmng_validate_numeric(event)\"";		
+												}   
+											$html .= layout_form_input( $fld, $fld_value, $value, $more );		
+										}
+										$html.='</div>';
+										$html.='</div>';
+									}
+								} //End of fields
+						} //End of form
 		
-					if( isset($_GET["upd_" . $aForm['table_name']] ))
+					if( $do_update )
 						{
-							$html .= "<input type='hidden' name='upd_" . $aForm['table_name'] . "' value='" . $_GET["upd_" . $aForm['table_name']] . "' />\n";
+							$html .= "<input type='hidden' name='act' value='do_upd' />\n";
+							$html .= "<input type='hidden' name='tbln' value='" . $aForm['table_name'] . "' />\n";
 							$html .= "<div class='dbmng_form_button'><input  type='submit' value='". t('Update') ."' /></div>\n";
 						}
 					else
 						{
-							$html .= "<input type='hidden' name='ins_" . $aForm['table_name'] . "' />\n";
+							$html .= "<input type='hidden' name='act' value='do_ins' />\n";
+							$html .= "<input type='hidden' name='tbln' value='" . $aForm['table_name'] . "' />\n";
 							$html .= "<div class='dbmng_form_button'><input class='dbmng_form_button' type='submit' value='" . t('Insert') . "' /></div>\n";
 						}
 		
 			    $html .= "</form>\n";
 			    $html .= "</div>\n";
-				}
-		}
+
 		return $html;
 }
 
