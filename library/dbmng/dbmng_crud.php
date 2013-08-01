@@ -63,9 +63,10 @@ function dbmng_delete($aForm, $aParam)
 									$var = array_merge($var, array(":".$fld => $_REQUEST[$fld] ));
 								}
 						}
-						$where = substr($where, 0, strlen($where)-4);
-						//TODO: add also filter fields in delete/update
-						$result = dbmng_query("delete from " . $aForm['table_name'] . " WHERE $where ", $var);
+
+					$where = substr($where, 0, strlen($where)-4);
+					//TODO: add also filter fields in delete/update
+					$result = dbmng_query("delete from " . $aForm['table_name'] . " WHERE $where ", $var);
 				}
 		}
 }
@@ -219,48 +220,39 @@ function dbmng_create_form_upload_file($aForm, $aParam)
 */
 function dbmng_update($aForm, $aParam) 
 {
-	if(isset($_POST["upd_" . $aForm['table_name']]))
+	$sSet = "";
+	$var = array();
+
+	foreach ( $aForm['fields'] as $fld => $fld_value )
 		{
-			$sSet = "";
-			$var = array();
-
-			foreach ( $aForm['fields'] as $fld => $fld_value )
+			if($fld_value['key'] != 1)
 				{
-					if($fld_value['key'] != 1)
-						{
-							$sSet .= $fld . " = :$fld, ";
+					$sSet .= $fld . " = :$fld, ";
 
-							$var = array_merge($var, array(":".$fld => dbmng_value_prepare($fld_value,$fld,$_POST)));
-							//$sSet.=dbmng_value_prepare($x_value,$x,$_POST).", ";
-						}
+					$var = array_merge($var, array(":".$fld => dbmng_value_prepare($fld_value,$fld,$_POST)));
+					//$sSet.=dbmng_value_prepare($x_value,$x,$_POST).", ";
 				}
-		
-			$sSet = substr($sSet, 0, strlen($sSet)-2);
-	
-
-			// $pk=$aForm['primary_key'][0] ;
-			foreach ( $aForm['fields'] as $fld => $fld_value )
-				{
-					if($fld_value['key'] == 1 || $fld_value['key'] == 2 )
-						{
-							$pk = $fld;
-						}
-				}
-
-			if( dbmng_is_field_type_numeric($aForm['fields'][$pk]['type']) )  
-				{
-					$id_upd = intval($_REQUEST["upd_" . $aForm['table_name']]);
-					$var = array_merge($var, array(":$pk" => ($id_upd)));
-				}
-			else
-				{
-					$id_upd = $_REQUEST["upd_" . $aForm['table_name']];
-					$var = array_merge($var, array(":$pk" => $id_upd));
-				}
-			
-			$sql    = "update " . $aForm['table_name'] . " set " . $sSet . " where " . $pk . " = :$pk " ;
-			$result = dbmng_query($sql, $var);
 		}
+
+	$sSet = substr($sSet, 0, strlen($sSet)-2);
+
+	$where  = "";
+	$aWhere = array();
+	foreach ( $aForm['fields'] as $fld => $fld_value )
+		{
+			if( dbmng_check_is_pk($fld_value) )
+				{
+					$where .= "$fld = :$fld and ";
+					$aWhere = array_merge( $aWhere, array(":".$fld => $_REQUEST[$fld]) );
+				}
+		}
+
+	$where = substr($where, 0, strlen($where)-4);
+	$var   = array_merge($var, $aWhere);
+
+	//TODO: add also filter fields in delete/update
+	
+	$result = dbmng_query("update " . $aForm['table_name'] . " set $sSet where $where ", $var);
 }
 
 ?>

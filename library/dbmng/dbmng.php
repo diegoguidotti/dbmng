@@ -403,19 +403,18 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 
 			if(!$custom_function_exists)
 				{
+					$value= null;
+					if($do_update)
+						{
+							$value = $vals->$fld;
+						}
+					elseif( isset($fld_value['default']) && !is_null($fld_value['default'])  )
+						{
+							$value = $fld_value['default'];
+						}
 					// if( $aForm['primary_key'][0] != $fld ) // $aForm['primary_key'][0][0] != 1 && $aForm['primary_key'][0][1] != $fld
 					if( $fld_value['key'] != 1 ) // 1 means: Auto-increment primary key (must be removed from the form.
 						{										
-							$value= null;
-							if($do_update)
-								{
-									$value = $vals->$fld;
-								}
-							elseif( isset($fld_value['default']) && !is_null($fld_value['default'])  )
-								{
-									$value = $fld_value['default'];
-								}
-							
 							$html.='<div class="dbmng_form_row dbmng_form_field_'.$fld.'">';
 							
 							$widget='input';
@@ -436,7 +435,21 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 								}
 							else if ($widget==='select')
 								{
-									$html .= layout_form_select( $fld, $fld_value, $value );
+									if( $do_update && dbmng_check_is_pk($fld_value))
+										{
+											$aVoc = array();
+											$aVoc = $fld_value['voc_val'];
+											foreach ( $aVoc as $vocKey => $vocValue )
+												{
+													if($do_update && $value==$vocKey)
+														$value = $vocValue; 
+												}
+											
+											$more .= " readonly='readonly'";
+											$html .= layout_form_input( $fld, $fld_value, $value, $more );		
+										}
+									else
+										$html .= layout_form_select( $fld, $fld_value, $value );
 								}
 							else if ($widget==='date')
 								{
@@ -456,11 +469,18 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 									if(dbmng_is_field_type_numeric($fld_value['type']))
 										{
 											$more="onkeypress=\"dbmng_validate_numeric(event)\"";		
-										}   
+										}  
+									if( $do_update && dbmng_check_is_pk($fld_value))
+										$more .= " readonly='readonly'";
+										
 									$html .= layout_form_input( $fld, $fld_value, $value, $more );		
 								}
 							$html.='</div>';
 							$html.='</div>';
+						}
+					else
+						{
+							$html .= "<input type='hidden' name='$fld' id='$fld' value='$value' />\n";
 						}
 				} //End of fields
 		} //End of form
