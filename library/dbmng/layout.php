@@ -10,7 +10,6 @@
 function prepare_hidden_var($aParam)
 {
 	$hv = "";
-
 	if(isset($aParam['hidden_vars']))
 		{
 			foreach ( $aParam['hidden_vars'] as $fld => $fld_value )
@@ -22,10 +21,17 @@ function prepare_hidden_var($aParam)
 }
 
 
+/////////////////////////////////////////////////////////////////////////////
+// prepare_hidden_var_form
+// ======================
+/// This function prepare the hidden var for the form
+/**
+\param $aParam  		parameter array
+\return             html
+*/
 function prepare_hidden_var_form($aParam)
 {
 	$hv = "";
-
 	if(isset($aParam['hidden_vars']))
 		{
 			foreach ( $aParam['hidden_vars'] as $fld => $fld_value )
@@ -35,7 +41,6 @@ function prepare_hidden_var_form($aParam)
 		}
 	return $hv;
 }
-
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -67,7 +72,7 @@ function layout_get_nullable($fld_value)
 function layout_get_label($fld, $fld_value)
 	{
 		$lb = $fld_value['label'];
-		if( isset( $fld_value['label_long'] ) )
+		if( isset($fld_value['label_long']) )
 			$lb =  $fld_value['label_long'];			
 		
 		$sRequired = "";
@@ -193,7 +198,6 @@ function layout_form_file( $fld, $fld_value, $value )
 
 	$html .= "<script type=\"text/javascript\">dbmng_style_fileform('".$fld."');</script>";
 
-
 	return $html;
 }
 
@@ -251,14 +255,14 @@ function layout_form_select( $fld, $fld_value, $value )
 	$nLen  = count($aVoc);
 	
 	foreach ( $aVoc as $vocKey => $vocValue )
-	{
-		$s = "";
-		if($do_update && $value==$vocKey){
-			$s = " selected='true' ";
+		{
+			$s = "";
+			if($do_update && $value==$vocKey){
+				$s = " selected='true' ";
+			}
+	
+			$html .= "<option $s value='" . $vocKey . "'>" . $vocValue . "</option> \n";	
 		}
-
-		$html .= "<option $s value='" . $vocKey . "'>" . $vocValue . "</option> \n";	
-	}
 	$html .= "</select>\n";
 	return $html;
 }
@@ -279,7 +283,6 @@ function layout_table_head($aField)
 	$html .= "<tr>\n";
 	foreach ( $aField as $fld => $fld_value )
 		{
-			
 			if( layout_view_field_table($fld_value) )
 				$html .= "<th class='dbmng_field_$fld'>" . t($fld_value['label']) . "</th>\n";
 		}
@@ -327,11 +330,13 @@ function layout_table_footer($aField)
 */
 function layout_view_field_table($fld_value){
 	$ret=true;	
-	if( isset($fld_value['skip_in_tbl']) ) {
-		if($fld_value['skip_in_tbl'] == 1){
-			$ret=false;
+	if( isset($fld_value['skip_in_tbl']) ) 
+		{
+			if($fld_value['skip_in_tbl'] == 1)
+				{
+					$ret=false;
+				}
 		}
-	}
 	return $ret;
 }
 
@@ -351,11 +356,11 @@ function layout_table_action( $aForm, $aParam, $id_record )
 	$nDel = 1;	$nUpd=1; 	$nDup=1; 
 	// get user function parameters
 	if( isset($aParam['user_function']) )
-	{
-	  $nUpd = (isset($aParam['user_function']['upd']) ? $aParam['user_function']['upd'] : 1 );
-	  $nDel = (isset($aParam['user_function']['del']) ? $aParam['user_function']['del'] : 1 );
-	  $nDup = (isset($aParam['user_function']['dup']) ? $aParam['user_function']['dup'] : 1 );				
-	}
+		{
+		  $nUpd = (isset($aParam['user_function']['upd']) ? $aParam['user_function']['upd'] : 1 );
+		  $nDel = (isset($aParam['user_function']['del']) ? $aParam['user_function']['del'] : 1 );
+		  $nDup = (isset($aParam['user_function']['dup']) ? $aParam['user_function']['dup'] : 1 );				
+		}
 	
 	$html = "";
 	$hv   = prepare_hidden_var($aParam);
@@ -388,12 +393,12 @@ function layout_table_custom_function($aParam, $id_record)
 
 	$html = "";
 	if(isset($aParam['custom_function']))
-	{
-		foreach($aParam['custom_function'] as $aCustom )								
-		{	
-			$html.="<a href='?$aCustom[custom_variable]=$id_record$hv'>$aCustom[custom_label]</a>";
+		{
+			foreach($aParam['custom_function'] as $aCustom )								
+				{	
+					$html.="<a href='?$aCustom[custom_variable]=$id_record$hv'>$aCustom[custom_label]</a>";
+				}
 		}
-	}
 	return $html;
 }
 
@@ -447,14 +452,12 @@ function layout_table_body( $result, $aForm, $aParam )
 			//get the query results for each field
 			foreach ( $aForm['fields'] as $fld => $fld_value )
 				{
-
 					//echo '!'.$record->$fld.'!'.$fld.'<br/>';
 					$value=dbmng_value_prepare_html($fld_value, $record->$fld);
 					if( layout_view_field_table($fld_value) )
 						{
 							$html.= "<td class='dbmng_field_$fld'>".$value."</td>";
 						}
-
 				}
 
 			// available functionalities
@@ -464,11 +467,11 @@ function layout_table_body( $result, $aForm, $aParam )
 			$id_record = "";
 			foreach ( $aForm['fields'] as $fld => $fld_value )
 				{
-				if(dbmng_check_is_pk($fld_value) )
-					{
-						$pkfield = $fld;
-						$id_record .= $fld . "=" . $record->$fld . "&";
-					}
+					if(dbmng_check_is_pk($fld_value) )
+						{
+							$pkfield = $fld;
+							$id_record .= $fld . "=" . $record->$fld . "&";
+						}
 				}
 
 			$html .= layout_table_action( $aForm, $aParam, $id_record );
@@ -500,18 +503,18 @@ function layout_table( $result, $aForm, $aParam )
 	$class   = "";
 	$add_js  = "";
 	if( isset($aParam['tbl_sorter']) )
-	{
-		$id_tbl  = "id='" . $aForm['table_name'] . "'";
-		$class   = "class='tablesorter'";
-		
-		$nColumn = 0;
-		foreach ( $aForm['fields'] as $fld => $fld_value )
-			{
-				if( layout_view_field_table($fld_value) )
-					$nColumn++;
-			}
-		$add_js  = "<script type=\"text/javascript\">dbmng_tablesorter('".$aForm['table_name']."',".$nColumn.");</script>\n";
-	}
+		{
+			$id_tbl  = "id='" . $aForm['table_name'] . "'";
+			$class   = "class='tablesorter'";
+			
+			$nColumn = 0;
+			foreach ( $aForm['fields'] as $fld => $fld_value )
+				{
+					if( layout_view_field_table($fld_value) )
+						$nColumn++;
+				}
+			$add_js  = "<script type=\"text/javascript\">dbmng_tablesorter('".$aForm['table_name']."',".$nColumn.");</script>\n";
+		}
 
 	$html = "";
 	$html .= "<table $id_tbl $class>\n";
@@ -520,15 +523,15 @@ function layout_table( $result, $aForm, $aParam )
 	
 	// write FOOTER row
 	if( dbmng_num_rows($result) > 1 )
-	{
-		if( isset($aParam['tbl_footer']) )
 		{
-			if( $aParam['tbl_footer'] == 1 )
-			{
-				$html .= layout_table_footer( $aForm['fields'] );
-			}
-		}
-	}		
+			if( isset($aParam['tbl_footer']) )
+				{
+					if( $aParam['tbl_footer'] == 1 )
+						{
+							$html .= layout_table_footer( $aForm['fields'] );
+						}
+				}
+		}		
 	$html .= layout_table_body($result, $aForm, $aParam);
   $html .= "</table>\n";
 	

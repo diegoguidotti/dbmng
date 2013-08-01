@@ -10,30 +10,35 @@
 \return           HTML generated code
 */
 function dbmng_create_form_process($aForm, $aParam) 
-	{
-		if(isset($_REQUEST['tbln']) && isset($_REQUEST['act']))
-			{
+{
+	if(isset($_REQUEST['tbln']) && isset($_REQUEST['act']))
+		{
 			//check if the table correspond to the table requested in the form
-			if($aForm['table_name']==$_REQUEST['tbln']){
-				// update record
-
-				if($_REQUEST['act']=='do_upd')
-					dbmng_update($aForm, $aParam);
-				// insert record
-				if($_REQUEST['act']=='do_ins')
-					dbmng_insert($aForm, $aParam);		
-				// delete record
-				if($_REQUEST['act']=='del')
-					dbmng_delete($aForm, $aParam);		
-				if($_REQUEST['act']=='dup')
-					dbmng_duplicate($aForm, $aParam);
-			}
-			else{
-				//TODO: update error message
-				echo 'You have not the right to delete the table you request!';
-			}
+			if($aForm['table_name']==$_REQUEST['tbln'])
+				{
+					// update record
+					if($_REQUEST['act']=='do_upd')
+						dbmng_update($aForm, $aParam);
+					
+					// insert record
+					if($_REQUEST['act']=='do_ins')
+						dbmng_insert($aForm, $aParam);		
+					
+					// delete record
+					if($_REQUEST['act']=='del')
+						dbmng_delete($aForm, $aParam);		
+	
+					// duplicate record
+					if($_REQUEST['act']=='dup')
+						dbmng_duplicate($aForm, $aParam);
+				}
+			else
+				{
+					//TODO: update error message
+					echo 'You have not the right to delete the table you request!';
+				}
 		}
-	}
+}
 
 /////////////////////////////////////////////////////////////////////////////
 // dbmng_delete
@@ -58,19 +63,15 @@ function dbmng_delete($aForm, $aParam)
 									$var = array_merge($var, array(":".$fld => $_REQUEST[$fld] ));
 								}
 						}
-
-					
-
 						$where = substr($where, 0, strlen($where)-4);
 						//TODO: add also filter fields in delete/update
 						$result = dbmng_query("delete from " . $aForm['table_name'] . " WHERE $where ", $var);
-					
-					
 				}
 		}
 }
 
-function dbmng_check_is_pk($fld_value){
+function dbmng_check_is_pk($fld_value)
+{
 	$ret=false;
 	if(!isset($fld_value['key']))
 		$ret = false;
@@ -100,15 +101,15 @@ function dbmng_duplicate($aForm, $aParam)
 		}
 
 	if( isset($aParam) )
-	{
-		if( isset($aParam['filters']) )
-			{
-					foreach ( $aParam['filters'] as $fld => $fld_value )
-						{				
-							$sWhat.=$fld.", ";
-						}					
-			}
-	}
+		{
+			if( isset($aParam['filters']) )
+				{
+						foreach ( $aParam['filters'] as $fld => $fld_value )
+							{				
+								$sWhat.=$fld.", ";
+							}					
+				}
+		}
 
 	$sWhat = substr($sWhat, 0, strlen($sWhat)-2);
 	
@@ -143,46 +144,41 @@ function dbmng_duplicate($aForm, $aParam)
 */
 function dbmng_insert($aForm, $aParam) 
 {
-	//if(isset($_POST["ins_" . $aForm['table_name']]))
-	//	{
-			$sWhat = "";
-			$sVal  = "";
+	$sWhat = "";
+	$sVal  = "";
 
-			$var = array();
-			foreach ( $aForm['fields'] as $fld => $fld_value )
+	$var = array();
+	foreach ( $aForm['fields'] as $fld => $fld_value )
+		{
+			//if($fld !== $aForm['primary_key'][0])
+			if($fld_value['key'] != 1)
 				{
-					//if($fld !== $aForm['primary_key'][0])
-					if($fld_value['key'] != 1)
-						{
-							$sWhat .= $fld . ", ";
-							$sVal.=":$fld ,";	
-							$var = array_merge($var, array(":".$fld => dbmng_value_prepare($fld_value,$fld,$_POST)));
-						}
+					$sWhat .= $fld . ", ";
+					$sVal.=":$fld ,";	
+					$var = array_merge($var, array(":".$fld => dbmng_value_prepare($fld_value,$fld,$_POST)));
 				}
+		}
 
-			if( isset($aParam) )
+	if( isset($aParam) )
+		{
+			if( isset($aParam['filters']) )
 				{
-					if( isset($aParam['filters']) )
-						{
-							foreach ( $aParam['filters'] as $fld => $fld_value )
-								{				
-									$sWhat.=$fld.", ";
-									$sVal.=":$fld, ";
+					foreach ( $aParam['filters'] as $fld => $fld_value )
+						{				
+							$sWhat.=$fld.", ";
+							$sVal.=":$fld, ";
 
-									$var = array_merge($var, array(":".$fld =>  $fld_value ));
-
-
-								}					
-						}
+							$var = array_merge($var, array(":".$fld =>  $fld_value ));
+						}					
 				}
+		}
 
-			$sWhat = substr($sWhat, 0, strlen($sWhat)-2);
-			$sVal  = substr($sVal, 0, strlen($sVal)-2);
-	
-			$sql    = "insert into " . $aForm['table_name'] . " (" . $sWhat . ") values (" . $sVal . ")";
-			$result = dbmng_query($sql, $var);
-			//print_r( $_FILES );
-		//}
+	$sWhat = substr($sWhat, 0, strlen($sWhat)-2);
+	$sVal  = substr($sVal, 0, strlen($sVal)-2);
+
+	$sql    = "insert into " . $aForm['table_name'] . " (" . $sWhat . ") values (" . $sVal . ")";
+	$result = dbmng_query($sql, $var);
+	//print_r( $_FILES );
 }
 
 /////////////////////////////////////////////////////////////////////////////
