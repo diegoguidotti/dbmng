@@ -435,20 +435,20 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 								}
 							else if ($widget==='select')
 								{
-									if( $do_update && dbmng_check_is_pk($fld_value))
-										{
-											$aVoc = array();
-											$aVoc = $fld_value['voc_val'];
-											foreach ( $aVoc as $vocKey => $vocValue )
-												{
-													if($do_update && $value==$vocKey)
-														$value = $vocValue; 
-												}
-											
-											$more .= " readonly='readonly'";
-											$html .= layout_form_input( $fld, $fld_value, $value, $more );		
-										}
-									else
+									//if( $do_update && dbmng_check_is_pk($fld_value))
+									//	{
+									//		$aVoc = array();
+									//		$aVoc = $fld_value['voc_val'];
+									//		foreach ( $aVoc as $vocKey => $vocValue )
+									//			{
+									//				if($do_update && $value==$vocKey)
+									//					$value = $vocValue; 
+									//			}
+									//		
+									//		$more .= " readonly='readonly'";
+									//		$html .= layout_form_input( $fld, $fld_value, $value, $more );		
+									//	}
+									//else
 										$html .= layout_form_select( $fld, $fld_value, $value );
 								}
 							else if ($widget==='date')
