@@ -127,21 +127,13 @@ function layout_form_date( $fld, $fld_value, $value )
 \param $more 				allow to insert other attributes
 \return             html
 */
-function layout_form_input( $fld, $fld_value, $value, $more='', $do_update )
+function layout_form_input( $fld, $fld_value, $value, $more='' )
 {
-	if( $do_update && dbmng_check_is_pk($fld_value) )
-		{
-			$html = "<div class='dbmng_upd_ro' id='dbmng_$fld'>$value</div>\n";
-			$more .= " readonly='readonly'";
-		}
-	else	
-		{
-			$html  = "<input type='text' name='$fld' id='$fld' $more";
-			$html .= " value= '$value' ";	
-			$html .= layout_get_nullable($fld_value);	
-			$html .= " />\n";
-		}
-		
+	$html  = "<input type='text' name='$fld' id='$fld' $more";
+	$html .= " value= '$value' ";	
+	$html .= layout_get_nullable($fld_value);	
+	$html .= " />\n";
+
 	return $html;
 }
 
@@ -159,7 +151,8 @@ function layout_form_input( $fld, $fld_value, $value, $more='', $do_update )
 */
 function layout_form_hidden( $fld, $value )
 {
-	$html = "<input type='hidden' name='$fld' id='$fld' value='$value' />\n";
+	//print_r($value);
+	$html = "<input type='hidden' name='$fld' id='$fld' value='".$value."' />\n";
 
 	return $html;
 }

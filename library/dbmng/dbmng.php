@@ -424,56 +424,49 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 							//generate the form label
 							$html .= layout_get_label($fld, $fld_value);
 							$html.='<div class="dbmbg_form_element">';
-
-							if ($widget==='textarea')
+							
+							// Do not show input or seletc field for PK
+							if($do_update && dbmng_check_is_pk($fld_value))
 								{
-									$html .= layout_form_textarea( $fld, $fld_value, $value );
+									$html .= dbmng_value_prepare_html( $fld_value, $value );
+									$html .= layout_form_hidden( $fld, $value );
 								}
-							else if ($widget==='checkbox')
+							else
 								{
-									$html .= layout_form_checkbox( $fld, $fld_value, $value );
-								}
-							else if ($widget==='select')
-								{
-									//if( $do_update && dbmng_check_is_pk($fld_value))
-									//	{
-									//		$aVoc = array();
-									//		$aVoc = $fld_value['voc_val'];
-									//		foreach ( $aVoc as $vocKey => $vocValue )
-									//			{
-									//				if($do_update && $value==$vocKey)
-									//					$value = $vocValue; 
-									//			}
-									//		
-									//		$more .= " readonly='readonly'";
-									//		$html .= layout_form_input( $fld, $fld_value, $value, $more );		
-									//	}
-									//else
-										$html .= layout_form_select( $fld, $fld_value, $value );
-								}
-							else if ($widget==='date')
-								{
-									$html .= layout_form_date( $fld, $fld_value, $value );
-								}
-							else if ($widget==='file')
-								{
-									$html .= layout_form_file( $fld, $fld_value, $value );
-								}
-							else if ($widget==='password')
-								{
-									$html .= layout_form_password( $fld, $fld_value, $value );
-								}
-							else //use input by default
-								{
-                  $more='';
-									if(dbmng_is_field_type_numeric($fld_value['type']))
+									if ($widget==='textarea')
 										{
-											$more="onkeypress=\"dbmng_validate_numeric(event)\"";		
-										}  
-									//if( $do_update && dbmng_check_is_pk($fld_value))
-									//	$more .= " readonly='readonly'";
-										
-									$html .= layout_form_input( $fld, $fld_value, $value, $more, $do_update );		
+											$html .= layout_form_textarea( $fld, $fld_value, $value );
+										}
+									else if ($widget==='checkbox')
+										{
+											$html .= layout_form_checkbox( $fld, $fld_value, $value );
+										}
+									else if ($widget==='select')
+										{
+											$html .= layout_form_select( $fld, $fld_value, $value );
+										}
+									else if ($widget==='date')
+										{
+											$html .= layout_form_date( $fld, $fld_value, $value );
+										}
+									else if ($widget==='file')
+										{
+											$html .= layout_form_file( $fld, $fld_value, $value );
+										}
+									else if ($widget==='password')
+										{
+											$html .= layout_form_password( $fld, $fld_value, $value );
+										}
+									else //use input by default
+										{
+		                  $more='';
+											if(dbmng_is_field_type_numeric($fld_value['type']))
+												{
+													$more="onkeypress=\"dbmng_validate_numeric(event)\"";		
+												}  
+												
+											$html .= layout_form_input( $fld, $fld_value, $value, $more );		
+										}
 								}
 							$html.='</div>';
 							$html.='</div>';
