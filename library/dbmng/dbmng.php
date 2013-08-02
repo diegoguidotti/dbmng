@@ -470,10 +470,10 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 										{
 											$more="onkeypress=\"dbmng_validate_numeric(event)\"";		
 										}  
-									if( $do_update && dbmng_check_is_pk($fld_value))
-										$more .= " readonly='readonly'";
+									//if( $do_update && dbmng_check_is_pk($fld_value))
+									//	$more .= " readonly='readonly'";
 										
-									$html .= layout_form_input( $fld, $fld_value, $value, $more );		
+									$html .= layout_form_input( $fld, $fld_value, $value, $more, $do_update );		
 								}
 							$html.='</div>';
 							$html.='</div>';
