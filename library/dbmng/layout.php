@@ -417,7 +417,7 @@ function layout_table_custom_function($aParam, $id_record)
 		{
 			foreach($aParam['custom_function'] as $aCustom )								
 				{	
-					$html.="<a href='?$aCustom[custom_variable]=$id_record$hv'>$aCustom[custom_label]</a>";
+					$html.="<a href='?act=$aCustom[custom_variable]&$id_record$hv'>$aCustom[custom_label]</a>";
 				}
 		}
 	return $html;
