@@ -1,6 +1,6 @@
 DBMNG
 =====
-
+Updated
 DBMNG is a proposed library to Create Read Update and Delete a database table. 
 
 
