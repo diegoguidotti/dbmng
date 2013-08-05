@@ -8,16 +8,17 @@ include_once "sites/all/library/dbmng/dbmng_sql_functions.php";
 // Query
 //******************************************************************************
 
-function dbmng_block_info() {
-$blocks = array();
-$blocks['lst_tables'] = array(
-'info' => t('List tables'),
-);
-
-return $blocks;
+function dbmng_module_block_info() 
+	{
+		$blocks = array();
+		$blocks['lst_tables'] = array(
+				'info' => t('List tables'),
+			);
+		
+		return $blocks;
 }
 
-function dbmng_block_view($delta='') {
+function dbmng_module_block_view($delta='') {
 $block = array();
 
 switch($delta) {
@@ -29,11 +30,11 @@ switch($delta) {
 return $block;
 }
 
-function dbmng_permission() {
+function dbmng_module_permission() {
 	return array('dbmng manager' => array('title'=>t('Manage all meta tables')));
 }
 
-function dbmng_menu() {
+function dbmng_module_menu() {
     $items = array();
 
     $items['dbmng/dbmng'] = array(
