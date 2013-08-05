@@ -184,7 +184,7 @@ function dbmng_crud($aForm, $aParam)
 				}
 		}
 
-	//echo($_REQUEST["act"]." ".$view_table." ".$do_update);
+	//echo($_REQUEST["act"]."|".$view_table."|".$do_update);
 
 	if($view_table)
 		$html .= dbmng_create_table($aForm, $aParam);

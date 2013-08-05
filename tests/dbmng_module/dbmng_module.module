@@ -86,6 +86,10 @@ function dbmng_manager()
 	$id_table_field=9;
 	dbmng_add_libraries();
 
+
+
+
+
 	$html = "";
 	if( isset($_REQUEST['tbl']) )
 	{
@@ -144,18 +148,21 @@ function dbmng_manager()
 				$html .= dbmng_crud_js($aForm, $aParam);
 
 			}
-		elseif( isset($_REQUEST['act']) )
+		elseif( isset($_REQUEST['show_fields']) )
 			{
+
+
 				//$aForm    = dbmng_get_form_array($id_table_field);
 				$sql    = 'select COLUMN_NAME as colname FROM information_schema.columns c, dbmng_tables t WHERE t.table_name=c.table_name AND t.id_table =:id_table;';
-				//if( isset($_REQUEST['ins_dbmng_fields']) ) //$_REQUEST["upd_" . $aForm['table_name']]
-				if( $_REQUEST['act'] = 'show_fields' )
-					{
+
+				
+				//if( $_REQUEST['act'] = 'show_fields' )
+			 //{
 						$sql    = 'select COLUMN_NAME as colname ';
 						$sql   .= 'FROM information_schema.columns c, ' . DBMNG_DB_NAME . '.dbmng_tables t ';
-						$sql   .= 'WHERE COLUMN_NAME not in( select field_name from ' . DBMNG_DB_NAME . '.dbmng_fields where id_table = :id_table ) ';
-						$sql   .= 'AND t.table_name=c.table_name AND t.id_table =:id_table;';
-					}
+						$sql   .= 'WHERE '; //COLUMN_NAME not in( select field_name from ' . DBMNG_DB_NAME . '.dbmng_fields where id_table = :id_table ) AND ';
+						$sql   .= ' t.table_name=c.table_name AND t.id_table =:id_table;';
+				//}
 
 				// $fields = dbmng_query($sql, array(':id_table' => $_REQUEST['show_fields']));
 				$fields = dbmng_query($sql, array(':id_table' => $_REQUEST['id_table']));
@@ -251,12 +258,6 @@ function dbmng_manager()
 															2 => t('Standard primary key')
 													)
 										),
-//									'pk'     => 
-//										array('label'   => t('Pk'), 
-//													'label_long' => t('Primary Key'),
-//													'type' => 'int', 
-//													'widget'=>'checkbox'
-//										),
 									'default_value' =>
 										array( 'label' => t('Default'),
 													 'label_long' => t('Default value'),
@@ -313,7 +314,10 @@ function dbmng_manager()
 				unset($aParam);
 				$aParam                                = array();
 				$aParam['filters']['id_table']	       = $_REQUEST['id_table']; 
-				$aParam['hidden_vars']['show_fields']  = $_REQUEST['act'];
+
+				//important - you need to add show_fields and id_table param to all the POST and GET call
+				$aParam['hidden_vars']['show_fields']  = $_REQUEST['show_fields'];
+				$aParam['hidden_vars']['id_table']  = $_REQUEST['id_table'];
 				$aParam['user_function']['dup']	       = 0;	              // allow to enabled=1 or disabled=0 the duplication function
 				$aParam['user_function']['del']	       = 0;	              // allow to enabled=1 or disabled=0 the delate function
 				$aParam['tbl_order']                   = 'field_order';
