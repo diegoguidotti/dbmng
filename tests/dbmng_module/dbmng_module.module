@@ -360,8 +360,8 @@ function dbmng_manager()
 													'widget'=>'select' ,
 													'key' => 0,
 													'voc_val' => array(
-														'1'=> t('Content Table'),	
-														'2'=> t('System Table')
+														'1'=> t('System Table') , 
+														'2'=> t('Content Table')
 													)
 										) ,
 									'table_label'  => 
