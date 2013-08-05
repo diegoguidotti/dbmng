@@ -178,6 +178,7 @@ function dbmng_manager()
 						'table_name' => 'dbmng_fields' ,
 							'primary_key'=> array('id_field'), 
 							'fields'     => array(
+/*
 									'id_table'  => 
 										array('label'   => t('ID') , 
 													'label_long' => t('ID Table'),
@@ -185,6 +186,7 @@ function dbmng_manager()
 													'skip_in_tbl' => '1',
 													'key' => 2
 										), 
+*/
 									'id_field'  => 
 										array('label'   => t('ID') , 
 													'label_long' => t('ID Field'),
