@@ -92,6 +92,7 @@ function dbmng_manager()
 
 
 	$html = "";
+	/*
 	if( isset($_REQUEST['tbl']) )
 	{
 		//get the form!!!
@@ -127,6 +128,9 @@ function dbmng_manager()
 
 		$html .= dbmng_create_form($aForm, $aParam);
 	}
+	*/
+	if(false)
+		{;}
 	else{
 		if( isset($_REQUEST['test']) )
 			{
@@ -142,11 +146,20 @@ function dbmng_manager()
         */
         $id_table = 1;
 				$aForm    = dbmng_get_form_array($id_table);
+				
+				$newField = array('label' => 'Contries', 'type' => 'int', 'widget'=>'multi', 'voc_table'=>'country', 'voc_table_pk'=>'id_country', 'voc_table_label'=>'country_name', 'rel_table'=>'test_country', 'rel_table_fk1'=>'id_test', 'rel_table_fk2'=>'id_country'  );
+				$aForm['fields'] = array_merge($aForm['fields'], array("id_country" => $newField));
+				
+				//echo '<pre>';
+				//print_r($aForm);
+				//echo '</pre>';
+				
+				
 				$aParam   = array();
-				$aParam['hidden_vars']['tbl']	     = $_REQUEST['test']; //save the table id
+				$aParam['hidden_vars']['test']	     = $_REQUEST['test']; //save the table id
 			  $aParam['hidden_vars']['type_tbl'] = 1; //table type (1: content table; 2: system table)
 
-				$html .= dbmng_crud_js($aForm, $aParam);
+				$html .= dbmng_crud($aForm, $aParam);
 
 			}
 		elseif( isset($_REQUEST['show_fields']) )

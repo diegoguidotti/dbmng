@@ -198,6 +198,32 @@ function layout_form_textarea( $fld, $fld_value, $value )
 }
 
 
+function layout_form_multi( $fld, $fld_value, $value )
+{		
+	$html  = "<select class='dbmng_multi_left'  multiple  id='$fld' name='$fld'  >";
+	$html  .= '</select>';
+	// 'voc_table'=>'country', 'voc_table_pk'=>'id_country', 'voc_table_label'=>'country_label', 'rel_table'=>'test_country', 'rel_table_fk1'=>'id_test', 'rel_table_fk2'=>'id_country'  );
+	
+	$sql= "select  ".$fld_value['voc_table_pk'].",  ".$fld_value['voc_table_label']." from  ".$fld_value['voc_table']." ";
+	$res=dbmng_query($sql,array());
+	
+	
+	$html  .= "<select class='dbmng_multi_right' multiple id='".$fld."_from' name='".$fld."_from'  >";
+	
+	foreach ($res as $val) {
+	 	  $html.="<option value='".$val->$fld_value['voc_table_pk']."' >".$val->$fld_value['voc_table_label']."</option>";
+	} 
+	
+	$html  .= '</select>';
+	
+	$js = "dbmng_multi('".$fld."');";
+	
+	$html  .= '<a href="javascript:'.$js.'">'.t('choice')."</a>";
+	 
+	return $html;
+}
+
+
 /////////////////////////////////////////////////////////////////////////////
 // layout_form_file
 // ======================
@@ -474,10 +500,17 @@ function layout_table_body( $result, $aForm, $aParam )
 			foreach ( $aForm['fields'] as $fld => $fld_value )
 				{
 					//echo '!'.$record->$fld.'!'.$fld.'<br/>';
-					$value=dbmng_value_prepare_html($fld_value, $record->$fld);
 					if( layout_view_field_table($fld_value) )
 						{
-							$html.= "<td class='dbmng_field_$fld'>".$value."</td>";
+							if(isset($record->$fld))
+								{
+									$value=dbmng_value_prepare_html($fld_value, $record->$fld);
+									$html.= "<td class='dbmng_field_$fld'>".$value."</td>";
+								}
+							else{//TODO: add a comma separated list if widget==multi
+									$html.= "<td class='dbmng_field_$fld'>&nbsp;</td>";							
+							}
+
 						}
 				}
 

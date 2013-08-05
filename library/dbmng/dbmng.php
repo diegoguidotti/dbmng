@@ -406,14 +406,15 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 					$value= null;
 					if($do_update)
 						{
-							$value = $vals->$fld;
+							if(isset($vals->$fld))
+								$value = $vals->$fld;
 						}
 					elseif( isset($fld_value['default']) && !is_null($fld_value['default'])  )
 						{
 							$value = $fld_value['default'];
 						}
 					// if( $aForm['primary_key'][0] != $fld ) // $aForm['primary_key'][0][0] != 1 && $aForm['primary_key'][0][1] != $fld
-					if( $fld_value['key'] != 1 ) // 1 means: Auto-increment primary key (must be removed from the form.
+					if( !dbmng_check_is_autopk($fld_value) ) // 1 means: Auto-increment primary key (must be removed from the form.
 						{										
 							$html.='<div class="dbmng_form_row dbmng_form_field_'.$fld.'">';
 							
@@ -456,6 +457,10 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 									else if ($widget==='password')
 										{
 											$html .= layout_form_password( $fld, $fld_value, $value );
+										}
+									else if ($widget==='multi')
+										{
+											$html .= layout_form_multi( $fld, $fld_value, $value );
 										}
 									else //use input by default
 										{

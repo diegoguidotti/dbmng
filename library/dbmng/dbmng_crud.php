@@ -35,7 +35,7 @@ function dbmng_create_form_process($aForm, $aParam)
 			else
 				{
 					//TODO: update error message
-					echo 'You have not the right to delete the table you request!';
+					echo 'You have not the right to access to the table you request '.$aForm['table_name'].' '.$_REQUEST['tbln'].'!';
 				}
 		}
 }
@@ -81,6 +81,18 @@ function dbmng_check_is_pk($fld_value)
 		
 	return $ret;
 }
+
+function dbmng_check_is_autopk($fld_value)
+{
+	$ret=false;
+	if(!isset($fld_value['key']))
+		$ret = false;
+	elseif ($fld_value['key'] == 1 )
+		$ret=true;
+		
+	return $ret;
+}
+
 
 /////////////////////////////////////////////////////////////////////////////
 // dbmng_duplicate

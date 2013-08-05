@@ -80,6 +80,7 @@ function dbmng_create_table (data, aForm, aParam) {
 
 /*LAYOUT LIBRARY*/
 
+
 function layout_view_field_table(fld_value){
 	ret=true;	
 	if (typeof fld_value != 'undefined') {
@@ -212,6 +213,22 @@ function dbmng_insert(aForm, aParam){
 function t (value){
 	return Drupal.t(value);
 }
+
+function dbmng_multi (form) {
+	
+	var sel= jQuery('#'+form+"_from").val();
+	
+	var html='';
+	jQuery.each( jQuery('#'+form+"_from").val(), function (key, val ){
+			html+="<option value='"+val+"'>"+val+"</option>";			
+	});
+
+	var sel= jQuery('#'+form+"").html(html);
+	
+	console.log(sel);
+	alert('m');
+}
+
 
 
 function dbmng_validate_numeric (evt) {
