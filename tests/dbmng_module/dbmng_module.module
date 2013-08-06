@@ -144,7 +144,7 @@ function dbmng_manager()
 					)
         );
         */
-        $id_table = 1;
+        $id_table = "test";
 				$aForm    = dbmng_get_form_array($id_table);
 				
 				$newField = array('label' => 'Contries', 'type' => 'int', 'widget'=>'multi', 'voc_table'=>'country', 'voc_table_pk'=>'id_country', 'voc_table_label'=>'country_name', 'rel_table'=>'test_country', 'rel_table_fk1'=>'id_test', 'rel_table_fk2'=>'id_country'  );
@@ -421,7 +421,7 @@ function dbmng_edit_tables()
 		{
 			//get the form!!!
 			$id_table = $_REQUEST['tbl'];
-			$aForm    = dbmng_get_form_array($id_table);
+			$aForm    = dbmng_get_form_array(intval($id_table));
 
 			//the param array stores some custom variable used by the renderer
 			//hidden_vars are some hidden variables used by the form creation

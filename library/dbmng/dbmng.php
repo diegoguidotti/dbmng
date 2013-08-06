@@ -67,8 +67,17 @@ function getVersion()
 function dbmng_get_form_array($id_table)
 	{
 		$aForm = array();
-
-		$table             = dbmng_query("select * from dbmng_tables where id_table=:id_table", array(':id_table' => intval($id_table)));
+		if( gettype($id_table) != "integer" && gettype($id_table) != "double" )
+			{
+				// TODO: manage if the table is not insert in the dbmng_tables
+				$tbln = dbmng_query("select id_table from dbmng_tables where table_name=:table_name", array(':table_name' => $id_table));
+				foreach($tbln as $t)
+					{
+						$id_table = $t->id_table;
+					}
+			}
+		
+		$table = dbmng_query("select * from dbmng_tables where id_table=:id_table", array(':id_table' => intval($id_table)));
 		//print_r( $table );
 		$aForm['id_table'] = $id_table;
 		$fo                = dbmng_fetch_object($table);
