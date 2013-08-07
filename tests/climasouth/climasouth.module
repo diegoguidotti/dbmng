@@ -10,8 +10,8 @@ include_once "sites/all/library/dbmng/dbmng.php";
 function climasouth_block_info() 
 {
 	$blocks = array();
-	$blocks['last_item'] = array(
-		'info' => t('Last item'),
+	$blocks['climasud_test'] = array(
+		'info' => t('Climasouth test block'),
 		);
 	
 	return $blocks;
@@ -23,29 +23,17 @@ function climasouth_block_view($delta='')
 	
 	switch($delta) 
 		{
-			case 'last_item' :
-				$block['content'] = last_item_view();
+			case 'climasud_test' :
+				$block['content'] = _climasouth_block();
 				break;
 		}
 	
 	return $block;
 }
 
-function last_item_view() {
-$html='';
-$result = db_query('SELECT distinct id_table, table_label, table_name FROM dbmng_tables where id_table_type=1 order by table_label ');
-	$html.="<ul>";
-		foreach ($result as $record) {
-
-			$tn=t($record->table_label);
-			if($tn==''){
-				$tn=$record->table_name;
-			}
-
-			$html.="<li><a href='?tbl=" . $record->id_table . "'>" . $tn . "</li>";
-		}
-	$html.='</ul>';
-return $html;
+function _climasouth_block() {
+	$html='';
+	return $html;
 }
 
 function climasouth_menu() 
@@ -64,8 +52,30 @@ function climasouth_menu()
 
 function lst_country() 
 {
+
 	drupal_add_css( "sites/all/modules/climasouth/climasouth.css" );
+
+				drupal_add_css('http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css',array('type' => 'external'));
+        drupal_add_js('http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js',array('type' => 'external'));
+
+	//important add dbmng js & css
+	dbmng_add_drupal_libraries();
+
 	$html = "lst_country";
+
+	$aForm    = dbmng_get_form_array("c_country"); 
+	
+
+	$html .= '<div id="map" style="width:600px; height:500px;"  ></div>';
+
+	$html .= "\n<script type='text/javascript'>\n";
+	$html .= "var data=".dbmng_get_js_array($aForm, null).";\n";
+	$html .= "var aForm=".json_encode($aForm).";\n";
+	$html .= "var aParam={'div_element':'map'};\n";
+	$html .= "dbmng_leaflet(data,aForm, aParam);\n";
+	$html .= "</script>\n";
+
+	
 	
   return ($html);
 

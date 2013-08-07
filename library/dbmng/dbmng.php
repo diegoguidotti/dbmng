@@ -169,7 +169,7 @@ function dbmng_get_form_array($id_table)
 \param $aParam  		Associative array with some custom variable used by the renderer
 \return           HTML generated code
 */
-function dbmng_crud($aForm, $aParam)
+function dbmng_crud($aForm, $aParam=null)
 {
    //echo($_REQUEST["act"]." ".$view_table." ".$do_update);
 	$html  = "";
@@ -779,6 +779,18 @@ function dbmng_value_prepare_html($fld_value, $value)
 
 	return $ret;
 }
+
+
+//add the js e css for drupal
+function dbmng_add_drupal_libraries()
+	{
+		drupal_add_css( "sites/all/modules/dbmng_module/dbmng_module.css" );
+		drupal_add_css( "sites/all/library/dbmng/assets/dbmng.css" );
+		drupal_add_js ( "sites/all/library/dbmng/assets/dbmng.js" );
+		drupal_add_js ( "sites/all/library/dbmng/assets/jquery.tablesorter.js" );
+		drupal_add_library('system','ui.datepicker');
+	}
+
 
 
 ?>

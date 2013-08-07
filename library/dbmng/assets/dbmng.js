@@ -277,3 +277,66 @@ function dbmng_tablesorter(id_tbl, nCol){
     } 
 	);
 }
+
+
+function dbmng_leaflet(data, aForm, aParam){
+
+	var coord=[40, 13];
+	if(aParam.coord)
+		coord=aParam.coord;
+	var zoom=3;
+	if(aParam.zoom)
+		zoom=aParam.zoom;
+
+	//create the map objet
+  var map = L.map(aParam.div_element).setView(coord, zoom);
+
+	//add a background layer
+	var mapquestUrl = 'http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png',
+  subDomains = ['otile1','otile2','otile3','otile4'],
+  mapquestAttrib = 'Data, imagery and map information provided by <a href="http://open.mapquest.co.uk" target="_blank">MapQuest</a>, <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> and contributors.';
+  var mapquest = new L.TileLayer(mapquestUrl, {maxZoom: 18, attribution: mapquestAttrib, subdomains: subDomains});
+  map.addLayer(mapquest);  
+
+
+	jQuery.each(data.records, function(k,v){
+
+		if(v.geojson!=null){
+
+			//transform the string in an object
+			var geo = JSON.parse(v.geojson);
+
+			//add the variable to geojson (geo is a featurecollection we need to assiign the value to the first and only feature
+			geo.features[0]['custom_var']=v;
+
+			
+			var feature=L.geoJson(geo, 
+				{
+					onEachFeature: onEachFeature
+				}
+			);
+
+			feature.addTo(map);
+			//console.log(geo);
+
+		}
+	});	
+}
+
+
+	function onEachFeature(feature, layer) {
+			var v=feature.custom_var;
+
+			var html = "<h3>"+v.country_name+"</h3>";
+			html += '<img src="../'+v.flag+'"/>';
+			html += '<a href="?id_c_country='+v.id_c_country+'">go to page</a>';
+
+
+			if (feature.properties && feature.properties.popupContent) {
+				html += feature.properties.popupContent;
+			}
+
+			layer.bindPopup(html);
+		}
+
+
