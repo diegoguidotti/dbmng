@@ -324,7 +324,8 @@ function dbmng_leaflet(data, aForm, aParam){
 
 			var html = "<h3>"+v.country_name+"</h3>";
 			html += '<img src="'+base_path+v.flag+'"/>';
-			html += '<a href="?id_c_country='+v.id_c_country+'">go to page</a>';
+			html += '<a href="'+base_path+'climasouth/country?id_c_country='+v.id_c_country+'">go to page</a>';
+			//html += '<a href="?id_c_country='+v.id_c_country+'">go to page</a>';
 			feature.bindPopup(html);
 
 
