@@ -13,6 +13,9 @@ function climasouth_block_info()
 	$blocks['climasud_test'] = array(
 		'info' => t('Climasouth test block'),
 		);
+	$blocks['climasouth_login'] = array(
+		'info' => t('Climasouth Login block'),
+		);
 	$blocks['climasouth_map'] = array(
 		'info' => t('Climasouth Map block'),
 		);
@@ -32,6 +35,9 @@ function climasouth_block_view($delta='')
 			case 'climasouth_map' :
 				$block['content'] = _climasouth_map_block();
 				break;
+			case 'climasouth_login' :
+				$block['content'] = _climasouth_login();
+				break;
 		}
 	
 	return $block;
@@ -48,6 +54,27 @@ function _climasouth_block() {
 
 	return $html;
 }
+
+function _climasouth_login() {
+
+	$html = '<div id="climasouth_login">';	
+	global $user;
+
+	if ($user->uid) 
+		{
+		 $html .= '<span class="climasouth_username">'.l($user->name, 'user').'</span> - ';
+		 $html .= l(t('logout'), 'user/logout');
+
+		}
+	else
+		{
+			$html .=  l(t('login'), 'user');
+		}
+
+	$html.='</div>';
+	return $html;
+}
+
 
 function climasouth_menu() 
 {
