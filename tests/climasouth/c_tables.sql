@@ -1,4 +1,4 @@
-CREATE TABLE  `enpiclima`.`c_country` (
+CREATE TABLE  `c_country` (
   `id_c_country` int(11) NOT NULL AUTO_INCREMENT,
   `country_name` varchar(255) NOT NULL,
   `flag` varchar(255) NOT NULL,
@@ -9,14 +9,14 @@ CREATE TABLE  `enpiclima`.`c_country` (
 
 
 
-CREATE TABLE  `enpiclima`.`c_visibility` (
+CREATE TABLE  `c_visibility` (
   `id_c_visibility` int(11) NOT NULL AUTO_INCREMENT,
   `visibility_label` varchar(255) NOT NULL,
   PRIMARY KEY (`id_c_visibility`)
 ) ENGINE=MyISAM;
 
 
-CREATE TABLE  `enpiclima`.`c_doc` (
+CREATE TABLE  `c_doc` (
   `id_c_doc` int(11) NOT NULL AUTO_INCREMENT,
   `doc_path` varchar(255) DEFAULT NULL,
   `doc_title` varchar(255) DEFAULT NULL,
