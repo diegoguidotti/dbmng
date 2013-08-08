@@ -311,27 +311,25 @@ function dbmng_leaflet(data, aForm, aParam){
 
 		if(v.geojson!=null){
 
-
-
 			//transform the string in an object
 			var geo = JSON.parse(v.geojson);
-			//add the variable to geojson (geo is a featurecollection we need to assiign the value to the first and only feature
-			//geo.features[0]['custom_var']=v;
-			//console.log(geo);
+			geo['features'][0]['custom_vars']=v;
 
-			
-			var feature=L.geoJson(geo);
+			var style={color: "#FFFFFF", "opacity": 0.8, "fillColor": "#ff7800", "fillOpacity": 0.3};;
 
-			var html = "<h3>"+v.country_name+"</h3>";
-			html += '<img src="'+base_path+v.flag+'"/>';
-			html += '<a href="'+base_path+'climasouth/country?id_c_country='+v.id_c_country+'">go to page</a>';
-			//html += '<a href="?id_c_country='+v.id_c_country+'">go to page</a>';
+
+			//create a feature
+			var feature=L.geoJson(geo, {style: style });
+
+			var html = "<div class='climasouth_popup'>";
+			html +='<h3><a href="'+base_path+'climasouth/country?id_c_country='+v.id_c_country+'">'+v.country_name+'</a></h3>';
+			html += '<img src="'+base_path+v.flag+'"/><br/>';
+
+			//html += '<a href="'+base_path+'climasouth/country?id_c_country='+v.id_c_country+'">'+Drupal.t('go to page')+'</a></div>';
 			feature.bindPopup(html);
 
 
 			feature.addTo(map);
-			//console.log(geo);
-
 		}
 	});	
 }
