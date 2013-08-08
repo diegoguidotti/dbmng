@@ -85,7 +85,7 @@ function lst_country()
 
 			//$html.='<h3>'.$cnt->country_name.'</h3>';
 
-			drupal_set_title($cnt->country_name);
+			drupal_set_title(t($cnt->country_name));
 			
 						
 			$html.= '<div id="climasouth_country">';
@@ -103,6 +103,7 @@ function lst_country()
 	else 
 		{
 			$aForm    = dbmng_get_form_array("c_country"); 	
+			drupal_set_title(t("Countries"));
 
 			$html .= '<div id="map_container" style="width:960px; height:500px;"  ></div>';
 
