@@ -44,7 +44,11 @@ function climasouth_block_view($delta='')
 }
 
 function _climasouth_map_block() {
-	$html = lst_country();
+
+	dbmng_add_drupal_libraries();
+
+	$html =  _climasouth_maps(true);
+
 
 	return $html;
 }
@@ -87,15 +91,19 @@ function climasouth_menu()
       'type' => MENU_CALLBACK,
    );
 
+  $items['climasouth/workspace'] = array(
+      'title' => 'Collaborative Workspaces',
+      'page callback' => '_climasouth_workspace',
+      'access arguments' => array('access content'),
+      'type' => MENU_CALLBACK,
+   );
+
   return $items;
 }
 
 function lst_country() 
 {
 
-	drupal_add_css( "sites/all/modules/climasouth/climasouth.css" );
-	drupal_add_css('http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css',array('type' => 'external'));
-  drupal_add_js('http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js',array('type' => 'external'));
 
 	//important add dbmng js & css
 	dbmng_add_drupal_libraries();
@@ -129,18 +137,63 @@ function lst_country()
 		}
 	else 
 		{
-			$aForm    = dbmng_get_form_array("c_country"); 	
-			drupal_set_title(t("Countries"));
-
-			$html .= '<div id="map_container" style="width:960px; height:400px;"  ></div>';
-
-			$html .= "\n<script type='text/javascript'>\n";
-			$html .= "var data=".dbmng_get_js_array($aForm, null).";\n";
-			$html .= "var aForm=".json_encode($aForm).";\n";
-			$html .= "var aParam={ 'div_element':'map_container', 'zoom': 4, 'base_path':'".base_path()."', 'coord': [30, 13] };\n";
-			$html .= "dbmng_leaflet(data,aForm, aParam);\n";
-			$html .= "</script>\n";
+			 $html.=  _climasouth_maps(false);
 		}
 	
   return ($html);
 }
+
+
+
+function _climasouth_maps($block) 
+	{
+		$html='';
+
+		drupal_add_css( "sites/all/modules/climasouth/climasouth.css" );
+		drupal_add_css('http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css',array('type' => 'external'));
+		drupal_add_js('http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js',array('type' => 'external'));
+
+
+		$aForm    = dbmng_get_form_array("c_country"); 	
+		//TODO: do not change title if called in a block
+
+		$height="350";
+		if(!$block)
+			{
+				drupal_set_title(t("Countries"));
+				$height="550";
+			}
+
+		$html .= '<div id="map_container" style="width:960px; height:'.$height.'px;"  ></div>';
+
+		$html .= "\n<script type='text/javascript'>\n";
+		$html .= "var data=".dbmng_get_js_array($aForm, null).";\n";
+		$html .= "var aForm=".json_encode($aForm).";\n";
+		$html .= "var aParam={ 'div_element':'map_container', 'zoom': 4, 'base_path':'".base_path()."', 'coord': [30, 13] };\n";
+		$html .= "dbmng_leaflet(data,aForm, aParam);\n";
+		$html .= "</script>\n";
+
+		return $html;
+	}
+
+
+function _climasouth_workspace() 
+	{
+
+		$html='';
+
+		global $user;
+
+		if ($user->uid) 
+			{
+				$html.='Add here the tables!';
+				
+			}
+		else 
+			{
+				$html.='Only for registered users';
+			}
+
+		return $html;
+
+	}
