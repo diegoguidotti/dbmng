@@ -13,6 +13,9 @@ function climasouth_block_info()
 	$blocks['climasud_test'] = array(
 		'info' => t('Climasouth test block'),
 		);
+	$blocks['climasouth_map'] = array(
+		'info' => t('Climasouth Map block'),
+		);
 	
 	return $blocks;
 }
@@ -26,13 +29,23 @@ function climasouth_block_view($delta='')
 			case 'climasud_test' :
 				$block['content'] = _climasouth_block();
 				break;
+			case 'climasouth_map' :
+				$block['content'] = _climasouth_map_block();
+				break;
 		}
 	
 	return $block;
 }
 
+function _climasouth_map_block() {
+	$html = lst_country();
+
+	return $html;
+}
+
 function _climasouth_block() {
-	$html='';
+	$html = "";
+
 	return $html;
 }
 
@@ -86,15 +99,9 @@ function lst_country()
 			}			 
 
 			$html.= '</div>';
-
-
 		}
 	else 
 		{
-	
-
-
-			
 			$aForm    = dbmng_get_form_array("c_country"); 	
 
 			$html .= '<div id="map_container" style="width:600px; height:500px;"  ></div>';
@@ -107,7 +114,5 @@ function lst_country()
 			$html .= "</script>\n";
 		}
 	
-	
   return ($html);
-
 }
