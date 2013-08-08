@@ -132,7 +132,7 @@ function lst_country()
 			$aForm    = dbmng_get_form_array("c_country"); 	
 			drupal_set_title(t("Countries"));
 
-			$html .= '<div id="map_container" style="width:960px; height:500px;"  ></div>';
+			$html .= '<div id="map_container" style="width:960px; height:400px;"  ></div>';
 
 			$html .= "\n<script type='text/javascript'>\n";
 			$html .= "var data=".dbmng_get_js_array($aForm, null).";\n";
