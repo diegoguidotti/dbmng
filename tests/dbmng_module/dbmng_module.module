@@ -1,6 +1,6 @@
 <?php
-include_once "sites/all/library/dbmng/dbmng.php";
-include_once "sites/all/library/dbmng/dbmng_sql_functions.php";
+include_once "sites/all/libraries/dbmng/dbmng.php";
+//include_once "sites/all/libraries/dbmng/dbmng_sql_functions.php";
 
 //******************************************************************************
 // Drupal Module 

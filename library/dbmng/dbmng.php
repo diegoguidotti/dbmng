@@ -4,7 +4,7 @@
 //use by default the Drupal location for library
 if(!defined( 'DBMNG_LIB_PATH'))
 	{
-		define( 'DBMNG_LIB_PATH', 'sites/all/library/dbmng/' ); 
+		define( 'DBMNG_LIB_PATH', 'sites/all/libraries/dbmng/' ); 
 	}
 
 
@@ -785,9 +785,9 @@ function dbmng_value_prepare_html($fld_value, $value)
 function dbmng_add_drupal_libraries()
 	{
 		drupal_add_css( "sites/all/modules/dbmng_module/dbmng_module.css" );
-		drupal_add_css( "sites/all/library/dbmng/assets/dbmng.css" );
-		drupal_add_js ( "sites/all/library/dbmng/assets/dbmng.js" );
-		drupal_add_js ( "sites/all/library/dbmng/assets/jquery.tablesorter.js" );
+		drupal_add_css( "sites/all/libraries/dbmng/assets/dbmng.css" );
+		drupal_add_js ( "sites/all/libraries/dbmng/assets/dbmng.js" );
+		drupal_add_js ( "sites/all/libraries/dbmng/assets/jquery.tablesorter.js" );
 		drupal_add_library('system','ui.datepicker');
 	}
 
