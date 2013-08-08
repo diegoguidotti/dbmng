@@ -104,12 +104,12 @@ function lst_country()
 		{
 			$aForm    = dbmng_get_form_array("c_country"); 	
 
-			$html .= '<div id="map_container" style="width:600px; height:500px;"  ></div>';
+			$html .= '<div id="map_container" style="width:960px; height:500px;"  ></div>';
 
 			$html .= "\n<script type='text/javascript'>\n";
 			$html .= "var data=".dbmng_get_js_array($aForm, null).";\n";
 			$html .= "var aForm=".json_encode($aForm).";\n";
-			$html .= "var aParam={ 'div_element':'map_container', 'zoom': 3, 'base_path':'".base_path()."' };\n";
+			$html .= "var aParam={ 'div_element':'map_container', 'zoom': 4, 'base_path':'".base_path()."', 'coord': [30, 13] };\n";
 			$html .= "dbmng_leaflet(data,aForm, aParam);\n";
 			$html .= "</script>\n";
 		}
