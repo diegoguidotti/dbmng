@@ -7,8 +7,6 @@ CREATE TABLE  `c_country` (
 ) ENGINE=MyISAM;
 
 
-
-
 CREATE TABLE  `c_visibility` (
   `id_c_visibility` int(11) NOT NULL AUTO_INCREMENT,
   `visibility_label` varchar(255) NOT NULL,
@@ -28,5 +26,8 @@ CREATE TABLE  `c_doc` (
 ) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=latin1
 
 
+
+
+alter table `c_country` add column   `html_content` text;
 
 

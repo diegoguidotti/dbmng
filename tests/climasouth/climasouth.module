@@ -54,27 +54,58 @@ function lst_country()
 {
 
 	drupal_add_css( "sites/all/modules/climasouth/climasouth.css" );
-
-		drupal_add_css('http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css',array('type' => 'external'));
-    drupal_add_js('http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js',array('type' => 'external'));
+	drupal_add_css('http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css',array('type' => 'external'));
+  drupal_add_js('http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js',array('type' => 'external'));
 
 	//important add dbmng js & css
 	dbmng_add_drupal_libraries();
 
 	$html = "";
 
-	$aForm    = dbmng_get_form_array("c_country"); 
+	if(isset($_REQUEST['id_c_country']))
+		{
+			$id_c_country=$_REQUEST['id_c_country'];
+			
+			$res = dbmng_query('select * from c_country WHERE id_c_country=:id_c_country', array('id_c_country' => intval($id_c_country) ));
+			
+			$cnt = dbmng_fetch_object($res);
+
+			//$html.='<h3>'.$cnt->country_name.'</h3>';
+
+			drupal_set_title($cnt->country_name);
+			
+						
+			$html.= '<div id="climasouth_country">';
+
+			if(	$cnt->flag !=null){				
+				$html.='<img id="climasouth_flag" src="'.base_path().$cnt->flag.'" />';
+			}			 
+
+			if(	$cnt->html_content !=null){				
+				$html.=$cnt->html_content;
+			}			 
+
+			$html.= '</div>';
+
+
+		}
+	else 
+		{
 	
 
-	$html .= '<div id="map_container" style="width:600px; height:500px;"  ></div>';
 
-	$html .= "\n<script type='text/javascript'>\n";
-	$html .= "var data=".dbmng_get_js_array($aForm, null).";\n";
-	$html .= "var aForm=".json_encode($aForm).";\n";
-	$html .= "var aParam={ 'div_element':'map_container', 'zoom': 3, 'base_path':'".base_path()."' };\n";
-	$html .= "dbmng_leaflet(data,aForm, aParam);\n";
-	$html .= "</script>\n";
+			
+			$aForm    = dbmng_get_form_array("c_country"); 	
 
+			$html .= '<div id="map_container" style="width:600px; height:500px;"  ></div>';
+
+			$html .= "\n<script type='text/javascript'>\n";
+			$html .= "var data=".dbmng_get_js_array($aForm, null).";\n";
+			$html .= "var aForm=".json_encode($aForm).";\n";
+			$html .= "var aParam={ 'div_element':'map_container', 'zoom': 3, 'base_path':'".base_path()."' };\n";
+			$html .= "dbmng_leaflet(data,aForm, aParam);\n";
+			$html .= "</script>\n";
+		}
 	
 	
   return ($html);
