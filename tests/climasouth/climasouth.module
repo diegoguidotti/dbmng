@@ -55,23 +55,23 @@ function lst_country()
 
 	drupal_add_css( "sites/all/modules/climasouth/climasouth.css" );
 
-				drupal_add_css('http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css',array('type' => 'external'));
-        drupal_add_js('http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js',array('type' => 'external'));
+		drupal_add_css('http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css',array('type' => 'external'));
+    drupal_add_js('http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js',array('type' => 'external'));
 
 	//important add dbmng js & css
 	dbmng_add_drupal_libraries();
 
-	$html = "lst_country";
+	$html = "";
 
 	$aForm    = dbmng_get_form_array("c_country"); 
 	
 
-	$html .= '<div id="map" style="width:600px; height:500px;"  ></div>';
+	$html .= '<div id="map_container" style="width:600px; height:500px;"  ></div>';
 
 	$html .= "\n<script type='text/javascript'>\n";
 	$html .= "var data=".dbmng_get_js_array($aForm, null).";\n";
 	$html .= "var aForm=".json_encode($aForm).";\n";
-	$html .= "var aParam={'div_element':'map'};\n";
+	$html .= "var aParam={ 'div_element':'map_container', 'zoom': 3, 'base_path':'".base_path()."' };\n";
 	$html .= "dbmng_leaflet(data,aForm, aParam);\n";
 	$html .= "</script>\n";
 
