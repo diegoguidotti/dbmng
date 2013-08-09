@@ -298,6 +298,14 @@ function dbmng_manager()
 													 'key' => 0,
 													 'type'  => 'int',
 										),
+									'is_searchable'     => 
+										array('label'   => t('Search'), 
+													'label_long' => t('Searchable'),
+													'key' => 0,
+													'type' => 'int', 
+													'widget'=>'checkbox',
+													'skip_in_tbl' => '1'
+										),
 									'skip_in_tbl'     => 
 										array('label'   => t('Skip'), 
 													'label_long' => t('Skip in table view'),
