@@ -454,13 +454,20 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 							$widget='input';
 							if(isset($fld_value['widget']))
 								$widget=$fld_value['widget'];
-							
+
+							$is_searchable = true;
+
 							$is_searchable = false;
-							if( $fld_value['is_searchable']==1 )
-								$is_searchable = true;
+							if(isset($fld_value['is_searchable']))
+								{
+									if( $fld_value['is_searchable']==1 )
+										$is_searchable = true;
+								}
+
+
 								
 							//generate the form label
-							if( $_REQUEST['act'] == 'ins' || $is_searchable )
+							if( $_REQUEST['act'] == 'ins' || $_REQUEST['act'] == 'upd' || $is_searchable )
 								{
 									$html .= layout_get_label($fld, $fld_value);
 								}
@@ -475,7 +482,7 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 								}
 							else
 								{
-									if( $_REQUEST['act'] == 'ins' || $is_searchable )
+									if( $_REQUEST['act'] == 'ins' || $_REQUEST['act'] == 'upd' || $is_searchable )
 										{
 											if ($widget==='textarea')
 												{
