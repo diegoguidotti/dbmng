@@ -104,6 +104,7 @@ function dbmng_get_form_array($id_table)
 																					 'value' => null, 
 																					 'nullable' => $fld->nullable, 
 																					 'default' => $fld->default_value,
+																					 'is_searchable' => $fld->is_searchable,
 																					 'key' => $fld->pk, //MM [26-07-13]
 																					 'field_function' => $fld->field_function,
 																					 'label_long' => $sLabelLong,
@@ -238,17 +239,17 @@ function dbmng_get_data($aForm, $aParam)
 
 		if(isset($_REQUEST['act']))
 			{
-					if($_REQUEST['act']=='do_search')
-						{
-							if(isset($_REQUEST['id_c_country']))
-								{
-									if($_REQUEST['id_c_country']!='')
-										{
-											$where.=" AND id_c_country = :id_c_country ";
-											$var = array_merge($var, array(":id_c_country" => $_REQUEST['id_c_country']));
-										}
-								}
-						}
+				if($_REQUEST['act']=='do_search')
+					{
+						if(isset($_REQUEST['id_c_country']))
+							{
+								if($_REQUEST['id_c_country']!='')
+									{
+										$where.=" AND id_c_country = :id_c_country ";
+										$var = array_merge($var, array(":id_c_country" => $_REQUEST['id_c_country']));
+									}
+							}
+					}
 			}
 
 
@@ -451,9 +452,17 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 							$widget='input';
 							if(isset($fld_value['widget']))
 								$widget=$fld_value['widget'];
-
+							
+							$is_searchable = false;
+							if( $fld_value['is_searchable']==1 )
+								$is_searchable = true;
+								
 							//generate the form label
-							$html .= layout_get_label($fld, $fld_value);
+							if( $_REQUEST['act'] == 'ins' || $is_searchable )
+								{
+									$html .= layout_get_label($fld, $fld_value);
+								}
+								
 							$html.='<div class="dbmbg_form_element">';
 							
 							// Do not show input or seletc field for PK
@@ -464,43 +473,46 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 								}
 							else
 								{
-									if ($widget==='textarea')
+									if( $_REQUEST['act'] == 'ins' || $is_searchable )
 										{
-											$html .= layout_form_textarea( $fld, $fld_value, $value );
-										}
-									else if ($widget==='checkbox')
-										{
-											$html .= layout_form_checkbox( $fld, $fld_value, $value );
-										}
-									else if ($widget==='select')
-										{
-											$html .= layout_form_select( $fld, $fld_value, $value );
-										}
-									else if ($widget==='date')
-										{
-											$html .= layout_form_date( $fld, $fld_value, $value );
-										}
-									else if ($widget==='file')
-										{
-											$html .= layout_form_file( $fld, $fld_value, $value );
-										}
-									else if ($widget==='password')
-										{
-											$html .= layout_form_password( $fld, $fld_value, $value );
-										}
-									else if ($widget==='multi')
-										{
-											$html .= layout_form_multi( $fld, $fld_value, $value );
-										}
-									else //use input by default
-										{
-		                  $more='';
-											if(dbmng_is_field_type_numeric($fld_value['type']))
+											if ($widget==='textarea')
 												{
-													$more="onkeypress=\"dbmng_validate_numeric(event)\"";		
-												}  
-												
-											$html .= layout_form_input( $fld, $fld_value, $value, $more );		
+													$html .= layout_form_textarea( $fld, $fld_value, $value );
+												}
+											else if ($widget==='checkbox')
+												{
+													$html .= layout_form_checkbox( $fld, $fld_value, $value );
+												}
+											else if ($widget==='select')
+												{
+													$html .= layout_form_select( $fld, $fld_value, $value );
+												}
+											else if ($widget==='date')
+												{
+													$html .= layout_form_date( $fld, $fld_value, $value );
+												}
+											else if ($widget==='file')
+												{
+													$html .= layout_form_file( $fld, $fld_value, $value );
+												}
+											else if ($widget==='password')
+												{
+													$html .= layout_form_password( $fld, $fld_value, $value );
+												}
+											else if ($widget==='multi')
+												{
+													$html .= layout_form_multi( $fld, $fld_value, $value );
+												}
+											else //use input by default
+												{
+				                  $more='';
+													if(dbmng_is_field_type_numeric($fld_value['type']))
+														{
+															$more="onkeypress=\"dbmng_validate_numeric(event)\"";		
+														}  
+														
+													$html .= layout_form_input( $fld, $fld_value, $value, $more );		
+												}
 										}
 								}
 							$html.='</div>';
