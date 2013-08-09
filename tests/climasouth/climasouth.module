@@ -43,36 +43,35 @@ function climasouth_block_view($delta='')
 	return $block;
 }
 
-function _climasouth_map_block() {
-
+function _climasouth_map_block() 
+{
 	dbmng_add_drupal_libraries();
 
 	$html =  _climasouth_maps(true);
 
-
 	return $html;
 }
 
-function _climasouth_block() {
+function _climasouth_block() 
+{
 	$html = "";
 
 	return $html;
 }
 
-function _climasouth_login() {
-
+function _climasouth_login() 
+{
 	$html = '<div id="climasouth_login">';	
 	global $user;
 
 	if ($user->uid) 
 		{
 		 $html .= '<span class="climasouth_username">'.l($user->name, 'user').'</span> - ';
-		 $html .= l(t('logout'), 'user/logout');
-
+		 $html .= l(t('log out'), 'user/logout');
 		}
 	else
 		{
-			$html .=  l(t('login'), 'user');
+			$html .=  l(t('log in'), 'user');
 		}
 
 	$html.='</div>';
@@ -103,8 +102,6 @@ function climasouth_menu()
 
 function lst_country() 
 {
-
-
 	//important add dbmng js & css
 	dbmng_add_drupal_libraries();
 
@@ -125,13 +122,15 @@ function lst_country()
 						
 			$html.= '<div id="climasouth_country">';
 
-			if(	$cnt->flag !=null){				
-				$html.='<img id="climasouth_flag" src="'.base_path().$cnt->flag.'" />';
-			}			 
+			if(	$cnt->flag !=null)
+				{				
+					$html.='<img id="climasouth_flag" src="'.base_path().$cnt->flag.'" />';
+				}			 
 
-			if(	$cnt->html_content !=null){				
-				$html.=$cnt->html_content;
-			}			 
+			if(	$cnt->html_content !=null)
+				{				
+					$html.=$cnt->html_content;
+				}			 
 
 			$html.= '</div>';
 		}
@@ -146,54 +145,89 @@ function lst_country()
 
 
 function _climasouth_maps($block) 
-	{
-		$html='';
+{
+	$html='';
 
-		drupal_add_css( "sites/all/modules/climasouth/climasouth.css" );
-		drupal_add_css('http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css',array('type' => 'external'));
-		drupal_add_js('http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js',array('type' => 'external'));
+	drupal_add_css( "sites/all/modules/climasouth/climasouth.css" );
+	drupal_add_css('http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css',array('type' => 'external'));
+	drupal_add_js('http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js',array('type' => 'external'));
 
 
-		$aForm    = dbmng_get_form_array("c_country"); 	
-		//TODO: do not change title if called in a block
+	$aForm    = dbmng_get_form_array("c_country"); 	
+	//TODO: do not change title if called in a block
 
-		$height="350";
-		if(!$block)
-			{
-				drupal_set_title(t("Countries"));
-				$height="550";
-			}
+	$height="350";
+	if(!$block)
+		{
+			drupal_set_title(t("Countries"));
+			$height="550";
+		}
 
-		$html .= '<div id="map_container" style="width:960px; height:'.$height.'px;"  ></div>';
+	$html .= '<div id="map_container" style="width:960px; height:'.$height.'px;"  ></div>';
 
-		$html .= "\n<script type='text/javascript'>\n";
-		$html .= "var data=".dbmng_get_js_array($aForm, null).";\n";
-		$html .= "var aForm=".json_encode($aForm).";\n";
-		$html .= "var aParam={ 'div_element':'map_container', 'zoom': 4, 'base_path':'".base_path()."', 'coord': [30, 13] };\n";
-		$html .= "dbmng_leaflet(data,aForm, aParam);\n";
-		$html .= "</script>\n";
+	$html .= "\n<script type='text/javascript'>\n";
+	$html .= "var data=".dbmng_get_js_array($aForm, null).";\n";
+	$html .= "var aForm=".json_encode($aForm).";\n";
+	$html .= "var aParam={ 'div_element':'map_container', 'zoom': 4, 'base_path':'".base_path()."', 'coord': [30, 13] };\n";
+	$html .= "dbmng_leaflet(data,aForm, aParam);\n";
+	$html .= "</script>\n";
 
-		return $html;
-	}
+	return $html;
+}
 
 
 function _climasouth_workspace() 
-	{
+{
+	dbmng_add_drupal_libraries();
 
-		$html='';
+	$html='';
 
-		global $user;
+	global $user;
 
-		if ($user->uid) 
-			{
-				$html.='Add here the tables!';
-				
-			}
-		else 
-			{
-				$html.='Only for registered users';
-			}
+	if ($user->uid) 
+		{
+			if( !isset($_REQUEST['act']) )
+				{
+					$html .= "Edit my data\n";
+					$html .= "<ul>\n";
+					$html .= "<li>add a resources</li>\n";
+					$html .= "<li>add an <a href='?act=ins&tbl=c_expert'>expert</a></li>\n"; 
+					$html .= "<li>add an organisation</li>\n";
+					$html .= "<li>add a link</li>\n";
+					$html .= "<li>add a project</li>\n";
+					$html .= "</ul>\n";
+					$html .= "Search my data\n";
+					$html .= "<ul>\n";
+					$html .= "<li>Search for resources</li>\n";
+					$html .= "<li><a href='?tbl=c_expert'>Search for expert or organisation</a></li>\n";
+					$html .= "<li>Search for related project</li>\n";
+					$html .= "</ul>\n";
+				}
 
-		return $html;
+			if( isset($_REQUEST['tbl']) )
+				{
+					//get the form!!!
+					$id_table = $_REQUEST['tbl'];
+					$aForm    = dbmng_get_form_array(($id_table));
+		
+					//the param array stores some custom variable used by the renderer
+					//hidden_vars are some hidden variables used by the form creation
+					global $user;
+					unset($aParam);
+					$aParam                          = array();
+					$aParam['filters']               = array();
+					$aParam['hidden_vars']           = array();
+					$aParam['hidden_vars']['tbl']	   = $_REQUEST['tbl']; //save the table id
+		
+					$aParam['tbl_sorter']              = '1';
+					// update record
+					$html .= dbmng_crud($aForm, $aParam);
+				}
+		}
+	else 
+		{
+			$html.=t('Only for registered users');
+		}
 
-	}
+	return $html;
+}
