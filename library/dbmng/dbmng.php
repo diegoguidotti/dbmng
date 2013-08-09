@@ -218,6 +218,9 @@ function dbmng_crud($aForm, $aParam=null)
 */
 function dbmng_get_data($aForm, $aParam) 
 {
+
+	//print_r($_REQUEST);
+
 	$var=array();
 	// Initialize where clause and hidden variables
 	$where = " WHERE 1=1 ";
@@ -231,6 +234,21 @@ function dbmng_get_data($aForm, $aParam)
 									$var = array_merge($var, array(":$x" => $x_value));
 							}					
 					}
+			}
+
+		if(isset($_REQUEST['act']))
+			{
+					if($_REQUEST['act']=='do_search')
+						{
+							if(isset($_REQUEST['id_c_country']))
+								{
+									if($_REQUEST['id_c_country']!='')
+										{
+											$where.=" AND id_c_country = :id_c_country ";
+											$var = array_merge($var, array(":id_c_country" => $_REQUEST['id_c_country']));
+										}
+								}
+						}
 			}
 
 
