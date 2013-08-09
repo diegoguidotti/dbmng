@@ -13,4 +13,3 @@ CREATE TABLE  c_expert (
   PRIMARY KEY (id_c_expert)
 ) ENGINE=MyISAM;
 
-

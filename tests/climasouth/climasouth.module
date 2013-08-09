@@ -186,20 +186,20 @@ function _climasouth_workspace()
 
 	if ($user->uid) 
 		{
-			if( !isset($_REQUEST['act']) )
+			if( !isset($_REQUEST['tbl']) )
 				{
 					$html .= "Edit my data\n";
 					$html .= "<ul>\n";
 					$html .= "<li>add a resources</li>\n";
 					$html .= "<li>add an <a href='?act=ins&tbl=c_expert'>expert</a></li>\n"; 
-					$html .= "<li>add an organisation</li>\n";
+					$html .= "<li>add an <a href='?act=ins&tbl=c_institution'>institution</a></li>\n";
 					$html .= "<li>add a link</li>\n";
-					$html .= "<li>add a project</li>\n";
+					$html .= "<li>add a <a href='?act=ins&tbl=c_project'>project</a></li>\n";
 					$html .= "</ul>\n";
 					$html .= "Search my data\n";
 					$html .= "<ul>\n";
 					$html .= "<li>Search for resources</li>\n";
-					$html .= "<li><a href='?tbl=c_expert'>Search for expert or organisation</a></li>\n";
+					$html .= "<li><a href='?act=search&tbl=c_expert'>Search for expert or organisation</a></li>\n";
 					$html .= "<li>Search for related project</li>\n";
 					$html .= "</ul>\n";
 				}

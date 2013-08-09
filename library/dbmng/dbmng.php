@@ -177,15 +177,18 @@ function dbmng_crud($aForm, $aParam=null)
 
 	//show table if there is no act or it's working on update or duplicate
 	$view_table = true;
-	$do_update = false;
+	$do_update = 0; //false;
 
 	if( isset($_REQUEST["act"]) )
 		{
-			if($_REQUEST["act"]=='ins' || $_REQUEST["act"]=='upd' )
+			if($_REQUEST["act"]=='ins' || $_REQUEST["act"]=='upd' || $_REQUEST["act"]=='search' )
 				{
 					$view_table = false;
 					if($_REQUEST["act"]=='upd')
-						$do_update=true;							
+						$do_update = 1; //true;
+					
+					if($_REQUEST["act"]=='search')
+						$do_update = 2;
 				}
 			else
 				{
@@ -356,7 +359,7 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 	$html      = "";
 	
 	//create the $val array storing all the record data
-  if( $do_update )
+  if( $do_update == 1 )
     {
 			$where = "";
 			$var = array();
@@ -413,7 +416,7 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 			if(!$custom_function_exists)
 				{
 					$value= null;
-					if($do_update)
+					if($do_update == 1)
 						{
 							if(isset($vals->$fld))
 								$value = $vals->$fld;
@@ -436,7 +439,7 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 							$html.='<div class="dbmbg_form_element">';
 							
 							// Do not show input or seletc field for PK
-							if($do_update && dbmng_check_is_pk($fld_value))
+							if($do_update == 1 && dbmng_check_is_pk($fld_value))
 								{
 									$html .= dbmng_value_prepare_html( $fld_value, $value );
 									$html .= layout_form_hidden( $fld, $value );
@@ -492,17 +495,23 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 				} //End of fields
 		} //End of form
 		
-	if( $do_update )
+	if( $do_update == 1 )
 		{
 			$html .= "<input type='hidden' name='act' value='do_upd' />\n";
 			$html .= "<input type='hidden' name='tbln' value='" . $aForm['table_name'] . "' />\n";
 			$html .= "<div class='dbmng_form_button'><input  type='submit' value='". t('Update') ."' /></div>\n";
 		}
-	else
+	elseif( $do_update == 0 )
 		{
 			$html .= "<input type='hidden' name='act' value='do_ins' />\n";
 			$html .= "<input type='hidden' name='tbln' value='" . $aForm['table_name'] . "' />\n";
 			$html .= "<div class='dbmng_form_button'><input class='dbmng_form_button' type='submit' value='" . t('Insert') . "' /></div>\n";
+		}
+	elseif( $do_update == 2 )
+		{
+			$html .= "<input type='hidden' name='act' value='do_search' />\n";
+			$html .= "<input type='hidden' name='tbln' value='" . $aForm['table_name'] . "' />\n";
+			$html .= "<div class='dbmng_form_button'><input class='dbmng_form_button' type='submit' value='" . t('Search') . "' /></div>\n";
 		}
 
   $html .= "</form>\n";

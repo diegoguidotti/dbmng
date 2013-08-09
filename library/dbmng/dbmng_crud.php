@@ -6,7 +6,7 @@
 /// This function prepare the form process (update, insert, delete, duplicate)
 /**
 \param $aForm  		Associative array with all the characteristics
-\param $aParam  		Associative array with some custom variable used by the renderer
+\param $aParam  	Associative array with some custom variable used by the renderer
 \return           HTML generated code
 */
 function dbmng_create_form_process($aForm, $aParam) 
@@ -31,6 +31,10 @@ function dbmng_create_form_process($aForm, $aParam)
 					// duplicate record
 					if($_REQUEST['act']=='dup')
 						dbmng_duplicate($aForm, $aParam);
+
+					// duplicate record
+					if($_REQUEST['act']=='do_search')
+						dbmng_search($aForm, $aParam);
 				}
 			else
 				{
@@ -46,6 +50,7 @@ function dbmng_create_form_process($aForm, $aParam)
 /// This function delete the selected record
 /**
 \param $aForm  		Associative array with all the characteristics
+\param $aParam  	Associative array with some custom variable used by the renderer
 */
 function dbmng_delete($aForm, $aParam) 
 {
@@ -67,6 +72,25 @@ function dbmng_delete($aForm, $aParam)
 					$where = substr($where, 0, strlen($where)-4);
 					//TODO: add also filter fields in delete/update
 					$result = dbmng_query("delete from " . $aForm['table_name'] . " WHERE $where ", $var);
+				}
+		}
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// dbmng_search
+// ======================
+/// This function return a subset of data
+/**
+\param $aForm  		Associative array with all the characteristics
+\param $aParam  	Associative array with some custom variable used by the renderer
+*/
+function dbmng_search($aForm, $aParam) 
+{
+	if( isset($_REQUEST['act']) )
+		{
+			if( $_REQUEST['act'] == 'do_search' )
+				{
+
 				}
 		}
 }
@@ -100,6 +124,7 @@ function dbmng_check_is_autopk($fld_value)
 /// This function duplicate the selected record
 /**
 \param $aForm  		Associative array with all the characteristics
+\param $aParam  	Associative array with some custom variable used by the renderer
 */
 function dbmng_duplicate($aForm, $aParam) 
 {
@@ -154,6 +179,7 @@ function dbmng_duplicate($aForm, $aParam)
 /// This function insert a new record
 /**
 \param $aForm  		Associative array with all the characteristics
+\param $aParam  	Associative array with some custom variable used by the renderer
 */
 function dbmng_insert($aForm, $aParam) 
 {
@@ -200,6 +226,7 @@ function dbmng_insert($aForm, $aParam)
 /// This function upload the selected file in the server
 /**
 \param $aForm  		Associative array with all the characteristics
+\param $aParam  	Associative array with some custom variable used by the renderer
 */
 function dbmng_create_form_upload_file($aForm, $aParam) 
 {
@@ -229,6 +256,7 @@ function dbmng_create_form_upload_file($aForm, $aParam)
 /// This function update an existing record
 /**
 \param $aForm  		Associative array with all the characteristics
+\param $aParam  	Associative array with some custom variable used by the renderer
 */
 function dbmng_update($aForm, $aParam) 
 {
