@@ -219,49 +219,51 @@ function dbmng_crud($aForm, $aParam=null)
 */
 function dbmng_get_data($aForm, $aParam) 
 {
-
-	//print_r($_REQUEST);
-
 	$var=array();
 	// Initialize where clause and hidden variables
 	$where = " WHERE 1=1 ";
-		if(isset($aParam))
-			{
-				if( isset($aParam['filters']) )
-					{
-						foreach ( $aParam['filters'] as $x => $x_value )
-							{				
-									$where.=" AND $x = :$x ";
-									$var = array_merge($var, array(":$x" => $x_value));
-							}					
-					}
-			}
+	if(isset($aParam))
+		{
+			if( isset($aParam['filters']) )
+				{
+					foreach ( $aParam['filters'] as $x => $x_value )
+						{				
+								$where.=" AND $x = :$x ";
+								$var = array_merge($var, array(":$x" => $x_value));
+						}					
+				}
+		}
 
-		if(isset($_REQUEST['act']))
-			{
-				if($_REQUEST['act']=='do_search')
-					{
-						if(isset($_REQUEST['id_c_country']))
-							{
-								if($_REQUEST['id_c_country']!='')
-									{
-										$where.=" AND id_c_country = :id_c_country ";
-										$var = array_merge($var, array(":id_c_country" => $_REQUEST['id_c_country']));
-									}
-							}
-					}
-			}
+	if(isset($_REQUEST['act']))
+		{
+			if($_REQUEST['act']=='do_search')
+				{
+					foreach( $aForm['fields'] as $fld => $fld_value )
+						{
+							if( $fld_value['is_searchable'] == 1 )
+								{
+									if(isset($_REQUEST[$fld]))
+										{
+											if( $_REQUEST[$fld] != '' )
+												{
+													$where.=" AND $fld = :$fld ";
+													$var = array_merge($var, array(":$fld" => $_REQUEST[$fld]));
+												}
+										}
+								}
+						}
+				}
+		}
 
+	$order_by = '';
+	if( isset($aParam['tbl_order']) )
+		$order_by = 'order by ' . $aParam['tbl_order'];
+		
+  $sql = 'select * from ' . $aForm['table_name'].' '. $where . ' ' . $order_by;
 
-		$order_by = '';
-		if( isset($aParam['tbl_order']) )
-			$order_by = 'order by ' . $aParam['tbl_order'];
-			
-	  $sql = 'select * from ' . $aForm['table_name'].' '. $where . ' ' . $order_by;
+	$result = dbmng_query($sql, $var);
 
-		$result = dbmng_query($sql, $var);
-
-		return $result;
+	return $result;
 }
 
 
