@@ -29,3 +29,5 @@ CREATE TABLE  c_project (
   name_project varchar(255),
   PRIMARY KEY (id_c_project)
 ) ENGINE=MyISAM;
+
+ALTER TABLE  dbmng_fields ADD  is_searchable INT( 11 ) NOT NULL AFTER field_order;
