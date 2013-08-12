@@ -56,7 +56,7 @@ function layout_get_nullable($fld_value)
 		$ht = "";
 		if( isset($_REQUEST['act']) )
 			{
-				if( !isset($_REQUEST['act']) == "search" )
+				if( !isset($_REQUEST['act']) == "search" && !isset($_REQUEST['act']) == "do_search" )
 					{
 						if(	isset($fld_value['nullable']) && $fld_value['nullable'] == 0 )
 								$ht .= "required ";
@@ -84,7 +84,7 @@ function layout_get_label($fld, $fld_value)
 		$sRequired = "";
 		if( isset($_REQUEST['act']) )
 			{
-				if( $_REQUEST['act'] != "search" )
+				if( $_REQUEST['act'] != "search" && !$_REQUEST['act'] == "do_search" )
 					{
 						if(isset($fld_value['nullable']) && $fld_value['nullable'] == 0)
 							$sRequired = "<span class='dbmng_required'>*</span>";
