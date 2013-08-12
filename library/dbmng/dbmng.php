@@ -189,7 +189,10 @@ function dbmng_crud($aForm, $aParam=null)
 						$do_update = 1; //true;
 					
 					if($_REQUEST["act"]=='search')
-						$do_update = 2;
+						{
+							$do_update = 2;
+							$view_table = true;
+						}
 				}
 			else
 				{
@@ -200,7 +203,13 @@ function dbmng_crud($aForm, $aParam=null)
 	//echo($_REQUEST["act"]."|".$view_table."|".$do_update);
 
 	if($view_table)
-		$html .= dbmng_create_table($aForm, $aParam);
+		{
+			if( $do_update == 2 )
+				{
+					$html .= dbmng_create_form($aForm, $aParam, $do_update);
+				}
+			$html .= dbmng_create_table($aForm, $aParam);
+		}
 	else
     $html .= dbmng_create_form($aForm, $aParam, $do_update);
 
@@ -246,7 +255,14 @@ function dbmng_get_data($aForm, $aParam)
 										{
 											if( $_REQUEST[$fld] != '' )
 												{
-													$where.=" AND $fld = :$fld ";
+													//if( $fld_value['widget'] == 'input' )
+													//	{
+													//		$where.=" AND $fld like '%:$fld%' ";														
+													//	}
+													//else
+													//	{
+															$where.=" AND $fld = :$fld ";														
+													//	}
 													$var = array_merge($var, array(":$fld" => $_REQUEST[$fld]));
 												}
 										}
