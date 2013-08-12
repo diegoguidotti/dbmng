@@ -182,13 +182,13 @@ function dbmng_crud($aForm, $aParam=null)
 
 	if( isset($_REQUEST["act"]) )
 		{
-			if($_REQUEST["act"]=='ins' || $_REQUEST["act"]=='upd' || $_REQUEST["act"]=='search' )
+			if($_REQUEST["act"]=='ins' || $_REQUEST["act"]=='upd' || $_REQUEST["act"]=='search' || $_REQUEST["act"]=='do_search' )
 				{
 					$view_table = false;
 					if($_REQUEST["act"]=='upd')
 						$do_update = 1; //true;
 					
-					if($_REQUEST["act"]=='search')
+					if($_REQUEST["act"]=='search' || $_REQUEST["act"]=='do_search' )
 						{
 							$do_update = 2;
 							$view_table = true;
@@ -255,15 +255,16 @@ function dbmng_get_data($aForm, $aParam)
 										{
 											if( $_REQUEST[$fld] != '' )
 												{
-													//if( $fld_value['widget'] == 'input' )
-													//	{
-													//		$where.=" AND $fld like '%:$fld%' ";														
-													//	}
-													//else
-													//	{
+													if( $fld_value['widget'] == 'input' )
+														{
+															$where.=" AND $fld like :$fld ";														
+															$var = array_merge($var, array(":$fld" => '%'.$_REQUEST[$fld].'%'));
+														}
+													else
+														{
 															$where.=" AND $fld = :$fld ";														
-													//	}
-													$var = array_merge($var, array(":$fld" => $_REQUEST[$fld]));
+															$var = array_merge($var, array(":$fld" => $_REQUEST[$fld]));
+														}
 												}
 										}
 								}
@@ -436,7 +437,11 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 	$hv =  prepare_hidden_var_form($aParam);
 
 	//render the form
-	$html .= "<div class='dbmng_form' id='dbmng_form_".$aForm['table_name']."' >\n<form method='POST' $more action='?' >\n".$hv."";
+	$class = "dbmng_form";
+	if( $do_update == 2 )
+		$class .= "_search";
+			
+	$html .= "<div class='$class' id='dbmng_form_".$aForm['table_name']."' >\n<form method='POST' $more action='?' >\n".$hv."";
 	foreach ( $aForm['fields'] as $fld => $fld_value )
 		{
 			//render the form field
@@ -457,6 +462,15 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 						{
 							if(isset($vals->$fld))
 								$value = $vals->$fld;
+						}
+					elseif( $do_update == 2 )
+						{
+							if(isset($_REQUEST[$fld]))
+								{
+									$value = $_REQUEST[$fld];
+								}
+							//print_r($_REQUEST);
+					 		//$value = 
 						}
 					elseif( isset($fld_value['default']) && !is_null($fld_value['default'])  )
 						{
