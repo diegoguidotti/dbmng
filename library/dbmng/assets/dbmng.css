@@ -53,8 +53,24 @@ div.dbmng_file_hide_this{
 }
 
 div.dbmng_form_row input.dbmng_file_text  {
-  width: 200px;
+  width: 200px;  
 }
+
+div.dbmng_form_search {
+	padding: 5px;
+}
+
+div.dbmng_form_search div.dbmng_form_row {
+  clear: none;
+
+	float:left;
+	padding: 5px;
+}
+
+div.dbmng_form_search div.dbmng_form_row input, div.dbmng_form_search div.dbmng_form_row select, div.dbmng_form_search div.dbmng_form_row textarea  {
+  width:100px;
+}
+
 
 
 /* Table sorter CSS */
