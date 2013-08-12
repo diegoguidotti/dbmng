@@ -16,7 +16,11 @@ climasouth_login {
 }
 
 
-
+.leaflet-top, .leaflet-bottom {
+    position: absolute !important;
+    z-index: 10 !important;
+    //pointer-events: none;
+}
 
 
 
