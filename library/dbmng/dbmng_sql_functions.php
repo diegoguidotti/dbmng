@@ -60,9 +60,10 @@ function dbmng_query($sql, $var=null)
 			
 		case "drupal":
 
-			if(isset($var)){
-				$res = db_query($sql, $var);
-			}
+			if(isset($var))
+				{
+					$res = db_query($sql, $var);
+				}
 			else 
 				{
 					$res = db_query($sql);
@@ -77,6 +78,15 @@ function dbmng_query($sql, $var=null)
 	print_r( $res );
 	echo "<br /><br />";
 */
+
+	/*
+	$tsql = $sql;
+	foreach ( $var as $k => $k_value )
+		{				
+			$tsql = str_replace($k, $k_value, $tsql);
+		}
+	echo "<br>$tsql</br>";
+	*/
 	return $res;
 }
 
