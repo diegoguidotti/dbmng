@@ -315,7 +315,7 @@ function dbmng_leaflet(data, aForm, aParam){
 			var geo = JSON.parse(v.geojson);
 			geo['features'][0]['custom_vars']=v;
 
-			var style={color: "#FFFFFF", "opacity": 0.8, "fillColor": "#ff7800", "fillOpacity": 0.3};;
+			var style={"color": "#ffffff", "opacity": 0.8, "fillColor": "#ff7800", "fillOpacity": 0.3, "weight":3};;
 
 
 			//create a feature
