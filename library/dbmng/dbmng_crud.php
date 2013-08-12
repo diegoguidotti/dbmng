@@ -39,7 +39,7 @@ function dbmng_create_form_process($aForm, $aParam)
 			else
 				{
 					//TODO: update error message
-					echo 'You have not the right to access to the table you request '.$aForm['table_name'].' '.$_REQUEST['tbln'].'!';
+					echo t('You have not the right to access to the table you request') .  ' ' . $aForm['table_name'] . ' ' . $_REQUEST['tbln'] . '!';
 				}
 		}
 }
