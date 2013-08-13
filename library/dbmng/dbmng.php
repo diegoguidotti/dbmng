@@ -479,13 +479,11 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 					// if( $aForm['primary_key'][0] != $fld ) // $aForm['primary_key'][0][0] != 1 && $aForm['primary_key'][0][1] != $fld
 					if( !dbmng_check_is_autopk($fld_value) ) // 1 means: Auto-increment primary key (must be removed from the form.
 						{										
-							$html.='<div class="dbmng_form_row dbmng_form_field_'.$fld.'">';
-							
 							$widget='input';
 							if(isset($fld_value['widget']))
 								$widget=$fld_value['widget'];
 
-							$is_searchable = true;
+							//$is_searchable = true;
 
 							$is_searchable = false;
 							if(isset($fld_value['is_searchable']))
@@ -493,17 +491,7 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 									if( $fld_value['is_searchable']==1 )
 										$is_searchable = true;
 								}
-
-
-								
-							//generate the form label
-							if( $_REQUEST['act'] == 'ins' || $_REQUEST['act'] == 'upd' || $is_searchable )
-								{
-									$html .= layout_get_label($fld, $fld_value);
-								}
-								
-							$html.='<div class="dbmbg_form_element">';
-							
+															
 							// Do not show input or seletc field for PK
 							if($do_update == 1 && dbmng_check_is_pk($fld_value))
 								{
@@ -514,6 +502,10 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 								{
 									if( $_REQUEST['act'] == 'ins' || $_REQUEST['act'] == 'upd' || $is_searchable )
 										{
+											$html.='<div class="dbmng_form_row dbmng_form_field_'.$fld.'">';
+											$html .= layout_get_label($fld, $fld_value);
+											$html.='<div class="dbmbg_form_element">';
+											
 											if ($widget==='textarea')
 												{
 													$html .= layout_form_textarea( $fld, $fld_value, $value );
@@ -552,10 +544,10 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 														
 													$html .= layout_form_input( $fld, $fld_value, $value, $more );		
 												}
+											$html.='</div>';
+											$html.='</div>';
 										}
 								}
-							$html.='</div>';
-							$html.='</div>';
 						}
 					else
 						{
@@ -563,7 +555,7 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 						}
 				} //End of fields
 		} //End of form
-		
+
 	if( $do_update == 1 )
 		{
 			$html .= "<input type='hidden' name='act' value='do_upd' />\n";
@@ -581,6 +573,7 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 			$html .= "<input type='hidden' name='act' value='do_search' />\n";
 			$html .= "<input type='hidden' name='tbln' value='" . $aForm['table_name'] . "' />\n";
 			$html .= "<div class='dbmng_form_button'><input class='dbmng_form_button' type='submit' value='" . t('Search') . "' /></div>\n";
+			//$html .= "<div class='dbmng_form_button'><input class='dbmng_form_button' type='reset' value='" . t('Reset') . "' /></div>\n";
 		}
 
   $html .= "</form>\n";
