@@ -93,7 +93,7 @@ function climasouth_menu()
   $items['climasouth/workspace'] = array(
       'title' => 'Collaborative Workspaces',
       'page callback' => '_climasouth_workspace',
-      'access arguments' => array('access content'),
+      'access arguments' => array('view workspace'),
       'type' => MENU_CALLBACK,
    );
 
@@ -230,4 +230,8 @@ function _climasouth_workspace()
 		}
 
 	return $html;
+}
+
+function climasouth_permission() {
+	return array('view workspace' => array('title'=>t('Access to the collarative workspace')));
 }
