@@ -31,3 +31,21 @@ CREATE TABLE  c_project (
 ) ENGINE=MyISAM;
 
 ALTER TABLE  dbmng_fields ADD  is_searchable INT( 11 ) NOT NULL AFTER field_order;
+
+
+/* >>>>>>>>>>>>>>>>>>>>>>>>> 
+		NEW TABLE: 13/08/2013 
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
+CREATE TABLE  c_news (
+  id_c_news int(11) NOT NULL AUTO_INCREMENT,
+  news_title varchar(255),
+  news_date varchar(255),
+  news_content text,
+  geom text,
+  id_user int(11),
+  PRIMARY KEY (id_c_news)
+) ENGINE=MyISAM;
+
+ALTER TABLE  c_expert ADD  geom text AFTER twitter;
+ALTER TABLE  c_institution ADD  geom text AFTER email;
+ALTER TABLE  c_project ADD  geom text;
