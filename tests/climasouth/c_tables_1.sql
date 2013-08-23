@@ -49,3 +49,25 @@ CREATE TABLE  c_news (
 ALTER TABLE  c_expert ADD  geom text AFTER twitter;
 ALTER TABLE  c_institution ADD  geom text AFTER email;
 ALTER TABLE  c_project ADD  geom text;
+
+/* >>>>>>>>>>>>>>>>>>>>>>>>> 
+		NEW TABLE: 23/08/2013 
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
+CREATE TABLE  c_ghg_assessment (
+  id_c_ghg_assessment int(11) NOT NULL AUTO_INCREMENT,
+  id_c_country int(11) NOT NULL,
+	id_c_assessment int(11) NOT NULL,
+  current_rating int(11) NOT NULL,
+  proposed_target int(11) NOT NULL,
+  status varchar(255),
+  comments text,
+  capacity_needs text,
+  id_user int(11),
+  PRIMARY KEY (id_c_ghg_assessment)
+) ENGINE=MyISAM;
+
+CREATE TABLE  c_assessment (
+  id_c_assessment int(11) NOT NULL AUTO_INCREMENT,
+  assessment varchar(255),
+  PRIMARY KEY (id_c_assessment)
+) ENGINE=MyISAM;
