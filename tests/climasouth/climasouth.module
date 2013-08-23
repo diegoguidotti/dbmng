@@ -1,6 +1,9 @@
 <?php
 
 include_once "sites/all/libraries/dbmng/dbmng.php";
+include_once "sites/all/libraries/jpgraph/src/jpgraph.php";
+include_once "sites/all/libraries/jpgraph/src/jpgraph_radar.php";
+ 
 
 //******************************************************************************
 // Drupal Module 
@@ -131,7 +134,10 @@ function lst_country()
 				{				
 					$html.=$cnt->html_content;
 				}			 
-
+			
+			$file = _climasouth_graph( $id_c_country, $cnt->country_name );
+			$html .= '<img id="climasouth_graph" src="'.base_path().$file.'" />';
+			
 			$html.= '</div>';
 		}
 	else 
@@ -142,7 +148,54 @@ function lst_country()
   return ($html);
 }
 
+function _climasouth_graph( $id_c_country,$country_name )
+{
+	$aPlot   = array();
+	$aRadar1 = array();
+	$aRadar2 = array();
+	
+	//Query to get the titles of the radar plot
+	$sql = "select assessment from c_assessment order by id_c_assessment";
+	$res = dbmng_query( $sql, array() );
+	$aTitles = array();
+	foreach($res as $r)
+		{
+			$aTitles[] = $r->assessment;
+		}
+	
+	//Query to get the proposed target value
+	$sql = "select proposed_target from c_ghg_assessment where id_c_country = :id_c_country order by id_c_assessment";
+	$res = dbmng_query($sql, array('id_c_country' => intval($id_c_country) ));
+	$aVal1 = array();
+	foreach($res as $r)
+		{
+			$aVal1[] = $r->proposed_target;
+		}
+	
+	//Query to get the current rating value
+	$sql = "select current_rating from c_ghg_assessment where id_c_country = :id_c_country order by id_c_assessment";
+	$res = dbmng_query($sql, array('id_c_country' => intval($id_c_country) ));
+	
+	$aVal2 = array();
+	foreach($res as $r)
+		{
+			$aVal2[] = $r->current_rating;
+		}
+	
+	$aPlot['Title']    = "Assessment of current GHG inventory preparation process versus needs in $country_name";
+	$aPlot['Titles']   = $aTitles;
+	$aPlot['Filename'] = "GHG";
 
+	$aRadar1['value'] = $aVal1;
+	$aRadar1['legeng']= "Goal";
+		
+	$aRadar2['value'] = $aVal2; // risultato della query: 'select current_rating from c_ghg_assessment where id_c_country = $id_c_country'
+	$aRadar2['legeng']= "Actual";
+	
+	$file = draw_radar_graph( $aPlot, $aRadar1, $aRadar2 );
+	
+	return $file;
+}
 
 function _climasouth_maps($block) 
 {
@@ -235,3 +288,53 @@ function _climasouth_workspace()
 function climasouth_permission() {
 	return array('view workspace' => array('title'=>t('Access to the collarative workspace')));
 }
+
+function draw_radar_graph( $aPlot, $aRadar1, $aRadar2 )
+{
+	// Create the basic rtadar graph
+	$graph = new RadarGraph(800,400);
+	 
+	// Set background color and shadow
+	$graph->SetColor("white");
+	$graph->SetShadow();
+	 
+	// Position the graph
+	$graph->SetCenter(0.5,0.55);
+	 
+	// Setup the axis formatting     
+	$graph->axis->SetFont(FF_FONT1,FS_BOLD);
+	$graph->axis->SetWeight(2);
+	 
+	// Setup the grid lines
+	$graph->grid->SetLineStyle("longdashed");
+	$graph->grid->SetColor("navy");
+	$graph->grid->Show();
+	$graph->HideTickMarks();
+	        
+	// Setup graph titles
+	$graph->title->Set($aPlot["Title"]);
+	$graph->title->SetFont(FF_FONT1,FS_BOLD);
+	$graph->SetTitles($aPlot["Titles"]);
+	// Create the first radar plot        
+	$plot = new RadarPlot($aRadar1['value']);
+	$plot->SetLegend($aRadar1['legeng']);
+	$plot->SetColor("red","lightred");
+	$plot->SetFill(false);
+	$plot->SetLineWeight(2);
+	 
+	// Create the second radar plot
+	$plot2 = new RadarPlot($aRadar2['value']);
+	$plot2->SetLegend($aRadar2['legeng']);
+	$plot2->SetColor("blue","lightred");
+	 
+	// Add the plots to the graph
+	$graph->Add($plot2);
+	$graph->Add($plot);
+	 
+	// And output the graph
+	$dir = "sites/all/tmp/";
+	$sFile = $aPlot['Filename'] . "_" . time() . ".png";
+	$graph->Stroke($dir.$sFile);
+	
+	return $dir.$sFile;
+} 
