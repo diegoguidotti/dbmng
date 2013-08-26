@@ -343,9 +343,7 @@ function draw_radar_graph( $aPlot, $aRadar0, $aRadar1, $aRadar2 )
 	//print_r($aPlot);
 	foreach ($aPlot['plot'] as $p) 
 		{
-			print_r($p);
-			echo "<br/>";
-			echo $p['legend'] . "<br/>";
+
 		} 
 
 	// Create the first radar plot        
