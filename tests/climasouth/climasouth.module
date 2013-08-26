@@ -135,7 +135,11 @@ function lst_country()
 					$html.=$cnt->html_content;
 				}			 
 			
-			$file = _climasouth_graph( $id_c_country, $cnt->country_name );
+			$aCountry = array();
+			$aCountry['id_c_country'] = $id_c_country;
+			$aCountry['country_name'] = $cnt->country_name;
+
+			$file = _climasouth_graph( $aCountry );
 			$html .= '<img id="climasouth_graph" src="'.base_path().$file.'" />';
 			
 			$html.= '</div>';
@@ -148,9 +152,13 @@ function lst_country()
   return ($html);
 }
 
-function _climasouth_graph( $id_c_country,$country_name )
+function _climasouth_graph( $aCountry )
 {
+	$id_c_country = $aCountry['id_c_country'];
+	$country_name = $aCountry['country_name'];
+	
 	$aPlot   = array();
+	$aRadar0 = array();
 	$aRadar1 = array();
 	$aRadar2 = array();
 	
@@ -161,6 +169,15 @@ function _climasouth_graph( $id_c_country,$country_name )
 	foreach($res as $r)
 		{
 			$aTitles[] = $r->assessment;
+		}
+	
+	//Query to get the reference target value
+	$sql = "select 5 as reference from c_ghg_assessment where id_c_country = :id_c_country order by id_c_assessment";
+	$res = dbmng_query($sql, array('id_c_country' => intval($id_c_country) ));
+	$aVal0 = array();
+	foreach($res as $r)
+		{
+			$aVal0[] = $r->reference;
 		}
 	
 	//Query to get the proposed target value
@@ -186,13 +203,16 @@ function _climasouth_graph( $id_c_country,$country_name )
 	$aPlot['Titles']   = $aTitles;
 	$aPlot['Filename'] = "GHG";
 
+	$aRadar0['value'] = $aVal0;
+	$aRadar0['legeng']= "Reference";
+		
 	$aRadar1['value'] = $aVal1;
-	$aRadar1['legeng']= "Goal";
+	$aRadar1['legeng']= "Target";
 		
 	$aRadar2['value'] = $aVal2; // risultato della query: 'select current_rating from c_ghg_assessment where id_c_country = $id_c_country'
-	$aRadar2['legeng']= "Actual";
+	$aRadar2['legeng']= "Current rating";
 	
-	$file = draw_radar_graph( $aPlot, $aRadar1, $aRadar2 );
+	$file = draw_radar_graph( $aPlot, $aRadar0, $aRadar1, $aRadar2 );
 	
 	return $file;
 }
@@ -289,7 +309,7 @@ function climasouth_permission() {
 	return array('view workspace' => array('title'=>t('Access to the collarative workspace')));
 }
 
-function draw_radar_graph( $aPlot, $aRadar1, $aRadar2 )
+function draw_radar_graph( $aPlot, $aRadar0, $aRadar1, $aRadar2 )
 {
 	// Create the basic rtadar graph
 	$graph = new RadarGraph(800,400);
@@ -315,6 +335,7 @@ function draw_radar_graph( $aPlot, $aRadar1, $aRadar2 )
 	$graph->title->Set($aPlot["Title"]);
 	$graph->title->SetFont(FF_FONT1,FS_BOLD);
 	$graph->SetTitles($aPlot["Titles"]);
+
 	// Create the first radar plot        
 	$plot = new RadarPlot($aRadar1['value']);
 	$plot->SetLegend($aRadar1['legeng']);
@@ -327,7 +348,13 @@ function draw_radar_graph( $aPlot, $aRadar1, $aRadar2 )
 	$plot2->SetLegend($aRadar2['legeng']);
 	$plot2->SetColor("blue","lightred");
 	 
+	// Create the third radar plot
+	$plot0 = new RadarPlot($aRadar0['value']);
+	$plot0->SetLegend($aRadar0['legeng']);
+	$plot0->SetColor("black","white");
+	 
 	// Add the plots to the graph
+	$graph->Add($plot0);
 	$graph->Add($plot2);
 	$graph->Add($plot);
 	 
