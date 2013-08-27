@@ -335,7 +335,7 @@ function climasouth_permission() {
 // Reference:
 // Manual: http://jpgraph.net/download/manuals/chunkhtml/index.html
 // Radar: http://jpgraph.net/download/manuals/chunkhtml/ch16s02.html
-Function draw_radar_graph( $aPlot )
+function draw_radar_graph( $aPlot )
 {
 	// Create the basic rtadar graph
 	$graph = new RadarGraph($aPlot['width'], $aPlot['height']);

@@ -68,6 +68,13 @@ CREATE TABLE  c_ghg_assessment (
 
 CREATE TABLE  c_assessment (
   id_c_assessment int(11) NOT NULL AUTO_INCREMENT,
-  assessment varchar(255),
+  strategy varchar(255),
+  ass_group varchar(255),
+  ass_type varchar(255),
   PRIMARY KEY (id_c_assessment)
 ) ENGINE=MyISAM;
+
+ALTER TABLE  c_assessment ADD stratety varchar(255) AFTER id_c_assessment;
+ALTER TABLE  c_assessment ADD ass_group varchar(255) AFTER strategy;
+ALTER TABLE  c_assessment ADD ass_type varchar(255) AFTER ass_group;
+ 
