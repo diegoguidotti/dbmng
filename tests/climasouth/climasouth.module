@@ -332,6 +332,9 @@ function climasouth_permission() {
 }
 
 // this function must be moved outside this module
+// Reference:
+// Manual: http://jpgraph.net/download/manuals/chunkhtml/index.html
+// Radar: http://jpgraph.net/download/manuals/chunkhtml/ch16s02.html
 Function draw_radar_graph( $aPlot )
 {
 	// Create the basic rtadar graph
