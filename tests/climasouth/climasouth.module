@@ -199,33 +199,42 @@ function _climasouth_graph( $aCountry )
 			$aVal2[] = $r->current_rating;
 		}
 	
+	//reference
 	$aRadar0['value']  = $aVal0;
 	$aRadar0['legend'] = t("Reference"); 
 	$aRadar0['color1'] = "black";
 	$aRadar0['color2'] = "white";
+	$aRadar0['mark']   = MARK_CROSS;
 	
-		
+	//target
 	$aRadar1['value'] = $aVal1;
 	$aRadar1['legend']= t("Target");
-	$aRadar1['color1'] = "red";
+	$aRadar1['color1'] = "blue";
 	$aRadar1['color2'] = "white";
 	$aRadar1['fill']   = "false";
 	$aRadar1['line_weight'] = 2;
-		
+	$aRadar1['mark'] = MARK_IMG_STAR;
+	
+	//Current
 	$aRadar2['value'] = $aVal2; 
 	$aRadar2['legend']= t("Current rating");
-	$aRadar2['color1'] = "blue";
+	$aRadar2['color1'] = "red";
 	$aRadar2['color2'] = "lightred";
 	$aRadar2['line_weight'] = 10;
+	$aRadar2['mark'] = MARK_IMG_SBALL;
 	
 	$aPlot['Title']    = t("Assessment of current GHG inventory preparation process versus needs in") . " " . $country_name;
 	$aPlot['Titles']   = $aTitles;
 	$aPlot['Filename'] = "GHG";
+	$aPlot['width']    = 750;
+	$aPlot['height']   = 400;
+	$aPlot['background'] = "white";
+	$aPlot['shadow']     = true;
 	$aPlot['plot'][0]  = $aRadar0;
 	$aPlot['plot'][1]  = $aRadar1;
 	$aPlot['plot'][2]  = $aRadar2;
 	
-	$file = draw_radar_graph( $aPlot, $aRadar0, $aRadar1, $aRadar2 );
+	$file = draw_radar_graph( $aPlot );
 	
 	return $file;
 }
@@ -323,20 +332,22 @@ function climasouth_permission() {
 }
 
 // this function must be moved outside this module
-function draw_radar_graph( $aPlot, $aRadar0, $aRadar1, $aRadar2 )
+Function draw_radar_graph( $aPlot )
 {
 	// Create the basic rtadar graph
-	$graph = new RadarGraph(750,400);
+	$graph = new RadarGraph($aPlot['width'], $aPlot['height']);
 	 
 	// Set background color and shadow
-	$graph->SetColor("white");
-	$graph->SetShadow();
+	$graph->SetColor($aPlot['background']);
+	if( isset($aPlot['shadow']) )
+		if( $aPlot['shadow'] )
+			$graph->SetShadow();
 	 
 	// Position the graph
 	$graph->SetCenter(0.5,0.55);
 	 
 	// Setup the axis formatting     
-	$graph->axis->SetFont(FF_FONT1,FS_BOLD);
+	$graph->axis->SetFont(FF_ARIAL,FS_BOLD);
 	$graph->axis->SetWeight(2);
 	 
 	// Setup the grid lines
@@ -347,7 +358,7 @@ function draw_radar_graph( $aPlot, $aRadar0, $aRadar1, $aRadar2 )
 	        
 	// Setup graph titles
 	$graph->title->Set($aPlot["Title"]);
-	$graph->title->SetFont(FF_FONT1,FS_BOLD);
+	$graph->title->SetFont(FF_VERDANA,FS_BOLD);
 	$graph->SetTitles($aPlot["Titles"]);
 	
 	foreach ($aPlot['plot'] as $p) 
@@ -361,31 +372,12 @@ function draw_radar_graph( $aPlot, $aRadar0, $aRadar1, $aRadar2 )
 			if( isset($p['line_weight']) )
 				$plot->SetLineWeight(2);
 			
+			if( isset($p['mark']) )
+				$plot->mark->SetType($p['mark'],$p['color1']);
+			
 			$graph->Add($plot);
 		} 
 
-	// Create the first radar plot        
-//	$plot = new RadarPlot($aRadar1['value']);
-//	$plot->SetLegend($aRadar1['legend']);
-//	$plot->SetColor("red","lightred");
-//	$plot->SetFill(false);
-//	$plot->SetLineWeight(2);
-//	 
-//	// Create the second radar plot
-//	$plot2 = new RadarPlot($aRadar2['value']);
-//	$plot2->SetLegend($aRadar2['legend']);
-//	$plot2->SetColor("blue","lightred");
-//	 
-//	// Create the third radar plot
-//	$plot0 = new RadarPlot($aRadar0['value']);
-//	$plot0->SetLegend($aRadar0['legend']);
-//	$plot0->SetColor("black","white");
-//	 
-//	// Add the plots to the graph
-//	$graph->Add($plot0);
-//	$graph->Add($plot2);
-//	$graph->Add($plot);
-//
 	// And output the graph
 	$dir = "sites/all/tmp/";
 	$sFile = $aPlot['Filename'] . "_" . time() . ".png";
