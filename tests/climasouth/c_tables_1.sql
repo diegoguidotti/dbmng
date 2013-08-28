@@ -74,7 +74,35 @@ CREATE TABLE  c_assessment (
   PRIMARY KEY (id_c_assessment)
 ) ENGINE=MyISAM;
 
+/*
 ALTER TABLE  c_assessment ADD stratety varchar(255) AFTER id_c_assessment;
 ALTER TABLE  c_assessment ADD ass_group varchar(255) AFTER strategy;
 ALTER TABLE  c_assessment ADD ass_type varchar(255) AFTER ass_group;
- 
+*/
+
+/* >>>>>>>>>>>>>>>>>>>>>>>>> 
+		NEW TABLE: 28/08/2013 
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
+CREATE TABLE  c_voc_strategy (
+  id_c_voc_strategy int(11) NOT NULL AUTO_INCREMENT,
+  strategy varchar(255),
+  PRIMARY KEY (id_c_voc_strategy)
+) ENGINE=MyISAM;
+
+CREATE TABLE  c_voc_ass_group (
+  id_c_voc_ass_group int(11) NOT NULL AUTO_INCREMENT,
+  ass_group varchar(255),
+  PRIMARY KEY (id_c_voc_ass_group)
+) ENGINE=MyISAM;
+
+ALTER TABLE  c_assessment ADD id_c_voc_strategy int(11) AFTER id_c_assessment;
+ALTER TABLE  c_assessment ADD id_c_voc_ass_group int(11) AFTER strategy;
+
+insert into c_voc_strategy (strategy) select distinct strategy from c_assessment;
+insert into c_voc_ass_group (ass_group) select distinct ass_group from c_assessment;
+update c_assessment a, c_voc_strategy v set a.id_c_voc_strategy = v.id_c_voc_strategy where a.strategy = v.strategy;
+update c_assessment a, c_voc_ass_group v set a.id_c_voc_ass_group = v.id_c_voc_ass_group where a.ass_group = v.ass_group;
+
+ALTER TABLE c_assessment DROP COLUMN strategy;
+ALTER TABLE c_assessment DROP COLUMN ass_group;
+ALTER TABLE c_assessment DROP COLUMN assessment;
