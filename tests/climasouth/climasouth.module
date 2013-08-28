@@ -163,12 +163,12 @@ function _climasouth_graph( $aCountry )
 	$aRadar2 = array();
 	
 	//Query to get the titles of the radar plot
-	$sql = "select assessment from c_assessment order by id_c_assessment";
+	$sql = "select ass_type from c_assessment where id_c_voc_ass_group = 1 order by id_c_assessment";
 	$res = dbmng_query( $sql, array() );
 	$aTitles = array();
 	foreach($res as $r)
 		{
-			$aTitles[] = $r->assessment;
+			$aTitles[] = $r->ass_type;
 		}
 	
 	//Query to get the reference target value
@@ -223,16 +223,16 @@ function _climasouth_graph( $aCountry )
 	$aRadar2['line_weight'] = 10;
 	$aRadar2['mark'] = MARK_IMG_SBALL;
 	
-	$aPlot['Title']    = t("Assessment of current GHG inventory preparation process versus needs in") . " " . $country_name;
-	$aPlot['Titles']   = $aTitles;
-	$aPlot['Filename'] = "GHG";
-	$aPlot['width']    = 750;
-	$aPlot['height']   = 400;
+	$aPlot['Title']      = t("Assessment of current GHG inventory preparation process versus needs in") . " " . $country_name;
+	$aPlot['Titles']     = $aTitles;
+	$aPlot['Filename']   = "GHG";
+	$aPlot['width']      = 750;
+	$aPlot['height']     = 400;
 	$aPlot['background'] = "white";
-	$aPlot['shadow']     = true;
-	$aPlot['plot'][0]  = $aRadar0;
-	$aPlot['plot'][1]  = $aRadar1;
-	$aPlot['plot'][2]  = $aRadar2;
+	$aPlot['shadow']     = false;
+	$aPlot['plot'][0]    = $aRadar0;
+	$aPlot['plot'][1]    = $aRadar1;
+	$aPlot['plot'][2]    = $aRadar2;
 	
 	$file = draw_radar_graph( $aPlot );
 	
