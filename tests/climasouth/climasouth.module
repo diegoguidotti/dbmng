@@ -132,7 +132,7 @@ function lst_country()
 
 			if(	$cnt->html_content !=null)
 				{				
-					$html.=$cnt->html_content;
+					$html.='<div id="climasouth_country_content">'.$cnt->html_content.'</div>';
 				}			 
 			
 			$aCountry = array();
@@ -140,8 +140,10 @@ function lst_country()
 			$aCountry['country_name'] = $cnt->country_name;
 
 			$file = _climasouth_graph( $aCountry );
-			$html .= '<img id="climasouth_graph" src="'.base_path().$file.'" />';
-			
+			if(strlen($file)>0)
+				{
+					$html .= '<img class="climasouth_radar_chart"  id="climasouth_graph" src="'.base_path().$file.'" />';
+				}			
 			$html.= '</div>';
 		}
 	else 
@@ -234,7 +236,14 @@ function _climasouth_graph( $aCountry )
 	$aPlot['plot'][1]    = $aRadar1;
 	$aPlot['plot'][2]    = $aRadar2;
 	
-	$file = draw_radar_graph( $aPlot );
+	if(count($aVal0)>0 && count($aVal1)>0 && count($aVal2)>0 )
+		{
+			$file = draw_radar_graph( $aPlot );
+		}
+	else
+		{
+			$file = '' ;
+		}
 	
 	return $file;
 }
@@ -258,7 +267,7 @@ function _climasouth_maps($block)
 			$height="550";
 		}
 
-	$html .= '<div id="map_container" style="width:960px; height:'.$height.'px;"  ></div>';
+	$html .= '<div id="map_container" style="width:930px; height:'.$height.'px;"  ></div>';
 
 	$html .= "\n<script type='text/javascript'>\n";
 	$html .= "var data=".dbmng_get_js_array($aForm, null).";\n";
@@ -350,7 +359,7 @@ function draw_radar_graph( $aPlot )
 	$graph->SetCenter(0.5,0.55);
 	 
 	// Setup the axis formatting     
-	$graph->axis->SetFont(FF_ARIAL,FS_BOLD);
+	//$graph->axis->SetFont(FF_ARIAL,FS_BOLD);
 	$graph->axis->SetWeight(2);
 	 
 	// Setup the grid lines
@@ -361,7 +370,7 @@ function draw_radar_graph( $aPlot )
 	        
 	// Setup graph titles
 	$graph->title->Set($aPlot["Title"]);
-	$graph->title->SetFont(FF_VERDANA,FS_BOLD);
+	//$graph->title->SetFont(FF_VERDANA,FS_BOLD);
 	$graph->SetTitles($aPlot["Titles"]);
 	
 	foreach ($aPlot['plot'] as $p) 
