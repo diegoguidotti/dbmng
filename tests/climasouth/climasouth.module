@@ -151,7 +151,8 @@ function lst_country()
 			 $html.=  _climasouth_maps(false);
 		}
 	
-  return ($html);
+	$html .= implode(' ', service_links_render(null, FALSE));  
+return ($html);
 }
 
 function _climasouth_graph( $aCountry )
