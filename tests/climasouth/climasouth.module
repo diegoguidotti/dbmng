@@ -142,7 +142,7 @@ function lst_country()
 			$file = _climasouth_graph( $aCountry );
 			if(strlen($file)>0)
 				{
-					$html .= '<img class="climasouth_radar_chart"  id="climasouth_graph" src="'.base_path().$file.'" />';
+					// $html .= '<img class="climasouth_radar_chart"  id="climasouth_graph" src="'.base_path().$file.'" />';
 				}			
 			$html.= '</div>';
 		}
