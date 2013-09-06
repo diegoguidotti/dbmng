@@ -62,7 +62,15 @@ function dbmng_query($sql, $var=null)
 
 			if(isset($var))
 				{
-					$res = db_query($sql, $var);
+				try 
+						{
+							$res = db_query($sql, $var);
+						}
+					catch( Exception $Exception ) {
+						echo ('PDO Exception: '.$Exception->getMessage( ).'<br/>');
+						echo ('Query: '.$sql.'<br/>');
+						$res = null;
+					}
 				}
 			else 
 				{
