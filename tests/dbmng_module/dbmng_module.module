@@ -127,12 +127,12 @@ function dbmng_manager()
 			{
 				$sql = "select distinct id_c_voc_strategy, strategy from c_voc_strategy";
 
-				$rFirst  = dbmng_query($sql, array());
-				$aRes = array();
+				$rFirst = dbmng_query($sql, array());
+				$aFirst = array();
 
 				foreach($rFirst as $first)
 					{
-						$aRes[$first->id_c_voc_strategy] = array("key" => $first->id_c_voc_strategy, "value" => $first->strategy, "vals" => array());
+						$aFirst[$first->id_c_voc_strategy] = array("key" => $first->id_c_voc_strategy, "value" => $first->strategy, "vals" => array());
 						
 						$sql = "select distinct a.id_c_voc_ass_group, g.ass_group from c_assessment a, c_voc_ass_group g where a.id_c_voc_ass_group = g.id_c_voc_ass_group and a.id_c_voc_strategy = ". $first->id_c_voc_strategy;
 						$rSecond = dbmng_query($sql, array());
@@ -148,12 +148,15 @@ function dbmng_manager()
 									{
 										$aThird[$third->id_c_assessment] = array("key" => $third->id_c_assessment, "value" => $third->ass_type);
 										$aSec[$second->id_c_voc_ass_group]["vals"] = $aThird;
-										$aRes[$first->id_c_voc_strategy]["vals"] = $aSec;
+										$aFirst[$first->id_c_voc_strategy]["vals"] = $aSec;
 									}
 							}
 					}
+				$aRes = array("res" => $aFirst);
+				echo json_encode($aRes);
 				echo "<pre>";
 				print_r($aRes);
+				
 				echo "</pre>";
 
 				/*
