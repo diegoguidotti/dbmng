@@ -348,20 +348,23 @@ function layout_form_multiselect( $fld, $fld_value, $value )
 			$aVoc = array();
 			$aVoc = $fld_value['voc_val'];
 		} 
-	$html = "<select  name='$fld' id='$fld'  ".layout_get_nullable($fld_value)." >\n";
-	$html .= "<option/> \n";	
-	$nLen  = count($aVoc);
-	
-	foreach ( $aVoc as $vocKey => $vocValue )
-		{
-			$s = "";
-			if($do_update && $value==$vocKey){
-				$s = " selected='true' ";
-			}
-	
-			$html .= "<option $s value='" . $vocKey . "'>" . $vocValue . "</option> \n";	
-		}
-	$html .= "</select>\n";
+		
+		
+		$fnc1="dbmng_update_multi2()";
+	$html = "<select  name='$fld' onChange='dbmng_update_multi2()' id='".$fld."_res'  ".layout_get_nullable($fld_value)." >\n";
+	$html .= "</select><br/>\n";
+
+	$html .= "<select  name='$fld' onChange='dbmng_update_multi3()' id='".$fld."_res2'  ".layout_get_nullable($fld_value)." >\n";
+	$html .= "</select><br/>\n";
+
+	$html .= "<select  name='$fld' onChange='dbmng_update_multi()' id='".$fld."_res3'  ".layout_get_nullable($fld_value)." >\n";
+	$html .= "</select><br/>\n";
+
+	$html .= "\n<script type='text/javascript'>\n";
+	$html .= "var aMultiSelectData={'res' : ".json_encode($aVoc).", 'field_name': '".$fld."'};\n";
+	$html .= "dbmng_multi1();\n";
+	$html .= "</script>\n";
+
 	return $html;
 }
 
