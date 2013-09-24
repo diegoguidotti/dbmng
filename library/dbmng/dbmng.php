@@ -149,29 +149,24 @@ function dbmng_get_form_array($id_table)
 				
 				if( $fld->field_widget == 'multiselect')
 					{
-						if( !isset($fld->voc_sql) )
-							{
-								// sql automatically generated throught standard coding tables definition
-								$sVoc = str_replace("id_", "", $fld->field_name);
-								$sql  = "select * from $sVoc";
-							}
-						else
-							{
-								// sql written in dbmng_fields
-								$sql  = $fld->voc_sql;							
-							}
+						// sql written in dbmng_fields
+						$sql  = $fld->voc_sql;							
 
 						//TODO: review the safety of this query
 						$rVoc  = dbmng_query($sql, array());
 						$aFVoc = array();
 
-						$v       = 0;
 						foreach($rVoc as $val)
 							{
 								$keys=array_keys((array)$val);
-								$aFVoc[$val->$keys[0]] = $val->$keys[1];
+								if( !isset($aFVoc[$val->$keys[0]]) )
+									$aFVoc[$val->$keys[0]] = array("key" => $val->$keys[0], "value" => $val->$keys[1]);
+								if( !isset($aFVoc[$val->$keys[0]]["vals"][$val->$keys[2]]) )
+									$aFVoc[$val->$keys[0]]["vals"][$val->$keys[2]] = array("key" => $val->$keys[2], "value" => $val->$keys[3]);
+								if( !isset($aFVoc[$val->$keys[0]]["vals"][$val->$keys[2]]["vals"][$val->$keys[4]]) ) 
+									$aFVoc[$val->$keys[0]]["vals"][$val->$keys[2]]["vals"][$val->$keys[4]] = array("key" => $val->$keys[4], "value" => $val->$keys[5]);
 							}
-												
+
 						$aFields[$fld->field_name]['voc_val'] = $aFVoc;
 					}
 			}
