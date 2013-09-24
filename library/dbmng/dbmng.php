@@ -146,6 +146,34 @@ function dbmng_get_form_array($id_table)
 						
 						$aFields[$fld->field_name]['voc_val'] = $aFVoc;
 					}
+				
+				if( $fld->field_widget == 'multiselect')
+					{
+						if( !isset($fld->voc_sql) )
+							{
+								// sql automatically generated throught standard coding tables definition
+								$sVoc = str_replace("id_", "", $fld->field_name);
+								$sql  = "select * from $sVoc";
+							}
+						else
+							{
+								// sql written in dbmng_fields
+								$sql  = $fld->voc_sql;							
+							}
+
+						//TODO: review the safety of this query
+						$rVoc  = dbmng_query($sql, array());
+						$aFVoc = array();
+
+						$v       = 0;
+						foreach($rVoc as $val)
+							{
+								$keys=array_keys((array)$val);
+								$aFVoc[$val->$keys[0]] = $val->$keys[1];
+							}
+												
+						$aFields[$fld->field_name]['voc_val'] = $aFVoc;
+					}
 			}
 
 		$aForm['primary_key'] = $aPK; 
@@ -518,6 +546,10 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 												{
 													$html .= layout_form_select( $fld, $fld_value, $value );
 												}
+											else if ($widget==='multiselect')
+												{
+													$html .= layout_form_multiselect( $fld, $fld_value, $value );
+												}
 											else if ($widget==='date')
 												{
 													$html .= layout_form_date( $fld, $fld_value, $value );
@@ -812,6 +844,19 @@ function dbmng_value_prepare_html($fld_value, $value)
 					$ret = null;
 				}
 		}
+	elseif( $widget == "multiselect" )
+		{
+			$aVoc = array();
+			$aVoc = $fld_value['voc_val'];
+			if(isset($aVoc[$value]))
+				{
+					$ret = $aVoc[$value];
+				}
+			else
+				{
+					$ret = null;
+				}
+		}	
 	elseif($widget == "file" )
 		{
 			$ret=dbmng_file_create_link($value);
