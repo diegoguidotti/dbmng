@@ -74,10 +74,43 @@ function dbmng_create_table (data, aForm, aParam) {
 	return html;
 }
 
+function dbmng_multi1(fld){
+	jQuery(function(){
+	    var html='';
+	    html+="<option value = ' ' selected=selected></option>";
+	    jQuery.each(aMultiSelectData.res, function(key, value) {
+	      html+="<option value='" + key + "'>"+value.value+"</option>";
+	    });
+	    jQuery('#'+aMultiSelectData.field_name+'_res').html(html);
+	});
+}
 
+function dbmng_update_multi2() {
+    var indice=jQuery('#'+aMultiSelectData.field_name+'_res').val();
 
+    var html='';
+    html+="<option value = ' ' selected=selected></option>";
+    jQuery.each(aMultiSelectData.res[indice].vals, function(key, value) {
+      html+="<option value='" + key + "'>"+value.value+"</option>";
+    });
+    jQuery('#'+aMultiSelectData.field_name+'_res2').html(html);
 
+}
 
+function dbmng_update_multi3() {
+    var indice=jQuery('#'+aMultiSelectData.field_name+'_res').val();
+    var indice2=jQuery('#'+aMultiSelectData.field_name+'_res2').val();
+    var html='';
+    html+="<option value = ' ' selected=selected></option>";
+    jQuery.each(aMultiSelectData.res[indice].vals[indice2].vals, function(key, value) {
+      html+="<option value='" + key + "'>"+value.value+"</option>";
+    });
+    jQuery('#'+aMultiSelectData.field_name+'_res3').html(html);
+}
+
+function dbmng_update_multi(){
+	alert(jQuery('#'+aMultiSelectData.field_name+'_res3').val());
+}
 /*LAYOUT LIBRARY*/
 
 
