@@ -125,6 +125,12 @@ function dbmng_manager()
 	else{
 		if( isset($_REQUEST['test']) )
 			{
+				/*
+				select s.id_c_voc_strategy, s.strategy,g.id_c_voc_ass_group, g.ass_group, a.id_c_assessment, a.ass_type from
+				c_voc_strategy s, c_voc_ass_group g, c_assessment a
+				WHERE s.id_c_voc_strategy=a.id_c_voc_strategy AND g.id_c_voc_ass_group=a.id_c_voc_ass_group
+				order by s.id_c_voc_strategy, g.id_c_voc_ass_group, a.id_c_assessment
+				*/
 				$sql = "select distinct id_c_voc_strategy, strategy from c_voc_strategy";
 
 				$rFirst = dbmng_query($sql, array());
