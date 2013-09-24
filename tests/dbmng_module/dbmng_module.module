@@ -125,6 +125,37 @@ function dbmng_manager()
 	else{
 		if( isset($_REQUEST['test']) )
 			{
+				$sql = "select distinct id_c_voc_strategy, strategy from c_voc_strategy";
+
+				$rFirst  = dbmng_query($sql, array());
+				$aRes = array();
+
+				foreach($rFirst as $first)
+					{
+						$aRes[$first->id_c_voc_strategy] = array("key" => $first->id_c_voc_strategy, "value" => $first->strategy, "vals" => array());
+						
+						$sql = "select distinct a.id_c_voc_ass_group, g.ass_group from c_assessment a, c_voc_ass_group g where a.id_c_voc_ass_group = g.id_c_voc_ass_group and a.id_c_voc_strategy = ". $first->id_c_voc_strategy;
+						$rSecond = dbmng_query($sql, array());
+						$aSec = array();
+						foreach($rSecond as $second)
+							{
+								$aSec[$second->id_c_voc_ass_group] = array("key" => $second->id_c_voc_ass_group, "value" => $second->ass_group, "vals" => array());
+								
+								$sql = "select distinct id_c_assessment, ass_type from c_assessment where id_c_voc_strategy=" . $first->id_c_voc_strategy . " and id_c_voc_ass_group=" . $second->id_c_voc_ass_group;
+								$rThird = dbmng_query($sql, array());
+								$aThird = array();
+								foreach($rThird as $third)
+									{
+										$aThird[$third->id_c_assessment] = array("key" => $third->id_c_assessment, "value" => $third->ass_type);
+										$aSec[$second->id_c_voc_ass_group]["vals"] = $aThird;
+										$aRes[$first->id_c_voc_strategy]["vals"] = $aSec;
+									}
+							}
+					}
+				echo "<pre>";
+				print_r($aRes);
+				echo "</pre>";
+
 				/*
 				$aForm=array(  
 					'table_name' => 'test' ,
@@ -134,7 +165,6 @@ function dbmng_manager()
 						'eta'  => array('label'   => 'Et&agrave;' , 'type' => 'int'    )
 					)
         );
-        */
         $id_table = "test";
 				$aForm    = dbmng_get_form_array($id_table);
 				
@@ -151,6 +181,7 @@ function dbmng_manager()
 			  $aParam['hidden_vars']['type_tbl'] = 1; //table type (1: content table; 2: system table)
 
 				$html .= dbmng_crud($aForm, $aParam);
+        */
 
 			}
 		elseif( isset($_REQUEST['show_fields']) )
@@ -244,6 +275,7 @@ function dbmng_manager()
 															'input'=> t('Input Box'),
 															'password'=> t('Password'),	
 															'select'=> t('Select'),	
+															'multiselect'=> t('Multi-Select'),	
 															'textarea'=> t('Text Area')	
 													)
 										),
