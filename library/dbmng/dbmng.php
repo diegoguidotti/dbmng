@@ -167,7 +167,7 @@ function dbmng_get_form_array($id_table)
 									$aFVoc[$val->$keys[0]]["vals"][$val->$keys[2]]["vals"][$val->$keys[4]] = array("key" => $val->$keys[4], "value" => $val->$keys[5]);
 							}
 
-						$aFields[$fld->field_name]['voc_val'] = $aFVoc;
+						$aFields[$fld->field_name]['voc_val'] = $aFVoc;						
 					}
 			}
 
@@ -636,16 +636,25 @@ function dbmng_is_field_type_numeric($sType)
 function dbmng_value_prepare($x_value, $x, $post)
 {
 
+	$widget='input';
+
   $sValue=null;
 	if(isset($post[$x]))
 		{
 		  $sValue=$post[$x];
 		}
 	
-	$widget='input';
 	if(isset($x_value['widget']))
 		{
 			$widget=$x_value['widget'];
+		}
+
+  if($widget=='multiselect')
+	  {
+			if(isset($post[$x."_res3"]))
+				{
+				  $sValue=$post[$x."_res3"];
+				}
 		}
 	
   if($widget=='checkbox')
@@ -843,13 +852,22 @@ function dbmng_value_prepare_html($fld_value, $value)
 		{
 			$aVoc = array();
 			$aVoc = $fld_value['voc_val'];
-			if(isset($aVoc[$value]))
+
+			foreach($aVoc as $voc1)
 				{
-					$ret = $aVoc[$value];
-				}
-			else
-				{
-					$ret = null;
+					foreach($aVoc[$voc1["key"]]["vals"] as $voc2)
+						{
+							foreach($aVoc[$voc1["key"]]["vals"][$voc2["key"]]["vals"] as $voc3)
+								{
+									if( $voc3["key"] == $value )
+										{
+											$ret = $voc1["value"] . " | " . $voc2["value"] . " | " . $voc3["value"];
+											//echo $voc1["key"] . ": " . $voc1["value"] . "<br>";
+											//echo "-- " . $voc2["key"] . ": " . $voc2["value"] . "<br>";
+											//echo "---- " . $voc3["key"] . ": " . $voc3["value"] . "<br>";
+										}
+								}
+						}
 				}
 		}	
 	elseif($widget == "file" )
