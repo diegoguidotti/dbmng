@@ -74,14 +74,50 @@ function dbmng_create_table (data, aForm, aParam) {
 	return html;
 }
 
-function dbmng_multi1(fld){
+function dbmng_multi1(){
 	jQuery(function(){
 	    var html='';
-	    html+="<option value = ' ' selected=selected></option>";
-	    jQuery.each(aMultiSelectData.res, function(key, value) {
-	      html+="<option value='" + key + "'>"+value.value+"</option>";
-	    });
-	    jQuery('#'+aMultiSelectData.field_name+'_res').html(html);
+	    if( typeof aMultiSelectData.val3 == 'undefined' )
+	    	{
+			    html+="<option value = ' ' selected=selected></option>";
+			    jQuery.each(aMultiSelectData.res, function(key, value) {
+			      html+="<option value='" + key + "'>"+value.value+"</option>";
+			    });
+			    jQuery('#'+aMultiSelectData.field_name+'_res').html(html);
+			  }
+			 else
+			 	{
+			    html+="<option value = ' '></option>";
+			    jQuery.each(aMultiSelectData.res, function(key, value) {
+			    	sOpt = ""
+			    	if(key == aMultiSelectData.val1)
+			    		sOpt = "selected=selected";
+			      html+="<option value='" + key + "' "+sOpt+">"+value.value+"</option>";
+			    });
+			    jQuery('#'+aMultiSelectData.field_name+'_res').html(html);
+
+
+			    html='';
+			    html+="<option value = ' '></option>";
+			    jQuery.each(aMultiSelectData.res[aMultiSelectData.val1].vals, function(key, value) {
+			    	sOpt = ""
+			    	if(key == aMultiSelectData.val2)
+			    		sOpt = "selected=selected";
+			      html+="<option value='" + key + "' "+sOpt+">"+value.value+"</option>";
+			    });
+			    jQuery('#'+aMultiSelectData.field_name+'_res2').html(html);
+
+			    html='';
+			    html+="<option value = ' '></option>";
+			    jQuery.each(aMultiSelectData.res[aMultiSelectData.val1].vals[aMultiSelectData.val2].vals, function(key, value) {
+			    	sOpt = ""
+			    	if(key == aMultiSelectData.val3)
+			    		sOpt = "selected=selected";
+			      html+="<option value='" + key + "' "+sOpt+">"+value.value+"</option>";
+			    });
+			    jQuery('#'+aMultiSelectData.field_name+'_res3').html(html);
+
+			 	}
 	});
 }
 
@@ -100,6 +136,7 @@ function dbmng_update_multi2() {
 function dbmng_update_multi3() {
     var indice=jQuery('#'+aMultiSelectData.field_name+'_res').val();
     var indice2=jQuery('#'+aMultiSelectData.field_name+'_res2').val();
+
     var html='';
     html+="<option value = ' ' selected=selected></option>";
     jQuery.each(aMultiSelectData.res[indice].vals[indice2].vals, function(key, value) {
@@ -109,7 +146,7 @@ function dbmng_update_multi3() {
 }
 
 function dbmng_update_multi(){
-	alert(jQuery('#'+aMultiSelectData.field_name+'_res3').val());
+	//alert(jQuery('#'+aMultiSelectData.field_name+'_res3').val());
 }
 /*LAYOUT LIBRARY*/
 
