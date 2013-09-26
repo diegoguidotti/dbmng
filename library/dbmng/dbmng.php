@@ -862,9 +862,6 @@ function dbmng_value_prepare_html($fld_value, $value)
 									if( $voc3["key"] == $value )
 										{
 											$ret = $voc1["value"] . " | " . $voc2["value"] . " | " . $voc3["value"];
-											//echo $voc1["key"] . ": " . $voc1["value"] . "<br>";
-											//echo "-- " . $voc2["key"] . ": " . $voc2["value"] . "<br>";
-											//echo "---- " . $voc3["key"] . ": " . $voc3["value"] . "<br>";
 										}
 								}
 						}
