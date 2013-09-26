@@ -348,9 +348,23 @@ function layout_form_multiselect( $fld, $fld_value, $value )
 			$aVoc = array();
 			$aVoc = $fld_value['voc_val'];
 		} 
-		
-		
-		$fnc1="dbmng_update_multi2()";
+	
+	$sKey = "";
+	foreach($aVoc as $voc1)
+		{
+			foreach($aVoc[$voc1["key"]]["vals"] as $voc2)
+				{
+					foreach($aVoc[$voc1["key"]]["vals"][$voc2["key"]]["vals"] as $voc3)
+						{
+							if( $voc3["key"] == $value )
+								{
+									if( isset($voc1["key"]) && isset($voc2["key"]) && isset($voc3["key"]) )
+										$sKey = "'val1' : ".$voc1["key"].", 'val2' : ".$voc2["key"].", 'val3' : ".$voc3["key"];
+								}
+						}
+				}
+		}
+	echo strlen($sKey);
 	$html = "<select  name='$fld' onChange='dbmng_update_multi2()' id='".$fld."_res'  ".layout_get_nullable($fld_value)." >\n";
 	$html .= "</select><br/>\n";
 
@@ -361,7 +375,7 @@ function layout_form_multiselect( $fld, $fld_value, $value )
 	$html .= "</select><br/>\n";
 
 	$html .= "\n<script type='text/javascript'>\n";
-	$html .= "var aMultiSelectData={'res' : ".json_encode($aVoc).", 'field_name': '".$fld."'};\n";
+	$html .= "var aMultiSelectData={'res' : ".json_encode($aVoc).", 'field_name': '".$fld."', ".$sKey."};\n";
 	$html .= "dbmng_multi1();\n";
 	$html .= "</script>\n";
 
