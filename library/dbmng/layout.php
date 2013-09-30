@@ -364,7 +364,7 @@ function layout_form_multiselect( $fld, $fld_value, $value )
 						}
 				}
 		}
-	echo strlen($sKey);
+
 	$html = "<select  name='$fld' onChange='dbmng_update_multi2()' id='".$fld."_res'  ".layout_get_nullable($fld_value)." >\n";
 	$html .= "</select><br/>\n";
 
@@ -376,7 +376,17 @@ function layout_form_multiselect( $fld, $fld_value, $value )
 
 	$html .= "\n<script type='text/javascript'>\n";
 	$html .= "var aMultiSelectData={'res' : ".json_encode($aVoc).", 'field_name': '".$fld."', ".$sKey."};\n";
-	$html .= "dbmng_multi1();\n";
+	echo $sKey;
+	if( !isset($value) )
+		{
+			$html .= "dbmng_multi1();\n";
+		}
+	else
+		{
+			$html .= "dbmng_multi1();\n";
+			$html .= "dbmng_update_multi2();\n";
+			$html .= "dbmng_update_multi3();\n";
+		}
 	$html .= "</script>\n";
 
 	return $html;
