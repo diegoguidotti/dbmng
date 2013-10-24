@@ -1,8 +1,12 @@
 <html>
 <head>
 <script type="text/javascript" src="../library/dbmng/assets/dbmng.js?mpvqml"></script>
-<script type="text/javascript" src="http://localhost/clima/misc/jquery.js?v=1.4.4"></script>
-<script type="text/javascript" src="http://localhost/clima/misc/jquery.once.js?v=1.2"></script>
+
+<!-- jQuery and JQ Mobile -->
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+
 
 <style type="text/css" media="all">
 	@import url("../library/dbmng/assets/dbmng.css");
@@ -11,10 +15,7 @@
 <body>
 
 <table border=1 id='dbmng_table'></table>
-Pippo
-	<span>G</span> <span>A</span>
 
-<span>lA bella</span>
 
 <script type="text/javascript">
 	
@@ -44,14 +45,6 @@ jQuery(document).ready(function() {
 	});
 	
 	jQuery('#dbmng_table').html(html);	
-
-
-$("span:contains('A')").css("color", "red");	
-
-{}
-
-$("span:contains('A')").html('G');	
-
 	
 });
 
