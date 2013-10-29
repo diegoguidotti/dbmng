@@ -1,6 +1,6 @@
 <html>
 <head>
-<script type="text/javascript" src="../library/dbmng/assets/dbmng.js?mpvqml"></script>
+<script type="text/javascript" src="../library/dbmng/assets/dbmng_obj.js?mpvqml"></script>
 
 <!-- jQuery and JQ Mobile -->
 <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
@@ -14,39 +14,39 @@
 </head>
 <body>
 
-<table border=1 id='dbmng_table'></table>
 
+<div id="table2"></div>
 
-<script type="text/javascript">
 	
 	
 <?php 
 
-//dbmng_create_json($) 
+  //we need to define some global variable to use dbmg independently by Drupal
+	define( 'DBMNG_LIB_PATH'    , '../library/dbmng/' );
+	define( 'DBMNG_CMS'         , 'none' );
+	define( 'DBMNG_DB'          , 'pdo' );
+
+	//0.include the library
+	include(DBMNG_LIB_PATH.'dbmng.php');
+	include(DBMNG_LIB_PATH.'dbmng_standalone.php');
+
+	//get the array storing the table metadata from record 1 in table dbmng_tables
+	$aForm    = dbmng_get_form_array(11); 
+
+	//echo dbmng_crud($aForm);
+  echo  dbmng_crud_js($aForm, Array() );
 
 ?>  
 
-var data= {'records':[
-		{'id_test':1, 'nome':'Diego', 'eta':39},
-		{'id_test':2, 'nome':'Michele', 'eta':41}	
-	]};
 
-var form= {'table':'Test', fields: [	]};
+<script type="text/javascript">
 
-jQuery(document).ready(function() {
+
+  jQuery(document).ready(function() {
+		var db  = new Dbmng(data, aForm, {'div_element':'table2'});  
+		db.createTable();
 	
-	var html='';
-	jQuery.each(data.records, function(index, value) {
-		
-			html+='<tr><td>'+value.id_test+'</td><td>'+value.nome+'</td><td>'+value.eta+'</td></tr>';
-			
-			
-  		console.log(value);
 	});
-	
-	jQuery('#dbmng_table').html(html);	
-	
-});
 
 
 

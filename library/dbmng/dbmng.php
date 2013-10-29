@@ -357,7 +357,8 @@ function dbmng_crud_js($aForm, $aParam)
 	$html .= "var data=".dbmng_get_js_array($aForm, $aParam).";\n";
 	$html .= "var aForm=".json_encode($aForm).";\n";
 	$html .= "var aParam=".json_encode($aParam).";\n";
-	$html .= "jQuery('#table_container').html(dbmng_create_table(data, aForm, aParam));\n";
+	
+	//$html .= "jQuery('#table_container').html(dbmng_create_table(data, aForm, aParam));\n";
 	$html .= "</script>\n";
 	return $html;
 }
