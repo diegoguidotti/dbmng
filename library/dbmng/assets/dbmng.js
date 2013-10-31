@@ -33,7 +33,7 @@ function dbmng_create_table (data, aForm, aParam) {
 					else{
 						html += "<td>-</td>";
 					}
-				
+				}
 			}
 
 			// available functionalities
