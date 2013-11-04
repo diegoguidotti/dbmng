@@ -197,7 +197,7 @@ function dbmng_manager()
 			{
 				if( isset($_REQUEST['show_add_fields']) ) 
 					{
-						echo "dbmng_get_table_structure - id_table: " . $_REQUEST['id_table'];
+						dbmng_get_table_structure( $_REQUEST['id_table'] );
 					}
 				//$aForm    = dbmng_get_form_array($id_table_field);
 				//$sql    = 'select COLUMN_NAME as colname FROM information_schema.columns c, dbmng_tables t WHERE t.table_name=c.table_name AND t.id_table =:id_table;';
