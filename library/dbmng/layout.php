@@ -510,9 +510,10 @@ function layout_table_action( $aForm, $aParam, $id_record )
 /**
 \param $aParam  	  parameter array
 \param $id_record  	id record
+\nFlds              number of fields (special case for dbmng_tables & fields)
 \return             html
 */
-function layout_table_custom_function($aParam, $id_record)
+function layout_table_custom_function($aParam, $id_record, $nFlds)
 {
 	$hv = prepare_hidden_var($aParam);
 
@@ -521,7 +522,20 @@ function layout_table_custom_function($aParam, $id_record)
 		{
 			foreach($aParam['custom_function'] as $aCustom )								
 				{	
-					$html.="<a href='?$aCustom[custom_variable]=on&$id_record$hv'>$aCustom[custom_label]</a> &nbsp;";
+					if( $aCustom['custom_variable'] == 'show_add_fields' )
+						{
+							if( $nFlds != -1 )
+								{
+									if( $nFlds <=1 )
+										{
+											$html.="<a href='?$aCustom[custom_variable]=on&$id_record$hv'>$aCustom[custom_label]</a> &nbsp;";
+										}
+								}
+						}
+					else
+						{
+							$html.="<a href='?$aCustom[custom_variable]=on&$id_record$hv'>$aCustom[custom_label]</a> &nbsp;";
+						}
 				}
 		}
 		//$html = substr($html, 0, -2);
@@ -605,9 +619,22 @@ function layout_table_body( $result, $aForm, $aParam )
 							$id_record .= $fld . "=" . $record->$fld . "&";
 						}
 				}
+			
 
 			$html .= layout_table_action( $aForm, $aParam, $id_record );
-			$html .= layout_table_custom_function($aParam, $id_record);
+			
+			$nFlds = -1;
+			if(isset($aParam['custom_function']))
+				{
+					foreach($aParam['custom_function'] as $aCustom )								
+						{	
+							if( $aCustom['custom_variable'] == 'show_add_fields' )
+								{
+									$nFlds = $record->fld;
+								}
+						}
+				}
+			$html .= layout_table_custom_function($aParam, $id_record, $nFlds);
 
 			$html .= "</td>\n";
 			
