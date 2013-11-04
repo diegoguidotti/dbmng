@@ -12,6 +12,7 @@ include_once DBMNG_LIB_PATH."dbmng_extend_functions.php";
 include_once DBMNG_LIB_PATH."dbmng_crud.php";
 include_once DBMNG_LIB_PATH."layout.php";
 include_once DBMNG_LIB_PATH."dbmng_sql_functions.php";
+include_once DBMNG_LIB_PATH."dbmng_sql_functions_obj.php";
 
 
 
@@ -919,6 +920,95 @@ function dbmng_add_drupal_libraries()
 		drupal_add_library('system','ui.datepicker');
 	}
 
+/////////////////////////////////////////////////////////////////////////////
+// dbmng_get_table_structure
+// ======================
+/// This function allow to store in the meta-database the structure of a specific
+/// table identified by its id_table
+/**
+\param $id_table  		The id of the table in the meta-database
+*/
+function dbmng_get_table_structure($id_table)
+{
+	$sql = "select table_name from dbmng_tables where id_table = :id_table";
+	
+	//$fields = dbmng_query($sql, array(':id_table' => $_REQUEST['id_table']));
+	$fields = dbmng_query($sql, array(':id_table' => $id_table));
+	foreach($fields as $f)
+		{
+			$tn = $f->table_name;
+		}
+	
+	$sql = "select * from information_schema.columns where table_name = :table_name";
+	$fields = dbmng_query($sql, array(':table_name' => $tn));
+	
+	foreach($fields as $f)
+		{
+			/* Map type into crud type */
+			$sType ="";
+			switch( $f->DATA_TYPE )
+				{
+					case "int":
+					case "float":
+						$sType = "int";
+						break;
+					case "date";
+						$sType = "date";
+						break;
+					default:
+						$sType = "varchar";
+				}
+			
+			/* Assign the 'basic' widget */
+			$widget = "";
+			switch( $f->DATA_TYPE )
+				{
+					case "int":
+					case "float":
+						$widget = "input";
+						break;
+					case "date";
+						$widget = "date";
+						break;
+					default:
+						$widget = "input";
+				}
+			
+			/* identify the primary key */
+			$pk = 0;
+			if( strlen($f->COLUMN_KEY) != 0 )
+				{
+					if( strlen(trim($f->EXTRA)) != 0 )
+						{
+							if( $f->EXTRA == 'auto_increment' )
+								$pk = 1;
+							else
+								$pk = 2;
+						}
+				}
+			
+			/* identify if a fields accept or no to be empty */
+			$nullable = 0;
+			if( $f->IS_NULLABLE == "YES" )
+				$nullable = 1;
+			
+			/* Prepare insert sql command */
+			$sql  = "insert into dbmng_fields( id_table, id_field_type, field_widget, field_name, nullable, field_label, field_order, pk, is_searchable ) ";
+			$sql .= "values( :id_table, :id_field_type, :field_widget, :field_name, :nullable, :field_label, :field_order, :pk, :is_searchable );";
+			$var = array(':id_table' => $id_table, 
+									 ':id_field_type' => $sType, 
+									 ':field_widget' => $widget, 
+									 ':field_name' => $f->COLUMN_NAME,
+									 ':nullable' => $nullable,
+									 ':field_label' => $f->COLUMN_NAME,
+									 ':field_order' => $f->ORDINAL_POSITION,
+									 ':pk' => $pk,
+									 ':is_searchable' => 0);
+			$result = dbmng_query($sql, $var);
+			
+			//echo debug_sql_statement($sql, $var) . "<br/>";			
+		}
+}
 
 
 ?>
