@@ -516,14 +516,15 @@ function layout_table_custom_function($aParam, $id_record)
 {
 	$hv = prepare_hidden_var($aParam);
 
-	$html = "";
+	$html = "&nbsp;";
 	if(isset($aParam['custom_function']))
 		{
 			foreach($aParam['custom_function'] as $aCustom )								
 				{	
-					$html.="<a href='?$aCustom[custom_variable]=on&$id_record$hv'>$aCustom[custom_label]</a>";
+					$html.="<a href='?$aCustom[custom_variable]=on&$id_record$hv'>$aCustom[custom_label]</a> &nbsp;";
 				}
 		}
+		//$html = substr($html, 0, -2);
 	return $html;
 }
 
@@ -573,7 +574,6 @@ function layout_table_body( $result, $aForm, $aParam )
 		{
 			// table value
 			$html .= "<tr>";
-			
 			//get the query results for each field
 			foreach ( $aForm['fields'] as $fld => $fld_value )
 				{
