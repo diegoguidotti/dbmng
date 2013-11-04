@@ -235,7 +235,6 @@ function dbmng_crud($aForm, $aParam=null)
 		}
 	else
     $html .= dbmng_create_form($aForm, $aParam, $do_update);
-
 	return $html;
 }
 
@@ -298,9 +297,12 @@ function dbmng_get_data($aForm, $aParam)
 	$order_by = '';
 	if( isset($aParam['tbl_order']) )
 		$order_by = 'order by ' . $aParam['tbl_order'];
-		
-  $sql = 'select * from ' . $aForm['table_name'].' '. $where . ' ' . $order_by;
-
+	
+	if( isset($aForm['table_view']) )
+	  $sql = 'select * from ' . $aForm['table_view'].' '. $where . ' ' . $order_by;
+	else
+	  $sql = 'select * from ' . $aForm['table_name'].' '. $where . ' ' . $order_by;
+	
 	$result = dbmng_query($sql, $var);
 
 	return $result;
@@ -331,10 +333,8 @@ function dbmng_create_table($aForm, $aParam)
 		}
 	
 	$html .= layout_table( $result, $aForm, $aParam );
-
 	$html  .= "<div class='dbmng_record_number'>" . t("Record number") . ": " . dbmng_num_rows($result) . " " . t("recs") . "</div>\n";
 	$html  .= '</div>';
-	
 	return $html;
 }
 
@@ -914,6 +914,7 @@ function dbmng_add_drupal_libraries()
 		drupal_add_css( "sites/all/modules/dbmng_module/dbmng_module.css" );
 		drupal_add_css( "sites/all/libraries/dbmng/assets/dbmng.css" );
 		drupal_add_js ( "sites/all/libraries/dbmng/assets/dbmng.js" );
+		drupal_add_js ( "sites/all/libraries/dbmng/assets/dbmng_obj.js" );
 		drupal_add_js ( "sites/all/libraries/dbmng/assets/jquery.tablesorter.js" );
 		drupal_add_library('system','ui.datepicker');
 	}
