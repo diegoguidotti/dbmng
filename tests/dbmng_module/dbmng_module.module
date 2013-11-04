@@ -193,8 +193,12 @@ function dbmng_manager()
         */
 
 			}
-		elseif( isset($_REQUEST['show_fields']) )
+		elseif( isset($_REQUEST['show_fields']) || isset($_REQUEST['show_add_fields']) )
 			{
+				if( isset($_REQUEST['show_add_fields']) ) 
+					{
+						echo "dbmng_get_table_structure - id_table: " . $_REQUEST['id_table'];
+					}
 				//$aForm    = dbmng_get_form_array($id_table_field);
 				//$sql    = 'select COLUMN_NAME as colname FROM information_schema.columns c, dbmng_tables t WHERE t.table_name=c.table_name AND t.id_table =:id_table;';
 
@@ -225,15 +229,6 @@ function dbmng_manager()
 						'table_name' => 'dbmng_fields' ,
 							'primary_key'=> array('id_field'), 
 							'fields'     => array(
-/*
-									'id_table'  => 
-										array('label'   => t('ID') , 
-													'label_long' => t('ID Table'),
-													'type' => 'bigint',
-													'skip_in_tbl' => '1',
-													'key' => 2
-										), 
-*/
 									'id_field'  => 
 										array('label'   => t('ID') , 
 													'label_long' => t('ID Field'),
@@ -374,7 +369,11 @@ function dbmng_manager()
 				$aParam['filters']['id_table']	       = $_REQUEST['id_table']; 
 
 				//important - you need to add show_fields and id_table param to all the POST and GET call
-				$aParam['hidden_vars']['show_fields']  = $_REQUEST['show_fields'];
+				if( isset($_REQUEST['show_fields']) )
+					$aParam['hidden_vars']['show_fields']  = $_REQUEST['show_fields'];
+				elseif( isset($_REQUEST['show_add_fields']) )
+					$aParam['hidden_vars']['show_add_fields']  = $_REQUEST['show_add_fields'];
+				
 				$aParam['hidden_vars']['id_table']  = $_REQUEST['id_table'];
 				$aParam['user_function']['dup']	       = 0;	              // allow to enabled=1 or disabled=0 the duplication function
 				$aParam['user_function']['del']	       = 0;	              // allow to enabled=1 or disabled=0 the delate function
@@ -408,6 +407,7 @@ function dbmng_manager()
 				// $aForm    = dbmng_get_form_array($id_table_table);
 				$aForm=array(  
 						'table_name' => 'dbmng_tables' ,
+						'table_view' => 'dbmng_tables_ext' ,
 							'primary_key'=> array('id_table'), 
 							'fields'     => array(
 									'id_table'  => 
@@ -432,8 +432,8 @@ function dbmng_manager()
 													'widget'=>'select' ,
 													'key' => 0,
 													'voc_val' => array(
-														'1'=> t('System Table') , 
-														'2'=> t('Content Table')
+														'2'=> t('System Table') , 
+														'1'=> t('Content Table')
 													)
 										) ,
 									'table_label'  => 
@@ -459,6 +459,11 @@ function dbmng_manager()
 				$aParam['user_function']['del']	   = 0;	              // allow to enabled=1 or disabled=0 the delate function
 				$aParam['custom_function'][0]['custom_variable']  = 'show_fields';
 				$aParam['custom_function'][0]['custom_label']  = t('Show Fields');
+				
+				// add check in order to remove this link
+				$aParam['custom_function'][1]['custom_variable']  = 'show_add_fields';
+				$aParam['custom_function'][1]['custom_label']  = t('Add & Show Fields');
+				
 				$aParam['tbl_sorter']              = '1';
 
 				// update record
