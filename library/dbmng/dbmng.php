@@ -963,8 +963,11 @@ function dbmng_get_table_structure($id_table)
 				{
 					case "int":
 					case "bigint":
-					case "float":
 						$sType = "int";
+						break;
+					case "float":
+					case "double":
+						$sType = "double";
 						break;
 					case "date";
 						$sType = "date";
