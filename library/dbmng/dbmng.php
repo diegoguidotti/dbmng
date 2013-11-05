@@ -944,11 +944,25 @@ function dbmng_get_table_structure($id_table)
 	
 	foreach($fields as $f)
 		{
+			/* identify the primary key */
+			$pk = 0;
+			if( strlen($f->COLUMN_KEY) != 0 )
+				{
+					if( strlen(trim($f->EXTRA)) != 0 )
+						{
+							if( $f->EXTRA == 'auto_increment' )
+								$pk = 1;
+							else
+								$pk = 2;
+						}
+				}
+			
 			/* Map type into crud type */
 			$sType ="";
 			switch( $f->DATA_TYPE )
 				{
 					case "int":
+					case "bigint":
 					case "float":
 						$sType = "int";
 						break;
@@ -961,9 +975,19 @@ function dbmng_get_table_structure($id_table)
 			
 			/* Assign the 'basic' widget */
 			$widget = "";
+			$voc_sql = null;
 			switch( $f->DATA_TYPE )
 				{
 					case "int":
+						if( strpos($f->COLUMN_NAME, "id_" ) !== false && $pk == 0 )
+							{
+								$widget = "select";
+							}
+						else
+							{
+								$widget = "input";
+							}
+						break;
 					case "float":
 						$widget = "input";
 						break;
@@ -972,19 +996,6 @@ function dbmng_get_table_structure($id_table)
 						break;
 					default:
 						$widget = "input";
-				}
-			
-			/* identify the primary key */
-			$pk = 0;
-			if( strlen($f->COLUMN_KEY) != 0 )
-				{
-					if( strlen(trim($f->EXTRA)) != 0 )
-						{
-							if( $f->EXTRA == 'auto_increment' )
-								$pk = 1;
-							else
-								$pk = 2;
-						}
 				}
 			
 			/* identify if a fields accept or no to be empty */
