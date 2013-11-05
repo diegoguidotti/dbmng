@@ -260,6 +260,7 @@ function dbmng_manager()
 													'nullable' => false,
 													'voc_val' => array(
 														'int'=> t('Integer'),	
+														'double'=> t('Double'),	
 														'varchar'=> t('Short Text'),	
 														'text'=> t('Long Text'),	
 														'date'=> t('Date')	
