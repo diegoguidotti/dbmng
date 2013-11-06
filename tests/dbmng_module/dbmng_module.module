@@ -74,403 +74,354 @@ return $html;
 
 function dbmng_manager() 
 {
-	$id_table_table=8;
-	$id_table_field=9;
 	dbmng_add_drupal_libraries();
-
-
-
-
-
 	$html = "";
-	/*
-	if( isset($_REQUEST['tbl']) )
-	{
-		//get the form!!!
-		$id_table = $_REQUEST['tbl'];
-		$aForm    = dbmng_get_form_array($id_table);
 
-		//the param array stores some custom variable used by the renderer
-		//hidden_vars are some hidden variables used by the form creation
-		global $user;
-		unset($aParam);
-		$aParam                            = array();
-		$aParam['filters']                 = array();
-		$aParam['hidden_vars']             = array();
-		$aParam['hidden_vars']['tbl']	     = $_REQUEST['tbl']; //save the table id
+	if( isset($_REQUEST['test']) )
+		{
+			// [MM 05/11/13] can be deleted
+			/*
+			select s.id_c_voc_strategy, s.strategy,g.id_c_voc_ass_group, g.ass_group, a.id_c_assessment, a.ass_type from
+			c_voc_strategy s, c_voc_ass_group g, c_assessment a
+			WHERE s.id_c_voc_strategy=a.id_c_voc_strategy AND g.id_c_voc_ass_group=a.id_c_voc_ass_group
+			order by s.id_c_voc_strategy, g.id_c_voc_ass_group, a.id_c_assessment
+			*/
+			$sql = "select distinct id_c_voc_strategy, strategy from c_voc_strategy";
 
-		//test filter records with a specific uid
-		//$aParam['filters']['id_user']	   = $user->uid;       // save the user id
-		$aParam['tbl_footer']              = 1;                // allow to add filtering
-		$aParam['user_function']['dup']	   = 0;	              // allow to enabled=1 or disabled=0 the duplication function
-		$aParam['user_function']['ins']	   = 1;	              // allow to enabled=1 or disabled=0 the insert function
-		$aParam['user_function']['upd']	   = 1;                // allow to enabled=1 or disabled=0 the update function
-		$aParam['user_function']['del']	   = 0;	              // allow to enabled=1 or disabled=0 the delate function
-		$aParam['file']                    = "sites/default/upload/";
-		$aParam['tbl_order']               = 'nome';
-		$aParam['tbl_sorter']              = '1';
+			$rFirst = dbmng_query($sql, array());
+			$aFirst = array();
 
-		//print_r ($aParam['filters']);
-
-		// update record
-		dbmng_create_form_process($aForm, $aParam);
-
-		$html .= dbmng_create_table($aForm, $aParam);
-
-		$html .= dbmng_create_form($aForm, $aParam);
-	}
-	*/
-	if(false)
-		{;}
-	else{
-		if( isset($_REQUEST['test']) )
-			{
-				/*
-				select s.id_c_voc_strategy, s.strategy,g.id_c_voc_ass_group, g.ass_group, a.id_c_assessment, a.ass_type from
-				c_voc_strategy s, c_voc_ass_group g, c_assessment a
-				WHERE s.id_c_voc_strategy=a.id_c_voc_strategy AND g.id_c_voc_ass_group=a.id_c_voc_ass_group
-				order by s.id_c_voc_strategy, g.id_c_voc_ass_group, a.id_c_assessment
-				*/
-				$sql = "select distinct id_c_voc_strategy, strategy from c_voc_strategy";
-
-				$rFirst = dbmng_query($sql, array());
-				$aFirst = array();
-
-				foreach($rFirst as $first)
-					{
-						$aFirst[$first->id_c_voc_strategy] = array("key" => $first->id_c_voc_strategy, "value" => $first->strategy, "vals" => array());
-						
-						$sql = "select distinct a.id_c_voc_ass_group, g.ass_group from c_assessment a, c_voc_ass_group g where a.id_c_voc_ass_group = g.id_c_voc_ass_group and a.id_c_voc_strategy = ". $first->id_c_voc_strategy;
-						$rSecond = dbmng_query($sql, array());
-						$aSec = array();
-						foreach($rSecond as $second)
-							{
-								$aSec[$second->id_c_voc_ass_group] = array("key" => $second->id_c_voc_ass_group, "value" => $second->ass_group, "vals" => array());
-								
-								$sql = "select distinct id_c_assessment, ass_type from c_assessment where id_c_voc_strategy=" . $first->id_c_voc_strategy . " and id_c_voc_ass_group=" . $second->id_c_voc_ass_group;
-								$rThird = dbmng_query($sql, array());
-								$aThird = array();
-								foreach($rThird as $third)
-									{
-										$aThird[$third->id_c_assessment] = array("key" => $third->id_c_assessment, "value" => $third->ass_type);
-										$aSec[$second->id_c_voc_ass_group]["vals"] = $aThird;
-										$aFirst[$first->id_c_voc_strategy]["vals"] = $aSec;
-									}
-							}
-					}
-				$aRes = array("res" => $aFirst);
-				echo json_encode($aRes);
-				echo "<pre>";
-				print_r($aRes);
-				
-				echo "</pre>";
-
-				/*
-				$aForm=array(  
-					'table_name' => 'test' ,
-					'primary_key'=> array('id_test'), 
-					'fields'     => array(
-						'nome' => array('label' => 'Name', 'type' => 'varchar') ,
-						'eta'  => array('label'   => 'Et&agrave;' , 'type' => 'int'    )
-					)
-        );
-        $id_table = "test";
-				$aForm    = dbmng_get_form_array($id_table);
-				
-				$newField = array('label' => 'Contries', 'type' => 'int', 'widget'=>'multi', 'voc_table'=>'country', 'voc_table_pk'=>'id_country', 'voc_table_label'=>'country_name', 'rel_table'=>'test_country', 'rel_table_fk1'=>'id_test', 'rel_table_fk2'=>'id_country'  );
-				$aForm['fields'] = array_merge($aForm['fields'], array("id_country" => $newField));
-				
-				//echo '<pre>';
-				//print_r($aForm);
-				//echo '</pre>';
-				
-				
-				$aParam   = array();
-				$aParam['hidden_vars']['test']	     = $_REQUEST['test']; //save the table id
-			  $aParam['hidden_vars']['type_tbl'] = 1; //table type (1: content table; 2: system table)
-
-				$html .= dbmng_crud($aForm, $aParam);
-        */
-
-			}
-		elseif( isset($_REQUEST['show_fields']) || isset($_REQUEST['show_add_fields']) )
-			{
-				if( isset($_REQUEST['show_add_fields']) ) 
-					{
-						dbmng_get_table_structure( $_REQUEST['id_table'] );
-					}
-				//$aForm    = dbmng_get_form_array($id_table_field);
-				//$sql    = 'select COLUMN_NAME as colname FROM information_schema.columns c, dbmng_tables t WHERE t.table_name=c.table_name AND t.id_table =:id_table;';
-
-				$sql    = 'select COLUMN_NAME as colname ';
-				$sql   .= 'FROM information_schema.columns c, ' . DBMNG_DB_NAME . '.dbmng_tables t ';
-				$sql   .= ' WHERE '; 
-				$sql   .= ' t.table_name=c.table_name AND t.id_table =:id_table';
-
-				//exclude already added fields in the list for insert
-				if(isset($_REQUEST['act']))
-					{
-						if($_REQUEST['act']=='ins') 
-							{
-								$sql  .= ' AND COLUMN_NAME not in( select field_name from ' . DBMNG_DB_NAME . '.dbmng_fields where id_table = :id_table ) ';
-							}
-					}
-
-				$fields = dbmng_query($sql, array(':id_table' => $_REQUEST['id_table']));
-				$varField= array();
-				foreach($fields as $f)
-					{				
-						$cn=	 $f->colname;
-
-						$varField[$cn] = $cn ;
-					}		
-
-				$aForm=array(  
-						'table_name' => 'dbmng_fields' ,
-							'primary_key'=> array('id_field'), 
-							'fields'     => array(
-									'id_field'  => 
-										array('label'   => t('ID') , 
-													'label_long' => t('ID Field'),
-													'type' => 'bigint',
-													'key' => 1,
-										), 
-									'field_name'  => 
-										array('label'   => t('Name') , 
-													'label_long' => t('Field Name'),
-													'nullable' => false,
-													'type' => 'varchar',
-													'widget'=>'select' ,
-													'key' => 0,
-											    'voc_val' => $varField
-										), 
-									'field_label'  => 
-										array('label'   => t('Label') , 
-													'label_long' => t('Field Label'),
-													'nullable' => false,
-													'key' => 0,
-													'type' => 'varchar'
-										), 
-									'id_field_type'     => 
-										array('label'   => t('Type'), 
-													'label_long' => t('Field Type'),
-													'key' => 0,
-													'type' => 'varchar', 
-													'widget'=>'select' ,
-													'nullable' => false,
-													'voc_val' => array(
-														'int'=> t('Integer'),	
-														'double'=> t('Double'),	
-														'varchar'=> t('Short Text'),	
-														'text'=> t('Long Text'),	
-														'date'=> t('Date')	
-													)
-										) ,
-									'field_widget'     => 
-										array('label'   => t('Widget'), 
-													'label_long' => t('Widget'),
-													'key' => 0,
-													'type' => 'varchar', 
-													'widget'=>'select' ,
-													'nullable' => false,
-													'voc_val' => array(
-															'checkbox'=> t('CheckBox'),	
-															'date'=> t('Date'),	
-															'file'=> t('File'),
-															'input'=> t('Input Box'),
-															'password'=> t('Password'),	
-															'select'=> t('Select'),	
-															'multiselect'=> t('Multi-Select'),	
-															'textarea'=> t('Text Area')	
-													)
-										),
-									'nullable'     => 
-										array('label'   => t('Null'), 
-													'label_long' => t('Nullable'),
-													'key' => 0,
-													'type' => 'int', 
-													'widget'=>'checkbox',
-													'skip_in_tbl' => '1'
-										),
-									'pk'     => 
-										array('label'   => t('Pk'), 
-													'label_long' => t('Primary Key'),
-													'key' => 0,
-													'type' => 'int', 
-													'widget'=>'select',
-													'voc_val' => array(
-															0 => t('Normal field'),
-															1 => t('Auto-increment primary key'),
-															2 => t('Standard primary key')
-													)
-										),
-									'default_value' =>
-										array( 'label' => t('Default'),
-													 'label_long' => t('Default value'),
-													 'key' => 0,
-													 'type'  => 'varchar',
-													 'skip_in_tbl' => '1'
-										),
-									'field_function' =>
-										array( 'label' => t('Fnc'),
-													 'label_long' => t('Field function'),
-													 'key' => 0,
-													 'type'  => 'varchar',
-													 'skip_in_tbl' => '1'
-										),
-									'field_label_long' =>
-										array( 'label' => t('Long'),
-													 'label_long' => t('Long Label'),
-													 'key' => 0,
-													 'type'  => 'varchar',
-													 'skip_in_tbl' => '1'
-										),
-									'field_order' =>
-										array( 'label' => t('Order'),
-													 'label_long' => t('Order'),
-													 'key' => 0,
-													 'type'  => 'int',
-										),
-									'is_searchable'     => 
-										array('label'   => t('Search'), 
-													'label_long' => t('Searchable'),
-													'key' => 0,
-													'type' => 'int', 
-													'widget'=>'checkbox',
-													'skip_in_tbl' => '1'
-										),
-									'skip_in_tbl'     => 
-										array('label'   => t('Skip'), 
-													'label_long' => t('Skip in table view'),
-													'key' => 0,
-													'type' => 'int', 
-													'widget'=>'checkbox',
-													'skip_in_tbl' => '1'
-										),
-									'voc_sql' =>
-										array( 'label' => t('SQL'),
-													 'label_long' => t('Vocabulary SQL'),
-													 'key' => 0,
-													 'type'  => 'text',
-													 'widget' => 'textarea',
-													 'skip_in_tbl' => '1'
-										),							
-									'field_function'     => 
-										array('label'   => t('Fnc'), 
-													'label_long' => t('Field function'),
-													'key' => 0,
-													'type' => 'varchar', 
-													'skip_in_tbl' => '1'
-										),
-							)
-					);
-
-				unset($aParam);
-				$aParam                                = array();
-				$aParam['filters']['id_table']	       = $_REQUEST['id_table']; 
-
-				//important - you need to add show_fields and id_table param to all the POST and GET call
-				if( isset($_REQUEST['show_fields']) )
-					$aParam['hidden_vars']['show_fields']  = $_REQUEST['show_fields'];
-				elseif( isset($_REQUEST['show_add_fields']) )
-					$aParam['hidden_vars']['show_add_fields']  = $_REQUEST['show_add_fields'];
-				
-				$aParam['hidden_vars']['id_table']  = $_REQUEST['id_table'];
-				$aParam['user_function']['dup']	       = 0;	              // allow to enabled=1 or disabled=0 the duplication function
-				$aParam['user_function']['del']	       = 0;	              // allow to enabled=1 or disabled=0 the delate function
-				$aParam['tbl_order']                   = 'field_order';
-				$aParam['tbl_sorter']                  = '1';
-				
-				$html .= dbmng_crud($aForm, $aParam);
-			}
-		else
-			{
-				$sql  = "select table_name FROM information_schema.columns ";
-				$sql .= "where table_schema='" . DBMNG_DB_NAME . "' and table_name not like '" . DBMNG_DB_TBL_PREFIX . "%' ";
-				
-				if(isset($_REQUEST['act']))
-					{
-						if($_REQUEST['act']=='ins') 
+			foreach($rFirst as $first)
+				{
+					$aFirst[$first->id_c_voc_strategy] = array("key" => $first->id_c_voc_strategy, "value" => $first->strategy, "vals" => array());
+					
+					$sql = "select distinct a.id_c_voc_ass_group, g.ass_group from c_assessment a, c_voc_ass_group g where a.id_c_voc_ass_group = g.id_c_voc_ass_group and a.id_c_voc_strategy = ". $first->id_c_voc_strategy;
+					$rSecond = dbmng_query($sql, array());
+					$aSec = array();
+					foreach($rSecond as $second)
+						{
+							$aSec[$second->id_c_voc_ass_group] = array("key" => $second->id_c_voc_ass_group, "value" => $second->ass_group, "vals" => array());
+							
+							$sql = "select distinct id_c_assessment, ass_type from c_assessment where id_c_voc_strategy=" . $first->id_c_voc_strategy . " and id_c_voc_ass_group=" . $second->id_c_voc_ass_group;
+							$rThird = dbmng_query($sql, array());
+							$aThird = array();
+							foreach($rThird as $third)
 								{
-									$sql .= "and table_name not in (select distinct table_name from " . DBMNG_DB_NAME .".dbmng_tables)";
-					 			}
-					}
-				
-				$tables   = dbmng_query( $sql, array() );
-				$varTable = array();
-				foreach($tables as $t)
-					{				
-						$cn=	 $t->table_name;
+									$aThird[$third->id_c_assessment] = array("key" => $third->id_c_assessment, "value" => $third->ass_type);
+									$aSec[$second->id_c_voc_ass_group]["vals"] = $aThird;
+									$aFirst[$first->id_c_voc_strategy]["vals"] = $aSec;
+								}
+						}
+				}
+			$aRes = array("res" => $aFirst);
+			echo json_encode($aRes);
+			echo "<pre>";
+			print_r($aRes);
+			
+			echo "</pre>";
 
-						$varTable[$cn] = $cn ;
-					}		
+			/*
+			$aForm=array(  
+				'table_name' => 'test' ,
+				'primary_key'=> array('id_test'), 
+				'fields'     => array(
+					'nome' => array('label' => 'Name', 'type' => 'varchar') ,
+					'eta'  => array('label'   => 'Et&agrave;' , 'type' => 'int'    )
+				)
+      );
+      $id_table = "test";
+			$aForm    = dbmng_get_form_array($id_table);
+			
+			$newField = array('label' => 'Contries', 'type' => 'int', 'widget'=>'multi', 'voc_table'=>'country', 'voc_table_pk'=>'id_country', 'voc_table_label'=>'country_name', 'rel_table'=>'test_country', 'rel_table_fk1'=>'id_test', 'rel_table_fk2'=>'id_country'  );
+			$aForm['fields'] = array_merge($aForm['fields'], array("id_country" => $newField));
+			
+			//echo '<pre>';
+			//print_r($aForm);
+			//echo '</pre>';
+			
+			
+			$aParam   = array();
+			$aParam['hidden_vars']['test']	     = $_REQUEST['test']; //save the table id
+		  $aParam['hidden_vars']['type_tbl'] = 1; //table type (1: content table; 2: system table)
 
-				// $aForm    = dbmng_get_form_array($id_table_table);
-				$aForm=array(  
-						'table_name' => 'dbmng_tables' ,
-						'table_view' => 'dbmng_tables_ext' ,
-							'primary_key'=> array('id_table'), 
-							'fields'     => array(
-									'id_table'  => 
-										array('label'   => t('ID') , 
-													'label_long' => t('ID Table'),
-													'type' => 'bigint',
-													'skip_in_tbl' => '1',
-													'key' => 1
-										), 
-									'table_name'  => 
-										array('label'   => t('Name') , 
-													'label_long' => t('Table Name'),
-													'type' => 'varchar',
-													'widget' => 'select',
-													'voc_val' => $varTable,
-													'key' => 0
-										), 
-									'id_table_type'     => 
-										array('label'   => t('Type'), 
-													'label_long' => t('Table Type'),
-													'type' => 'varchar', 
-													'widget'=>'select' ,
-													'key' => 0,
-													'voc_val' => array(
-														'2'=> t('System Table') , 
-														'1'=> t('Content Table')
-													)
-										) ,
-									'table_label'  => 
-										array('label'   => t('Label') , 
-													'label_long' => t('Table Label'),
-													'type' => 'varchar',
-													'key' => 0,
-													'skip_in_tbl' => '1'
-										), 
-									'table_desc'  => 
-										array('label'   => t('Desc') , 
-													'label_long' => t('Table Description'),
-													'type' => 'varchar',
-													'key' => 0,
-													'skip_in_tbl' => '1'
-										)
-							)
-					);
-
-				unset($aParam);
-				$aParam                            = array();
-				$aParam['user_function']['dup']	   = 0;	              // allow to enabled=1 or disabled=0 the duplication function
-				$aParam['user_function']['del']	   = 0;	              // allow to enabled=1 or disabled=0 the delate function
-				$aParam['custom_function'][0]['custom_variable']  = 'show_fields';
-				$aParam['custom_function'][0]['custom_label']  = t('Show Fields');
-				
-				// add check in order to remove this link
-				$aParam['custom_function'][1]['custom_variable']  = 'show_add_fields';
-				$aParam['custom_function'][1]['custom_label']  = t('Add & Show Fields');
-				
-				$aParam['tbl_sorter']              = '1';
-
-				// update record
-				$html .= dbmng_crud($aForm, $aParam);
+			$html .= dbmng_crud($aForm, $aParam);
+      */
 		}
-	}
+	elseif( isset($_REQUEST['show_fields']) || isset($_REQUEST['show_add_fields']) )
+		{
+			if( isset($_REQUEST['show_add_fields']) ) 
+				{
+					dbmng_get_table_structure( $_REQUEST['id_table'] );
+				}
+
+			$sql    = 'select COLUMN_NAME as colname ';
+			$sql   .= 'FROM information_schema.columns c, ' . DBMNG_DB_NAME . '.dbmng_tables t ';
+			$sql   .= ' WHERE '; 
+			$sql   .= ' t.table_name=c.table_name AND t.id_table =:id_table';
+
+			//exclude already added fields in the list for insert
+			if(isset($_REQUEST['act']))
+				{
+					if($_REQUEST['act']=='ins') 
+						{
+							$sql  .= ' AND COLUMN_NAME not in( select field_name from ' . DBMNG_DB_NAME . '.dbmng_fields where id_table = :id_table ) ';
+						}
+				}
+
+			$fields = dbmng_query($sql, array(':id_table' => $_REQUEST['id_table']));
+			$varField= array();
+			foreach($fields as $f)
+				{				
+					$cn=	 $f->colname;
+
+					$varField[$cn] = $cn ;
+				}		
+
+			$aForm=array(  
+					'table_name' => 'dbmng_fields' ,
+						'primary_key'=> array('id_field'), 
+						'fields'     => array(
+								'id_field'  => 
+									array('label'   => t('ID') , 
+												'label_long' => t('ID Field'),
+												'type' => 'bigint',
+												'key' => 1,
+									), 
+								'field_name'  => 
+									array('label'   => t('Name') , 
+												'label_long' => t('Field Name'),
+												'nullable' => false,
+												'type' => 'varchar',
+												'widget'=>'select' ,
+												'key' => 0,
+										    'voc_val' => $varField
+									), 
+								'field_label'  => 
+									array('label'   => t('Label') , 
+												'label_long' => t('Field Label'),
+												'nullable' => false,
+												'key' => 0,
+												'type' => 'varchar'
+									), 
+								'id_field_type'     => 
+									array('label'   => t('Type'), 
+												'label_long' => t('Field Type'),
+												'key' => 0,
+												'type' => 'varchar', 
+												'widget'=>'select' ,
+												'nullable' => false,
+												'voc_val' => array(
+													'int'=> t('Integer'),	
+													'double'=> t('Double'),	
+													'varchar'=> t('Short Text'),	
+													'text'=> t('Long Text'),	
+													'date'=> t('Date')	
+												)
+									) ,
+								'field_widget'     => 
+									array('label'   => t('Widget'), 
+												'label_long' => t('Widget'),
+												'key' => 0,
+												'type' => 'varchar', 
+												'widget'=>'select' ,
+												'nullable' => false,
+												'voc_val' => array(
+														'checkbox'=> t('CheckBox'),	
+														'date'=> t('Date'),	
+														'file'=> t('File'),
+														'input'=> t('Input Box'),
+														'password'=> t('Password'),	
+														'select'=> t('Select'),	
+														'multiselect'=> t('Multi-Select'),	
+														'textarea'=> t('Text Area')	
+												)
+									),
+								'nullable'     => 
+									array('label'   => t('Null'), 
+												'label_long' => t('Nullable'),
+												'key' => 0,
+												'type' => 'int', 
+												'widget'=>'checkbox',
+												'skip_in_tbl' => '1'
+									),
+								'pk'     => 
+									array('label'   => t('Pk'), 
+												'label_long' => t('Primary Key'),
+												'key' => 0,
+												'type' => 'int', 
+												'widget'=>'select',
+												'voc_val' => array(
+														0 => t('Normal field'),
+														1 => t('Auto-increment primary key'),
+														2 => t('Standard primary key')
+												)
+									),
+								'default_value' =>
+									array( 'label' => t('Default'),
+												 'label_long' => t('Default value'),
+												 'key' => 0,
+												 'type'  => 'varchar',
+												 'skip_in_tbl' => '1'
+									),
+								'field_function' =>
+									array( 'label' => t('Fnc'),
+												 'label_long' => t('Field function'),
+												 'key' => 0,
+												 'type'  => 'varchar',
+												 'skip_in_tbl' => '1'
+									),
+								'field_label_long' =>
+									array( 'label' => t('Long'),
+												 'label_long' => t('Long Label'),
+												 'key' => 0,
+												 'type'  => 'varchar',
+												 'skip_in_tbl' => '1'
+									),
+								'field_order' =>
+									array( 'label' => t('Order'),
+												 'label_long' => t('Order'),
+												 'key' => 0,
+												 'type'  => 'int',
+									),
+								'is_searchable'     => 
+									array('label'   => t('Search'), 
+												'label_long' => t('Searchable'),
+												'key' => 0,
+												'type' => 'int', 
+												'widget'=>'checkbox',
+												'skip_in_tbl' => '1'
+									),
+								'skip_in_tbl'     => 
+									array('label'   => t('Skip'), 
+												'label_long' => t('Skip in table view'),
+												'key' => 0,
+												'type' => 'int', 
+												'widget'=>'checkbox',
+												'skip_in_tbl' => '1'
+									),
+								'voc_sql' =>
+									array( 'label' => t('SQL'),
+												 'label_long' => t('Vocabulary SQL'),
+												 'key' => 0,
+												 'type'  => 'text',
+												 'widget' => 'textarea',
+												 'skip_in_tbl' => '1'
+									),							
+								'field_function'     => 
+									array('label'   => t('Fnc'), 
+												'label_long' => t('Field function'),
+												'key' => 0,
+												'type' => 'varchar', 
+												'skip_in_tbl' => '1'
+									),
+						)
+				);
+
+			unset($aParam);
+			$aParam                                = array();
+			$aParam['filters']['id_table']	       = $_REQUEST['id_table']; 
+
+			//important - you need to add show_fields and id_table param to all the POST and GET call
+			if( isset($_REQUEST['show_fields']) )
+				$aParam['hidden_vars']['show_fields']  = $_REQUEST['show_fields'];
+			elseif( isset($_REQUEST['show_add_fields']) )
+				$aParam['hidden_vars']['show_add_fields']  = $_REQUEST['show_add_fields'];
+			
+			$aParam['hidden_vars']['id_table']  = $_REQUEST['id_table'];
+			$aParam['user_function']['dup']	       = 0;	              // allow to enabled=1 or disabled=0 the duplication function
+			$aParam['user_function']['del']	       = 0;	              // allow to enabled=1 or disabled=0 the delate function
+			$aParam['tbl_order']                   = 'field_order';
+			$aParam['tbl_sorter']                  = '1';
+			
+			$html .= dbmng_crud($aForm, $aParam);
+		}
+	else
+		{
+			$sql  = "select table_name FROM information_schema.columns ";
+			$sql .= "where table_schema='" . DBMNG_DB_NAME . "' and table_name not like '" . DBMNG_DB_TBL_PREFIX . "%' ";
+			
+			if(isset($_REQUEST['act']))
+				{
+					if($_REQUEST['act']=='ins') 
+							{
+								$sql .= "and table_name not in (select distinct table_name from " . DBMNG_DB_NAME .".dbmng_tables)";
+				 			}
+				}
+			
+			$tables   = dbmng_query( $sql, array() );
+			$varTable = array();
+			foreach($tables as $t)
+				{				
+					$cn=	 $t->table_name;
+
+					$varTable[$cn] = $cn ;
+				}		
+
+			// $aForm    = dbmng_get_form_array($id_table_table);
+			$aForm=array(  
+					'table_name' => 'dbmng_tables' ,
+					'table_view' => 'dbmng_tables_ext' ,
+						'primary_key'=> array('id_table'), 
+						'fields'     => array(
+								'id_table'  => 
+									array('label'   => t('ID') , 
+												'label_long' => t('ID Table'),
+												'type' => 'bigint',
+												'skip_in_tbl' => '1',
+												'key' => 1
+									), 
+								'table_name'  => 
+									array('label'   => t('Name') , 
+												'label_long' => t('Table Name'),
+												'type' => 'varchar',
+												'widget' => 'select',
+												'voc_val' => $varTable,
+												'key' => 0
+									), 
+								'id_table_type'     => 
+									array('label'   => t('Type'), 
+												'label_long' => t('Table Type'),
+												'type' => 'varchar', 
+												'widget'=>'select' ,
+												'key' => 0,
+												'voc_val' => array(
+													'2'=> t('System Table') , 
+													'1'=> t('Content Table')
+												)
+									) ,
+								'table_label'  => 
+									array('label'   => t('Label') , 
+												'label_long' => t('Table Label'),
+												'type' => 'varchar',
+												'key' => 0,
+												'skip_in_tbl' => '1'
+									), 
+								'table_desc'  => 
+									array('label'   => t('Desc') , 
+												'label_long' => t('Table Description'),
+												'type' => 'varchar',
+												'key' => 0,
+												'skip_in_tbl' => '1'
+									)
+						)
+				);
+
+			unset($aParam);
+			$aParam                            = array();
+			$aParam['user_function']['dup']	   = 0;	              // allow to enabled=1 or disabled=0 the duplication function
+			$aParam['user_function']['del']	   = 0;	              // allow to enabled=1 or disabled=0 the delate function
+			$aParam['custom_function'][0]['custom_variable']  = 'show_fields';
+			$aParam['custom_function'][0]['custom_label']  = t('Show Fields');
+			
+			// add check in order to remove this link
+			$aParam['custom_function'][1]['custom_variable']  = 'show_add_fields';
+			$aParam['custom_function'][1]['custom_label']  = t('Add & Show Fields');
+			
+			$aParam['tbl_sorter']              = '1';
+
+			// update record
+			$html .= dbmng_crud($aForm, $aParam);
+		}
   return ($html);
 }
 
