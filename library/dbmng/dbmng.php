@@ -939,8 +939,8 @@ function dbmng_get_table_structure($id_table)
 			$tn = $f->table_name;
 		}
 	
-	$sql = "select * from information_schema.columns where table_name = :table_name";
-	$fields = dbmng_query($sql, array(':table_name' => $tn));
+	$sql = "select * from information_schema.columns where table_name = :table_name and table_schema = :table_schema";
+	$fields = dbmng_query($sql, array(':table_name' => $tn, ':table_schema' => DBMNG_DB_NAME) );
 	
 	foreach($fields as $f)
 		{
