@@ -194,7 +194,7 @@ function dbmng_insert($aForm, $aParam)
 				{
 					$sWhat .= $fld . ", ";
 					$sVal.=":$fld ,";	
-					$var = array_merge($var, array(":".$fld => dbmng_value_prepare($fld_value,$fld,$_POST)));
+					$var = array_merge($var, array(":".$fld => dbmng_value_prepare($fld_value,$fld,$_POST,$aParam)));
 				}
 		}
 
@@ -269,7 +269,7 @@ function dbmng_update($aForm, $aParam)
 				{
 					$sSet .= $fld . " = :$fld, ";
 
-					$var = array_merge($var, array(":".$fld => dbmng_value_prepare($fld_value,$fld,$_POST)));
+					$var = array_merge($var, array(":".$fld => dbmng_value_prepare($fld_value,$fld,$_POST,$aParam)));
 					//$sSet.=dbmng_value_prepare($x_value,$x,$_POST).", ";
 				}
 		}
