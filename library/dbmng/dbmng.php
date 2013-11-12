@@ -635,7 +635,7 @@ function dbmng_is_field_type_numeric($sType)
 \param $sValue  		The value obtained by the request
 \return             Value
 */
-function dbmng_value_prepare($x_value, $x, $post)
+function dbmng_value_prepare($x_value, $x, $post, $aParam)
 {
 
 	$widget='input';
@@ -672,7 +672,7 @@ function dbmng_value_prepare($x_value, $x, $post)
 			$dir_upd_file = "docs/";
 			if( isset($aParam['file']) )
 				$dir_upd_file = $aParam['file'];
-				
+			
 			$sValue = $dir_upd_file . $_FILES[$x]['name'];
 
 			if( $_FILES[$x]["error"] == 0 )
