@@ -13,6 +13,7 @@ include_once DBMNG_LIB_PATH."dbmng_crud.php";
 include_once DBMNG_LIB_PATH."layout.php";
 include_once DBMNG_LIB_PATH."dbmng_sql_functions.php";
 include_once DBMNG_LIB_PATH."dbmng_sql_functions_obj.php";
+include_once DBMNG_LIB_PATH."dbmng_resize_functions.php";
 
 
 
@@ -678,7 +679,36 @@ function dbmng_value_prepare($x_value, $x, $post, $aParam)
 			if( $_FILES[$x]["error"] == 0 )
 				{
 					$sValue = dbmng_uploadfile($_FILES[$x]['name'], $dir_upd_file, $_FILES[$x]["tmp_name"]);
-			  	// move_uploaded_file($_FILES[$x]["tmp_name"], $dir_upd_file . $_FILES[$x]["name"]);
+
+					if( $_FILES[$x]['type'] == 'image/jpeg' ) // use the dbmng_is_function($_FILES[$x])!!!!
+						{
+							echo $sValue;
+							if( isset($aParam['file_version']['nrm']) )
+								{
+									$thumb=new thumbnail($sValue); 
+									$thumb->size_auto($aParam['file_size']['nrm']);	
+									$thumb->save($aParam['file_version']['nrm'] . $_FILES[$x]['name'] );
+								}
+							if( isset($aParam['file_version']['big']) )
+								{
+									$thumb=new thumbnail($sValue); 
+									$thumb->size_auto($aParam['file_size']['big']);	
+									$thumb->save($aParam['file_version']['big'] . $_FILES[$x]['name'] );
+								}
+							if( isset($aParam['file_version']['prw']) )
+								{
+									$thumb=new thumbnail($sValue); 
+									$thumb->size_auto($aParam['file_size']['prw']);	
+									$thumb->save($aParam['file_version']['prw'] . $_FILES[$x]['name'] );
+								}
+							if( isset($aParam['file_version']['ext']) )
+								{
+									$thumb=new thumbnail($sValue); 
+									$thumb->size_auto($aParam['file_size']['ext']);	
+									$thumb->save($aParam['file_version']['ext'] . $_FILES[$x]['name'] );
+								}
+						}
+
 			  }
 			else if ($_FILES[$x]["error"] == 4)
 				{ //if the file is null use the text in the checkbox
@@ -780,7 +810,7 @@ function dbmng_is_picture($fn)
 	|| ($_FILES[$fn]["type"] == "image/png"))
 	&& in_array($extension, $allowedExts))
 		{
-			$is_picture = false;
+			$is_picture = true;
 		}
 
 	return $is_picture;
@@ -805,8 +835,9 @@ function dbmng_file_create_link($value)
 
 			//if(in_array( substr(strrchr($value, '.'), 1), $allowedExts ))
 			if( preg_match('/\.(gif|jpe?g|png)$/i',strtolower($value)) )
-				{					
-					$ret="<a class='dbmng_image_link' target='_NEW' href='".$link."'><img class='dbmng_image_thumb' src='".$link."' /></a>\n";					
+				{
+					$link = str_replace("raw/", "prw/", $link);
+					$ret="<a class='dbmng_image_link' target='_NEW' href='".$link."'><img src='".$link."' /></a>\n";	//class='dbmng_image_thumb'				
 				}
 			else
 				{
