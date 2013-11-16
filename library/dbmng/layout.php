@@ -252,7 +252,7 @@ function layout_form_file( $fld, $fld_value, $value )
 	$html .= "<div class='dbmng_file_hide_this'><input type='file' name='$fld' id='$fld' ></div>";
 
 	$html .= '<input class="dbmng_file_text" type="text" name="'.$fld.'_tmp_choosebox" id="'.$fld.'_tmp_choosebox" value="'.$value.'" />';
-	$html .= '<a href="#" id="'.$fld.'_tmp_choose">'.t('Choose').'</a>';
+	$html .= '<a href="#" id="'.$fld.'_tmp_choose">'.t('Choose').'</a>&nbsp';
 	$html .= '<a href="#" id="'.$fld.'_tmp_remove">'.t('Remove').'</a>';
 
 	$html .= "<script type=\"text/javascript\">dbmng_style_fileform('".$fld."');</script>";
