@@ -680,7 +680,7 @@ function dbmng_value_prepare($x_value, $x, $post, $aParam)
 				{
 					$sValue = dbmng_uploadfile($_FILES[$x]['name'], $dir_upd_file, $_FILES[$x]["tmp_name"]);
 
-					if( $_FILES[$x]['type'] == 'image/jpeg' ) // use the dbmng_is_function($_FILES[$x])!!!!
+					if( dbmng_is_picture($_FILES[$x]) ) // use the dbmng_is_picture($_FILES[$x])!!!!
 						{
 							echo $sValue;
 							if( isset($aParam['file_version']['nrm']) )
@@ -799,16 +799,16 @@ function dbmng_is_picture($fn)
 {
 	$is_picture = false;
 	
-	$allowedExts = array("gif", "jpeg", "jpg", "png");
-	$temp = explode(".", $_FILES[$fn]["name"]);
-	$extension = end($temp);
-	if ((($_FILES[$fn]["type"] == "image/gif")
-	|| ($_FILES[$fn]["type"] == "image/jpeg")
-	|| ($_FILES[$fn]["type"] == "image/jpg")
-	|| ($_FILES[$fn]["type"] == "image/pjpeg")
-	|| ($_FILES[$fn]["type"] == "image/x-png")
-	|| ($_FILES[$fn]["type"] == "image/png"))
-	&& in_array($extension, $allowedExts))
+	//$allowedExts = array("gif", "jpeg", "jpg", "png");
+	//$temp = explode(".", $_FILES[$fn]["name"]);
+	//$extension = end($temp);
+	if ((($fn["type"] == "image/gif")
+	|| ($fn["type"] == "image/jpeg")
+	|| ($fn["type"] == "image/jpg")
+	|| ($fn["type"] == "image/pjpeg")
+	|| ($fn["type"] == "image/x-png")
+	|| ($fn["type"] == "image/png"))
+	)//&& in_array($extension, $allowedExts))
 		{
 			$is_picture = true;
 		}
