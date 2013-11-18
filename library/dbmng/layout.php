@@ -244,11 +244,38 @@ function layout_form_multi( $fld, $fld_value, $value )
 \param $fld					field name
 \param $fld_value		field value
 \param $value				existing value
+\param $aParam			parameters array
 \return             html
 */
-function layout_form_file( $fld, $fld_value, $value )
+function layout_form_file( $fld, $fld_value, $value, $aParam )
 {		
-  $html  = "<span id='".$fld."_link_container'>".dbmng_file_create_link($value).'</span><br/>';
+  $html  = "<span id='".$fld."_link_container'>".dbmng_file_create_link($value, $aParam).'</span><br/>';
+	$html .= "<div class='dbmng_file_hide_this'><input type='file' name='$fld' id='$fld' ></div>";
+
+	$html .= '<input class="dbmng_file_text" type="text" name="'.$fld.'_tmp_choosebox" id="'.$fld.'_tmp_choosebox" value="'.$value.'" />';
+	$html .= '<a href="#" id="'.$fld.'_tmp_choose">'.t('Choose').'</a>&nbsp';
+	$html .= '<a href="#" id="'.$fld.'_tmp_remove">'.t('Remove').'</a>';
+
+	$html .= "<script type=\"text/javascript\">dbmng_style_fileform('".$fld."');</script>";
+
+	return $html;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////
+// layout_form_picture
+// ======================
+/// This function allow to add the widget picture (html tag) 
+/**
+\param $fld					field name
+\param $fld_value		field value
+\param $value				existing value
+\param $aParam			parameters array
+\return             html
+*/
+function layout_form_picture( $fld, $fld_value, $value, $aParam )
+{		
+  $html  = "<span id='".$fld."_link_container'>".dbmng_picture_create_link($value, $aParam, "form").'</span><br/>';
 	$html .= "<div class='dbmng_file_hide_this'><input type='file' name='$fld' id='$fld' ></div>";
 
 	$html .= '<input class="dbmng_file_text" type="text" name="'.$fld.'_tmp_choosebox" id="'.$fld.'_tmp_choosebox" value="'.$value.'" />';
@@ -581,64 +608,73 @@ function layout_table_insert($aForm, $aParam)
 */
 function layout_table_body( $result, $aForm, $aParam )
 {
+	$recs = 0;
+	$pages = 1;
+	if( isset($_GET['pages']) )
+		$pages = $_GET['pages'];
+
 	$html ="";
 	// write BODY content 
 	$html .= "<tbody>\n";
 	foreach ($result as $record) 
 		{
-			// table value
-			$html .= "<tr>";
-			//get the query results for each field
-			foreach ( $aForm['fields'] as $fld => $fld_value )
+			$recs++;
+			if( ($pages == 1 && $recs <= $aParam['tbl_navigation']) || ($pages != 1 && $recs > $aParam['tbl_navigation']*($pages-1) && $recs<= $aParam['tbl_navigation']*$pages) )
 				{
-					//echo '!'.$record->$fld.'!'.$fld.'<br/>';
-					if( layout_view_field_table($fld_value) )
+					// table value
+					$html .= "<tr>";
+					//get the query results for each field
+					foreach ( $aForm['fields'] as $fld => $fld_value )
 						{
-							if(isset($record->$fld))
+							//echo '!'.$record->$fld.'!'.$fld.'<br/>';
+							if( layout_view_field_table($fld_value) )
 								{
-									$value=dbmng_value_prepare_html($fld_value, $record->$fld);
-									$html.= "<td class='dbmng_field_$fld'>".$value."</td>";
-								}
-							else{//TODO: add a comma separated list if widget==multi
-									$html.= "<td class='dbmng_field_$fld'>&nbsp;</td>";							
-							}
-
-						}
-				}
-
-			// available functionalities
-			$html .= "<td class='dbmng_functions'>";
-
-			$pkfield = "";
-			$id_record = "";
-			foreach ( $aForm['fields'] as $fld => $fld_value )
-				{
-					if(dbmng_check_is_pk($fld_value) )
-						{
-							$pkfield = $fld;
-							$id_record .= $fld . "=" . $record->$fld . "&";
-						}
-				}
-			
-
-			$html .= layout_table_action( $aForm, $aParam, $id_record );
-			
-			$nFlds = -1;
-			if(isset($aParam['custom_function']))
-				{
-					foreach($aParam['custom_function'] as $aCustom )								
-						{	
-							if( $aCustom['custom_variable'] == 'show_add_fields' )
-								{
-									$nFlds = $record->fld;
+									if(isset($record->$fld))
+										{
+											$value=dbmng_value_prepare_html($fld_value, $record->$fld, $aParam, "table");
+											$html.= "<td class='dbmng_field_$fld'>".$value."</td>";
+										}
+									else{//TODO: add a comma separated list if widget==multi
+											$html.= "<td class='dbmng_field_$fld'>&nbsp;</td>";							
+									}
+		
 								}
 						}
+		
+					// available functionalities
+					$html .= "<td class='dbmng_functions'>";
+		
+					$pkfield = "";
+					$id_record = "";
+					foreach ( $aForm['fields'] as $fld => $fld_value )
+						{
+							if(dbmng_check_is_pk($fld_value) )
+								{
+									$pkfield = $fld;
+									$id_record .= $fld . "=" . $record->$fld . "&";
+								}
+						}
+					
+		
+					$html .= layout_table_action( $aForm, $aParam, $id_record );
+					
+					$nFlds = -1;
+					if(isset($aParam['custom_function']))
+						{
+							foreach($aParam['custom_function'] as $aCustom )								
+								{	
+									if( $aCustom['custom_variable'] == 'show_add_fields' )
+										{
+											$nFlds = $record->fld;
+										}
+								}
+						}
+					$html .= layout_table_custom_function($aParam, $id_record, $nFlds);
+		
+					$html .= "</td>\n";
+					
+					$html .= "</tr>\n";
 				}
-			$html .= layout_table_custom_function($aParam, $id_record, $nFlds);
-
-			$html .= "</td>\n";
-			
-			$html .= "</tr>\n";
 		}
 	$html .= "</tbody>\n";
 
@@ -676,6 +712,7 @@ function layout_table( $result, $aForm, $aParam )
 		}
 
 	$html = "";
+	$html .= layout_table_navigation($result, $aParam);
 	$html .= "<table $id_tbl $class>\n";
 	
 	$html .= layout_table_head( $aForm['fields'] );
@@ -698,5 +735,17 @@ function layout_table( $result, $aForm, $aParam )
 	$html .= $add_js;
 	
 	return $html;
+}
+
+function layout_table_navigation($result, $aParam)
+{
+	$recs   = dbmng_num_rows($result);
+	$pages = ceil($recs / $aParam['tbl_navigation']);
+	$paging = "";
+	for( $i = 1; $i <= $pages; $i++ )
+		{
+			$paging .= "<a href='?pages=".$i."'>".$i."</a> ";
+		}
+	return $paging;
 }
 ?>
