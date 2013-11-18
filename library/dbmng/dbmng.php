@@ -299,11 +299,15 @@ function dbmng_get_data($aForm, $aParam)
 	$order_by = '';
 	if( isset($aParam['tbl_order']) )
 		$order_by = 'order by ' . $aParam['tbl_order'];
+	       
+	$limit = "";
+	//if( isset($aParam['tbl_navigation']) )
+	//	$limit = 'limit 0, ' . $aParam['tbl_navigation'];
 	
 	if( isset($aForm['table_view']) )
-	  $sql = 'select * from ' . $aForm['table_view'].' '. $where . ' ' . $order_by;
+	  $sql = 'select * from ' . $aForm['table_view'].' '. $where . ' ' . $order_by . ' ' . $limit;
 	else
-	  $sql = 'select * from ' . $aForm['table_name'].' '. $where . ' ' . $order_by;
+	  $sql = 'select * from ' . $aForm['table_name'].' '. $where . ' ' . $order_by . ' ' . $limit;
 	
 	$result = dbmng_query($sql, $var);
 
@@ -521,7 +525,7 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 							// Do not show input or seletc field for PK
 							if($do_update == 1 && dbmng_check_is_pk($fld_value))
 								{
-									$html .= dbmng_value_prepare_html( $fld_value, $value );
+									$html .= dbmng_value_prepare_html( $fld_value, $value, $aParam, "form" );
 									$html .= layout_form_hidden( $fld, $value );
 								}
 							else
@@ -554,7 +558,11 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 												}
 											else if ($widget==='file')
 												{
-													$html .= layout_form_file( $fld, $fld_value, $value );
+													$html .= layout_form_file( $fld, $fld_value, $value, $aParam );
+												}
+											else if ($widget==='picture')
+												{
+													$html .= layout_form_picture( $fld, $fld_value, $value, $aParam );
 												}
 											else if ($widget==='password')
 												{
@@ -679,8 +687,28 @@ function dbmng_value_prepare($x_value, $x, $post, $aParam)
 			if( $_FILES[$x]["error"] == 0 )
 				{
 					$sValue = dbmng_uploadfile($_FILES[$x]['name'], $dir_upd_file, $_FILES[$x]["tmp_name"]);
+					$sValue = $_FILES[$x]['name'];
 
-					if( dbmng_is_picture($_FILES[$x]) ) // use the dbmng_is_picture($_FILES[$x])!!!!
+			  }
+			else if ($_FILES[$x]["error"] == 4)
+				{ //if the file is null use the text in the checkbox
+					$sValue = $post[$x.'_tmp_choosebox'];
+				}		
+		}
+
+	if( $widget=='picture' )
+		{
+			$dir_upd_file = "docs";
+			if( isset($aParam['file']) )
+				$dir_upd_file = $aParam['file'];
+			
+			$sValue = $dir_upd_file . $_FILES[$x]['name'];
+
+			if( $_FILES[$x]["error"] == 0 )
+				{
+					$sValue = dbmng_uploadfile($_FILES[$x]['name'], $dir_upd_file, $_FILES[$x]["tmp_name"]);
+
+					if( dbmng_is_picture($_FILES[$x]) )
 						{
 							echo $sValue;
 							if( isset($aParam['file_version']['nrm']) )
@@ -708,6 +736,7 @@ function dbmng_value_prepare($x_value, $x, $post, $aParam)
 									$thumb->save($aParam['file_version']['ext'] . $_FILES[$x]['name'] );
 								}
 						}
+					$sValue = $_FILES[$x]['name'];
 
 			  }
 			else if ($_FILES[$x]["error"] == 4)
@@ -823,20 +852,62 @@ function dbmng_is_picture($fn)
 /// This function allow to create an hypertext link with the uploaded file
 /**
 \param 		$value  value
-\return           html
+\param 		$aParam  parameter array
+\return   html
 */
-function dbmng_file_create_link($value)
+function dbmng_file_create_link($value, $aParam)
 {
   $ret="";
 	//echo realpath('.').'/'.$value;
 	if(!is_null($value) && $value!='')
 		{
-			$link= base_path() . ''. $value;
+			$link= base_path() . $aParam['file_version']['prw'] . $value;
 
 			//if(in_array( substr(strrchr($value, '.'), 1), $allowedExts ))
 			if( preg_match('/\.(gif|jpe?g|png)$/i',strtolower($value)) )
 				{
-					$link = str_replace("raw/", "prw/", $link);
+					//$link = str_replace("raw/", "prw/", $link);
+					$ret="<a class='dbmng_image_link' target='_NEW' href='".$link."'><img src='".$link."' /></a>\n";	//class='dbmng_image_thumb'				
+				}
+			else
+				{
+					$ret="<a class='dbmng_file_link' target='_NEW' href='". base_path() . "" . $value."'>".t("download")."</a>\n";					
+				}
+			$ret .= "&nbsp;";			
+		}
+	return $ret;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////
+// dbmng_picture_create_link
+// ======================
+/// This function allow to create an hypertext link with the uploaded picture
+/**
+\param 		$value  value
+\param 		$aParam  parameter array
+\return   html
+*/
+function dbmng_picture_create_link($value, $aParam, $layout_type)
+{
+  $ret="";
+	//echo realpath('.').'/'.$value;
+	if(!is_null($value) && $value!='')
+		{
+			$thumb = $aParam['picture_version']['prw'];
+			if( isset($layout_type) )
+				{
+					if( $layout_type == "table" )
+						$thumb = $aParam['picture_version']['prw'];
+					elseif( $layout_type == "form" )
+						$thumb = $aParam['picture_version']['nrm'];
+				}
+				
+			$link= base_path() . $thumb . $value;
+
+			//if(in_array( substr(strrchr($value, '.'), 1), $allowedExts ))
+			if( preg_match('/\.(gif|jpe?g|png)$/i',strtolower($value)) )
+				{
 					$ret="<a class='dbmng_image_link' target='_NEW' href='".$link."'><img src='".$link."' /></a>\n";	//class='dbmng_image_thumb'				
 				}
 			else
@@ -858,7 +929,7 @@ function dbmng_file_create_link($value)
 \param $value  		      The value obtained by the request
 \return             Value
 */
-function dbmng_value_prepare_html($fld_value, $value)
+function dbmng_value_prepare_html($fld_value, $value, $aParam, $layout_type)
 {
 	$ret=null;
 
@@ -902,7 +973,11 @@ function dbmng_value_prepare_html($fld_value, $value)
 		}	
 	elseif($widget == "file" )
 		{
-			$ret=dbmng_file_create_link($value);
+			$ret=dbmng_file_create_link($value, $aParam);
+		}
+	elseif($widget == "picture" )
+		{
+			$ret=dbmng_picture_create_link($value, $aParam, $layout_type);
 		}
 	elseif($widget == "password" )
 		{
