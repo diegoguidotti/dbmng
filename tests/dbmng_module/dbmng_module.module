@@ -229,6 +229,7 @@ function dbmng_manager()
 														'checkbox'=> t('CheckBox'),	
 														'date'=> t('Date'),	
 														'file'=> t('File'),
+														'picture'=> t('Picture'),
 														'input'=> t('Input Box'),
 														'password'=> t('Password'),	
 														'select'=> t('Select'),	
