@@ -612,14 +612,19 @@ function layout_table_body( $result, $aForm, $aParam )
 	$pages = 1;
 	if( isset($_GET['pages']) )
 		$pages = $_GET['pages'];
-
+	
+	$page_recs = dbmng_num_rows($result);
+	if( isset($aParam['tbl_navigation']) )
+		$page_recs = $aParam['tbl_navigation'];
+		
 	$html ="";
 	// write BODY content 
 	$html .= "<tbody>\n";
+	// print_r($result->fetchAllAssoc("id_gallery"));
 	foreach ($result as $record) 
 		{
 			$recs++;
-			if( ($pages == 1 && $recs <= $aParam['tbl_navigation']) || ($pages != 1 && $recs > $aParam['tbl_navigation']*($pages-1) && $recs<= $aParam['tbl_navigation']*$pages) )
+			if( ($pages == 1 && $recs <= $page_recs ) || ($pages != 1 && $recs > $page_recs*($pages-1) && $recs<= $page_recs *$pages) )
 				{
 					// table value
 					$html .= "<tr>";
@@ -739,12 +744,15 @@ function layout_table( $result, $aForm, $aParam )
 
 function layout_table_navigation($result, $aParam)
 {
-	$recs   = dbmng_num_rows($result);
-	$pages = ceil($recs / $aParam['tbl_navigation']);
 	$paging = "";
-	for( $i = 1; $i <= $pages; $i++ )
+	if( isset($aParam['tbl_navigation']) )
 		{
-			$paging .= "<a href='?pages=".$i."'>".$i."</a> ";
+			$recs   = dbmng_num_rows($result);
+			$pages = ceil($recs / $aParam['tbl_navigation']);
+			for( $i = 1; $i <= $pages; $i++ )
+				{
+					$paging .= "<a href='?pages=".$i."'>".$i."</a> ";
+				}
 		}
 	return $paging;
 }
