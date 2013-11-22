@@ -139,7 +139,6 @@ Dbmng.prototype.createTable = function()
 //The function delete one record
 Dbmng.prototype.deleteRecord = function(id_record) {
 
-
 			//TODO deal with multiple key
 			var obj=this;
 			to_delete=-1;
@@ -166,17 +165,31 @@ Dbmng.prototype.deleteRecord = function(id_record) {
 
 
 
+//TODO: review create Form
 Dbmng.prototype.createForm = function() {
+
+		
 
 		obj=this;
 		var form='<form>';
 		jQuery.each(this.aForm.fields, function(index, field){ 
-			form += "<label>" + t(field.label) + "</label><input type='text' value='' /><br/>";
+			form += "<label>" + t(field.label) + "</label>";
+
+			console.log(field);
+			//keep only input
+			if(field.widget=='checkbox'){
+				form+="<input type='checkbox' value='' /><br/>";
+			}
+			else{
+				form+="<input type='text' value='' /><br/>";
+			}
+
 		});
 		form+="</form>";
-		form+="!!!!!!<a id='"+this.id+"_insert'>"+t("Insert")+"</a>";		
+		form+="<a id='"+this.id+"_insert'>"+t("Insert")+"</a>";		
 
 		jQuery('#'+obj.id+"_form").html(form);
+
 
 
 		jQuery('#'+obj.id+"_insert").click(function(){
