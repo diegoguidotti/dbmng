@@ -456,7 +456,7 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 		{
 			if( isset($fld_value['widget']) )
 				{
-					if( $fld_value['widget'] == 'file' )
+					if( $fld_value['widget'] == 'file' || $fld_value['widget'] == 'picture' )
 						{
 							$more = "enctype='multipart/form-data'";
 						}
@@ -699,9 +699,11 @@ function dbmng_value_prepare($x_value, $x, $post, $aParam)
 	if( $widget=='picture' )
 		{
 			$dir_upd_file = "docs";
-			if( isset($aParam['file']) )
-				$dir_upd_file = $aParam['file'];
-			
+			if( isset($aParam['picture']) )
+				$dir_upd_file = $aParam['picture'];
+				
+			// echo "aParam dir:" . $dir_upd_file . "<br/>";
+			// echo "File: " . $_FILES[$x]['name'] . "<br/>";
 			$sValue = $dir_upd_file . $_FILES[$x]['name'];
 
 			if( $_FILES[$x]["error"] == 0 )
@@ -710,30 +712,30 @@ function dbmng_value_prepare($x_value, $x, $post, $aParam)
 
 					if( dbmng_is_picture($_FILES[$x]) )
 						{
-							echo $sValue;
-							if( isset($aParam['file_version']['nrm']) )
+							echo "picture:" . $sValue;
+							if( isset($aParam['picture_version']['nrm']) )
 								{
 									$thumb=new thumbnail($sValue); 
-									$thumb->size_auto($aParam['file_size']['nrm']);	
-									$thumb->save($aParam['file_version']['nrm'] . $_FILES[$x]['name'] );
+									$thumb->size_auto($aParam['picture_size']['nrm']);	
+									$thumb->save($aParam['picture_version']['nrm'] . $_FILES[$x]['name'] );
 								}
-							if( isset($aParam['file_version']['big']) )
+							if( isset($aParam['picture_version']['big']) )
 								{
 									$thumb=new thumbnail($sValue); 
-									$thumb->size_auto($aParam['file_size']['big']);	
-									$thumb->save($aParam['file_version']['big'] . $_FILES[$x]['name'] );
+									$thumb->size_auto($aParam['picture_size']['big']);	
+									$thumb->save($aParam['picture_version']['big'] . $_FILES[$x]['name'] );
 								}
-							if( isset($aParam['file_version']['prw']) )
+							if( isset($aParam['picture_version']['prw']) )
 								{
 									$thumb=new thumbnail($sValue); 
-									$thumb->size_auto($aParam['file_size']['prw']);	
-									$thumb->save($aParam['file_version']['prw'] . $_FILES[$x]['name'] );
+									$thumb->size_auto($aParam['picture_size']['prw']);	
+									$thumb->save($aParam['picture_version']['prw'] . $_FILES[$x]['name'] );
 								}
-							if( isset($aParam['file_version']['ext']) )
+							if( isset($aParam['picture_version']['ext']) )
 								{
 									$thumb=new thumbnail($sValue); 
-									$thumb->size_auto($aParam['file_size']['ext']);	
-									$thumb->save($aParam['file_version']['ext'] . $_FILES[$x]['name'] );
+									$thumb->size_auto($aParam['picture_size']['ext']);	
+									$thumb->save($aParam['picture_version']['ext'] . $_FILES[$x]['name'] );
 								}
 						}
 					$sValue = $_FILES[$x]['name'];
