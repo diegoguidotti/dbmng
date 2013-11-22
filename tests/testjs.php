@@ -43,6 +43,8 @@
 
 
   jQuery(document).ready(function() {
+
+	
 		var db  = new Dbmng(data, aForm, {'div_element':'table2'});  
 		db.createTable();
 	

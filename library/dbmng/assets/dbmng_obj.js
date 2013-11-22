@@ -1,35 +1,46 @@
 
-
+/*  General class to visualize and edit a single table
+*/
 function Dbmng( aData, aForm , aParam) {
+
   this.aForm = aForm;
   this.aData = aData;
   this.aParam = aParam;
 
-  console.log(data);
-  console.log(aForm);
+  debug(data);
+  debug(aForm);
+
 	this.id='dbmng';
 	if(this.aParam.div_element){
 		this.id='dbmng_'+this.aParam.div_element;
 	}
+
+	var html="";
+  html += "<div id='"+this.id+"_form'></div>\n";
+  html += "<div id='"+this.id+"_view'>\n";
+	jQuery('#'+this.aParam.div_element).html(html);
+
 }
 
 Dbmng.prototype.createTable = function()
 {
 
+
+	
+
+
 	//store the object to refer to it in the subfunction
 	var obj=this;
 
-
-	var html="";
-  html += "<div id='"+this.id+"_form'></div>\n";
-  html += "<div id='"+this.id+"_view'>\n";
-	html += "<h1 class='dbmng_table_label'>" + t('Table1') + ": " + obj.aForm.table_name + "</h1>\n";
+	//Create the two container for the table and the form
+	
+	var html='';
+	html += "<h1 class='dbmng_table_label'>" + obj.aForm.table_name + "</h1>\n";
 	html += "<table id='"+this.id+"_table'>\n";
 
 	//Add header
 	html += "<thead>\n";
 	html += "<tr>\n";
-	// console.log( aFields );
 	jQuery.each(obj.aForm.fields, function(index, field){ 
 			var f = field;
 			if( layout_view_field_table(f.skip_in_tbl) ){
@@ -39,12 +50,17 @@ Dbmng.prototype.createTable = function()
 	html += "<th class='dbmng_functions'>" + t('actions') + "</th>\n";
 	html += "</tr>\n";
 	html += "</thead>\n";
+	html+= "<tbody></tbody></table>";	
+
+	jQuery('#'+obj.id+'_view').html(html);
+
 
   
-
+	//Create the body of the table
 	jQuery.each(this.aData.records, function(k,value){
+
 			var o = value;
-			html += "<tr>";
+			var html_row = "<tr>";
 			var id_record = 0;
 			for( var key in o )
 				{        
@@ -58,50 +74,117 @@ Dbmng.prototype.createTable = function()
 					if( layout_view_field_table(f.skip_in_tbl) ){
 						if (o.hasOwnProperty(key))
 						{
-							html += "<td>" + o[key] + "</td>";
+							html_row += "<td>" + o[key] + "</td>";
 						}
 						else{
-							html += "<td>-</td>";
+							html_row += "<td>-</td>";
 						}				
 					}
 			}
 		
 		// available functionalities
-		html += "<td class='dbmng_functions'>";
-	
-		//TODO: html += layout_table_action( aForm, aParam, id_record );
+		html_row += "<td class='dbmng_functions'>";
+		
+		var nDel=1; nUpd=1; nDup=1;
 
-		html += "</td>\n";
-		html += "</tr>\n";
-		//console.log(value);
+		if(aParam['user_function']){
+		  nUpd = ((aParam['user_function']['upd']) ? aParam['user_function']['upd'] : 1);
+		  nDel = ((aParam['user_function']['del']) ? aParam['user_function']['del'] : 1);
+		  nDup = ((aParam['user_function']['dup']) ? aParam['user_function']['dup'] : 1);
+		}
+
+		if( nDel == 1 )
+			{				
+				html_row += '<span id="'+obj.id+'_del_'+id_record+'"><a  class="dbmng_delete_button"  >' + t('Delete') +'</a>' + "&nbsp;</span>";
+			}
+		if( nUpd == 1 )
+			{				
+				html_row += '<span id="'+obj.id+'_upd_'+id_record+'"><a  class="dbmng_update_button"  >' + t('Update') +'</a>' + "&nbsp;</span>";
+			}
+		if( nDup == 1 )
+			{				
+				html_row += '<span id="'+obj.id+'_dup_'+id_record+'"><a  class="dbmng_duplicate_button"  >' + t('Duplicate') +'</a>' + "&nbsp;</span>";
+			}
+
+		html_row += "</td>\n";
+		html_row += "</tr>\n";	
+
+		//Save the table row in DOM
+		jQuery('#'+obj.id+'_view tbody').append(html_row);			
+
+
+		jQuery('#'+obj.id+'_del_'+id_record).click(function(){						
+			obj.deleteRecord(id_record);
+		});
+		jQuery('#'+obj.id+'_upd_'+id_record).click(function(){						
+			//obj.updateRecord(id_record);
+		});
+		jQuery('#'+obj.id+'_dup_'+id_record).click(function(){						
+			//obj.dupplicateRecord(id_record);
+		});
 	});
-  
-  html += "</table>";
-	html+="<a id='"+obj.id+"_add'>Aggiungi</a></div>";
 
-	if(this.aParam.div_element){
-		jQuery('#'+this.aParam.div_element).html(html);
-	}
 
-	jQuery('#'+this.id+"_add").click(function(){
+	//Add the insert button
+	jQuery('#'+obj.id+'_view').append("<a id='"+obj.id+"_add'>"+t("Add")+"</a>");
+	jQuery('#'+obj.id+"_add").click(function(){
 		obj.addRow();
 	});
-
+	
 
 	return html;
-
 };
+
+
+//The function delete one record
+Dbmng.prototype.deleteRecord = function(id_record) {
+
+
+			//TODO deal with multiple key
+			var obj=this;
+			to_delete=-1;
+			jQuery.each(obj.aData.records,function(k,value){
+				var pk_key=obj.aForm.primary_key[0];
+				if(value[pk_key]==id_record){
+					to_delete=k;
+				}
+			});
+
+			if(to_delete>-1){
+			 	if(!obj.aData.deleted){
+						obj.aData.deleted=Array();
+				}
+				obj.aData.deleted.push(obj.aData.records[to_delete]);
+
+				obj.aData.records.splice(to_delete,1);
+				obj.createTable();
+			}
+			else{
+				alert('Error. record to delete not found');
+			}		
+}				
+
+
 
 Dbmng.prototype.createForm = function() {
 
-		var form='This is a form<form>';
+		obj=this;
+		var form='<form>';
 		jQuery.each(this.aForm.fields, function(index, field){ 
-			form += "<label>" + t(field.label) + "</label><input type='text' value='' />";
+			form += "<label>" + t(field.label) + "</label><input type='text' value='' /><br/>";
 		});
 		form+="</form>";
+		form+="!!!!!!<a id='"+this.id+"_insert'>"+t("Insert")+"</a>";		
+
+		jQuery('#'+obj.id+"_form").html(form);
+
+
+		jQuery('#'+obj.id+"_insert").click(function(){
+			debug('insert');
+		});
+		
 
 		
-		jQuery('#'+this.id+"_form").html(form);
 }
 
 
@@ -128,4 +211,13 @@ function layout_view_field_table(fld_value){
 
 function t(txt){
 	return txt;
+}
+
+
+var DEBUG=true;
+function debug(d){
+	if(DEBUG){
+		console.log(d);
+	}
+
 }
