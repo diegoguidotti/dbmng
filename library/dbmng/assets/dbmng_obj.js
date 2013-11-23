@@ -24,11 +24,6 @@ function Dbmng( aData, aForm , aParam) {
 
 Dbmng.prototype.createTable = function()
 {
-
-
-	
-
-
 	//store the object to refer to it in the subfunction
 	var obj=this;
 
@@ -53,8 +48,6 @@ Dbmng.prototype.createTable = function()
 	html+= "<tbody></tbody></table>";	
 
 	jQuery('#'+obj.id+'_view').html(html);
-
-
   
 	//Create the body of the table
 	jQuery.each(this.aData.records, function(k,value){
@@ -163,25 +156,57 @@ Dbmng.prototype.deleteRecord = function(id_record) {
 			}		
 }				
 
+Dbmng.layout_get_label = function(field_name, field)
+{
+	lb = field.label;
+	if( typeof field.label_long != 'undefined' )
+		lb = field.label_long;
+	
+	sRequired = "";
+	
+	//if( isset($_REQUEST['act']) )
+	//	{
+	//		if( $_REQUEST['act'] != "search" && !$_REQUEST['act'] == "do_search" )
+	//			{
+					if(typeof field.nullable != 'undefined' && field.nullable == 0 )
+						sRequired = "<span class='dbmng_required'>*</span>";
+	//			}
+	//	}
+			
+		
+	return "<label for='"+field_name+"'>" + t(lb) + " " + sRequired + "</label>";
+}
+
+Dbmng.layout_form_input = function( fld, field, value, more )
+{
+	html  = "<input type='text' name='"+fld+"' id='"+fld+"' " + more;
+	html += " value= '"+value+"' ";	
+	
+	if(typeof field.nullable != 'undefined' && field.nullable == 0 )
+		html += " required ";	
+	
+	html += " />\n";
+
+	return html;
+}
 
 
 //TODO: review create Form
 Dbmng.prototype.createForm = function() {
-
-		
-
 		obj=this;
 		var form='<form>';
 		jQuery.each(this.aForm.fields, function(index, field){ 
-			form += "<label>" + t(field.label) + "</label>";
-
-			console.log(field);
+			form += Dbmng.layout_get_label(index, field);
+			
+			console.log(index);
 			//keep only input
 			if(field.widget=='checkbox'){
 				form+="<input type='checkbox' value='' /><br/>";
 			}
 			else{
-				form+="<input type='text' value='' /><br/>";
+				value = '';
+				form += Dbmng.layout_form_input(index, field, value, '') + "<br/>";
+				//form+="<input id='"+index+"' type='text' value='' /><br/>";
 			}
 
 		});
@@ -190,25 +215,17 @@ Dbmng.prototype.createForm = function() {
 
 		jQuery('#'+obj.id+"_form").html(form);
 
-
-
 		jQuery('#'+obj.id+"_insert").click(function(){
 			debug('insert');
 		});
-		
-
-		
 }
 
 
 Dbmng.prototype.addRow = function(){
-  
-   jQuery("#"+this.id+"_view").hide();	
-   jQuery("#"+this.id+"_form").show();	
-	 this.createForm();
+	jQuery("#"+this.id+"_view").hide();	
+	jQuery("#"+this.id+"_form").show();	
+	this.createForm();
 };
-
-
 
 function layout_view_field_table(fld_value){
 	ret=true;	
@@ -220,17 +237,13 @@ function layout_view_field_table(fld_value){
 	return ret;
 }
 
-
-
 function t(txt){
 	return txt;
 }
-
 
 var DEBUG=true;
 function debug(d){
 	if(DEBUG){
 		console.log(d);
 	}
-
 }
