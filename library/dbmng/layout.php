@@ -276,7 +276,7 @@ function layout_form_file( $fld, $fld_value, $value, $aParam )
 function layout_form_picture( $fld, $fld_value, $value, $aParam )
 {		
   $html  = "<span id='".$fld."_link_container'>".dbmng_picture_create_link($value, $aParam, "form").'</span><br/>';
-	$html .= "<div class='dbmng_file_hide_this'><input type='file' name='$fld' id='$fld' ></div>";
+	$html .= "<div class='dbmng_file_hide_this'><input type='file' name='$fld' id='$fld' accept='image/*' ></div>";
 
 	$html .= '<input class="dbmng_file_text" type="text" name="'.$fld.'_tmp_choosebox" id="'.$fld.'_tmp_choosebox" value="'.$value.'" />';
 	$html .= '<a href="#" id="'.$fld.'_tmp_choose">'.t('Choose').'</a>&nbsp';
