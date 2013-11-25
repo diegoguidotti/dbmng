@@ -156,7 +156,7 @@ Dbmng.prototype.deleteRecord = function(id_record) {
 			}		
 }				
 
-Dbmng.layout_get_label = function(field_name, field)
+Dbmng.layout_get_label = function(field_name, field, act)
 {
 	lb = field.label;
 	if( typeof field.label_long != 'undefined' )
@@ -164,39 +164,52 @@ Dbmng.layout_get_label = function(field_name, field)
 	
 	sRequired = "";
 	
-	//if( isset($_REQUEST['act']) )
-	//	{
-	//		if( $_REQUEST['act'] != "search" && !$_REQUEST['act'] == "do_search" )
-	//			{
+	if( typeof act != 'undefined' )
+		{
+			if( act != "search" && !act == "do_search" )
+				{
 					if(typeof field.nullable != 'undefined' && field.nullable == 0 )
 						sRequired = "<span class='dbmng_required'>*</span>";
-	//			}
-	//	}
+				}
+		}
 			
 		
 	return "<label for='"+field_name+"'>" + t(lb) + " " + sRequired + "</label>";
 }
 
-Dbmng.layout_form_input = function( fld, field, value, more )
+Dbmng.layout_form_input = function( fld, field, value, more, act )
 {
 	html  = "<input type='text' name='"+fld+"' id='"+fld+"' " + more;
 	html += " value= '"+value+"' ";	
 	
-	if(typeof field.nullable != 'undefined' && field.nullable == 0 )
-		html += " required ";	
+	Dbmng.layout_get_nullable(field,act);
 	
 	html += " />\n";
 
 	return html;
 }
 
+Dbmng.layout_get_nullable = function( field, act )
+{
+	ht = "";
+	if( typeof act != 'undefined' )
+		{
+			if( act == "search" && !act == "do_search" )
+				{
+					if(	typeof field.nullable != 'undefined' && field.nullable == 0 )
+							ht += "required ";
+				}
+		}
+	return ht;
+}
 
 //TODO: review create Form
 Dbmng.prototype.createForm = function() {
+		var act = 'ins';
 		obj=this;
 		var form='<form>';
 		jQuery.each(this.aForm.fields, function(index, field){ 
-			form += Dbmng.layout_get_label(index, field);
+			form += Dbmng.layout_get_label(index, field, act);
 			
 			console.log(index);
 			//keep only input
@@ -205,7 +218,7 @@ Dbmng.prototype.createForm = function() {
 			}
 			else{
 				value = '';
-				form += Dbmng.layout_form_input(index, field, value, '') + "<br/>";
+				form += Dbmng.layout_form_input(index, field, value, '', act) + "<br/>";
 				//form+="<input id='"+index+"' type='text' value='' /><br/>";
 			}
 
