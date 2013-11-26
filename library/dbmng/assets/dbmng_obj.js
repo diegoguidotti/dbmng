@@ -24,6 +24,10 @@ function Dbmng( aData, aForm , aParam) {
 
 Dbmng.prototype.createTable = function()
 {
+	//show the table and hide the form
+	jQuery("#"+this.id+"_view").show();	
+	jQuery("#"+this.id+"_form").hide();	
+
 	//store the object to refer to it in the subfunction
 	var obj=this;
 
@@ -113,7 +117,7 @@ Dbmng.prototype.createTable = function()
 			//obj.updateRecord(id_record);
 		});
 		jQuery('#'+obj.id+'_dup_'+id_record).click(function(){						
-			//obj.dupplicateRecord(id_record);
+			obj.duplicateRecord(id_record);
 		});
 	});
 
@@ -121,40 +125,106 @@ Dbmng.prototype.createTable = function()
 	//Add the insert button
 	jQuery('#'+obj.id+'_view').append("<a id='"+obj.id+"_add'>"+t("Add")+"</a>");
 	jQuery('#'+obj.id+"_add").click(function(){
-		obj.addRow();
+		obj.createForm();
+	});
+
+	jQuery('#'+obj.id+'_view').append(" - <a id='"+obj.id+"_save'>"+t("Save")+"</a>");
+	
+	jQuery('#'+obj.id+"_save").click(function(){
+	
+		jQuery.ajax({
+			url: 'ajax.php',
+			type: "POST",
+			data: {"aForm" : JSON.stringify(obj.aForm), "inserted":  JSON.stringify(obj.aData.inserted), "deleted": JSON.stringify(obj.aData.deleted) }, 
+			//dataType: "json",
+			success: function (data) {
+    		console.log(data);
+			},
+			error: function (xhr, ajaxOptions, thrownError){
+  	  	console.log(xhr);
+    	 //console.log(thrownError);
+	    }   
+		});	
+		
 	});
 	
 
 	return html;
 };
 
-
 //The function delete one record
 Dbmng.prototype.deleteRecord = function(id_record) {
+	//TODO deal with multiple key
+	var obj=this;
+	to_delete=-1;
+	jQuery.each(obj.aData.records,function(k,value){
+		var pk_key=obj.aForm.primary_key[0];
+		if(value[pk_key]==id_record){
+			to_delete=k;
+		}
+	});
 
-			//TODO deal with multiple key
-			var obj=this;
-			to_delete=-1;
-			jQuery.each(obj.aData.records,function(k,value){
-				var pk_key=obj.aForm.primary_key[0];
-				if(value[pk_key]==id_record){
-					to_delete=k;
-				}
-			});
+	if(to_delete>-1){
+	 	if(!obj.aData.deleted){
+				obj.aData.deleted=Array();
+		}
+		obj.aData.deleted.push(obj.aData.records[to_delete]);
 
-			if(to_delete>-1){
-			 	if(!obj.aData.deleted){
-						obj.aData.deleted=Array();
-				}
-				obj.aData.deleted.push(obj.aData.records[to_delete]);
-
-				obj.aData.records.splice(to_delete,1);
-				obj.createTable();
-			}
-			else{
-				alert('Error. record to delete not found');
-			}		
+		obj.aData.records.splice(to_delete,1);
+		obj.createTable();
+	}
+	else{
+		alert('Error. record to delete not found');
+	}		
 }				
+
+
+//The function duplicate one record
+Dbmng.prototype.duplicateRecord = function(id_record) {
+	//TODO deal with multiple key
+	var obj=this;
+	to_duplicate=-1;
+	jQuery.each(obj.aData.records,function(k,value){
+		var pk_key=obj.aForm.primary_key[0];
+		if(value[pk_key]==id_record){
+			to_duplicate=k;
+		}
+	});
+
+	if(to_duplicate>-1){
+	 	if(!obj.aData.inserted){
+				obj.aData.inserted=Array();
+		}
+		obj.aData.inserted.push(obj.aData.records[to_duplicate]);
+		obj.aData.records.push(obj.aData.records[to_duplicate]);
+
+		obj.createTable();
+	}
+	else{
+		alert('Error. record to delete not found');
+	}		
+}				
+
+
+//The function insert one record
+Dbmng.prototype.insertRecord = function(record) {
+	//TODO deal with multiple key
+	var obj=this;
+
+	if(record){
+	 	if(!obj.aData.inserted){
+				obj.aData.inserted=Array();
+		}
+		obj.aData.inserted.push(record);
+		obj.aData.records.push(record);
+
+		obj.createTable();
+	}
+	else{
+		alert('Error. record to insert undefined');
+	}		
+}				
+
 
 Dbmng.layout_get_label = function(field_name, field, act)
 {
@@ -163,15 +233,19 @@ Dbmng.layout_get_label = function(field_name, field, act)
 		lb = field.label_long;
 	
 	sRequired = "";
-	
+	if(typeof field.nullable != 'undefined' && field.nullable == 0 )
+		sRequired = "<span class='dbmng_required'>*</span>";
+
+	/*	
 	if( typeof act != 'undefined' )
 		{
-			if( act != "search" && !act == "do_search" )
+			if( act != "search" && act != "do_search" )
 				{
 					if(typeof field.nullable != 'undefined' && field.nullable == 0 )
 						sRequired = "<span class='dbmng_required'>*</span>";
 				}
 		}
+		*/
 			
 		
 	return "<label for='"+field_name+"'>" + t(lb) + " " + sRequired + "</label>";
@@ -192,26 +266,36 @@ Dbmng.layout_form_input = function( fld, field, value, more, act )
 Dbmng.layout_get_nullable = function( field, act )
 {
 	ht = "";
+	if(	typeof field.nullable != 'undefined' && field.nullable == 0 )
+			ht += "required ";
+			
+	/* Check if needed
 	if( typeof act != 'undefined' )
 		{
-			if( act == "search" && !act == "do_search" )
+			if( act != "search" && act != "do_search" )
 				{
 					if(	typeof field.nullable != 'undefined' && field.nullable == 0 )
 							ht += "required ";
 				}
 		}
+		*/
 	return ht;
 }
 
 //TODO: review create Form
 Dbmng.prototype.createForm = function() {
 		var act = 'ins';
+		
+		//hide the table and show the form
+		jQuery("#"+this.id+"_view").hide();	
+		jQuery("#"+this.id+"_form").show();	
+
+
 		obj=this;
-		var form='<form>';
+		var form='<form >';
 		jQuery.each(this.aForm.fields, function(index, field){ 
 			form += Dbmng.layout_get_label(index, field, act);
 			
-			console.log(index);
 			//keep only input
 			if(field.widget=='checkbox'){
 				form+="<input type='checkbox' value='' /><br/>";
@@ -219,7 +303,6 @@ Dbmng.prototype.createForm = function() {
 			else{
 				value = '';
 				form += Dbmng.layout_form_input(index, field, value, '', act) + "<br/>";
-				//form+="<input id='"+index+"' type='text' value='' /><br/>";
 			}
 
 		});
@@ -229,16 +312,17 @@ Dbmng.prototype.createForm = function() {
 		jQuery('#'+obj.id+"_form").html(form);
 
 		jQuery('#'+obj.id+"_insert").click(function(){
-			debug('insert');
+			
+			var record= {};
+			
+			jQuery.each(obj.aForm.fields, function(index, field){ 
+				record[index] = jQuery('#'+obj.id+'_form #'+index).val();
+			});
+			obj.insertRecord(record);
 		});
 }
 
 
-Dbmng.prototype.addRow = function(){
-	jQuery("#"+this.id+"_view").hide();	
-	jQuery("#"+this.id+"_form").show();	
-	this.createForm();
-};
 
 function layout_view_field_table(fld_value){
 	ret=true;	
