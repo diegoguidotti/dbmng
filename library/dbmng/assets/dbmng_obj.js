@@ -9,7 +9,11 @@ function Dbmng( aData, aForm , aParam) {
 
   debug(data);
   debug(aForm);
-
+	
+	//dataobj = {};
+	dataobj = { "dbmng_id" : 1, "data" : data };
+	
+	debug(dataobj);
 	this.id='dbmng';
 	if(this.aParam.div_element){
 		this.id='dbmng_'+this.aParam.div_element;
@@ -296,14 +300,9 @@ Dbmng.prototype.createForm = function() {
 		jQuery.each(this.aForm.fields, function(index, field){ 
 			form += Dbmng.layout_get_label(index, field, act);
 			
-			//keep only input
-			if(field.widget=='checkbox'){
-				form+="<input type='checkbox' value='' /><br/>";
-			}
-			else{
-				value = '';
-				form += Dbmng.layout_form_input(index, field, value, '', act) + "<br/>";
-			}
+			//keep only input			
+			value = '';
+			form += Dbmng.layout_form_input(index, field, value, '', act) + "<br/>";
 
 		});
 		form+="</form>";
