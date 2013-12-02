@@ -1,19 +1,25 @@
 
 /*  General class to visualize and edit a single table
 */
-function Dbmng( aData, aForm , aParam) {
+function Dbmng( d, f , p) {
 
-  this.aForm = aForm;
-  this.aData = aData;
-  this.aParam = aParam;
+  this.aForm = f;
 
-  debug(data);
-  debug(aForm);
+	var newRecords={};
+	//we need to create the complex data object;
+	jQuery.each(d.records,function(k,v){
+		newRecords[Guid.newGuid()]={'state':'ok', 'record':v};
+	});
 	
-	//dataobj = {};
-	dataobj = { "dbmng_id" : 1, "data" : data };
+	console.log(newRecords);
+
+  this.aData = {'records': newRecords};
+
+  this.aParam = p;
+
+  //debug(data);
+  //debug(aForm);
 	
-	debug(dataobj);
 	this.id='dbmng';
 	if(this.aParam.div_element){
 		this.id='dbmng_'+this.aParam.div_element;
@@ -28,6 +34,7 @@ function Dbmng( aData, aForm , aParam) {
 
 Dbmng.prototype.createTable = function()
 {
+	
 	//show the table and hide the form
 	jQuery("#"+this.id+"_view").show();	
 	jQuery("#"+this.id+"_form").hide();	
@@ -39,7 +46,7 @@ Dbmng.prototype.createTable = function()
 	
 	var html='';
 	html += "<h1 class='dbmng_table_label'>" + obj.aForm.table_name + "</h1>\n";
-	html += "<table id='"+this.id+"_table'>\n";
+	html += "<table class='dbmng_table' id='"+this.id+"_table'>\n";
 
 	//Add header
 	html += "<thead>\n";
@@ -60,18 +67,15 @@ Dbmng.prototype.createTable = function()
 	//Create the body of the table
 	jQuery.each(this.aData.records, function(k,value){
 
-			var o = value;
-			var html_row = "<tr>";
-			var id_record = 0;
+			var o = value.record;
+			var state = value.state;
+			var id_record=k;
+
+			var html_row = "<tr class='"+state+"'>";
 			for( var key in o )
 				{        
 					//get the field parameters
 		      var f = obj.aForm.fields[key];
-
-					if( id_record == 0 && key == obj.aForm.primary_key[0] )
-						{
-							id_record = o[key];
-						}
 					if( layout_view_field_table(f.skip_in_tbl) ){
 						if (o.hasOwnProperty(key))
 						{
@@ -94,17 +98,24 @@ Dbmng.prototype.createTable = function()
 		  nDup = ((aParam['user_function']['dup']) ? aParam['user_function']['dup'] : 1);
 		}
 
-		if( nDel == 1 )
-			{				
-				html_row += '<span id="'+obj.id+'_del_'+id_record+'"><a  class="dbmng_delete_button"  >' + t('Delete') +'</a>' + "&nbsp;</span>";
+		if(state=='del')
+			{
+				html_row += '<span id="'+obj.id+'_restore_'+id_record+'"><a  class="dbmng_restore_button"  >' + t('Restore') +'</a>' + "&nbsp;</span>";
 			}
-		if( nUpd == 1 )
-			{				
-				html_row += '<span id="'+obj.id+'_upd_'+id_record+'"><a  class="dbmng_update_button"  >' + t('Update') +'</a>' + "&nbsp;</span>";
-			}
-		if( nDup == 1 )
-			{				
-				html_row += '<span id="'+obj.id+'_dup_'+id_record+'"><a  class="dbmng_duplicate_button"  >' + t('Duplicate') +'</a>' + "&nbsp;</span>";
+		else
+			{
+				if( nDel == 1 )
+					{				
+						html_row += '<span id="'+obj.id+'_del_'+id_record+'"><a  class="dbmng_delete_button"  >' + t('Delete') +'</a>' + "&nbsp;</span>";
+					}
+				if( nUpd == 1 )
+					{				
+						html_row += '<span id="'+obj.id+'_upd_'+id_record+'"><a  class="dbmng_update_button"  >' + t('Update') +'</a>' + "&nbsp;</span>";
+					}
+				if( nDup == 1 )
+					{				
+						html_row += '<span id="'+obj.id+'_dup_'+id_record+'"><a  class="dbmng_duplicate_button"  >' + t('Duplicate') +'</a>' + "&nbsp;</span>";
+					}
 			}
 
 		html_row += "</td>\n";
@@ -116,6 +127,9 @@ Dbmng.prototype.createTable = function()
 
 		jQuery('#'+obj.id+'_del_'+id_record).click(function(){						
 			obj.deleteRecord(id_record);
+		});
+		jQuery('#'+obj.id+'_restore_'+id_record).click(function(){						
+			obj.restoreRecord(id_record);
 		});
 		jQuery('#'+obj.id+'_upd_'+id_record).click(function(){						
 			//obj.updateRecord(id_record);
@@ -135,9 +149,14 @@ Dbmng.prototype.createTable = function()
 	jQuery('#'+obj.id+'_view').append(" - <a id='"+obj.id+"_save'>"+t("Save")+"</a>");
 	
 	jQuery('#'+obj.id+"_save").click(function(){
+
+	var url='dbmng_ajax.php';
+	if(obj.aParam.ajax_url){
+		url=obj.aParam.ajax_url;
+	}
 	
 		jQuery.ajax({
-			url: 'ajax.php',
+			url: url,
 			type: "POST",
 			data: {"aForm" : JSON.stringify(obj.aForm), "inserted":  JSON.stringify(obj.aData.inserted), "deleted": JSON.stringify(obj.aData.deleted) }, 
 			//dataType: "json",
@@ -160,28 +179,42 @@ Dbmng.prototype.createTable = function()
 Dbmng.prototype.deleteRecord = function(id_record) {
 	//TODO deal with multiple key
 	var obj=this;
-	to_delete=-1;
-	jQuery.each(obj.aData.records,function(k,value){
-		var pk_key=obj.aForm.primary_key[0];
-		if(value[pk_key]==id_record){
-			to_delete=k;
-		}
-	});
-
-	if(to_delete>-1){
-	 	if(!obj.aData.deleted){
-				obj.aData.deleted=Array();
-		}
-		obj.aData.deleted.push(obj.aData.records[to_delete]);
-
-		obj.aData.records.splice(to_delete,1);
-		obj.createTable();
+	
+	var to_delete = obj.aData.records[id_record];	
+	if(to_delete.state=='ins'){
+		delete obj.aData.records[id_record];
 	}
 	else{
-		alert('Error. record to delete not found');
-	}		
+		to_delete.state = 'del';
+		if(to_delete){
+		 	if(!obj.aData.deleted){
+					obj.aData.deleted={};
+			}
+			obj.aData.deleted[id_record]=(to_delete);
+		}
+		else{
+			alert('Error. record to delete not found');
+		}		
+	}
+
+	obj.createTable();
 }				
 
+
+
+//The function delete one record
+Dbmng.prototype.restoreRecord = function(id_record) {
+	//TODO deal with multiple key
+	var obj=this;
+	console.log('restore');
+	var to_restore = obj.aData.records[id_record];	
+	to_restore.state = 'ok';
+
+	console.log(to_restore);
+	delete obj.aData.deleted[id_record];
+		
+	obj.createTable();
+}			
 
 //The function duplicate one record
 Dbmng.prototype.duplicateRecord = function(id_record) {
@@ -214,13 +247,17 @@ Dbmng.prototype.duplicateRecord = function(id_record) {
 Dbmng.prototype.insertRecord = function(record) {
 	//TODO deal with multiple key
 	var obj=this;
+		
+	var id=[Guid.newGuid()];
+
+	console.log('b');
 
 	if(record){
 	 	if(!obj.aData.inserted){
-				obj.aData.inserted=Array();
+				obj.aData.inserted={};
 		}
-		obj.aData.inserted.push(record);
-		obj.aData.records.push(record);
+		obj.aData.inserted[id]=(record);
+		obj.aData.records[id]=(record);
 
 		obj.createTable();
 	}
@@ -299,20 +336,14 @@ Dbmng.prototype.createForm = function() {
 		obj=this;
 		var form='<form >';
 		jQuery.each(this.aForm.fields, function(index, field){ 
-			form += Dbmng.layout_get_label(index, field, act);
-			console.log(index + ": " + dbmng_check_is_pk(field));
-			//keep only input			
-			var pk_key=obj.aForm.primary_key[0];
+			
+			//console.log(index + ": " + dbmng_check_is_pk(field));
 			value = '';
-			if( pk_key == index )
-			{
-				value = get_max_id(obj);
-				form += Dbmng.layout_form_input(index, field, value, '', act) + "<br/>";
-			}
-			else
-			{
-				form += Dbmng.layout_form_input(index, field, value, '', act) + "<br/>";
-			}
+			if( ! dbmng_check_is_pk(field) )
+				{
+					form += Dbmng.layout_get_label(index, field, act);
+					form += Dbmng.layout_form_input(index, field, value, '', act) + "<br/>";
+				}
 
 		});
 		form+="</form>";
@@ -327,7 +358,8 @@ Dbmng.prototype.createForm = function() {
 			jQuery.each(obj.aForm.fields, function(index, field){ 
 				record[index] = jQuery('#'+obj.id+'_form #'+index).val();
 			});
-			obj.insertRecord(record);
+
+			obj.insertRecord({ 'state':'ins', 'record': record});
 		});
 }
 
@@ -373,16 +405,57 @@ function get_max_id(obj)
 function dbmng_check_is_pk(fld_value)
 {
 	var ret=false;
-	if( typeof fld_value.key != 'undefined' )
+	if( typeof fld_value.key == 'undefined' )
 		{
 			ret = false;
 		}
-	else( (parseInt(fld_value.key) == 1 || parseInt(fld_value.key) == 2) )
+	else if( (parseInt(fld_value.key) == 1 || parseInt(fld_value.key) == 2) )
 		{
 			ret = true;
 		}
 	
-	console.log("valore: "+ parseInt(fld_value.key) + " tipo: " + typeof(parseInt(fld_value.key)) + " espressione: " + (parseInt(fld_value.key) == 1 || parseInt(fld_value.key) == 2));
-	console.log(ret);
 	return ret;
 }
+
+
+//Creat an object for unique identifier
+var Guid = Guid || (function () {
+
+var EMPTY = '00000000-0000-0000-0000-000000000000';
+
+var _padLeft = function (paddingString, width, replacementChar) {
+    return paddingString.length >= width ? paddingString : _padLeft(replacementChar + paddingString, width, replacementChar || ' ');
+};
+
+var _s4 = function (number) {
+    var hexadecimalResult = number.toString(16);
+    return _padLeft(hexadecimalResult, 4, '0');
+};
+
+var _cryptoGuid = function () {
+    var buffer = new window.Uint16Array(8);
+    window.crypto.getRandomValues(buffer);
+    return [_s4(buffer[0]) + _s4(buffer[1]), _s4(buffer[2]), _s4(buffer[3]), _s4(buffer[4]), _s4(buffer[5]) + _s4(buffer[6]) + _s4(buffer[7])].join('-');
+};
+
+var _guid = function () {
+    var currentDateMilliseconds = new Date().getTime();
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (currentChar) {
+        var randomChar = (currentDateMilliseconds + Math.random() * 16) % 16 | 0;
+        currentDateMilliseconds = Math.floor(currentDateMilliseconds / 16);
+        return (currentChar === 'x' ? randomChar : (randomChar & 0x7 | 0x8)).toString(16);
+    });
+};
+
+var create = function () {
+    var hasCrypto = typeof (window.crypto) != 'undefined',
+        hasRandomValues = typeof (window.crypto.getRandomValues) != 'undefined';
+    return (hasCrypto && hasRandomValues) ? _cryptoGuid() : _guid();
+};
+
+return {
+    newGuid: create,
+    empty: EMPTY
+};})();
+
+

@@ -71,8 +71,6 @@ div.dbmng_form_search div.dbmng_form_row input, div.dbmng_form_search div.dbmng_
   width:100px;
 }
 
-
-
 /* Table sorter CSS */
 table.tablesorter thead tr .header {
 	background-image: url(themes/bg.gif);
@@ -94,4 +92,17 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 }
 
 
+
+/* dbmng_obj  */
+table.dbmng_table tr.del td {
+	background-color: #FFCC00;
+}
+
+table.dbmng_table tr.ins td {
+	background-color: #CCFF66;
+}
+
+table.dbmng_table tr.upd td {
+	background-color: #FFFF66;
+}
 

@@ -1,5 +1,13 @@
 <?php
-//include_once "sites/all/libraries/dbmng/dbmng.php";
+
+	define( 'DBMNG_LIB_PATH'    , '../library/dbmng/' );
+	define( 'DBMNG_CMS'         , 'none' );
+	define( 'DBMNG_DB'          , 'pdo' );
+
+	//0.include the library
+	include(DBMNG_LIB_PATH.'dbmng.php');
+	include(DBMNG_LIB_PATH.'dbmng_standalone.php');
+
 
 
 	$ok=false;
@@ -17,6 +25,7 @@
 	if(isset($_POST['deleted']))
 		$aDel = json_decode($_POST['deleted'], true);
 
+	
 	
 	if($ok) {	
 		//print_r( $aForm );
@@ -59,18 +68,21 @@
 		if( isset($aDel) )
 			{
 				$sql = "";
-				$sql_del = "delete from $table where ";
+				
 				$sVal = "";
 				$aVal = array();
+				$sql_del = "delete from $table where ";
+				
 				foreach( $aDel as $index => $val )
 					{
+						//print_r ($val);
 						//$sVal = $pk . " = " . $val[$pk] . ";\n";
 						$sVal = $pk . " = :" . $pk . ";\n";
-						$aVal = array(":".$pk => $val[$pk]);
-						$sql .= $sql_del . $sVal; 
+						$aVal = array(":".$pk => $val['record'][$pk]);
+						$sql = $sql_del . $sVal; 
+						print_r (dbmng_query( $sql, $aVal));
+						
 					}
-				echo $sql;
-				print_r($aVal);
 			}
 
 			echo $err_msg;

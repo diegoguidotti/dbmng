@@ -40,12 +40,13 @@
 
 
 <script type="text/javascript">
+	var db;
 
 
   jQuery(document).ready(function() {
 
 	
-		var db  = new Dbmng(data, aForm, {'div_element':'table2'});  
+		db  = new Dbmng(data, aForm, {'div_element':'table2', 'ajax_url':'ajax.php'});  
 		db.createTable();
 	
 	});
