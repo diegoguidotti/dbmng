@@ -152,7 +152,7 @@ Dbmng.prototype.createTable = function()
 		
 	});
 	
-
+	html+=get_max_id(obj);
 	return html;
 };
 
@@ -229,7 +229,7 @@ Dbmng.prototype.insertRecord = function(record) {
 	}		
 }				
 
-
+// The function get the label from metadb
 Dbmng.layout_get_label = function(field_name, field, act)
 {
 	lb = field.label;
@@ -255,6 +255,7 @@ Dbmng.layout_get_label = function(field_name, field, act)
 	return "<label for='"+field_name+"'>" + t(lb) + " " + sRequired + "</label>";
 }
 
+// The function add an input widget
 Dbmng.layout_form_input = function( fld, field, value, more, act )
 {
 	html  = "<input type='text' name='"+fld+"' id='"+fld+"' " + more;
@@ -299,10 +300,19 @@ Dbmng.prototype.createForm = function() {
 		var form='<form >';
 		jQuery.each(this.aForm.fields, function(index, field){ 
 			form += Dbmng.layout_get_label(index, field, act);
-			
+			console.log(index + ": " + dbmng_check_is_pk(field));
 			//keep only input			
+			var pk_key=obj.aForm.primary_key[0];
 			value = '';
-			form += Dbmng.layout_form_input(index, field, value, '', act) + "<br/>";
+			if( pk_key == index )
+			{
+				value = get_max_id(obj);
+				form += Dbmng.layout_form_input(index, field, value, '', act) + "<br/>";
+			}
+			else
+			{
+				form += Dbmng.layout_form_input(index, field, value, '', act) + "<br/>";
+			}
 
 		});
 		form+="</form>";
@@ -342,4 +352,33 @@ function debug(d){
 	if(DEBUG){
 		console.log(d);
 	}
+}
+
+function get_max_id(obj)
+{
+	//var obj = this;
+	var id_max = -1;
+	var aID = Array();
+	
+	jQuery.each(obj.aData.records,function(k,value){
+		var pk_key=obj.aForm.primary_key[0];
+		aID.push(value[pk_key]);
+	});	
+	aID.reverse();
+	
+	id_max = "L"+(parseInt(aID[0])+1).toString();
+	return id_max;
+}
+
+function dbmng_check_is_pk(fld_value)
+{
+	var ret=false;
+	if( typeof fld_value.key != 'undefined' )
+		ret = false;
+	else( parseInt(fld_value.key) == 1 || parseInt(fld_value.key) == 2 )
+		ret=true;
+	
+	console.log("valore: "+ parseInt(fld_value.key) + " tipo: " + typeof(parseInt(fld_value.key)) + " espressione: " + (parseInt(fld_value.key) == 1 || parseInt(fld_value.key) == 2));
+	
+	return ret;
 }
