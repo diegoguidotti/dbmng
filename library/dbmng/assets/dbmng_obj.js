@@ -374,11 +374,15 @@ function dbmng_check_is_pk(fld_value)
 {
 	var ret=false;
 	if( typeof fld_value.key != 'undefined' )
-		ret = false;
-	else( parseInt(fld_value.key) == 1 || parseInt(fld_value.key) == 2 )
-		ret=true;
+		{
+			ret = false;
+		}
+	else( (parseInt(fld_value.key) == 1 || parseInt(fld_value.key) == 2) )
+		{
+			ret = true;
+		}
 	
 	console.log("valore: "+ parseInt(fld_value.key) + " tipo: " + typeof(parseInt(fld_value.key)) + " espressione: " + (parseInt(fld_value.key) == 1 || parseInt(fld_value.key) == 2));
-	
+	console.log(ret);
 	return ret;
 }
