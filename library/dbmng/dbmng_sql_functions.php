@@ -34,13 +34,31 @@ function dbmng_query($sql, $var=null)
 							$link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 					
 
+
+							$link->beginTransaction();
 						  $res0 = $link->prepare($sql);
 						  $res0->execute($var);
+							if(startsWithL($sql,"insert"))
+								{							
+									$id = $link->lastInsertId();	
+	  						}
+
+							$link->commit();
 							
 							//Temporary Fix: you can not fetch data after UPDATE INSERT and DELETE 
 							if(startsWithL($sql,"update") || startsWithL($sql,"insert") || startsWithL($sql,"delete") )
 								{
-									$res=$res0;
+
+									$ret=Array();
+		
+									if(startsWithL($sql,"insert"))
+										{							
+											$ret['inserted_id']=$id;	
+										}
+
+									$ret['res']=$res0;
+									$res=$ret;
+
 								}
 							else
 								{
@@ -97,6 +115,7 @@ function dbmng_query($sql, $var=null)
 	*/
 	return $res;
 }
+
 
 /////////////////////////////////////////////////////////////////////////////
 // dbmng_fetch_object

@@ -39,28 +39,31 @@
 		if( isset($aIns) )
 			{
 				$sql = "";
-				$sql_ins = "insert into $table values ";
+				$sql_ins = "insert into $table  ";
 			
 				foreach($aIns as $index => $val)
 					{
+						$sFld = "";
 						$sVal = "";
 						$aVal = array();
 						foreach( $aForm['fields'] as $fld => $fld_value )
 							{
-								if(isset($val[$fld])){
-									$sVal .= $fld . "= :$fld, ";
-									$aVal = array_merge( $aVal, array(":".$fld => $val[$fld]) );
+						
+								if(isset($val['record'][$fld])){
+									$sFld .= $fld .", ";
+									$sVal .= ":$fld, ";
+									$aVal = array_merge( $aVal, array(":".$fld => $val['record'][$fld]) );
 								}
 								else{
 									$err_msg .= "Field ".	$fld ." not found in val ";																		
 								}
-
-								//$sVal .= $fld . "=" . $val[$fld] . ", ";
 							}
 						$sVal = substr( $sVal, 0, strlen($sVal)-2 );
-						$sql = $sql_ins . "(" . $sVal . ");";
-						echo $sql;
-						//print_r( $aVal );
+						$sFld = substr( $sFld, 0, strlen($sFld)-2 );
+						echo $sVal;
+						print_r($aVal);
+						$sql = $sql_ins . "(" . $sFld . ") VALUES (" . $sVal . ");";						
+						print_r (dbmng_query( $sql, $aVal));
 					}
 			}
 
