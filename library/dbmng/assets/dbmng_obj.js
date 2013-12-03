@@ -220,26 +220,22 @@ Dbmng.prototype.restoreRecord = function(id_record) {
 Dbmng.prototype.duplicateRecord = function(id_record) {
 	//TODO deal with multiple key
 	var obj=this;
-	to_duplicate=-1;
-	jQuery.each(obj.aData.records,function(k,value){
-		var pk_key=obj.aForm.primary_key[0];
-		if(value[pk_key]==id_record){
-			to_duplicate=k;
-		}
-	});
+	
+	var id=[Guid.newGuid()];
+	var to_duplicate=jQuery.extend(true, {}, obj.aData.records[id_record]);
+	to_duplicate.state = "ins";
 
-	if(to_duplicate>-1){
-	 	if(!obj.aData.inserted){
-				obj.aData.inserted=Array();
-		}
-		obj.aData.inserted.push(obj.aData.records[to_duplicate]);
-		obj.aData.records.push(obj.aData.records[to_duplicate]);
-
+	if(to_duplicate)
+	{
+	 	if(!obj.aData.inserted)
+		 	{
+				obj.aData.inserted={};
+			}
+		obj.aData.inserted[id]=to_duplicate;
+		obj.aData.records[id]=to_duplicate;
+		console.log(id);
 		obj.createTable();
 	}
-	else{
-		alert('Error. record to delete not found');
-	}		
 }				
 
 

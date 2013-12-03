@@ -31,8 +31,12 @@
 	include(DBMNG_LIB_PATH.'dbmng_standalone.php');
 
 	//get the array storing the table metadata from record 1 in table dbmng_tables
-	$aForm    = dbmng_get_form_array(11); 
-
+	if( gethostname() == "Galveston" )
+		$id_table = 12;
+	else
+		$id_table = 11;
+	
+	$aForm    = dbmng_get_form_array($id_table); 
 	//echo dbmng_crud($aForm);
   echo  dbmng_crud_js($aForm, Array() );
 
