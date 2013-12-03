@@ -13,6 +13,8 @@ include_once DBMNG_LIB_PATH."dbmng_cfg.php";
 function dbmng_query($sql, $var=null)
 {
 
+	$ret=Array();
+
 	if(is_null($var))
 		{
 			$callers=debug_backtrace();
@@ -37,39 +39,50 @@ function dbmng_query($sql, $var=null)
 
 							$link->beginTransaction();
 						  $res0 = $link->prepare($sql);
-						  $res0->execute($var);
-							if(startsWithL($sql,"insert"))
-								{							
-									$id = $link->lastInsertId();	
-	  						}
+							if($res0)
+								{	
+								$res0->execute($var);
+								if(startsWithL($sql,"insert"))
+									{							
+										$id = $link->lastInsertId();	
+									}
 
-							$link->commit();
+								$link->commit();
 							
-							//Temporary Fix: you can not fetch data after UPDATE INSERT and DELETE 
-							if(startsWithL($sql,"update") || startsWithL($sql,"insert") || startsWithL($sql,"delete") )
-								{
+								//Temporary Fix: you can not fetch data after UPDATE INSERT and DELETE 
+								if(startsWithL($sql,"update") || startsWithL($sql,"insert") || startsWithL($sql,"delete") )
+									{
 
-									$ret=Array();
+										$ret=Array();
 		
-									if(startsWithL($sql,"insert"))
-										{							
-											$ret['inserted_id']=$id;	
-										}
+										if(startsWithL($sql,"insert"))
+											{							
+												$ret['inserted_id']=$id;	
+											}
 
-									$ret['res']=$res0;
-									$res=$ret;
+										$ret['res']=$res0;
+										$ret['ok']=true;
+										
 
-								}
+									}
+								else
+									{
+										$ret=$res0->fetchAll(PDO::FETCH_CLASS);				
+									}
+							 }
 							else
 								{
-									$res=$res0->fetchAll(PDO::FETCH_CLASS);									
+										$ret=Array();
+										$ret['ok']=1;
+										$ret['error']=$link->errorInfo();	
 								}
 						}	
 					catch( PDOException $Exception ) {
 						// PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
 						// String.
-						echo ('PDO Exception: '.$Exception->getMessage( ).'<br/>');
-						echo ('Query: '.$sql.'<br/>');
+						$ret=Array();
+						$ret['ok']=0;
+						$ret['error']=$link->errorInfo();							
 					}
 					break;
 					
@@ -82,17 +95,17 @@ function dbmng_query($sql, $var=null)
 				{
 				try 
 						{
-							$res = db_query($sql, $var);
+							$ret = db_query($sql, $var);
 						}
 					catch( Exception $Exception ) {
 						echo ('PDO Exception: '.$Exception->getMessage( ).'<br/>');
 						echo ('Query: '.$sql.'<br/>');
-						$res = null;
+						$ret = null;
 					}
 				}
 			else 
 				{
-					$res = db_query($sql);
+					$ret = db_query($sql);
 				}
 
 			break;
@@ -113,7 +126,7 @@ function dbmng_query($sql, $var=null)
 		}
 	echo "<br>$tsql</br>";
 	*/
-	return $res;
+	return $ret;
 }
 
 

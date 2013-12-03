@@ -11,7 +11,7 @@
 
 
 	$ok=false;
-	$err_msg="";
+	$json="";
 
 	if(isset($_POST['aForm'])) {
 		$aForm = json_decode($_POST['aForm'], true);
@@ -40,7 +40,8 @@
 			{
 				$sql = "";
 				$sql_ins = "insert into $table  ";
-			
+				$json['inserted']=Array();
+
 				foreach($aIns as $index => $val)
 					{
 						$sFld = "";
@@ -62,16 +63,25 @@
 							}
 						$sVal = substr( $sVal, 0, strlen($sVal)-2 );
 						$sFld = substr( $sFld, 0, strlen($sFld)-2 );
-						echo $sVal;
-						print_r($aVal);
 						$sql = $sql_ins . "(" . $sFld . ") VALUES (" . $sVal . ");";						
-						print_r (dbmng_query( $sql, $aVal));
+						$ret = (dbmng_query( $sql, $aVal));
+						if($ret['ok']==1){
+							$json['inserted'][$index]['ok']=1;
+							$json['inserted'][$index]['inserted_id']=$ret['inserted_id'];
+						}
+						else{
+							$json['inserted'][$index]['ok']=0;				
+							$json['inserted'][$index]['error']=$ret['error'][2];				
+						}
+
 					}
 			}
 
 		// ********** DELETE ********** //
 		if( isset($aDel) )
 			{
+				$json['deleted']=Array();
+
 				$sql = "";
 				
 				$sVal = "";
@@ -85,12 +95,19 @@
 						$sVal = $pk . " = :" . $pk . ";\n";
 						$aVal = array(":".$pk => $val['record'][$pk]);
 						$sql = $sql_del . $sVal; 
-						print_r (dbmng_query( $sql, $aVal));
+						$ret = (dbmng_query( $sql, $aVal));
+						if($ret['ok']==1){
+							$json['deleted'][$index]['ok']=1;
+						}
+						else{
+							$json['deleted'][$index]['ok']=0;				
+							$json['deleted'][$index]['error']=$ret['error'][2];				
+						}
 						
 					}
 			}
 
-			echo $err_msg;
+			echo json_encode( $json );
 	}
 	else{
 		echo '{"ok":false}';

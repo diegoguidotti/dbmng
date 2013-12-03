@@ -117,6 +117,10 @@ Dbmng.prototype.createTable = function()
 						html_row += '<span id="'+obj.id+'_dup_'+id_record+'"><a  class="dbmng_duplicate_button"  >' + t('Duplicate') +'</a>' + "&nbsp;</span>";
 					}
 			}
+		
+		if(value.error){
+			html_row += '<span title="'+value.error+'" class="dbmng_error">'+t('Error!')+'</span>';
+		}
 
 		html_row += "</td>\n";
 		html_row += "</tr>\n";	
@@ -159,9 +163,43 @@ Dbmng.prototype.createTable = function()
 			url: url,
 			type: "POST",
 			data: {"aForm" : JSON.stringify(obj.aForm), "inserted":  JSON.stringify(obj.aData.inserted), "deleted": JSON.stringify(obj.aData.deleted) }, 
-			//dataType: "json",
+			dataType: "json",
 			success: function (data) {
+
     		console.log(data);
+
+				if(data.deleted){
+					jQuery.each(data.deleted, function(k,v){
+						if(v.ok==1){
+							delete obj.aData.records[k];
+							delete obj.aData.deleted[k];							
+						}
+						else{
+							obj.aData.records[k].error=v.error;
+						}
+					});
+				}
+
+
+				var pk_key=obj.aForm.primary_key[0];
+
+				if(data.inserted){
+					jQuery.each(data.inserted, function(k,v){
+						if(v.ok==1){
+							obj.aData.records[k].state='ok';
+							obj.aData.records[k].record[pk_key] = v.inserted_id;
+							delete obj.aData.inserted[k];	
+						}
+						else{							
+							console.log(v);
+//							obj.aData.records[k].error=v.error;
+						}
+					});
+				}
+
+
+				obj.createTable();
+				//end of Success	
 			},
 			error: function (xhr, ajaxOptions, thrownError){
   	  	console.log(xhr);
