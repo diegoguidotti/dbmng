@@ -136,7 +136,7 @@ Dbmng.prototype.createTable = function()
 			obj.restoreRecord(id_record);
 		});
 		jQuery('#'+obj.id+'_upd_'+id_record).click(function(){						
-			//obj.updateRecord(id_record);
+			obj.createForm(id_record);
 		});
 		jQuery('#'+obj.id+'_dup_'+id_record).click(function(){						
 			obj.duplicateRecord(id_record);
@@ -162,7 +162,7 @@ Dbmng.prototype.createTable = function()
 		jQuery.ajax({
 			url: url,
 			type: "POST",
-			data: {"aForm" : JSON.stringify(obj.aForm), "inserted":  JSON.stringify(obj.aData.inserted), "deleted": JSON.stringify(obj.aData.deleted) }, 
+			data: {"aForm" : JSON.stringify(obj.aForm), "inserted":  JSON.stringify(obj.aData.inserted), "deleted": JSON.stringify(obj.aData.deleted) , "updated": JSON.stringify(obj.aData.updated) }, 
 			dataType: "json",
 			success: function (data) {
 
@@ -189,6 +189,18 @@ Dbmng.prototype.createTable = function()
 							obj.aData.records[k].state='ok';
 							obj.aData.records[k].record[pk_key] = v.inserted_id;
 							delete obj.aData.inserted[k];	
+						}
+						else{														
+								//obj.aData.records[k].error=v.error;
+						}
+					});
+				}
+
+				if(data.updated){
+					jQuery.each(data.updated, function(k,v){
+						if(v.ok==1){
+							obj.aData.records[k].state='ok';							
+							delete obj.aData.updated[k];	
 						}
 						else{							
 							console.log(v);
@@ -254,6 +266,8 @@ Dbmng.prototype.restoreRecord = function(id_record) {
 	obj.createTable();
 }			
 
+
+
 //The function duplicate one record
 Dbmng.prototype.duplicateRecord = function(id_record) {
 	//TODO deal with multiple key
@@ -284,7 +298,6 @@ Dbmng.prototype.insertRecord = function(record) {
 		
 	var id=[Guid.newGuid()];
 
-	console.log('b');
 
 	if(record){
 	 	if(!obj.aData.inserted){
@@ -292,6 +305,25 @@ Dbmng.prototype.insertRecord = function(record) {
 		}
 		obj.aData.inserted[id]=(record);
 		obj.aData.records[id]=(record);
+
+		obj.createTable();
+	}
+	else{
+		alert('Error. record to insert undefined');
+	}		
+}			
+
+//The function insert one record
+Dbmng.prototype.updateRecord = function(item, id_record) {
+	//TODO deal with multiple key
+	var obj=this;
+		
+
+	if(item){
+	 	if(!obj.aData.updated){
+				obj.aData.updated={};
+		}
+		obj.aData.updated[id_record]=(item);		
 
 		obj.createTable();
 	}
@@ -326,6 +358,79 @@ Dbmng.layout_get_label = function(field_name, field, act)
 	return "<label for='"+field_name+"'>" + t(lb) + " " + sRequired + "</label>";
 }
 
+
+//TODO: review create Form
+Dbmng.prototype.createForm = function(id_record) {
+		obj=this;
+		var act = 'ins';
+		if(typeof id_record!='undefined'){
+			act='upd';
+			item=obj.aData.records[id_record];
+		}		
+
+		//hide the table and show the form
+		jQuery("#"+obj.id+"_view").hide();	
+		jQuery("#"+obj.id+"_form").show();	
+
+
+		
+		var form='<form >';
+		jQuery.each(this.aForm.fields, function(index, field){ 
+			
+			//console.log(index + ": " + dbmng_check_is_pk(field));
+			value = '';
+			if( ! dbmng_check_is_pk(field) )
+				{
+					form += Dbmng.layout_get_label(index, field, act);
+
+					var value='';
+
+					if(act=='upd'){
+						if(item.record[index]){
+							value=item.record[index];							
+						}
+					}
+					form += Dbmng.layout_form_input(index, field, value, '', act) + "<br/>";
+				}
+
+		});
+		form+="</form>";
+		if(act=='ins'){
+			form+="<a id='"+this.id+"_insert'>"+t("Insert")+"</a>";		
+		}
+		else{
+			form+="<a id='"+this.id+"_update'>"+t("Update")+"</a>";		
+		}
+
+		jQuery('#'+obj.id+"_form").html(form);
+
+		jQuery('#'+obj.id+"_insert").click(function(){
+			
+			var record= {};
+			
+			jQuery.each(obj.aForm.fields, function(index, field){ 
+				record[index] = jQuery('#'+obj.id+'_form #'+index).val();
+			});
+
+			obj.insertRecord({ 'state':'ins', 'record': record});
+		});
+
+		jQuery('#'+obj.id+"_update").click(function(){
+			
+			jQuery.each(obj.aForm.fields, function(index, field){ 
+				if( ! dbmng_check_is_pk(field) ) 	
+					{
+						item.record[index] = jQuery('#'+obj.id+'_form #'+index).val();
+					}
+			});
+			item.state='upd';
+			obj.updateRecord(item, id_record);
+		});
+
+
+}
+
+
 // The function add an input widget
 Dbmng.layout_form_input = function( fld, field, value, more, act )
 {
@@ -357,47 +462,6 @@ Dbmng.layout_get_nullable = function( field, act )
 		*/
 	return ht;
 }
-
-//TODO: review create Form
-Dbmng.prototype.createForm = function() {
-		var act = 'ins';
-		
-		//hide the table and show the form
-		jQuery("#"+this.id+"_view").hide();	
-		jQuery("#"+this.id+"_form").show();	
-
-
-		obj=this;
-		var form='<form >';
-		jQuery.each(this.aForm.fields, function(index, field){ 
-			
-			//console.log(index + ": " + dbmng_check_is_pk(field));
-			value = '';
-			if( ! dbmng_check_is_pk(field) )
-				{
-					form += Dbmng.layout_get_label(index, field, act);
-					form += Dbmng.layout_form_input(index, field, value, '', act) + "<br/>";
-				}
-
-		});
-		form+="</form>";
-		form+="<a id='"+this.id+"_insert'>"+t("Insert")+"</a>";		
-
-		jQuery('#'+obj.id+"_form").html(form);
-
-		jQuery('#'+obj.id+"_insert").click(function(){
-			
-			var record= {};
-			
-			jQuery.each(obj.aForm.fields, function(index, field){ 
-				record[index] = jQuery('#'+obj.id+'_form #'+index).val();
-			});
-
-			obj.insertRecord({ 'state':'ins', 'record': record});
-		});
-}
-
-
 
 function layout_view_field_table(fld_value){
 	ret=true;	

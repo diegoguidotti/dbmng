@@ -25,6 +25,8 @@
 	if(isset($_POST['deleted']))
 		$aDel = json_decode($_POST['deleted'], true);
 
+	if(isset($_POST['updated']))
+		$aUpd = json_decode($_POST['updated'], true);
 	
 	
 	if($ok) {	
@@ -72,6 +74,51 @@
 						else{
 							$json['inserted'][$index]['ok']=0;				
 							$json['inserted'][$index]['error']=$ret['error'][2];				
+						}
+
+					}
+			}
+
+
+		// ********** UPDATE ********** //
+		if( isset($aUpd) )
+			{
+				$sql = "";
+				$sql_ins = " UPDATE $table ";
+				$json['updated']=Array();
+
+				foreach($aUpd as $index => $val)
+					{						
+						$sVal = "";
+						$where = "";
+						$aVal = array();
+						foreach( $aForm['fields'] as $fld => $fld_value )
+							{
+								if( $fld != $pk )
+									{
+										if(isset($val['record'][$fld])){
+											$sVal .= $fld."= :$fld, ";
+											$aVal = array_merge( $aVal, array(":".$fld => $val['record'][$fld]) );
+										}
+										else{
+											$err_msg .= "Field ".	$fld ." not found in val ";																		
+										}
+									}
+								else{
+									$where = '  '.$fld.'=:'.$fld.' ';
+									$aVal = array_merge( $aVal, array(":".$fld => $val['record'][$fld]) );
+								}
+							}
+						$sVal = substr( $sVal, 0, strlen($sVal)-2 );
+
+						$sql = $sql_ins . " SET " . $sVal . " WHERE ".$where."; ";						
+						$ret = (dbmng_query( $sql, $aVal));
+						if($ret['ok']==1){
+							$json['updated'][$index]['ok']=1;							
+						}
+						else{
+							$json['updated'][$index]['ok']=0;				
+							$json['updated'][$index]['error']=$ret['error'][2];				
 						}
 
 					}
