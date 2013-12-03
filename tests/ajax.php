@@ -55,7 +55,7 @@
 									$aVal = array_merge( $aVal, array(":".$fld => $val['record'][$fld]) );
 								}
 								else{
-									$err_msg .= "Field ".	$fld ." not found in val ";																		
+									//$err_msg .= "Field ".	$fld ." not found in val ";																		
 								}
 							}
 						$sVal = substr( $sVal, 0, strlen($sVal)-2 );
