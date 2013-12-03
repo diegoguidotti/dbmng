@@ -48,15 +48,17 @@
 						$aVal = array();
 						foreach( $aForm['fields'] as $fld => $fld_value )
 							{
-						
-								if(isset($val['record'][$fld])){
-									$sFld .= $fld .", ";
-									$sVal .= ":$fld, ";
-									$aVal = array_merge( $aVal, array(":".$fld => $val['record'][$fld]) );
-								}
-								else{
-									$err_msg .= "Field ".	$fld ." not found in val ";																		
-								}
+								if( $fld != $pk )
+									{
+										if(isset($val['record'][$fld])){
+											$sFld .= $fld .", ";
+											$sVal .= ":$fld, ";
+											$aVal = array_merge( $aVal, array(":".$fld => $val['record'][$fld]) );
+										}
+										else{
+											$err_msg .= "Field ".	$fld ." not found in val ";																		
+										}
+									}
 							}
 						$sVal = substr( $sVal, 0, strlen($sVal)-2 );
 						$sFld = substr( $sFld, 0, strlen($sFld)-2 );
