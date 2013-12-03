@@ -216,30 +216,78 @@ Dbmng.prototype.restoreRecord = function(id_record) {
 	obj.createTable();
 }			
 
-//The function duplicate one record
-Dbmng.prototype.duplicateRecord = function(id_record) {
+/*
+//The function delete one record
+Dbmng.prototype.deleteRecord = function(id_record) {
 	//TODO deal with multiple key
 	var obj=this;
-	to_duplicate=-1;
-	jQuery.each(obj.aData.records,function(k,value){
-		var pk_key=obj.aForm.primary_key[0];
-		if(value[pk_key]==id_record){
-			to_duplicate=k;
+	
+	var to_delete = obj.aData.records[id_record];	
+	if(to_delete.state=='ins'){
+		delete obj.aData.records[id_record];
+	}
+	else{
+		to_delete.state = 'del';
+		if(to_delete){
+		 	if(!obj.aData.deleted){
+					obj.aData.deleted={};
+			}
+			obj.aData.deleted[id_record]=(to_delete);
 		}
-	});
+		else{
+			alert('Error. record to delete not found');
+		}		
+	}
 
-	if(to_duplicate>-1){
+	obj.createTable();
+}				
+
+Dbmng.prototype.insertRecord = function(record) {
+	//TODO deal with multiple key
+	var obj=this;
+		
+	var id=[Guid.newGuid()];
+
+	console.log('b');
+
+	if(record){
 	 	if(!obj.aData.inserted){
-				obj.aData.inserted=Array();
+				obj.aData.inserted={};
 		}
-		obj.aData.inserted.push(obj.aData.records[to_duplicate]);
-		obj.aData.records.push(obj.aData.records[to_duplicate]);
+		obj.aData.inserted[id]=(record);
+		obj.aData.records[id]=(record);
 
 		obj.createTable();
 	}
 	else{
-		alert('Error. record to delete not found');
+		alert('Error. record to insert undefined');
 	}		
+}				
+
+*/
+
+//The function duplicate one record
+Dbmng.prototype.duplicateRecord = function(id_record) {
+	//TODO deal with multiple key
+	var obj=this;
+	
+	var id=[Guid.newGuid()];
+	
+	to_duplicate=obj.aData.records[id_record];
+//	to_duplicate.state = "ins";
+	console.log(to_duplicate);
+	if(to_duplicate)
+	{
+	 	if(!obj.aData.inserted)
+		 	{
+				obj.aData.inserted={};
+			}
+		obj.aData.inserted=(to_duplicate);
+		obj.aData.records[id]=(to_duplicate);
+		obj.aData.records[id].state = "ins";
+		console.log(id);
+		obj.createTable();
+	}
 }				
 
 
