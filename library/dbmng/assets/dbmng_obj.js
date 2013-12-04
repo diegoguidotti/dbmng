@@ -82,22 +82,10 @@ Dbmng.prototype.createTable = function()
 			html_row += "</tr>\n";	
 
 		//Save the table row in DOM
-		jQuery('#'+obj.id+'_view tbody').append(html_row);			
+		jQuery('#'+obj.id+'_view tbody').append(html_row);
 
-
-		jQuery('#'+obj.id+'_del_'+id_record).click(function(){						
-			obj.deleteRecord(id_record);
-		});
-		jQuery('#'+obj.id+'_restore_'+id_record).click(function(){						
-			obj.restoreRecord(id_record);
-		});
-		jQuery('#'+obj.id+'_upd_'+id_record).click(function(){						
-			obj.createForm(id_record);
-			
-		});
-		jQuery('#'+obj.id+'_dup_'+id_record).click(function(){						
-			obj.duplicateRecord(id_record);
-		});
+		//attach command assign the click function to delete/update/restore/insert button			
+		obj.attachCommand(id_record);
 	});
 
 
@@ -183,6 +171,24 @@ Dbmng.prototype.createTable = function()
 };
 
 
+Dbmng.prototype.attachCommand = function (id_record) 
+	{
+		var obj=this;
+		jQuery('#'+obj.id+'_del_'+id_record).click(function(){							
+			obj.deleteRecord(id_record);
+		});
+		jQuery('#'+obj.id+'_restore_'+id_record).click(function(){						
+			obj.restoreRecord(id_record);
+		});
+		jQuery('#'+obj.id+'_upd_'+id_record).click(function(){						
+			obj.createForm(id_record);
+			
+		});
+		jQuery('#'+obj.id+'_dup_'+id_record).click(function(){						
+			obj.duplicateRecord(id_record);
+		});
+}
+
 Dbmng.prototype.createRow = function (value, id_record) 
 	{
 		var obj=this;
@@ -218,7 +224,7 @@ Dbmng.prototype.createRow = function (value, id_record)
 
 		if(state=='del')
 			{
-				html_row += '<span id="'+obj.id+'_restore_'+id_record+'"><a  class="dbmng_restore_button"  >' + t('Restore') +'</a>' + "&nbsp;</span>";
+				html_row +=     '<span id="'+obj.id+'_restore_'+id_record+'"><a  class="dbmng_restore_button"  >' + t('Restore') +'</a>' + "&nbsp;</span>";
 			}
 		else
 			{
@@ -253,9 +259,11 @@ Dbmng.prototype.deleteRecord = function(id_record) {
 	var to_delete = obj.aData.records[id_record];	
 	if(to_delete.state=='ins'){
 		delete obj.aData.records[id_record];
+		jQuery('#'+obj.id+"_"+id_record).html();
 	}
 	else{
 		to_delete.state = 'del';
+		jQuery('#'+obj.id+"_"+id_record).removeClass( "ok" ).addClass( "del" );
 		if(to_delete){
 		 	if(!obj.aData.deleted){
 					obj.aData.deleted={};
@@ -265,9 +273,13 @@ Dbmng.prototype.deleteRecord = function(id_record) {
 		else{
 			alert('Error. record to delete not found');
 		}		
+		jQuery('#'+obj.id+"_"+id_record).html(obj.createRow(to_delete, id_record));
+		//You need to attach again the restore button
+		obj.attachCommand(id_record);
+		
+
 	}
 
-	obj.createTable();
 }				
 
 
@@ -281,9 +293,12 @@ Dbmng.prototype.restoreRecord = function(id_record) {
 	to_restore.state = 'ok';
 
 	console.log(to_restore);
-	delete obj.aData.deleted[id_record];
-		
-	obj.createTable();
+	delete obj.aData.deleted[id_record];		
+	jQuery('#'+obj.id+"_"+id_record).removeClass( "del" ).addClass( "ok" );	
+	jQuery('#'+obj.id+"_"+id_record).html(obj.createRow(to_restore, id_record));
+		//You need to attach again the restore button
+		obj.attachCommand(id_record);
+
 }			
 
 
@@ -293,7 +308,7 @@ Dbmng.prototype.duplicateRecord = function(id_record) {
 	//TODO deal with multiple key
 	var obj=this;
 	
-	var id=[Guid.newGuid()];
+	var new_id_record=[Guid.newGuid()];
 	var to_duplicate=jQuery.extend(true, {}, obj.aData.records[id_record]);
 	to_duplicate.state = "ins";
 
@@ -303,30 +318,42 @@ Dbmng.prototype.duplicateRecord = function(id_record) {
 		 	{
 				obj.aData.inserted={};
 			}
-		obj.aData.inserted[id]=to_duplicate;
-		obj.aData.records[id]=to_duplicate;
-		console.log(id);
-		obj.createTable();
+		obj.aData.inserted[new_id_record]=to_duplicate;
+		obj.aData.records[new_id_record]=to_duplicate;
+
+		//add a Row
+		jQuery("#"+obj.id+"_table").append("<tr id='"+obj.id+"_"+new_id_record+"' class='ins'></tr>");
+		jQuery('#'+obj.id+"_"+new_id_record).html(obj.createRow(to_duplicate, new_id_record));	
+		obj.attachCommand(new_id_record);
+
 	}
 }				
 
 
 //The function insert one record
-Dbmng.prototype.insertRecord = function(record) {
+Dbmng.prototype.insertRecord = function(item, temporary_id_record) {
 	//TODO deal with multiple key
 	var obj=this;
-		
-	var id=[Guid.newGuid()];
+
+	var id_record=[Guid.newGuid()];
 
 
-	if(record){
+	if(item){
 	 	if(!obj.aData.inserted){
 				obj.aData.inserted={};
 		}
-		obj.aData.inserted[id]=(record);
-		obj.aData.records[id]=(record);
+		obj.aData.inserted[id_record]=(item);
+		obj.aData.records[id_record]=(item);
 
-		obj.createTable();
+		//Change the id to the temporary one
+    jQuery('#'+obj.id+"_"+temporary_id_record).attr("id",obj.id+"_"+id_record);
+
+		jQuery('#'+obj.id+"_"+id_record).html(obj.createRow(item, id_record));	
+		jQuery('#'+obj.id+"_"+id_record).removeClass( "ok" ).addClass( "ins" );	
+		//You need to attach again the restore button
+		obj.attachCommand(id_record);
+
+
 	}
 	else{
 		alert('Error. record to insert undefined');
@@ -345,7 +372,10 @@ Dbmng.prototype.updateRecord = function(item, id_record) {
 		}
 		obj.aData.updated[id_record]=(item);		
 
-		obj.createTable();
+		jQuery('#'+obj.id+"_"+id_record).removeClass( "ok" ).addClass( "upd" );
+		jQuery('#'+obj.id+"_"+id_record).html(obj.createRow(item, id_record));
+		//You need to attach again the restore button
+		obj.attachCommand(id_record);
 	}
 	else{
 		alert('Error. record to insert undefined');
@@ -383,8 +413,6 @@ Dbmng.layout_get_label = function(field_name, field, act)
 Dbmng.prototype.createForm = function(id_record) {
 		obj=this;
 		var act = 'ins';
-
-		
 
 		if(typeof id_record!='undefined'){
 			act='upd';
@@ -457,7 +485,7 @@ Dbmng.prototype.createForm = function(id_record) {
 			jQuery.each(obj.aForm.fields, function(index, field){ 
 				record[index] = jQuery('#'+obj.id+'_'+id_record+'_'+index).val();
 			});
-			obj.insertRecord({ 'state':'ins', 'record': record});
+			obj.insertRecord({ 'state':'ins', 'record': record} , id_record);
 		});
 
 		jQuery('#'+obj.id+"_"+id_record+"_update").click(function(){
