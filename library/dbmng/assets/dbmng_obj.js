@@ -17,6 +17,11 @@ function Dbmng( d, f , p) {
 
   this.aParam = p;
 
+	this.inline=0;
+	if(p.inline){
+		this.inline=p.inline;
+	}	
+
   //debug(data);
   //debug(aForm);
 	
@@ -50,7 +55,7 @@ Dbmng.prototype.createTable = function()
 
 	//Add header
 	html += "<thead>\n";
-	html += "<tr>\n";
+	html += "<tr >\n";
 	jQuery.each(obj.aForm.fields, function(index, field){ 
 			var f = field;
 			if( layout_view_field_table(f.skip_in_tbl) ){
@@ -71,59 +76,10 @@ Dbmng.prototype.createTable = function()
 			var state = value.state;
 			var id_record=k;
 
-			var html_row = "<tr class='"+state+"'>";
-			for( var key in o )
-				{        
-					//get the field parameters
-		      var f = obj.aForm.fields[key];
-					if( layout_view_field_table(f.skip_in_tbl) ){
-						if (o.hasOwnProperty(key))
-						{
-							html_row += "<td>" + o[key] + "</td>";
-						}
-						else{
-							html_row += "<td>-</td>";
-						}				
-					}
-			}
-		
-		// available functionalities
-		html_row += "<td class='dbmng_functions'>";
-		
-		var nDel=1; nUpd=1; nDup=1;
+			var html_row = "<tr id='"+obj.id+"_"+k+"' class='"+state+"'>";
 
-		if(aParam['user_function']){
-		  nUpd = ((aParam['user_function']['upd']) ? aParam['user_function']['upd'] : 1);
-		  nDel = ((aParam['user_function']['del']) ? aParam['user_function']['del'] : 1);
-		  nDup = ((aParam['user_function']['dup']) ? aParam['user_function']['dup'] : 1);
-		}
-
-		if(state=='del')
-			{
-				html_row += '<span id="'+obj.id+'_restore_'+id_record+'"><a  class="dbmng_restore_button"  >' + t('Restore') +'</a>' + "&nbsp;</span>";
-			}
-		else
-			{
-				if( nDel == 1 )
-					{				
-						html_row += '<span id="'+obj.id+'_del_'+id_record+'"><a  class="dbmng_delete_button"  >' + t('Delete') +'</a>' + "&nbsp;</span>";
-					}
-				if( nUpd == 1 )
-					{				
-						html_row += '<span id="'+obj.id+'_upd_'+id_record+'"><a  class="dbmng_update_button"  >' + t('Update') +'</a>' + "&nbsp;</span>";
-					}
-				if( nDup == 1 )
-					{				
-						html_row += '<span id="'+obj.id+'_dup_'+id_record+'"><a  class="dbmng_duplicate_button"  >' + t('Duplicate') +'</a>' + "&nbsp;</span>";
-					}
-			}
-		
-		if(value.error){
-			html_row += '<span title="'+value.error+'" class="dbmng_error">'+t('Error!')+'</span>';
-		}
-
-		html_row += "</td>\n";
-		html_row += "</tr>\n";	
+			html_row += obj.createRow(value, id_record);
+			html_row += "</tr>\n";	
 
 		//Save the table row in DOM
 		jQuery('#'+obj.id+'_view tbody').append(html_row);			
@@ -137,6 +93,7 @@ Dbmng.prototype.createTable = function()
 		});
 		jQuery('#'+obj.id+'_upd_'+id_record).click(function(){						
 			obj.createForm(id_record);
+			
 		});
 		jQuery('#'+obj.id+'_dup_'+id_record).click(function(){						
 			obj.duplicateRecord(id_record);
@@ -224,6 +181,69 @@ Dbmng.prototype.createTable = function()
 	html+=get_max_id(obj);
 	return html;
 };
+
+
+Dbmng.prototype.createRow = function (value, id_record) 
+	{
+		var obj=this;
+		var state=value.state;
+		var o=value.record;		
+		var html_row='';
+
+			for( var key in o )
+				{        
+					//get the field parameters
+		      var f = obj.aForm.fields[key];
+					if( layout_view_field_table(f.skip_in_tbl) ){
+						if (o.hasOwnProperty(key))
+						{
+							html_row += "<td>" + o[key] + "</td>";
+						}
+						else{
+							html_row += "<td>-</td>";
+						}				
+					}
+			}
+		
+		// available functionalities
+		html_row += "<td class='dbmng_functions'>";
+		
+		var nDel=1; nUpd=1; nDup=1;
+
+		if(aParam['user_function']){
+		  nUpd = ((aParam['user_function']['upd']) ? aParam['user_function']['upd'] : 1);
+		  nDel = ((aParam['user_function']['del']) ? aParam['user_function']['del'] : 1);
+		  nDup = ((aParam['user_function']['dup']) ? aParam['user_function']['dup'] : 1);
+		}
+
+		if(state=='del')
+			{
+				html_row += '<span id="'+obj.id+'_restore_'+id_record+'"><a  class="dbmng_restore_button"  >' + t('Restore') +'</a>' + "&nbsp;</span>";
+			}
+		else
+			{
+				if( nDel == 1 )
+					{				
+						html_row += '<span id="'+obj.id+'_del_'+id_record+'"><a  class="dbmng_delete_button"  >' + t('Delete') +'</a>' + "&nbsp;</span>";
+					}
+				if( nUpd == 1 )
+					{				
+						html_row += '<span id="'+obj.id+'_upd_'+id_record+'"><a  class="dbmng_update_button"  >' + t('Update') +'</a>' + "&nbsp;</span>";
+					}
+				if( nDup == 1 )
+					{				
+						html_row += '<span id="'+obj.id+'_dup_'+id_record+'"><a  class="dbmng_duplicate_button"  >' + t('Duplicate') +'</a>' + "&nbsp;</span>";
+					}
+			}
+		
+		if(value.error){
+			html_row += '<span title="'+value.error+'" class="dbmng_error">'+t('Error!')+'</span>';
+		}
+		html_row += "</td>\n";
+
+		return html_row;
+	}
+
 
 //The function delete one record
 Dbmng.prototype.deleteRecord = function(id_record) {
@@ -363,25 +383,43 @@ Dbmng.layout_get_label = function(field_name, field, act)
 Dbmng.prototype.createForm = function(id_record) {
 		obj=this;
 		var act = 'ins';
+
+		
+
 		if(typeof id_record!='undefined'){
 			act='upd';
 			item=obj.aData.records[id_record];
 		}		
 
-		//hide the table and show the form
-		jQuery("#"+obj.id+"_view").hide();	
-		jQuery("#"+obj.id+"_form").show();	
+		console.log('create_form'+obj.inline+" "+act);
+
+		if(obj.inline==0){
+			//hide the table and show the form
+			jQuery("#"+obj.id+"_view").hide();	
+			jQuery("#"+obj.id+"_form").show();	
+		}
+		else{
+			if(act=='ins'){
+				id_record='tmp_'+Guid.newGuid();
+				jQuery("#"+obj.id+"_table").append("<tr id='"+obj.id+"_"+id_record+"'></tr>");
+				
+			}
 
 
+		}
 		
 		var form='<form >';
-		jQuery.each(this.aForm.fields, function(index, field){ 
-			
+		jQuery.each(this.aForm.fields, function(index, field){ 			
 			//console.log(index + ": " + dbmng_check_is_pk(field));
 			value = '';
 			if( ! dbmng_check_is_pk(field) )
 				{
-					form += Dbmng.layout_get_label(index, field, act);
+					if(obj.inline==1){
+						form+='<td>';
+					}
+					else{
+						form += Dbmng.layout_get_label(index, field, act);
+					}
 
 					var value='';
 
@@ -390,51 +428,56 @@ Dbmng.prototype.createForm = function(id_record) {
 							value=item.record[index];							
 						}
 					}
-					form += Dbmng.layout_form_input(index, field, value, '', act) + "<br/>";
+					form += obj.layout_form_widget(index, field, id_record, value, '', act) + "<br/>";
+
+					if(obj.inline==1){
+						form+='</td>';
+					}
 				}
 
 		});
 		form+="</form>";
+
 		if(act=='ins'){
-			form+="<a id='"+this.id+"_insert'>"+t("Insert")+"</a>";		
+			form+="<a id='"+this.id+"_"+id_record+"_insert'>"+t("Insert")+"</a>";		
 		}
 		else{
-			form+="<a id='"+this.id+"_update'>"+t("Update")+"</a>";		
+			form+="<a id='"+this.id+"_"+id_record+"_update'>"+t("Update")+"</a>";		
+		}
+		
+		if(obj.inline==1){
+			jQuery('#'+obj.id+"_"+id_record).html(form)
+		}
+		else{
+			jQuery('#'+obj.id+"_form").html(form);
 		}
 
-		jQuery('#'+obj.id+"_form").html(form);
-
-		jQuery('#'+obj.id+"_insert").click(function(){
-			
-			var record= {};
-			
+		jQuery('#'+obj.id+"_"+id_record+"_insert").click(function(){			
+			var record= {};			
 			jQuery.each(obj.aForm.fields, function(index, field){ 
-				record[index] = jQuery('#'+obj.id+'_form #'+index).val();
+				record[index] = jQuery('#'+obj.id+'_'+id_record+'_'+index).val();
 			});
-
 			obj.insertRecord({ 'state':'ins', 'record': record});
 		});
 
-		jQuery('#'+obj.id+"_update").click(function(){
+		jQuery('#'+obj.id+"_"+id_record+"_update").click(function(){
 			
 			jQuery.each(obj.aForm.fields, function(index, field){ 
 				if( ! dbmng_check_is_pk(field) ) 	
 					{
-						item.record[index] = jQuery('#'+obj.id+'_form #'+index).val();
+						item.record[index] = jQuery('#'+obj.id+'_'+id_record+'_'+index).val();
 					}
 			});
 			item.state='upd';
 			obj.updateRecord(item, id_record);
 		});
-
-
 }
 
 
 // The function add an input widget
-Dbmng.layout_form_input = function( fld, field, value, more, act )
-{
-	html  = "<input type='text' name='"+fld+"' id='"+fld+"' " + more;
+Dbmng.prototype.layout_form_widget = function( fld, field, id_record, value, more, act )
+{	
+	html  = "<input type='text' name='"+fld+"' id='"+this.id+"_"+id_record+"_"+fld+"' " + more;
 	html += " value= '"+value+"' ";	
 	
 	Dbmng.layout_get_nullable(field,act);
