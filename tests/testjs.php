@@ -17,7 +17,8 @@
 
 <div id="table2"></div>
 
-	
+
+
 	
 <?php 
 
@@ -42,6 +43,8 @@
 
 ?>  
 
+	
+<div id="paste_here" >Paste Here from Excell</div>
 
 <script type="text/javascript">
 	var db;
@@ -57,6 +60,30 @@
 		});
   
 		db.createTable();
+
+
+		jQuery('#paste_here').bind('paste', function (e) {
+          var tab=(event.clipboardData.getData('text/plain'));
+          var lines=(tab.split('\n'));
+          var html="<table>";
+          var r=0;    
+          jQuery.each(lines, function(){
+              html+="<tr>";
+              var cells=(this.split('\t'));
+              var c=0;
+              jQuery.each(cells, function(){                                    
+                  html+="<td>"+this+"</td>";
+                  c++;
+              });
+              r++;
+              html+="</tr>";
+          });
+          html+="</table>";
+          
+          jQuery("#paste_here").html(html);
+          
+      });
+
 	
 	});
 
