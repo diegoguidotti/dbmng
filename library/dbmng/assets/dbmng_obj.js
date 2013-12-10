@@ -462,6 +462,10 @@ Dbmng.prototype.createForm = function(id_record) {
 						form+='</td>';
 					}
 				}
+			else
+				{
+					form+="<td>&nbsp</td>";
+				}
 
 		});
 		form+="</form>";
