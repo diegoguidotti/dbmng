@@ -509,12 +509,21 @@ Dbmng.prototype.createForm = function(id_record) {
 // The function add an input widget
 Dbmng.prototype.layout_form_widget = function( fld, field, id_record, value, more, act )
 {	
-	html  = "<input type='text' name='"+fld+"' id='"+this.id+"_"+id_record+"_"+fld+"' " + more;
-	html += " value= '"+value+"' ";	
-	
-	Dbmng.layout_get_nullable(field,act);
-	
-	html += " />\n";
+	if( field.widget == "input" )
+		{
+			html  = "<input type='text' name='"+fld+"' id='"+this.id+"_"+id_record+"_"+fld+"' " + more;
+			html += " value= '"+value+"' ";	
+			Dbmng.layout_get_nullable(field,act);
+			html += " />\n";
+		}
+	if( field.widget == "textarea" )
+		{		
+			html = "<textarea  name='" + fld + "' id='"+this.id+"_"+id_record+"_"+fld+"' ";//.layout_get_nullable($fld_value)." >";
+			Dbmng.layout_get_nullable(field,act);
+			html += " >\n";
+			html += value;	
+			html += "</textarea>\n";			
+		}
 
 	return html;
 }
