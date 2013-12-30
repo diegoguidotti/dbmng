@@ -524,18 +524,19 @@ Dbmng.prototype.layout_form_widget = function( fld, field, id_record, value, mor
 			html += value;	
 			html += "</textarea>\n";			
 		}
-	//if( field.widget == "checkbox" )
-	//	{
-	//		html = "<input class='dbmng_checkbox' type='checkbox' name='"+fld+"' id='"+this.id+"_"+id_record+"_"+fld+"' ";
-	//		if( value==1 || (value<>0 && field.default == 1) )
-	//	    {
-	//				html += " checked='true' ";
-	//			}	
-	//	  //the field will never reply with a null value (true or false)
-	//		//if setted as a non_nullable it will accept only true values
-	//		//$html .= layout_get_nullable($fld_value);	
-	//		html += " />\n";
-	//	}
+	if( field.widget == "checkbox" )
+		{
+			html = "<input class='dbmng_checkbox' type='checkbox' name='"+fld+"' id='"+this.id+"_"+id_record+"_"+fld+"' ";
+			//if( value==1 || (value<>0 && field.default == 1) )
+		  if( value == 1 || (value != 0 && field.default == 1) )
+		    {
+					html += " checked='true' ";
+				}	
+		  //the field will never reply with a null value (true or false)
+			//if setted as a non_nullable it will accept only true values
+			//$html .= layout_get_nullable($fld_value);	
+			html += " />\n";
+		}
 	return html;
 }
 
