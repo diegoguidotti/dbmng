@@ -509,6 +509,7 @@ Dbmng.prototype.createForm = function(id_record) {
 // The function add an input widget
 Dbmng.prototype.layout_form_widget = function( fld, field, id_record, value, more, act )
 {	
+	// =============== input widget =============== //
 	if( field.widget == "input" )
 		{
 			html  = "<input type='text' name='"+fld+"' id='"+this.id+"_"+id_record+"_"+fld+"' " + more;
@@ -516,6 +517,8 @@ Dbmng.prototype.layout_form_widget = function( fld, field, id_record, value, mor
 			Dbmng.layout_get_nullable(field,act);
 			html += " />\n";
 		}
+
+	// =============== textarea widget =============== //
 	if( field.widget == "textarea" )
 		{		
 			html = "<textarea  name='" + fld + "' id='"+this.id+"_"+id_record+"_"+fld+"' ";//.layout_get_nullable($fld_value)." >";
@@ -524,6 +527,8 @@ Dbmng.prototype.layout_form_widget = function( fld, field, id_record, value, mor
 			html += value;	
 			html += "</textarea>\n";			
 		}
+
+	// =============== checkbox widget =============== //
 	if( field.widget == "checkbox" )
 		{
 			html = "<input class='dbmng_checkbox' type='checkbox' name='"+fld+"' id='"+this.id+"_"+id_record+"_"+fld+"' ";
@@ -536,6 +541,28 @@ Dbmng.prototype.layout_form_widget = function( fld, field, id_record, value, mor
 			//if setted as a non_nullable it will accept only true values
 			//$html .= layout_get_nullable($fld_value);	
 			html += " />\n";
+		}
+	
+	// =============== date widget =============== //
+	if( field.widget == "date" )
+		{
+			datetime_str='';
+		
+			//format the date string 
+			if( !is_null(value) && value!='' )
+				{
+					datetime = new Date(value);             //DateTime::createFromFormat('Y-m-d', $value);
+					datetime_str= datetime.toString(d-m-Y); //datetime->format('d-m-Y');
+				}
+		
+			//add a new input field for the datapicker ui
+			html  = "<input type='text' name='"+fld+"_tmp' id='"+fld+"_tmp' value='"+datetime_str+"' />";
+			//keep hidden the "real" input form
+			html += "<input type='hidden' name='"+fld+"' id='"+fld+"' ";
+			html += " value= '"+value+"' ";	
+			html += Dbmng.layout_get_nullable(field,act);	
+			html += " />\n";
+			//html +='<script>  jQuery(function() { jQuery( "#'.$fld.'_tmp" ).datepicker({altField: \'#'.$fld.'\', dateFormat:\'dd-mm-yy\' , altFormat: \'yy-mm-dd\'});  });  </script>';
 		}
 	return html;
 }
