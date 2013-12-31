@@ -365,7 +365,6 @@ Dbmng.prototype.updateRecord = function(item, id_record) {
 	//TODO deal with multiple key
 	var obj=this;
 		
-record
 	if(item){
 	 	if(!obj.aData.updated){
 				obj.aData.updated={};
@@ -487,7 +486,19 @@ Dbmng.prototype.createForm = function(id_record) {
 		jQuery('#'+obj.id+"_"+id_record+"_insert").click(function(){			
 			var record= {};			
 			jQuery.each(obj.aForm.fields, function(index, field){ 
-				record[index] = jQuery('#'+obj.id+'_'+id_record+'_'+index).val();
+				switch( field.widget )
+					{
+						case "checkbox":
+							record[index] = 0;
+							if( jQuery('#'+obj.id+'_'+id_record+'_'+index).prop('checked') )
+								record[index] = 1;
+							break;
+						
+						default:
+							record[index] = jQuery('#'+obj.id+'_'+id_record+'_'+index).val();
+							break;
+					}
+				
 			});
 			obj.insertRecord({ 'state':'ins', 'record': record} , id_record);
 		});
@@ -497,7 +508,18 @@ Dbmng.prototype.createForm = function(id_record) {
 			jQuery.each(obj.aForm.fields, function(index, field){ 
 				if( ! dbmng_check_is_pk(field) ) 	
 					{
-						item.record[index] = jQuery('#'+obj.id+'_'+id_record+'_'+index).val();
+						switch( field.widget )
+							{
+								case "checkbox":
+									item.record[index] = 0;
+									if( jQuery('#'+obj.id+'_'+id_record+'_'+index).prop('checked') )
+										item.record[index] = 1;
+									break;
+								
+								default:
+									item.record[index] = jQuery('#'+obj.id+'_'+id_record+'_'+index).val();
+									break;
+							}
 					}
 			});
 			item.state='upd';
@@ -509,9 +531,63 @@ Dbmng.prototype.createForm = function(id_record) {
 // The function add an input widget
 Dbmng.prototype.layout_form_widget = function( fld, field, id_record, value, more, act )
 {	
-	//console.log(field.label);
+	switch( field.widget )
+		{
+			// =============== textarea widget =============== //
+			case "textarea":
+				html  = "<textarea  name='" + fld + "' id='"+this.id+"_"+id_record+"_"+fld+"' ";//.layout_get_nullable($fld_value)." >";
+				html += Dbmng.layout_get_nullable(field,act);
+				html += " >\n";
+				html += value;	
+				html += "</textarea>\n";			
+				break;
+			
+			// =============== checkbox widget =============== //
+			case "checkbox":
+				console.log("incheck");
+				console.log(value);
+				html = "<input class='dbmng_checkbox' type='checkbox' name='"+fld+"' id='"+this.id+"_"+id_record+"_"+fld+"' ";
+			  if( value == 1 || (value != 0 && field.default == 1) )
+			    {
+						html += " checked='true' ";
+					}	
+			  //the field will never reply with a null value (true or false)
+				//if setted as a non_nullable it will accept only true values
+				//$html .= layout_get_nullable($fld_value);	
+				html += " />\n";
+				break;
+				
+			// =============== date widget =============== //
+			case "date":
+				datetime_str='';
+			
+				//format the date string 
+				if( typeof value!="undefined"  && value!='' )
+					{
+						datetime = new Date(value);             //DateTime::createFromFormat('Y-m-d', $value);
+						datetime_str= datetime.toString("d-m-Y"); //datetime->format('d-m-Y');
+					}
+			
+				//add a new input field for the datapicker ui
+				html  = "<input type='text' name='"+fld+"_tmp' id='"+fld+"_tmp' value='"+datetime_str+"' />";
+				//keep hidden the "real" input form
+				html += "<input type='hidden' name='"+fld+"' id='"+fld+"' ";
+				html += " value= '"+value+"' ";	
+				html += Dbmng.layout_get_nullable(field,act);	
+				html += " />\n";
+				//html +='<script>  jQuery(function() { jQuery( "#'.$fld.'_tmp" ).datepicker({altField: \'#'.$fld.'\', dateFormat:\'dd-mm-yy\' , altFormat: \'yy-mm-dd\'});  });  </script>';
+				break;
+			
+			// =============== input widget =============== //
+			default:
+				html  = "<input type='text' name='"+fld+"' id='"+this.id+"_"+id_record+"_"+fld+"' " + more;
+				html += " value= '"+value+"' ";	
+				html += Dbmng.layout_get_nullable(field,act);
+				html += " />\n";
+				break;
+		}
 
-	//console.log(field);
+/*	
 	// =============== textarea widget =============== //
 	if( field.widget == "textarea" )
 		{		
@@ -567,7 +643,7 @@ Dbmng.prototype.layout_form_widget = function( fld, field, id_record, value, mor
 			Dbmng.layout_get_nullable(field,act);
 			html += " />\n";
 		}
-
+*/
 	return html;
 }
 
