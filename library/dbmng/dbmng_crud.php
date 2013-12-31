@@ -32,7 +32,11 @@ function dbmng_create_form_process($aForm, $aParam)
 					if($_REQUEST['act']=='dup')
 						dbmng_duplicate($aForm, $aParam);
 
-					// duplicate record
+					// print record
+					if($_REQUEST['act']=='prt_rec')
+						dbmng_print_rec($aForm, $aParam);
+
+					// search record
 					if($_REQUEST['act']=='do_search')
 						dbmng_search($aForm, $aParam);
 				}
@@ -295,5 +299,14 @@ function dbmng_update($aForm, $aParam)
 	$result = dbmng_query("update " . $aForm['table_name'] . " set $sSet where $where ", $var);
 }
 
+function dbmng_print_rec($aForm, $aParam)
+{
+	require('sites/all/libraries/fpdf/fpdf.php');
+	$pdf = new FPDF();
+	$pdf->AddPage();
+	$pdf->SetFont('Arial','B',16);
+	$pdf->Cell(40,10,'Hello World!');
+	$pdf->Output('pippo.pdf','D');
+}
 ?>
 
