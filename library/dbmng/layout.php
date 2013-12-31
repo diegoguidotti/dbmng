@@ -505,13 +505,14 @@ function layout_view_field_table($fld_value){
 */
 function layout_table_action( $aForm, $aParam, $id_record )
 {
-	$nDel = 1;	$nUpd=1; 	$nDup=1; 
+	$nDel = 1;	$nUpd=1; 	$nDup=1; $nPrt_rec=1;
 	// get user function parameters
 	if( isset($aParam['user_function']) )
 		{
 		  $nUpd = (isset($aParam['user_function']['upd']) ? $aParam['user_function']['upd'] : 1 );
 		  $nDel = (isset($aParam['user_function']['del']) ? $aParam['user_function']['del'] : 1 );
 		  $nDup = (isset($aParam['user_function']['dup']) ? $aParam['user_function']['dup'] : 1 );				
+		  $nPrt_rec = (isset($aParam['user_function']['prt_rec']) ? $aParam['user_function']['prt_rec'] : 1 );				
 		}
 	
 	$html = "";
@@ -525,6 +526,8 @@ function layout_table_action( $aForm, $aParam, $id_record )
 		$html .= "<a class='dbmng_update_button' href='?act=upd&amp;tbln=" . $aForm['table_name'] . "&amp;" . $id_record .$hv."'>" . t('Update') . "</a>" . "&nbsp;";
 	if( $nDup == 1 )
 		$html .= "<a class='dbmng_duplicate_button' href='?act=dup&amp;tbln=" . $aForm['table_name'] . "&amp;" . $id_record .$hv."'>" . t('Duplicate') . "</a>" . "&nbsp;";
+	if( $nPrt_rec == 1 )
+		$html .= "<a class='dbmng_print_rec_button' href='?act=prt_rec&amp;tbln=" . $aForm['table_name'] . "&amp;" . $id_record .$hv."'>" . t('Print') . "</a>" . "&nbsp;";
 
 	return $html;
 }
