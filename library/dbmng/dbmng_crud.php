@@ -36,6 +36,10 @@ function dbmng_create_form_process($aForm, $aParam)
 					if($_REQUEST['act']=='prt_rec')
 						dbmng_print_rec($aForm, $aParam);
 
+					// print table
+					if($_REQUEST['act']=='prt_tbl')
+						dbmng_print_table($aForm, $aParam);
+
 					// search record
 					if($_REQUEST['act']=='do_search')
 						dbmng_search($aForm, $aParam);
@@ -299,14 +303,108 @@ function dbmng_update($aForm, $aParam)
 	$result = dbmng_query("update " . $aForm['table_name'] . " set $sSet where $where ", $var);
 }
 
+// Move outside this file
 function dbmng_print_rec($aForm, $aParam)
 {
-	require('sites/all/libraries/fpdf/fpdf.php');
+	//require('sites/all/libraries/fpdf/fpdf.php');
+
+	$sql = "select * from " . $aForm['table_name'] . " where " . $aForm['primary_key'][0] . " = :" . $aForm['primary_key'][0]; 
+	$var = array(':'.$aForm['primary_key'][0] => $_GET[$aForm['primary_key'][0]]);
+	
+	$pdf = new PDF();
+	// Column headings
+	$data = $pdf->LoadData($sql,$var);
+	$pdf->SetFont('Arial','',14);
+	//$pdf->AddPage();
+	//$pdf->BasicTable($aForm, $aParam, $data);
+	//$pdf->AddPage();
+	//$pdf->ImprovedTable($aForm, $aParam, $data);
+	$pdf->AddPage();
+	$pdf->FancyTable($aForm, $aParam, $data);
+	$pdf->Output('pippo.pdf','D');
+
+/*
+	$result = dbmng_query($sql, $var);
+
+	// echo debug_sql_statement($sql, $var);
 	$pdf = new FPDF();
 	$pdf->AddPage();
 	$pdf->SetFont('Arial','B',16);
-	$pdf->Cell(40,10,'Hello World!');
+
+	$value = "";
+	foreach( $result as $record )
+		{
+			foreach ( $aForm['fields'] as $fld => $fld_value )
+				{
+					if( layout_view_field_table($fld_value) )
+						{
+							if(isset($record->$fld))
+								{
+									$value=$record->$fld; //dbmng_value_prepare_html($fld_value, $record->$fld, $aParam, "table");
+								}
+							else
+								{//TODO: add a comma separated list if widget==multi
+									$value.= "&nbsp;";							
+								}
+							$pdf->Cell(40,10,$fld,0);
+							$pdf->Cell(40,10,$value,0);
+							$pdf->Ln();
+						}
+				}
+		}
 	$pdf->Output('pippo.pdf','D');
+*/
+}
+
+// Move outside this file
+function dbmng_print_table($aForm, $aParam)
+{
+	$sql = "select * from " . $aForm['table_name']; 
+	$var = array();
+	
+	$pdf = new PDF();
+	// Column headings
+	$data = $pdf->LoadData($sql,$var);
+	$pdf->SetFont('Arial','',14);
+	//$pdf->AddPage();
+	//$pdf->BasicTable($aForm, $aParam, $data);
+	//$pdf->AddPage();
+	//$pdf->ImprovedTable($aForm, $aParam, $data);
+	$pdf->AddPage();
+	$pdf->FancyTable($aForm, $aParam, $data);
+	$pdf->Output('pippo.pdf','D');
+
+/*
+	$result = dbmng_query($sql, $var);
+
+	// echo debug_sql_statement($sql, $var);
+	$pdf = new FPDF();
+	$pdf->AddPage();
+	$pdf->SetFont('Arial','B',16);
+
+	$value = "";
+	foreach( $result as $record )
+		{
+			foreach ( $aForm['fields'] as $fld => $fld_value )
+				{
+					if( layout_view_field_table($fld_value) )
+						{
+							if(isset($record->$fld))
+								{
+									$value=$record->$fld; //dbmng_value_prepare_html($fld_value, $record->$fld, $aParam, "table");
+								}
+							else
+								{//TODO: add a comma separated list if widget==multi
+									$value.= "&nbsp;";							
+								}
+							$pdf->Cell(40,10,$fld,0);
+							$pdf->Cell(40,10,$value,0);
+							$pdf->Ln();
+						}
+				}
+		}
+	$pdf->Output('pippo.pdf','D');
+*/
 }
 ?>
 
