@@ -527,7 +527,7 @@ function layout_table_action( $aForm, $aParam, $id_record )
 	if( $nDup == 1 )
 		$html .= "<a class='dbmng_duplicate_button' href='?act=dup&amp;tbln=" . $aForm['table_name'] . "&amp;" . $id_record .$hv."'>" . t('Duplicate') . "</a>" . "&nbsp;";
 	if( $nPrt_rec == 1 )
-		$html .= "<a class='dbmng_print_rec_button' href='?act=prt_rec&amp;tbln=" . $aForm['table_name'] . "&amp;" . $id_record .$hv."'>" . t('Print') . "</a>" . "&nbsp;";
+		$html .= "<a class='dbmng_print_rec_button' href='?act=prt_rec&amp;tbln=" . $aForm['table_name'] . "&amp;" . $id_record .$hv."' target='_blank'>" . t('PDF') . "</a>" . "&nbsp;";
 
 	return $html;
 }
@@ -594,6 +594,32 @@ function layout_table_insert($aForm, $aParam)
 	$html = "";
 	if( $nIns == 1)
 		$html .= "<a class='dbmng_insert_button' href='?act=ins&amp;tbln=" . $aForm['table_name'] . $hv. "'>" . t('Insert new data') . "</a><br />\n";
+	
+	return $html;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////
+// layout_table_export
+// ======================
+/// This function allow to add the link "PDF"
+/**
+\param $aForm  			metadata table array 
+\param $aParam  	  parameter array
+\return             html
+*/
+function layout_table_export($aForm, $aParam)
+{
+  // Initialization of user function variable
+  $nPrt_rec=1;
+	if( isset($aParam['user_function']) )
+	  $nPrt_rec = (isset($aParam['user_function']['prt_rec']) ? $aParam['user_function']['prt_rec'] : 1 );				
+
+	$hv = prepare_hidden_var($aParam);
+	
+	$html = "";
+	if( $nPrt_rec == 1)
+		$html .= "<a class='dbmng_print_rec_button' href='?act=prt_tbl&amp;tbln=" . $aForm['table_name'] .$hv."' target='_blank'>" . t('PDF') . "</a>" . "&nbsp;";
 	
 	return $html;
 }
@@ -740,6 +766,7 @@ function layout_table( $result, $aForm, $aParam )
   $html .= "</table>\n";
 	
 	$html .= layout_table_insert($aForm, $aParam);
+	$html .= layout_table_export($aForm, $aParam);
 	$html .= $add_js;
 	
 	return $html;
