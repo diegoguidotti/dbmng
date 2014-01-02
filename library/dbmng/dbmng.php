@@ -14,6 +14,7 @@ include_once DBMNG_LIB_PATH."layout.php";
 include_once DBMNG_LIB_PATH."dbmng_sql_functions.php";
 include_once DBMNG_LIB_PATH."dbmng_sql_functions_obj.php";
 include_once DBMNG_LIB_PATH."dbmng_resize_functions.php";
+include_once DBMNG_LIB_PATH."dbmng_pdf.php";
 
 
 
