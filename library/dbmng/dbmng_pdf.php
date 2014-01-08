@@ -1,5 +1,7 @@
 <?php
-require('sites/all/libraries/fpdf/fpdf.php');
+if(file_exists(DBMNG_LIB_PATH.'fpdf/fpdf.php')){
+	require(DBMNG_LIB_PATH.'fpdf/fpdf.php');
+}
 
 class PDF extends FPDF
 {

@@ -4,18 +4,20 @@
 //use by default the Drupal location for library
 if(!defined( 'DBMNG_LIB_PATH'))
 	{
-		define( 'DBMNG_LIB_PATH', 'sites/all/libraries/dbmng/' ); 
+		define( 'DBMNG_LIB_PATH', 'sites/all/libraries/' ); 
 	}
 
+include_once DBMNG_LIB_PATH."dbmng/dbmng_cfg.php";
+include_once DBMNG_LIB_PATH."dbmng/dbmng_extend_functions.php";
+include_once DBMNG_LIB_PATH."dbmng/dbmng_crud.php";
+include_once DBMNG_LIB_PATH."dbmng/layout.php";
+include_once DBMNG_LIB_PATH."dbmng/dbmng_sql_functions.php";
+include_once DBMNG_LIB_PATH."dbmng/dbmng_sql_functions_obj.php";
+include_once DBMNG_LIB_PATH."dbmng/dbmng_resize_functions.php";
 
-include_once DBMNG_LIB_PATH."dbmng_extend_functions.php";
-include_once DBMNG_LIB_PATH."dbmng_crud.php";
-include_once DBMNG_LIB_PATH."layout.php";
-include_once DBMNG_LIB_PATH."dbmng_sql_functions.php";
-include_once DBMNG_LIB_PATH."dbmng_sql_functions_obj.php";
-include_once DBMNG_LIB_PATH."dbmng_resize_functions.php";
-include_once DBMNG_LIB_PATH."dbmng_pdf.php";
-
+if(file_exists(DBMNG_LIB_PATH.'fpdf/fpdf.php')){
+	include_once DBMNG_LIB_PATH."dbmng/dbmng_pdf.php";
+}
 
 
 /*

@@ -17,19 +17,16 @@
 
 <div id="table2"></div>
 
-
-
-	
 <?php 
 
   //we need to define some global variable to use dbmg independently by Drupal
-	define( 'DBMNG_LIB_PATH'    , '../library/dbmng/' );
+	define( 'DBMNG_LIB_PATH'    , '../library/' );
 	define( 'DBMNG_CMS'         , 'none' );
 	define( 'DBMNG_DB'          , 'pdo' );
 
 	//0.include the library
-	include(DBMNG_LIB_PATH.'dbmng.php');
-	include(DBMNG_LIB_PATH.'dbmng_standalone.php');
+	include(DBMNG_LIB_PATH.'dbmng/dbmng.php');
+	include(DBMNG_LIB_PATH.'dbmng/dbmng_standalone.php');
 
 	//get the array storing the table metadata from record 1 in table dbmng_tables
 	if( gethostname() == "Galveston" )

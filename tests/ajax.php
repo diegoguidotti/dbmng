@@ -1,12 +1,12 @@
 <?php
 
-	define( 'DBMNG_LIB_PATH'    , '../library/dbmng/' );
+	define( 'DBMNG_LIB_PATH'    , '../library/' );
 	define( 'DBMNG_CMS'         , 'none' );
 	define( 'DBMNG_DB'          , 'pdo' );
 
 	//0.include the library
-	include(DBMNG_LIB_PATH.'dbmng.php');
-	include(DBMNG_LIB_PATH.'dbmng_standalone.php');
+	include(DBMNG_LIB_PATH.'dbmng/dbmng.php');
+	include(DBMNG_LIB_PATH.'dbmng/dbmng_standalone.php');
 
 
 
