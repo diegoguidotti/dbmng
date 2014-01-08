@@ -139,11 +139,11 @@ function lst_country()
 			$aCountry['id_c_country'] = $id_c_country;
 			$aCountry['country_name'] = $cnt->country_name;
 
-			$file = _climasouth_graph( $aCountry );
-			if(strlen($file)>0)
-				{
-					$html .= '<img class="climasouth_radar_chart"  id="climasouth_graph" src="'.base_path().$file.'" />';
-				}			
+			//$file = _climasouth_graph( $aCountry );
+			//if(strlen($file)>0)
+			//	{
+			//		$html .= '<img class="climasouth_radar_chart"  id="climasouth_graph" src="'.base_path().$file.'" />';
+			//	}			
 			$html.= '</div>';
 		}
 	else 
@@ -304,6 +304,7 @@ function _climasouth_workspace()
 					$html .= "</ul>\n";
 					$html .= "Search my data\n";
 					$html .= "<ul>\n";
+					$html .= "<li><a href='?act=search&tbl=c_country'>Countries</a></li>\n";
 					$html .= "<li><a href='?act=search&tbl=c_resource'>Search for resources</a></li>\n";
 					$html .= "<li><a href='?act=search&tbl=c_expert'>Search for expert or organisation</a></li>\n";
 					$html .= "<li><a href='?act=search&tbl=c_activity'>Search for M&E indicators</a></li>\n";
@@ -325,6 +326,7 @@ function _climasouth_workspace()
 					$aParam['filters']               = array();
 					$aParam['hidden_vars']           = array();
 					$aParam['hidden_vars']['tbl']	   = $_REQUEST['tbl']; //save the table id
+					$aParam['user_function']['dup']	 = 0;	              // allow to enabled=1 or disabled=0 the duplication function
 		
 					$aParam['tbl_sorter']              = '1';
 					// update record
