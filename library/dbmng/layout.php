@@ -611,14 +611,14 @@ function layout_table_insert($aForm, $aParam)
 function layout_table_export($aForm, $aParam)
 {
   // Initialization of user function variable
-  $nPrt_rec=1;
+  $nPrt_tbl=1;
 	if( isset($aParam['user_function']) )
-	  $nPrt_rec = (isset($aParam['user_function']['prt_rec']) ? $aParam['user_function']['prt_rec'] : 1 );				
+	  $nPrt_tbl = (isset($aParam['user_function']['prt_tbl']) ? $aParam['user_function']['prt_tbl'] : 1 );				
 
 	$hv = prepare_hidden_var($aParam);
 	
 	$html = "";
-	if( $nPrt_rec == 1)
+	if( $nPrt_tbl == 1)
 		$html .= "<a class='dbmng_print_rec_button' href='?act=prt_tbl&amp;tbln=" . $aForm['table_name'] .$hv."' target='_blank'>" . t('PDF') . "</a>" . "&nbsp;";
 	
 	return $html;
