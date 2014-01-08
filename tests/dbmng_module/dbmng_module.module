@@ -330,7 +330,7 @@ function dbmng_manager()
 			
 			$aParam['hidden_vars']['id_table']  = $_REQUEST['id_table'];
 			$aParam['user_function']['dup']	       = 0;	              // allow to enabled=1 or disabled=0 the duplication function
-			$aParam['user_function']['del']	       = 0;	              // allow to enabled=1 or disabled=0 the delate function
+			$aParam['user_function']['del']	       = 1;	              // allow to enabled=1 or disabled=0 the delate function
 			$aParam['tbl_order']                   = 'field_order';
 			$aParam['tbl_sorter']                  = '1';
 			
