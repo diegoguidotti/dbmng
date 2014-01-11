@@ -42,13 +42,19 @@ functions for user and adding custom function
   $aParam['hidden_vars']['section']  = 'News';    
 
   //define if a specific function is enables (1) or disabled (0)
-  $aParam['user_function']['dup']    = 1;	        // record duplication
-  $aParam['user_function']['ins']	   = 1;	        // insert
-  $aParam['user_function']['upd']	   = 1;         // update
-  $aParam['user_function']['del']	   = 1;	        // delete
+  //By default all the functionalities are enabled
+  $aParam['user_function']['ins']	    = 1;	        // insert
+  $aParam['user_function']['upd']	    = 1;          // update
+  $aParam['user_function']['del']	    = 1;	        // delete
+  $aParam['user_function']['dup']     = 1;	        // record duplication
+  $aParam['user_function']['prt_rec'] = 1;	        // export record in pdf format
+  $aParam['user_function']['prt_tbl'] = 1;	        // export table in pdf format
 
   //activate a table footer with filter sections
-  $aParam['tbl_footer']              = 1;               
+  $aParam['tbl_footer']               = 1;
+  
+  //activate the table pagination setting the maximum number of records per page  
+  $aParam['tbl_navigation']           = 10;  
   
   //add a custom function to each record calling show_fields=id_record 
   $aParam['custom_function'][0]['custom_variable'] = 'show_fields';
