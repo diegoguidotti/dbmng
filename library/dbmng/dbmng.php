@@ -866,7 +866,8 @@ function dbmng_file_create_link($value, $aParam)
 	//echo realpath('.').'/'.$value;
 	if(!is_null($value) && $value!='')
 		{
-			$link= base_path() . $aParam['file_version']['prw'] . $value;
+			// $link= base_path() . $aParam['file_version']['prw'] . $value;
+			$link= base_path() . $aParam['file'] . $value;
 
 			//if(in_array( substr(strrchr($value, '.'), 1), $allowedExts ))
 			if( preg_match('/\.(gif|jpe?g|png)$/i',strtolower($value)) )
