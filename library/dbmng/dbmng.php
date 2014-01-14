@@ -1002,10 +1002,12 @@ function dbmng_value_prepare_html($fld_value, $value, $aParam, $layout_type)
 			if($value=="1")
 				{
 					$ret = '<span class="dbmng_check_true">'.t('true').'<span>';
+					$ret = "<input class='dbmng_checkbox' type='checkbox' checked disabled/>";
 				}
 			elseif($value=="0")
 				{
 					$ret = '<span class="dbmng_check_false">'.t('false').'<span>';
+					$ret = "<input class='dbmng_checkbox' type='checkbox' disabled/>";
 				}
 			else
 				{
