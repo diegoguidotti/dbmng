@@ -873,7 +873,7 @@ function dbmng_file_create_link($value, $aParam)
 
 			//$link = base_path() . $aParam['file'] . $value;
 			$link = base_path() . $dir_upd_file . $value;
-			echo $link;
+
 			//if(in_array( substr(strrchr($value, '.'), 1), $allowedExts ))
 			if( preg_match('/\.(gif|jpe?g|png)$/i',strtolower($value)) )
 				{
