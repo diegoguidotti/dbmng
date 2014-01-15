@@ -867,8 +867,13 @@ function dbmng_file_create_link($value, $aParam)
 	if(!is_null($value) && $value!='')
 		{
 			// $link= base_path() . $aParam['file_version']['prw'] . $value;
-			$link= base_path() . $aParam['file'] . $value;
+			$dir_upd_file  = "docs/";
+			if( isset($aParam['file']) )
+				$dir_upd_file = $aParam['file'];
 
+			//$link = base_path() . $aParam['file'] . $value;
+			$link = base_path() . $dir_upd_file . $value;
+			echo $link;
 			//if(in_array( substr(strrchr($value, '.'), 1), $allowedExts ))
 			if( preg_match('/\.(gif|jpe?g|png)$/i',strtolower($value)) )
 				{
@@ -877,7 +882,7 @@ function dbmng_file_create_link($value, $aParam)
 				}
 			else
 				{
-					$ret="<a class='dbmng_file_link' target='_NEW' href='". base_path() . "" . $value."'>".t("download")."</a>\n";					
+					$ret="<a class='dbmng_file_link' target='_NEW' href='".$link."'>".t("download")."</a>\n";					
 				}
 			$ret .= "&nbsp;";			
 		}
