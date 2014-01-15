@@ -66,6 +66,24 @@ functions for user and adding custom function
   //allow to add the field sorter functionality
   $aParam['tbl_sorter']        = '1';
   
+  //specify the directory where the uploaded file will be stored
+  //in case this parameter is missing your file will be stored in 'docs/'
+  $aParam['file'] = 'sites/docs/';
+  
+  //gallery parameters
+	$aParam['picture']                = 'raw/'; //default directory where your picture will be stored
+
+	$aParam['picture_version']['nrm'] = 'nrm/'; //default directory where normal version is stored automatically by the system
+	$aParam['picture_version']['prw'] = 'prw/'; //default directory where preview version is stored automatically by the system
+	$aParam['picture_version']['big'] = 'big/'; //default directory where big version is stored automatically by the system
+	$aParam['picture_version']['ext'] = 'ext/'; //default directory where extra version is stored automatically by the system
+
+	$aParam['picture_size']['nrm']    = 600; //normal size in pixel
+	$aParam['picture_size']['prw']    = 60;  //preview size in pixel
+	$aParam['picture_size']['big']    = 900; //big size in pixel
+	$aParam['picture_size']['ext']    = 77;  //extra size in pixel
+  
+  
   //Create the CRUD interface using the custom parameters
   echo dbmng_crud($aForm, $aParam);
 ```
