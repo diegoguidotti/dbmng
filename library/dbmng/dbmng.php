@@ -715,7 +715,7 @@ function dbmng_value_prepare($x_value, $x, $post, $aParam)
 
 					if( dbmng_is_picture($_FILES[$x]) )
 						{
-							echo "picture:" . $sValue;
+							//echo "picture:" . $sValue;
 							if( isset($aParam['picture_version']['nrm']) )
 								{
 									$thumb=new thumbnail($sValue); 
@@ -905,13 +905,27 @@ function dbmng_picture_create_link($value, $aParam, $layout_type)
 	//echo realpath('.').'/'.$value;
 	if(!is_null($value) && $value!='')
 		{
-			$thumb = $aParam['picture_version']['prw'];
+			if( isset($aParam['picture_version']['prw']) )
+				$thumb = $aParam['picture_version']['prw'];
+			elseif( isset($aParam['picture_version']['ext']) )
+				$thumb = $aParam['picture_version']['ext'];
+
 			if( isset($layout_type) )
 				{
 					if( $layout_type == "table" )
-						$thumb = $aParam['picture_version']['prw'];
+						{
+							if( isset($aParam['picture_version']['prw']) )
+								$thumb = $aParam['picture_version']['prw'];
+							elseif( isset($aParam['picture_version']['ext']) )
+								$thumb = $aParam['picture_version']['ext'];
+						}
 					elseif( $layout_type == "form" )
-						$thumb = $aParam['picture_version']['nrm'];
+						{
+							if( isset($aParam['picture_version']['nrm']) )
+								$thumb = $aParam['picture_version']['nrm'];
+							elseif( isset($aParam['picture_version']['big']) )
+								$thumb = $aParam['picture_version']['big'];
+						}
 				}
 				
 			$link= base_path() . $thumb . $value;
