@@ -130,6 +130,43 @@ function dbmng_query($sql, $var=null)
 
 
 /////////////////////////////////////////////////////////////////////////////
+// dbmng_query2array
+// ======================
+/// Returns an array with the result of an executed query
+/**
+\param 						$res  A result set identifier returned by dbmng_query
+\return           Returns an array with the result of the query
+*/
+function dbmng_query2array($res)
+{
+	$nr = dbmng_num_columns($res);
+	$nrecs = dbmng_num_rows($res);
+
+	$aData = array();
+	if( $nr == 1 )
+		{
+			foreach( $res as $data )
+				{
+					$keys=array_keys((array)$data);
+					$aData[] = $data->$keys[0];
+				}
+		}
+	else
+		{
+			echo "aaa";
+			foreach( $res as $data )
+				{
+					$aData[] = (array)$data;
+				}
+			//provare a creare l'array utilizzando il fetch_object
+			//generalizzare per creare array multidimensione
+		}
+
+	return $aData;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////
 // dbmng_fetch_object
 // ======================
 /// Returns the current row of a result set as an object
