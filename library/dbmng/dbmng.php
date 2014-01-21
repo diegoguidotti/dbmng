@@ -543,6 +543,10 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 												{
 													$html .= layout_form_textarea( $fld, $fld_value, $value );
 												}
+											else if ($widget==='html')
+												{
+													$html .= layout_form_html( $fld, $fld_value, $value );
+												}
 											else if ($widget==='checkbox')
 												{
 													$html .= layout_form_checkbox( $fld, $fld_value, $value );

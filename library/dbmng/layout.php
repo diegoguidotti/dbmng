@@ -210,6 +210,25 @@ function layout_form_textarea( $fld, $fld_value, $value )
 }
 
 
+/////////////////////////////////////////////////////////////////////////////
+// layout_form_html
+// ======================
+/// This function allow to add the widget html (html tag) 
+/**
+\param $fld					field name
+\param $fld_value		field value
+\param $value				existing value
+\return             html
+*/
+function layout_form_html( $fld, $fld_value, $value )
+{		
+	$html  = "<textarea  name='$fld' id='$fld'  ".layout_get_nullable($fld_value)." >";
+	$html .= $value;	
+	$html .= "</textarea>\n";
+	return $html;
+}
+
+
 function layout_form_multi( $fld, $fld_value, $value )
 {		
 	$html  = "<select class='dbmng_multi_left'  multiple  id='$fld' name='$fld'  >";
