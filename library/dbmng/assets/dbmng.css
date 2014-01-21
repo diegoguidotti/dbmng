@@ -31,6 +31,12 @@ div.dbmng_form_row input, div.dbmng_form_row select, div.dbmng_form_row textarea
   width:300px;
 }
 
+
+div.dbmng_form_row textarea.html_widget{
+	width: 500px;
+	height: 300px;
+}
+
 /* do not change width of checkbox */
 div.dbmng_form_row input.dbmng_checkbox {
   width: auto;
