@@ -203,7 +203,8 @@ function layout_form_password( $fld, $fld_value, $value, $more='' )
 */
 function layout_form_textarea( $fld, $fld_value, $value )
 {		
-	$html  = "<textarea  name='$fld' id='$fld'  ".layout_get_nullable($fld_value)." >";
+	$html  = "";
+	$html .= "<textarea  name='$fld' id='$fld'  ".layout_get_nullable($fld_value)." >";
 	$html .= $value;	
 	$html .= "</textarea>\n";
 	return $html;
@@ -222,6 +223,10 @@ function layout_form_textarea( $fld, $fld_value, $value )
 */
 function layout_form_html( $fld, $fld_value, $value )
 {		
+	$html  = '<script src="sites/all/libraries/tinymce/jscripts/tiny_mce/tinymce.min.js"></script>';
+	$html .= '<script>';
+  $html .= '	tinymce.init({selector:"textarea"});';
+	$html .= '</script>';
 	$html  = "<textarea  name='$fld' id='$fld'  ".layout_get_nullable($fld_value)." >";
 	$html .= $value;	
 	$html .= "</textarea>\n";
