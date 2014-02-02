@@ -29,12 +29,45 @@ function Dbmng( d, f , p) {
 	if(this.aParam.div_element){
 		this.id='dbmng_'+this.aParam.div_element;
 	}
+	var obj=this;
 
 	var html="";
   html += "<div id='"+this.id+"_form'></div>\n";
   html += "<div id='"+this.id+"_view'>\n";
 	jQuery('#'+this.aParam.div_element).html(html);
 
+	//check when exit the page
+	jQuery(window).bind('beforeunload', function(){ 
+		
+		
+		if(!obj.isSaved()){
+			var msg='Please save before exit.';
+
+			return (msg);
+		}
+	});
+
+}
+
+
+Dbmng.prototype.isSaved = function()
+{
+		var obj=this;
+		var il=0;
+		if(obj.aData.inserted)
+			il=Object.keys(obj.aData.inserted).length ;
+		var dl=0;
+		if(obj.aData.deleted)
+			dl=Object.keys(obj.aData.deleted).length ;
+		var ul=0;
+		if(obj.aData.updated)
+			ul=Object.keys(obj.aData.updated).length ;
+		if(il==0 && dl==0 && ul==0){
+			return true;
+		}
+		else{
+			return false;
+		}
 }
 
 Dbmng.prototype.createTable = function()
@@ -255,11 +288,12 @@ Dbmng.prototype.createRow = function (value, id_record)
 Dbmng.prototype.deleteRecord = function(id_record) {
 	//TODO deal with multiple key
 	var obj=this;
-	
+	console.log("Find "+id_record+"to delete");
 	var to_delete = obj.aData.records[id_record];	
+	console.log(to_delete);
 	if(to_delete.state=='ins'){
 		delete obj.aData.records[id_record];
-		jQuery('#'+obj.id+"_"+id_record).html();
+		jQuery('#'+obj.id+"_"+id_record).html('');
 	}
 	else{
 		to_delete.state = 'del';
