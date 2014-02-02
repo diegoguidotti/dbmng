@@ -681,6 +681,7 @@ function layout_table_body( $result, $aForm, $aParam )
 	// write BODY content 
 	$html .= "<tbody>\n";
 	// print_r($result->fetchAllAssoc("id_gallery"));
+
 	foreach ($result as $record) 
 		{
 			$recs++;
@@ -777,7 +778,7 @@ function layout_table( $result, $aForm, $aParam )
 		}
 
 	$html = "";
-	$html .= layout_table_navigation($result, $aParam);
+	$html .= layout_table_navigation($result, $aForm, $aParam);
 	$html .= "<table $id_tbl $class>\n";
 	
 	$html .= layout_table_head( $aForm['fields'] );
@@ -803,8 +804,9 @@ function layout_table( $result, $aForm, $aParam )
 	return $html;
 }
 
-function layout_table_navigation($result, $aParam)
+function layout_table_navigation($result, $aForm, $aParam)
 {
+	$tbl = $aForm['table_name'];
 	$paging = "";
 	if( isset($aParam['tbl_navigation']) )
 		{
@@ -812,7 +814,7 @@ function layout_table_navigation($result, $aParam)
 			$pages = ceil($recs / $aParam['tbl_navigation']);
 			for( $i = 1; $i <= $pages; $i++ )
 				{
-					$paging .= "<a href='?pages=".$i."'>".$i."</a> ";
+					$paging .= "<a href='?tbl=".$tbl."&pages=".$i."'>".$i."</a> "; //?tbl=".$tbl."
 				}
 		}
 	return $paging;
