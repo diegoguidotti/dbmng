@@ -218,6 +218,20 @@ function dbmng_insert($aForm, $aParam)
 							$var = array_merge($var, array(":".$fld =>  $fld_value ));
 						}					
 				}
+			
+			if( isset($aParam['auto_field']) )
+				{
+					foreach ( $aParam['auto_field'] as $fld => $fld_value )
+						{
+							foreach( $fld_value as $f => $v )
+								{
+									$sWhat.=$fld.", ";
+									$sVal.=":$fld, ";
+		
+									$var = array_merge($var, array(":".$fld =>  $fld_value ));
+								}
+						}					
+				}
 		}
 
 	$sWhat = substr($sWhat, 0, strlen($sWhat)-2);
@@ -281,7 +295,23 @@ function dbmng_update($aForm, $aParam)
 					//$sSet.=dbmng_value_prepare($x_value,$x,$_POST).", ";
 				}
 		}
-
+	if( isset($aParam) )
+		{
+			if( isset($aParam['auto_field']) )
+				{
+					foreach ( $aParam['auto_field'] as $fld => $fld_value )
+						{
+							foreach( $fld_value as $f => $v )
+								{
+									if( $f == "U" )
+										{
+											$sSet .= $fld . " = :$fld, ";
+											$var = array_merge($var, array(":".$fld => $v));
+										}
+								}
+						}					
+				}
+		}
 	$sSet = substr($sSet, 0, strlen($sSet)-2);
 
 	$where  = "";
