@@ -117,9 +117,9 @@ function layout_form_date( $fld, $fld_value, $value )
 	}
 
 	//add a new input field for the datapicker ui
-	$html  = "<input type='text' name='".$fld."_tmp' id='".$fld."_tmp' value='".$datetime_str."' />";
+	$html  = "<input type='text' name='".$fld."_tmp' id='dbmng_".$fld."_tmp' value='".$datetime_str."' />";
 	//keep hidden the "real" input form
-	$html .= "<input type='hidden' name='$fld' id='".$fld."' ";
+	$html .= "<input type='hidden' name='$fld' id='dbmng_".$fld."' ";
 	$html .= " value= '$value' ";	
 	$html .= layout_get_nullable($fld_value);	
 	$html .= " />\n";
@@ -141,7 +141,7 @@ function layout_form_date( $fld, $fld_value, $value )
 */
 function layout_form_input( $fld, $fld_value, $value, $more='' )
 {
-	$html  = "<input type='text' name='$fld' id='$fld' $more";
+	$html  = "<input type='text' name='$fld' id='dbmng_$fld' $more";
 	$html .= " value= '$value' ";	
 	$html .= layout_get_nullable($fld_value);	
 	$html .= " />\n";
@@ -164,7 +164,7 @@ function layout_form_input( $fld, $fld_value, $value, $more='' )
 function layout_form_hidden( $fld, $value )
 {
 	//print_r($value);
-	$html = "<input type='hidden' name='$fld' id='$fld' value='".$value."' />\n";
+	$html = "<input type='hidden' name='$fld' id='dbmng_$fld' value='".$value."' />\n";
 
 	return $html;
 }
@@ -183,7 +183,7 @@ function layout_form_hidden( $fld, $value )
 */
 function layout_form_password( $fld, $fld_value, $value, $more='' )
 {
-	$html  = "<input type='password' name='$fld' id='$fld' $more";
+	$html  = "<input type='password' name='$fld' id='dbmng_$fld' $more";
 	$html .= " value= '$value' ";	
 	$html .= layout_get_nullable($fld_value);	
 	$html .= " />\n";
@@ -204,7 +204,7 @@ function layout_form_password( $fld, $fld_value, $value, $more='' )
 function layout_form_textarea( $fld, $fld_value, $value )
 {		
 	$html  = "";
-	$html .= "<textarea  name='$fld' id='$fld'  ".layout_get_nullable($fld_value)." >";
+	$html .= "<textarea  name='$fld' id='dbmng_$fld'  ".layout_get_nullable($fld_value)." >";
 	$html .= $value;	
 	$html .= "</textarea>\n";
 	return $html;
@@ -234,7 +234,7 @@ function layout_form_html( $fld, $fld_value, $value )
 	$html .= '<script>';
   $html .= '	tinymce.init({selector:"textarea#'.$fld.'"});';
 	$html .= '</script>';
-	$html .= "<textarea  class='html_widget' name='$fld' id='$fld'  ".layout_get_nullable($fld_value)." >";
+	$html .= "<textarea  class='html_widget' name='$fld' id='dbmng_$fld'  ".layout_get_nullable($fld_value)." >";
 	$html .= $value;	
 	$html .= "</textarea>\n";
 	return $html;
@@ -243,7 +243,7 @@ function layout_form_html( $fld, $fld_value, $value )
 
 function layout_form_multi( $fld, $fld_value, $value )
 {		
-	$html  = "<select class='dbmng_multi_left'  multiple  id='$fld' name='$fld'  >";
+	$html  = "<select class='dbmng_multi_left'  multiple  id='dbmng_$fld' name='$fld'  >";
 	$html  .= '</select>';
 	// 'voc_table'=>'country', 'voc_table_pk'=>'id_country', 'voc_table_label'=>'country_label', 'rel_table'=>'test_country', 'rel_table_fk1'=>'id_test', 'rel_table_fk2'=>'id_country'  );
 	
@@ -251,7 +251,7 @@ function layout_form_multi( $fld, $fld_value, $value )
 	$res=dbmng_query($sql,array());
 	
 	
-	$html  .= "<select class='dbmng_multi_right' multiple id='".$fld."_from' name='".$fld."_from'  >";
+	$html  .= "<select class='dbmng_multi_right' multiple id='dbmng_".$fld."_from' name='".$fld."_from'  >";
 	
 	foreach ($res as $val) {
 	 	  $html.="<option value='".$val->$fld_value['voc_table_pk']."' >".$val->$fld_value['voc_table_label']."</option>";
@@ -280,12 +280,12 @@ function layout_form_multi( $fld, $fld_value, $value )
 */
 function layout_form_file( $fld, $fld_value, $value, $aParam )
 {		
-  $html  = "<span id='".$fld."_link_container'>".dbmng_file_create_link($value, $aParam).'</span><br/>';
-	$html .= "<div class='dbmng_file_hide_this'><input type='file' name='$fld' id='$fld' ></div>";
+  $html  = "<span id='dbmng_".$fld."_link_container'>".dbmng_file_create_link($value, $aParam).'</span><br/>';
+	$html .= "<div class='dbmng_file_hide_this'><input type='file' name='$fld' id='dbmng_$fld' ></div>";
 
-	$html .= '<input class="dbmng_file_text" type="text" name="'.$fld.'_tmp_choosebox" id="'.$fld.'_tmp_choosebox" value="'.$value.'" />';
-	$html .= '<a href="#" id="'.$fld.'_tmp_choose">'.t('Choose').'</a>&nbsp';
-	$html .= '<a href="#" id="'.$fld.'_tmp_remove">'.t('Remove').'</a>';
+	$html .= '<input class="dbmng_file_text" type="text" name="'.$fld.'_tmp_choosebox" id="dbmng_'.$fld.'_tmp_choosebox" value="'.$value.'" />';
+	$html .= '<a href="#" id="dbmng_'.$fld.'_tmp_choose">'.t('Choose').'</a>&nbsp';
+	$html .= '<a href="#" id="dbmng_'.$fld.'_tmp_remove">'.t('Remove').'</a>';
 
 	$html .= "<script type=\"text/javascript\">dbmng_style_fileform('".$fld."');</script>";
 
@@ -306,12 +306,12 @@ function layout_form_file( $fld, $fld_value, $value, $aParam )
 */
 function layout_form_picture( $fld, $fld_value, $value, $aParam )
 {		
-  $html  = "<span id='".$fld."_link_container'>".dbmng_picture_create_link($value, $aParam, "form").'</span><br/>';
-	$html .= "<div class='dbmng_file_hide_this'><input type='file' name='$fld' id='$fld' accept='image/*' ></div>";
+  $html  = "<span id='dbmng_".$fld."_link_container'>".dbmng_picture_create_link($value, $aParam, "form").'</span><br/>';
+	$html .= "<div class='dbmng_file_hide_this'><input type='file' name='$fld' id='dbmng_$fld' accept='image/*' ></div>";
 
-	$html .= '<input class="dbmng_file_text" type="text" name="'.$fld.'_tmp_choosebox" id="'.$fld.'_tmp_choosebox" value="'.$value.'" />';
-	$html .= '<a href="#" id="'.$fld.'_tmp_choose">'.t('Choose').'</a>&nbsp';
-	$html .= '<a href="#" id="'.$fld.'_tmp_remove">'.t('Remove').'</a>';
+	$html .= '<input class="dbmng_file_text" type="text" name="'.$fld.'_tmp_choosebox" id="dbmng_'.$fld.'_tmp_choosebox" value="'.$value.'" />';
+	$html .= '<a href="#" id="dbmng_'.$fld.'_tmp_choose">'.t('Choose').'</a>&nbsp';
+	$html .= '<a href="#" id="dbmng_'.$fld.'_tmp_remove">'.t('Remove').'</a>';
 
 	$html .= "<script type=\"text/javascript\">dbmng_style_fileform('".$fld."');</script>";
 
@@ -331,7 +331,7 @@ function layout_form_picture( $fld, $fld_value, $value, $aParam )
 */
 function layout_form_checkbox( $fld, $fld_value, $value )
 {
-	$html = "<input class='dbmng_checkbox' type='checkbox' name='$fld' id='$fld' ";
+	$html = "<input class='dbmng_checkbox' type='checkbox' name='$fld' id='dbmng_$fld' ";
 	if($value==1 || ($value<>0 &&  $fld_value['default']=="1"))
     {
 			$html .= " checked='true' ";
@@ -367,7 +367,7 @@ function layout_form_select( $fld, $fld_value, $value )
 			$aVoc = array();
 			$aVoc = $fld_value['voc_val'];
 		} 
-	$html = "<select  name='$fld' id='$fld'  ".layout_get_nullable($fld_value)." >\n";
+	$html = "<select  name='$fld' id='dbmng_$fld'  ".layout_get_nullable($fld_value)." >\n";
 	$html .= "<option/> \n";	
 	$nLen  = count($aVoc);
 	
@@ -423,13 +423,13 @@ function layout_form_multiselect( $fld, $fld_value, $value )
 				}
 		}
 
-	$html = "<select  name='$fld' onChange='dbmng_update_multi2()' id='".$fld."_res'  ".layout_get_nullable($fld_value)." >\n";
+	$html = "<select  name='$fld' onChange='dbmng_update_multi2()' id='dbmng_".$fld."_res'  ".layout_get_nullable($fld_value)." >\n";
 	$html .= "</select><br/>\n";
 
-	$html .= "<select  name='$fld' onChange='dbmng_update_multi3()' id='".$fld."_res2'  ".layout_get_nullable($fld_value)." >\n";
+	$html .= "<select  name='$fld' onChange='dbmng_update_multi3()' id='dbmng_".$fld."_res2'  ".layout_get_nullable($fld_value)." >\n";
 	$html .= "</select><br/>\n";
 
-	$html .= "<select  name='$fld' onChange='dbmng_update_multi()' id='".$fld."_res3'  ".layout_get_nullable($fld_value)." >\n";
+	$html .= "<select  name='$fld' onChange='dbmng_update_multi()' id='dbmng_".$fld."_res3'  ".layout_get_nullable($fld_value)." >\n";
 	$html .= "</select><br/>\n";
 
 	$html .= "\n<script type='text/javascript'>\n";
@@ -493,7 +493,7 @@ function layout_table_footer($aField)
 	foreach ( $aField as $fld => $fld_value )
 		{
 			if( layout_view_field_table($fld_value) )
-				$html .= "<td><input type='text' name='$fld' id='$fld' placeholder='" . t("Search") . " " . t($fld_value['label']) . "' /></td>\n";
+				$html .= "<td><input type='text' name='$fld' id='dbmng_$fld' placeholder='" . t("Search") . " " . t($fld_value['label']) . "' /></td>\n";
 		}
 	$html .= "<td>" . t("Clear filtering") . "</td>";
 	$html .= "</tr>\n";
