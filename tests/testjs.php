@@ -30,7 +30,7 @@
 
 	//get the array storing the table metadata from record 1 in table dbmng_tables
 	if( gethostname() == "Galveston" )
-		$id_table = 12;
+		$id_table = 1;
 	else
 		$id_table = 11;
 	
