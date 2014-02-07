@@ -37,7 +37,7 @@ function dbmng_module_permission() {
 function dbmng_module_menu() {
     $items = array();
 
-    $items['dbmng/dbmng'] = array(
+    $items['dbmng'] = array(
         'title' => 'Database Management',
         'page callback' => 'dbmng_manager',
         'access arguments' => array('dbmng manager'),
