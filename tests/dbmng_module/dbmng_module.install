@@ -1,0 +1,62 @@
+<?php
+include_once "sites/all/libraries/dbmng/dbmng.php";
+
+/* 
+=====================================
+	Writing .install files
+	https://drupal.org/node/323314
+=====================================
+*/
+function dbmng_module_install()
+{
+	echo "dbmng_module_install: begin function<br/>";
+	$sql = "select * from information_schema.tables where table_name = :table_name and table_schema = :table_schema";
+	$var = array(':table_name' => 'dbmng_tables', ':table_schema' => DBMNG_DB_NAME);
+	$table = dbmng_query($sql, $var );
+	if( dbmng_num_rows($table) == 0 )
+		{
+			//echo "dbmng_module_install: before table generation<br/>";
+			$sql = "CREATE TABLE IF NOT EXISTS `dbmng_tables` (
+							  `id_table` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+							  `id_table_type` int(11) DEFAULT '1',
+							  `table_name` char(50) DEFAULT NULL,
+							  `table_desc` text,
+							  `table_label` text,
+							  PRIMARY KEY (`id_table`),
+							  UNIQUE KEY `id_table` (`id_table`),
+							  UNIQUE KEY `table_name` (`table_name`)
+							) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;";
+			$tbl = dbmng_query($sql, array());
+
+			$sql = "CREATE TABLE IF NOT EXISTS `dbmng_fields` (
+							  `id_field` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+							  `id_table` int(11) DEFAULT NULL,
+							  `id_field_type` varchar(11) NOT NULL,
+							  `field_widget` varchar(50) NOT NULL,
+							  `field_name` char(50) NOT NULL,
+							  `field_size` int(11) DEFAULT NULL,
+							  `nullable` int(11) DEFAULT NULL,
+							  `field_note` text,
+							  `default_value` char(100) DEFAULT NULL,
+							  `field_label` varchar(100) DEFAULT NULL,
+							  `field_label_long` varchar(100) DEFAULT NULL,
+							  `field_order` int(11) DEFAULT NULL,
+							  `is_searchable` int(11) DEFAULT NULL,
+							  `pk` int(1) DEFAULT '0',
+							  `field_function` varchar(100) DEFAULT NULL,
+							  `skip_in_tbl` int(11) DEFAULT '0',
+							  `voc_sql` text,
+							  PRIMARY KEY (`id_field`),
+							  UNIQUE KEY `id_field` (`id_field`),
+							  UNIQUE KEY `table_fieldname` (`id_table`,`field_name`)
+							) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;";
+			$tbl = dbmng_query($sql, array());
+			
+			$sql = "CREATE VIEW `dbmng_tables_ext` AS 
+							select `t`.`id_table` AS `id_table`,`t`.`id_table_type` AS `id_table_type`,`t`.`table_name` AS `table_name`,`t`.`table_desc` AS `table_desc`,`t`.`table_label` AS `table_label`,count(0) AS `fld` 
+							from (`dbmng_tables` `t` left join `dbmng_fields` `f` on 
+							((`t`.`id_table` = `f`.`id_table`))) group by `t`.`id_table`,`t`.`id_table_type`,`t`.`table_name`,`t`.`table_desc`,`t`.`table_label`;";
+			$tbl = dbmng_query($sql, array());
+		}
+
+}
