@@ -3,10 +3,16 @@
 <script type="text/javascript" src="../library/dbmng/assets/dbmng_obj.js?mpvqml"></script>
 
 <!-- jQuery and JQ Mobile -->
+<!--
 <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
 <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 <script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+-->
 
+<link rel="stylesheet" href="/libs/jquery.mobile-1.3.2.min.css" />
+<script src="/libs/jquery-1.9.1.min.js"></script>
+<script src="/libs/jquery.mobile-1.3.2.min.js"></script>
+<script src="/libs/jstorage.min.js"></script>
 
 <style type="text/css" media="all">
 	@import url("../library/dbmng/assets/dbmng.css");
@@ -41,24 +47,22 @@
 ?>  
 
 	
-<div id="paste_here" >Paste Here from Excell</div>
+<!-- <div id="paste_here" >Paste Here from Excell</div> -->
 
 <script type="text/javascript">
 	var db;
 
 
   jQuery(document).ready(function() {
-
 	
-		db  = new Dbmng(data, aForm, {
+		db  = new Dbmng(aForm, {
 			'div_element':'table2',   //div id containing the table
 			'ajax_url':'ajax.php',    //Where is locate the php with ajax function (relative to the current PHP file)
 			'inline':1                //Enable editing in the table without creating a new form
-		});
-  
-		db.createTable();
+		});  
+		db.start();
 
-
+	
 		jQuery('#paste_here').bind('paste', function (e) {
           var tab=(event.clipboardData.getData('text/plain'));
           var lines=(tab.split('\n'));

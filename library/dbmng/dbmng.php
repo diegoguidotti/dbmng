@@ -363,7 +363,7 @@ function dbmng_crud_js($aForm, $aParam)
 	$html .= "<div id='table_container'></div>\n";
 
 	$html .= "\n<script type='text/javascript'>\n";
-	$html .= "var data=".dbmng_get_js_array($aForm, $aParam).";\n";
+	//$html .= "var data=".dbmng_get_js_array($aForm, $aParam).";\n";
 	$html .= "var aForm=".json_encode($aForm).";\n";
 	$html .= "var aParam=".json_encode($aParam).";\n";
 	
@@ -389,7 +389,7 @@ function dbmng_get_js_array($aForm, $aParam)
 	$html = "";
 
 	$result = dbmng_get_data($aForm, $aParam);			
-	$html .= "{'records':[\n";
+	$html .= '{"records":[';
 		
 	$sObj  = "";
 	foreach( $result as $record )
@@ -403,7 +403,7 @@ function dbmng_get_js_array($aForm, $aParam)
 					$value=$record->$fld;
 
 					//important! use json_encode to escape special characters
-					$sObj .= "'" . $fld . "': " . json_encode($value) . ", ";
+					$sObj .= '"' . $fld . '": ' . json_encode($value) . ", ";
 						
 				}
 			$sObj = substr($sObj, 0, strlen($sObj)-2);
@@ -411,7 +411,7 @@ function dbmng_get_js_array($aForm, $aParam)
 		}
 	$sObj = substr($sObj, 0, strlen($sObj)-2);
 	
-	$html .= $sObj . "\n]}\n";
+	$html .= $sObj . "]}";
 	return $html;
 }
 
