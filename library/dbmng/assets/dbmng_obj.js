@@ -278,19 +278,23 @@ Dbmng.prototype.createRow = function (value, id_record)
 		var state=value.state;
 		var o=value.record;		
 		var html_row='';
-
 			for( var key in o )
 				{        
 					//get the field parameters
 		      var f = obj.aForm.fields[key];
-					if( layout_view_field_table(f.skip_in_tbl) ){
-						if (o.hasOwnProperty(key))
-						{
-							html_row += "<td>" + o[key] + "</td>";
+		      if(f){
+						if( layout_view_field_table(f.skip_in_tbl) ){
+							if (o.hasOwnProperty(key))
+							{
+								html_row += "<td>" + o[key] + "</td>";
+							}
+							else{
+								html_row += "<td>-</td>";
+							}				
 						}
-						else{
-							html_row += "<td>-</td>";
-						}				
+					}
+					else{
+						console.log('field '+key+' not found in aForm' );
 					}
 			}
 		
