@@ -74,19 +74,20 @@ Dbmng.prototype.isSaved = function()
 Dbmng.prototype.start = function()
 {
 	obj=this;
-	
 
 	var saved_data= jQuery.jStorage.get(this.id+"_data");
-	
 	if(saved_data){
 		obj.aData =saved_data;
 		obj.createTable();
 	}
 	else {
-		jQuery.ajax({
+				var form=obj.aForm;
+				//form={"id_table":20,"table_name":"mm_test","table_label":"Questa tabella si chiama pippo","fields":{"nome":{}}};
+			
+				jQuery.ajax({
 				url: this.ajax_url,
 				type: "POST",
-				data: {"aForm" : JSON.stringify(obj.aForm), "get_records": true }, 
+				data: {"aForm" : JSON.stringify(form), "get_records": true },
 				dataType: "json",
 				error: function (e) {
 					console.log(e);
