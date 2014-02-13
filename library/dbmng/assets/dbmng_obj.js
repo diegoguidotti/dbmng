@@ -10,6 +10,7 @@ function Dbmng(f , p) {
 
 	this.prog=0;
 
+	
 	//taken from http://stackoverflow.com/questions/4785724/queue-ajax-requests-using-jquery-queue
 	this.am = (function() {
      var requests = [];
@@ -52,6 +53,7 @@ function Dbmng(f , p) {
 
 	this.am.run(); 
 
+
   this.aData = {'records': new Array()};
 
 	//setup parameters
@@ -66,6 +68,12 @@ function Dbmng(f , p) {
 	if(p.auto_sync){
 		this.auto_sync=p.auto_sync;
 	}	
+
+	this.auto_edit=0;
+	if(p.auto_edit){
+		this.auto_edit=p.auto_edit;
+	}	
+
 
 	this.ajax_url='dbmng_ajax.php';
 	if(this.aParam.ajax_url){
@@ -95,12 +103,6 @@ function Dbmng(f , p) {
 			obj.updateStorage();
 		}
 	});
-
-
-
-	
-
-
 
 }
 
@@ -233,6 +235,37 @@ Dbmng.prototype.createTable = function()
 		});
 	}
 
+
+	if(this.auto_edit && this.inline){
+
+			jQuery("#"+obj.id+"_table tr").on('click', function (e) {  
+        var el=jQuery(this);        
+        if(el.hasClass('working')){
+             ; //keep working...
+        }
+        else{             
+
+            var current=jQuery('#'+obj.id+"_table tr.working");
+            console.log(current);
+            console.log(current.length);
+
+            if(current.length>0){ //if exist an editiing record save it
+                console.log('save the record '+current.attr('id'));   
+                current.removeClass('working')
+
+								var id_record=	current.attr('id').substring(obj.id.length+1,current.attr('id').length);
+								console.log('rec: '+id_record);
+								obj.prepareUpdate(id_record);
+            } 
+						else{
+							var id_record=	el.attr('id').substring(obj.id.length+1,el.attr('id').length);
+							obj.createForm(id_record);	
+						}               
+            el.addClass('working');
+            console.log('Start editing record '+this.id);
+        }        
+    }); 
+	}
 	
 	return html;
 };
@@ -347,17 +380,20 @@ Dbmng.prototype.syncData = function()
 Dbmng.prototype.attachCommand = function (id_record) 
 	{
 		var obj=this;
-		jQuery('#'+obj.id+'_del_'+id_record).click(function(){							
-			obj.deleteRecord(id_record);
+		jQuery('#'+obj.id+'_del_'+id_record).click(function(e){							
+			obj.deleteRecord(id_record); 
+			e.stopPropagation(); //stopPropagation block the auto_edit features when clicking on table row
 		});
-		jQuery('#'+obj.id+'_restore_'+id_record).click(function(){						
+		jQuery('#'+obj.id+'_restore_'+id_record).click(function(e){						
 			obj.restoreRecord(id_record);
+			e.stopPropagation();
 		});
-		jQuery('#'+obj.id+'_upd_'+id_record).click(function(){						
+		jQuery('#'+obj.id+'_upd_'+id_record).click(function(e){						
 			obj.createForm(id_record);			
 		});
-		jQuery('#'+obj.id+'_dup_'+id_record).click(function(){						
+		jQuery('#'+obj.id+'_dup_'+id_record).click(function(e){						
 			obj.duplicateRecord(id_record);
+			e.stopPropagation();
 		});
 }
 
@@ -759,29 +795,34 @@ Dbmng.prototype.createForm = function(id_record) {
 		});
 
 		jQuery('#'+obj.id+"_"+id_record+"_update").click(function(){
-			
-			jQuery.each(obj.aForm.fields, function(index, field){ 
-				if( ! dbmng_check_is_pk(field) ) 	
-					{
-						switch( field.widget )
-							{
-								case "checkbox":
-									item.record[index] = 0;
-									if( jQuery('#'+obj.id+'_'+id_record+'_'+index).prop('checked') )
-										item.record[index] = 1;
-									break;
-								
-								default:
-									item.record[index] = jQuery('#'+obj.id+'_'+id_record+'_'+index).val();
-									break;
-							}
-					}
-			});
-			item.state='upd';
-			obj.updateRecord(item, id_record);
+			obj.prepareUpdate(id_record);		
 		});
 }
 
+
+//create the record and lunch prepareUpdate
+Dbmng.prototype.prepareUpdate = function(id_record){
+		var obj=this;
+		jQuery.each(obj.aForm.fields, function(index, field){ 
+			if( ! dbmng_check_is_pk(field) ) 	
+				{
+					switch( field.widget )
+						{
+							case "checkbox":
+								item.record[index] = 0;
+								if( jQuery('#'+obj.id+'_'+id_record+'_'+index).prop('checked') )
+									item.record[index] = 1;
+								break;
+							
+							default:
+								item.record[index] = jQuery('#'+obj.id+'_'+id_record+'_'+index).val();
+								break;
+						}
+				}
+		});
+		item.state='upd';
+		obj.updateRecord(item, id_record);
+}
 
 // The function add an input widget
 Dbmng.prototype.layout_form_widget = function( fld, field, id_record, value, more, act )

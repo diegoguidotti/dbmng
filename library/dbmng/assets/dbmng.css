@@ -5,6 +5,9 @@ div.dbmng_form_row{
   padding:3px;
 }
 
+tr.working{
+	background-color: #777;
+}
 
 div.dbmbg_form_element{
 	float:left;

@@ -56,7 +56,8 @@
 			'div_element':'table2',   //div id containing the table
 			'ajax_url':'ajax.php',    //Where is locate the php with ajax function (relative to the current PHP file)
 			'auto_sync': 1,    			  //Save automatically to the server record by record
-			'inline':0                //Enable editing in the table without creating a new form
+			'inline':1,               //Enable editing in the table without creating a new form
+			'auto_edit':1                //Enable editing in the table without creating a new form
 		});  
 		db.start();
 		
