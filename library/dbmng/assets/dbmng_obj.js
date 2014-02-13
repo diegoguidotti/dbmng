@@ -209,6 +209,20 @@ Dbmng.prototype.createTable = function()
 	//Add the insert button
 	jQuery('#'+obj.id+'_view').append("<a id='"+obj.id+"_add'>"+t("Add")+"</a>");
 	jQuery('#'+obj.id+"_add").click(function(){
+
+		var current=jQuery('#'+obj.id+"_table tr.working");
+
+      if(current.length>0){ //if exist an editing record save it
+          current.removeClass('working')
+					var id_record=	current.attr('id').substring(obj.id.length+1,current.attr('id').length);
+					if(current.hasClass('auto_edit_insert')){
+						obj.prepareInsert(id_record);
+					}
+					else{
+						obj.prepareUpdate(id_record);
+					}
+      } 
+
 		obj.createForm();
 	});
 
@@ -240,6 +254,7 @@ Dbmng.prototype.createTable = function()
 
 			jQuery("#"+obj.id+"_table tr").on('click', function (e) {  
         var el=jQuery(this);        
+
         if(el.hasClass('working')){
              ; //keep working...
         }
@@ -249,13 +264,18 @@ Dbmng.prototype.createTable = function()
             console.log(current);
             console.log(current.length);
 
-            if(current.length>0){ //if exist an editiing record save it
+            if(current.length>0){ //if exist an editing record save it
                 console.log('save the record '+current.attr('id'));   
                 current.removeClass('working')
 
 								var id_record=	current.attr('id').substring(obj.id.length+1,current.attr('id').length);
-								console.log('rec: '+id_record);
-								obj.prepareUpdate(id_record);
+
+								if(current.hasClass('auto_edit_insert')){
+									obj.prepareInsert(id_record);
+								}
+								else{
+									obj.prepareUpdate(id_record);
+								}
             } 
 						else{
 							var id_record=	el.attr('id').substring(obj.id.length+1,el.attr('id').length);
@@ -721,7 +741,12 @@ Dbmng.prototype.createForm = function(id_record) {
 
 		if(act=='ins'){
 			id_record='tmp_'+Guid.newGuid();
-			jQuery("#"+obj.id+"_table").append("<tr id='"+obj.id+"_"+id_record+"'></tr>");
+			
+			var cl="";
+			if(obj.auto_edit && obj.inline){
+				cl='class="working auto_edit_insert"';
+			}
+			jQuery("#"+obj.id+"_table").append("<tr "+cl+" id='"+obj.id+"_"+id_record+"'></tr>");
 			
 		}
 
@@ -775,6 +800,18 @@ Dbmng.prototype.createForm = function(id_record) {
 		}
 
 		jQuery('#'+obj.id+"_"+id_record+"_insert").click(function(){			
+			obj.prepareInsert(id_record);		
+		});
+
+		jQuery('#'+obj.id+"_"+id_record+"_update").click(function(){
+			obj.prepareUpdate(id_record);		
+		});
+}
+
+
+//create the record and lunch prepareInsert
+Dbmng.prototype.prepareInsert = function(id_record){
+
 			var record= {};			
 			jQuery.each(obj.aForm.fields, function(index, field){ 
 				switch( field.widget )
@@ -792,11 +829,6 @@ Dbmng.prototype.createForm = function(id_record) {
 				
 			});
 			obj.insertRecord({ 'state':'ins', 'record': record} , id_record);
-		});
-
-		jQuery('#'+obj.id+"_"+id_record+"_update").click(function(){
-			obj.prepareUpdate(id_record);		
-		});
 }
 
 
