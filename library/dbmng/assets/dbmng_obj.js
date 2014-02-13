@@ -4,11 +4,57 @@
 function Dbmng(f , p) {
 
   this.aForm = f;
+ 
+	//check if an ajax call is running
+	this.running=false;
 
-	
+	this.prog=0;
+
+	//taken from http://stackoverflow.com/questions/4785724/queue-ajax-requests-using-jquery-queue
+	this.am = (function() {
+     var requests = [];
+
+     return {
+        addReq:  function(opt) {
+            requests.push(opt);
+        },
+        removeReq:  function(opt) {
+            if( $.inArray(opt, requests) > -1 )
+                requests.splice($.inArray(opt, requests), 1);
+        },
+        run: function() {
+            var self = this,
+                orgSuc;
+
+            if( requests.length ) {
+                oriSuc = requests[0].complete;
+
+                requests[0].complete = function() {
+                     if( typeof oriSuc === 'function' ) oriSuc();
+                     requests.shift();
+                     self.run.apply(self, []);
+                };   
+								console.log('manda');
+								console.log(requests[0]);
+                $.ajax(requests[0]);
+            } else {
+              self.tid = setTimeout(function() {
+                 self.run.apply(self, []);
+              }, 1000);
+            }
+        },
+        stop:  function() {
+            requests = [];
+            clearTimeout(this.tid);
+        }
+     };
+	}());
+
+	this.am.run(); 
 
   this.aData = {'records': new Array()};
 
+	//setup parameters
   this.aParam = p;
 
 	this.inline=0;
@@ -16,19 +62,23 @@ function Dbmng(f , p) {
 		this.inline=p.inline;
 	}	
 
+	this.auto_sync=0;
+	if(p.auto_sync){
+		this.auto_sync=p.auto_sync;
+	}	
 
 	this.ajax_url='dbmng_ajax.php';
 	if(this.aParam.ajax_url){
 		this.ajax_url=this.aParam.ajax_url;
 	}
 
-  //debug(data);
-  //debug(aForm);
 	
-	this.id='dbmng';
+	this.id='dbmng_'+f.table_name;
 	if(this.aParam.div_element){
-		this.id='dbmng_'+this.aParam.div_element;
+		this.id+='_'+this.aParam.div_element;
 	}
+
+	console.log(this.id);
 	var obj=this;
 
 	var html="";
@@ -47,28 +97,13 @@ function Dbmng(f , p) {
 	});
 
 
-}
+
+	
 
 
-Dbmng.prototype.isSaved = function()
-{
-		var obj=this;
-		var il=0;
-		if(obj.aData.inserted)
-			il=Object.keys(obj.aData.inserted).length ;
-		var dl=0;
-		if(obj.aData.deleted)
-			dl=Object.keys(obj.aData.deleted).length ;
-		var ul=0;
-		if(obj.aData.updated)
-			ul=Object.keys(obj.aData.updated).length ;
-		if(il==0 && dl==0 && ul==0){
-			return true;
-		}
-		else{
-			return false;
-		}
+
 }
+
 
 //search for the data to the server and, if founded, create the table
 Dbmng.prototype.start = function()
@@ -84,7 +119,7 @@ Dbmng.prototype.start = function()
 				var form=obj.aForm;
 				//form={"id_table":20,"table_name":"mm_test","table_label":"Questa tabella si chiama pippo","fields":{"nome":{}}};
 			
-				jQuery.ajax({
+			this.am.addReq({ //jQuery.ajax({
 				url: this.ajax_url,
 				type: "POST",
 				data: {"aForm" : JSON.stringify(form), "get_records": true },
@@ -119,8 +154,7 @@ Dbmng.prototype.start = function()
 
 //Populate the table using aData
 Dbmng.prototype.createTable = function()
-{
-	
+{	
 	//show the table and hide the form
 	jQuery("#"+this.id+"_view").show();	
 	jQuery("#"+this.id+"_form").hide();	
@@ -131,7 +165,7 @@ Dbmng.prototype.createTable = function()
 	//Create the two container for the table and the form
 	
 	var html='';
-	html += "<h1 class='dbmng_table_label'>" + obj.aForm.table_name + "</h1>\n";
+	html += "<div id='dbmng_table_header'><h1 class='dbmng_table_label'>" + obj.aForm.table_name + "</h1></div>\n";
 	html += "<table class='dbmng_table' id='"+this.id+"_table'>\n";
 
 	//Add header
@@ -176,84 +210,139 @@ Dbmng.prototype.createTable = function()
 		obj.createForm();
 	});
 
-	jQuery('#'+obj.id+'_view').append(" - <a id='"+obj.id+"_save'>"+t("Save")+"</a>");
+
+	if(!obj.auto_sync){
+		jQuery('#'+obj.id+'_view').append(" - <a id='"+obj.id+"_save'>"+t("Save")+"</a>");
+		jQuery('#'+obj.id+'_view').append(" - <a id='"+obj.id+"_reload'>"+t("Reset")+"</a>");
 	
-	jQuery('#'+obj.id+"_save").click(function(){
-
+		jQuery('#'+obj.id+"_save").click(function(){
+			obj.syncData();		
+		});
 	
-	
+		jQuery('#'+obj.id+"_reload").click(function(){
 
-		jQuery.ajax({
-			url: obj.ajax_url,
-			type: "POST",
-			data: {"aForm" : JSON.stringify(obj.aForm), "inserted":  JSON.stringify(obj.aData.inserted), "deleted": JSON.stringify(obj.aData.deleted) , "updated": JSON.stringify(obj.aData.updated) }, 
-			dataType: "json",
-			success: function (data) {
-
-    		console.log(data);
-
-				if(data.deleted){
-					jQuery.each(data.deleted, function(k,v){
-						if(v.ok==1){
-							delete obj.aData.records[k];
-							delete obj.aData.deleted[k];							
-						}
-						else{
-							obj.aData.records[k].error=v.error;
-						}
-					});
+				if(obj.isSaved()){
+					obj.resetDb();
 				}
-
-
-				var pk_key=obj.aForm.primary_key[0];
-
-				if(data.inserted){
-					jQuery.each(data.inserted, function(k,v){
-						if(v.ok==1){
-							obj.aData.records[k].state='ok';
-							obj.aData.records[k].record[pk_key] = v.inserted_id;
-							delete obj.aData.inserted[k];	
-						}
-						else{														
-								//obj.aData.records[k].error=v.error;
-						}
-					});
+				else{
+					var r=confirm(t('Do you confirm? You will lose all the local changes.'));
+					if (r==true){
+						obj.resetDb();	
+					}
 				}
+		});
+	}
 
-				if(data.updated){
-					jQuery.each(data.updated, function(k,v){
-						if(v.ok==1){
-							if(obj.aData.records[k]){
-								obj.aData.records[k].state='ok';							
-								delete obj.aData.updated[k];	
-							}
-							else{
-								alert('Record '+k+' not found in updated');
-							}
-						}
-						else{							
-							console.log(v);
-//							obj.aData.records[k].error=v.error;
-						}
-					});
-				}
-
-				obj.createTable();
-				jQuery.jStorage.deleteKey(obj.id+"_data");
-				//end of Success	
-			},
-			error: function (xhr, ajaxOptions, thrownError){
-  	  	console.log(xhr);
-    	 //console.log(thrownError);
-	    }   
-		});	
-		
-	});
 	
-	html+=get_max_id(obj);
 	return html;
 };
 
+
+//Populate the table using aData
+Dbmng.prototype.resetDb = function() {
+	jQuery.jStorage.deleteKey(obj.id+"_data");
+	obj.start();		
+}
+
+
+//Populate the table using aData
+Dbmng.prototype.syncData = function()
+{	
+
+	var obj=this;
+	var q=jQuery(document).queue('myAjaxQueue', function() {
+
+		obj.running=true;
+
+		if(obj.isSaved()){
+			console.log('NO DATA TO SAVE');
+			obj.running=false;
+		}
+		else {
+			
+			obj.prog = obj.prog+1;
+			console.log('start '+obj.prog);
+			console.log(JSON.stringify(obj.aData.inserted));
+
+			//TODO: check if it is better to use ajaxmanager
+			//obj.am.addReq({ //
+			jQuery.ajax({
+				url: obj.ajax_url,
+				type: "POST",
+				data: {"aForm" : JSON.stringify(obj.aForm), "inserted":  JSON.stringify(obj.aData.inserted), "deleted": JSON.stringify(obj.aData.deleted) , "updated": JSON.stringify(obj.aData.updated) }, 
+				dataType: "json",
+				success: function (data) {
+
+
+					if(data.deleted){
+						jQuery.each(data.deleted, function(k,v){
+							if(v.ok==1){
+								delete obj.aData.records[k];
+								delete obj.aData.deleted[k];							
+							}
+							else{
+								obj.aData.records[k].error=v.error;
+							}
+						});
+					}
+
+
+					var pk_key=obj.aForm.primary_key[0];
+
+					if(data.inserted){
+						jQuery.each(data.inserted, function(k,v){
+							if(v.ok==1){
+								obj.aData.records[k].state='ok';
+								obj.aData.records[k].record[pk_key] = v.inserted_id;
+								delete obj.aData.inserted[k];	
+							}
+							else{														
+									//obj.aData.records[k].error=v.error;
+							}
+						});
+					}
+
+					if(data.updated){
+						jQuery.each(data.updated, function(k,v){
+							if(v.ok==1){
+								if(obj.aData.records[k]){
+									obj.aData.records[k].state='ok';							
+									delete obj.aData.updated[k];	
+								}
+								else{
+									alert('Record '+k+' not found in updated');
+								}
+							}
+							else{							
+								console.log(v);
+	//							obj.aData.records[k].error=v.error;
+							}
+						});
+					}
+
+					obj.createTable();
+					jQuery.jStorage.deleteKey(obj.id+"_data");
+
+
+				
+					console.log('end '+obj.prog);
+					obj.running=false;
+
+					//end of Success	
+				},
+				error: function (xhr, ajaxOptions, thrownError){
+			  	console.log(xhr);
+					obj.running=false;
+		  	 //console.log(thrownError);
+			  }   
+			});	//end of Ajax
+		}
+	}); //end of queue
+
+	if(!obj.running){
+      jQuery(document).dequeue('myAjaxQueue'); 
+  }
+}
 
 Dbmng.prototype.attachCommand = function (id_record) 
 	{
@@ -270,6 +359,29 @@ Dbmng.prototype.attachCommand = function (id_record)
 		jQuery('#'+obj.id+'_dup_'+id_record).click(function(){						
 			obj.duplicateRecord(id_record);
 		});
+}
+
+
+
+//check if there are data not synched with the db
+Dbmng.prototype.isSaved = function()
+{
+		var obj=this;
+		var il=0;
+		if(obj.aData.inserted)
+			il=Object.keys(obj.aData.inserted).length ;
+		var dl=0;
+		if(obj.aData.deleted)
+			dl=Object.keys(obj.aData.deleted).length ;
+		var ul=0;
+		if(obj.aData.updated)
+			ul=Object.keys(obj.aData.updated).length ;
+		if(il==0 && dl==0 && ul==0){
+			return true;
+		}
+		else{
+			return false;
+		}
 }
 
 Dbmng.prototype.createRow = function (value, id_record) 
@@ -362,7 +474,7 @@ Dbmng.prototype.deleteRecord = function(id_record) {
 					obj.aData.deleted={};
 			}
 			obj.aData.deleted[id_record]=(to_delete);
-
+			console.log('delete record '+id_record);
 		}
 		else{
 			alert('Error. record to delete not found');
@@ -445,10 +557,21 @@ Dbmng.prototype.insertRecord = function(item, temporary_id_record) {
 		obj.aData.inserted[id_record]=(item);
 		obj.aData.records[id_record]=(item);
 
+		console.log('add record');
+
+		//go back to table
+		if(!this.inline){
+			jQuery("#"+obj.id+"_view").show();	
+			jQuery("#"+obj.id+"_form").hide();
+		}
+
+
 		//Change the id to the temporary one
     jQuery('#'+obj.id+"_"+temporary_id_record).attr("id",obj.id+"_"+id_record);
 
+		console.log(jQuery('#'+obj.id+"_"+id_record));
 		jQuery('#'+obj.id+"_"+id_record).html(obj.createRow(item, id_record));	
+		console.log('create row');
 		jQuery('#'+obj.id+"_"+id_record).removeClass( "ok" ).addClass( "ins" );	
 		//You need to attach again the restore button
 		obj.attachCommand(id_record);
@@ -470,7 +593,13 @@ Dbmng.prototype.updateRecord = function(item, id_record) {
 	 	if(!obj.aData.updated){
 				obj.aData.updated={};
 		}
-		obj.aData.updated[id_record]=(item);		
+		obj.aData.updated[id_record]=(item);	
+
+		//go back to table
+		if(!this.inline){
+			jQuery("#"+obj.id+"_view").show();	
+			jQuery("#"+obj.id+"_form").hide();
+		}	
 
 		jQuery('#'+obj.id+"_"+id_record).removeClass( "ok" ).addClass( "upd" );
 		jQuery('#'+obj.id+"_"+id_record).html(obj.createRow(item, id_record));
@@ -493,6 +622,15 @@ Dbmng.prototype.updateStorage = function() {
 	console.log('upd storage on '+this.id);
 
 	jQuery.jStorage.set(this.id+"_data", this.aData);
+
+
+	if(obj.auto_sync){
+		console.log('start_sync');
+		db.syncData();
+	}
+
+	//After update show the main table in not inline
+	
 }
 
 	
@@ -542,14 +680,15 @@ Dbmng.prototype.createForm = function(id_record) {
 			jQuery("#"+obj.id+"_form").show();	
 		}
 		else{
-			if(act=='ins'){
-				id_record='tmp_'+Guid.newGuid();
-				jQuery("#"+obj.id+"_table").append("<tr id='"+obj.id+"_"+id_record+"'></tr>");
-				
-			}
-
-
+			;
 		}
+
+		if(act=='ins'){
+			id_record='tmp_'+Guid.newGuid();
+			jQuery("#"+obj.id+"_table").append("<tr id='"+obj.id+"_"+id_record+"'></tr>");
+			
+		}
+
 		
 		var form='<form >';
 		jQuery.each(this.aForm.fields, function(index, field){ 			
@@ -782,6 +921,22 @@ Dbmng.layout_get_nullable = function( field, act )
 	return ht;
 }
 
+function dbmng_check_is_pk(fld_value)
+{
+	var ret=false;
+	if( typeof fld_value.key == 'undefined' )
+		{
+			ret = false;
+		}
+	else if( (parseInt(fld_value.key) == 1 || parseInt(fld_value.key) == 2) )
+		{
+			ret = true;
+		}
+
+	return ret;
+}
+
+
 function layout_view_field_table(fld_value){
 	ret=true;	
 	if (typeof fld_value != 'undefined') {
@@ -803,36 +958,8 @@ function debug(d){
 	}
 }
 
-function get_max_id(obj)
-{
-	//var obj = this;
-	var id_max = -1;
-	var aID = Array();
-	
-	jQuery.each(obj.aData.records,function(k,value){
-		var pk_key=obj.aForm.primary_key[0];
-		aID.push(value[pk_key]);
-	});	
-	aID.reverse();
-	
-	id_max = "L"+(parseInt(aID[0])+1).toString();
-	return id_max;
-}
 
-function dbmng_check_is_pk(fld_value)
-{
-	var ret=false;
-	if( typeof fld_value.key == 'undefined' )
-		{
-			ret = false;
-		}
-	else if( (parseInt(fld_value.key) == 1 || parseInt(fld_value.key) == 2) )
-		{
-			ret = true;
-		}
-	
-	return ret;
-}
+
 
 
 //Creat an object for unique identifier
