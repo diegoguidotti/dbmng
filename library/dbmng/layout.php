@@ -779,6 +779,7 @@ function layout_table( $result, $aForm, $aParam )
 
 	$html = "";
 	$html .= layout_table_navigation($result, $aForm, $aParam);
+	$html .= layout_table_insert($aForm, $aParam);
 	$html .= "<table $id_tbl $class>\n";
 	
 	$html .= layout_table_head( $aForm['fields'] );
