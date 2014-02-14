@@ -57,7 +57,8 @@
 			'ajax_url':'ajax.php',    //Where is locate the php with ajax function (relative to the current PHP file)
 			'auto_sync': 1,    			  //Save automatically to the server record by record
 			'inline':1,               //Enable editing in the table without creating a new form
-			'auto_edit':1                //Enable editing in the table without creating a new form
+			'auto_edit':1,            //Enable editing in the table without creating a new form
+			'mobile':1								//Enable jQuery-mobile css style
 		});  
 		db.start();
 		

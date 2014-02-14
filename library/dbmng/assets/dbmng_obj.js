@@ -74,6 +74,10 @@ function Dbmng(f , p) {
 		this.auto_edit=p.auto_edit;
 	}	
 
+	this.mobile=0;
+	if(p.mobile){
+		this.mobile=p.mobile;
+	}	
 
 	this.ajax_url='dbmng_ajax.php';
 	if(this.aParam.ajax_url){
@@ -167,7 +171,11 @@ Dbmng.prototype.createTable = function()
 	//Create the two container for the table and the form
 	
 	var html='';
-	html += "<div id='dbmng_table_header'><h1 class='dbmng_table_label'>" + obj.aForm.table_name + "</h1></div>\n";
+	if( obj.mobile == 1 ){
+		html += "<div data-role='header'><h1>" + obj.aForm.table_name + "</h1></div>\n";
+	}else{
+		html += "<div id='dbmng_table_header'><h1 class='dbmng_table_label'>" + obj.aForm.table_name + "</h1></div>\n";
+	}	
 	html += "<table class='dbmng_table' id='"+this.id+"_table'>\n";
 
 	//Add header
