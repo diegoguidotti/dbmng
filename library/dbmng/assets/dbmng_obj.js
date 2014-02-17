@@ -822,6 +822,13 @@ Dbmng.prototype.prepareInsert = function(id_record){
 
 			var record= {};			
 			jQuery.each(obj.aForm.fields, function(index, field){ 
+				if(typeof window["dbmng_"+field.widget+"_prepare_val"] == "undefined") {
+					  record[index] = dbmng_widget_prepare_val(obj.id, id_record, index); 
+				}
+				else{
+					record[index] =  executeFunctionByName("dbmng_"+field.widget+"_prepare_val", window, obj.id, id_record, index);
+				}
+				/*
 				switch( field.widget )
 					{
 						case "checkbox":
@@ -834,6 +841,7 @@ Dbmng.prototype.prepareInsert = function(id_record){
 							record[index] = jQuery('#'+obj.id+'_'+id_record+'_'+index).val();
 							break;
 					}
+					*/
 				
 			});
 			obj.insertRecord({ 'state':'ins', 'record': record} , id_record);
@@ -843,25 +851,37 @@ Dbmng.prototype.prepareInsert = function(id_record){
 //create the record and lunch prepareUpdate
 Dbmng.prototype.prepareUpdate = function(id_record){
 		var obj=this;
+		var it=(obj.aData.records[id_record]);
+
 		jQuery.each(obj.aForm.fields, function(index, field){ 
 			if( ! dbmng_check_is_pk(field) ) 	
 				{
+					if(typeof window["dbmng_"+field.widget+"_prepare_val"] == "undefined") {
+							it.record[index] = dbmng_widget_prepare_val(obj.id, id_record, index); 
+					}
+					else{
+						  it.record[index] =  executeFunctionByName("dbmng_"+field.widget+"_prepare_val", window, obj.id, id_record, index);
+					}
+
+				/**
 					switch( field.widget )
 						{
 							case "checkbox":
-								item.record[index] = 0;
+								it.record[index] = 0;
 								if( jQuery('#'+obj.id+'_'+id_record+'_'+index).prop('checked') )
-									item.record[index] = 1;
+									it.record[index] = 1;
 								break;
 							
 							default:
-								item.record[index] = jQuery('#'+obj.id+'_'+id_record+'_'+index).val();
+								it.record[index] = jQuery('#'+obj.id+'_'+id_record+'_'+index).val();
 								break;
 						}
+				*/
 				}
 		});
-		item.state='upd';
-		obj.updateRecord(item, id_record);
+		it.state='upd';
+
+		obj.updateRecord(it, id_record);
 }
 
 // The function add an input widget

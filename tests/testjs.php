@@ -1,6 +1,7 @@
 <html>
 <head>
 <script type="text/javascript" src="../library/dbmng/assets/dbmng_obj.js?mpvqml"></script>
+<script type="text/javascript" src="../library/dbmng/assets/dbmng_widgets.js?mpvqml"></script>
 
 <!-- jQuery and JQ Mobile -->
 <!--
