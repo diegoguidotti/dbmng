@@ -671,7 +671,14 @@ function layout_table_body( $result, $aForm, $aParam )
 	$recs = 0;
 	$pages = 1;
 	if( isset($_GET['pages']) )
-		$pages = $_GET['pages'];
+		{
+			$pages = $_GET['pages'];
+			$_SESSION[$aForm['table_name'].'_pages'] = $pages;
+		}
+	else if( isset($_SESSION[$aForm['table_name'].'_pages']) )
+		{
+			$pages = $_SESSION[$aForm['table_name'].'_pages'];
+		}
 	
 	$page_recs = dbmng_num_rows($result);
 	if( isset($aParam['tbl_navigation']) )
