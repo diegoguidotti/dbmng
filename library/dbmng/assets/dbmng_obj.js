@@ -462,7 +462,19 @@ Dbmng.prototype.createRow = function (value, id_record)
 						if( layout_view_field_table(f.skip_in_tbl) ){
 							if (o.hasOwnProperty(key))
 							{
-								html_row += "<td>" + o[key] + "</td>";
+								
+								var field_value=o[key];
+								var html_value='';
+
+								if(typeof window["dbmng_"+f.widget+"_html"] == "undefined") {
+										html_value = dbmng_widget_html(field_value, f ); 
+								}
+								else{
+										html_value =  executeFunctionByName("dbmng_"+f.widget+"_html", window, field_value, f );
+								}
+
+
+								html_row += "<td>" + html_value + "</td>";
 							}
 							else{
 								html_row += "<td>-</td>";
@@ -859,119 +871,15 @@ Dbmng.prototype.prepareUpdate = function(id_record){
 // The function add an input widget
 Dbmng.prototype.layout_form_widget = function( fld, field, id_record, value, more, act )
 {	
-	switch( field.widget )
-		{
-			// =============== textarea widget =============== //
-			case "textarea":
-				html  = "<textarea  name='" + fld + "' id='"+this.id+"_"+id_record+"_"+fld+"' ";//.layout_get_nullable($fld_value)." >";
-				html += Dbmng.layout_get_nullable(field,act);
-				html += " >\n";
-				html += value;	
-				html += "</textarea>\n";			
-				break;
-			
-			// =============== checkbox widget =============== //
-			case "checkbox":
-				console.log("incheck");
-				console.log(value);
-				html = "<input class='dbmng_checkbox' type='checkbox' name='"+fld+"' id='"+this.id+"_"+id_record+"_"+fld+"' ";
-			  if( value == 1 || (value != 0 && field.default == 1) )
-			    {
-						html += " checked='true' ";
-					}	
-			  //the field will never reply with a null value (true or false)
-				//if setted as a non_nullable it will accept only true values
-				//$html .= layout_get_nullable($fld_value);	
-				html += " />\n";
-				break;
-				
-			// =============== date widget =============== //
-			case "date":
-				datetime_str='';
-			
-				//format the date string 
-				if( typeof value!="undefined"  && value!='' )
-					{
-						datetime = new Date(value);             //DateTime::createFromFormat('Y-m-d', $value);
-						datetime_str= datetime.toString("d-m-Y"); //datetime->format('d-m-Y');
-					}
-			
-				//add a new input field for the datapicker ui
-				html  = "<input type='text' name='"+fld+"_tmp' id='"+fld+"_tmp' value='"+datetime_str+"' />";
-				//keep hidden the "real" input form
-				html += "<input type='hidden' name='"+fld+"' id='"+fld+"' ";
-				html += " value= '"+value+"' ";	
-				html += Dbmng.layout_get_nullable(field,act);	
-				html += " />\n";
-				//html +='<script>  jQuery(function() { jQuery( "#'.$fld.'_tmp" ).datepicker({altField: \'#'.$fld.'\', dateFormat:\'dd-mm-yy\' , altFormat: \'yy-mm-dd\'});  });  </script>';
-				break;
-			
-			// =============== input widget =============== //
-			default:
-				html  = "<input type='text' name='"+fld+"' id='"+this.id+"_"+id_record+"_"+fld+"' " + more;
-				html += " value= '"+value+"' ";	
-				html += Dbmng.layout_get_nullable(field,act);
-				html += " />\n";
-				break;
-		}
+	var obj=this;
+	var html='';
+	if(typeof window["dbmng_"+field.widget+"_form"] == "undefined") {
+			html = dbmng_widget_form(obj.id, fld, field, id_record, value, more, act ); 
+	}
+	else{
+		  html =  executeFunctionByName("dbmng_"+field.widget+"_form", window, obj.id, fld, field, id_record, value, more, act );
+	}
 
-/*	
-	// =============== textarea widget =============== //
-	if( field.widget == "textarea" )
-		{		
-			html = "<textarea  name='" + fld + "' id='"+this.id+"_"+id_record+"_"+fld+"' ";//.layout_get_nullable($fld_value)." >";
-			Dbmng.layout_get_nullable(field,act);
-			html += " >\n";
-			html += value;	
-			html += "</textarea>\n";			
-		}
-
-	// =============== checkbox widget =============== //
-	else if( field.widget == "checkbox" )
-		{
-		console.log("incheck");
-		console.log(value);
-			html = "<input class='dbmng_checkbox' type='checkbox' name='"+fld+"' id='"+this.id+"_"+id_record+"_"+fld+"' ";
-			//if( value==1 || (value<>0 && field.default == 1) )
-		  if( value == 1 || (value != 0 && field.default == 1) )
-		    {
-					html += " checked='true' ";
-				}	
-		  //the field will never reply with a null value (true or false)
-			//if setted as a non_nullable it will accept only true values
-			//$html .= layout_get_nullable($fld_value);	
-			html += " />\n";
-		}	
-	// =============== date widget =============== //
-	else if( field.widget == "date" )
-		{
-			datetime_str='';
-		
-			//format the date string 
-			if( typeof value!="undefined"  && value!='' )
-				{
-					datetime = new Date(value);             //DateTime::createFromFormat('Y-m-d', $value);
-					datetime_str= datetime.toString("d-m-Y"); //datetime->format('d-m-Y');
-				}
-		
-			//add a new input field for the datapicker ui
-			html  = "<input type='text' name='"+fld+"_tmp' id='"+fld+"_tmp' value='"+datetime_str+"' />";
-			//keep hidden the "real" input form
-			html += "<input type='hidden' name='"+fld+"' id='"+fld+"' ";
-			html += " value= '"+value+"' ";	
-			html += Dbmng.layout_get_nullable(field,act);	
-			html += " />\n";
-			//html +='<script>  jQuery(function() { jQuery( "#'.$fld.'_tmp" ).datepicker({altField: \'#'.$fld.'\', dateFormat:\'dd-mm-yy\' , altFormat: \'yy-mm-dd\'});  });  </script>';
-		}
-	// =============== input widget =============== //
-	else 
-		{
-			html  = "<input type='text' name='"+fld+"' id='"+this.id+"_"+id_record+"_"+fld+"' " + more;
-			html += " value= '"+value+"' ";	
-			Dbmng.layout_get_nullable(field,act);
-			html += " />\n";
-		}
-*/
 	return html;
 }
 
