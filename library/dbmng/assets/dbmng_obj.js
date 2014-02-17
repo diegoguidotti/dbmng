@@ -827,22 +827,7 @@ Dbmng.prototype.prepareInsert = function(id_record){
 				}
 				else{
 					record[index] =  executeFunctionByName("dbmng_"+field.widget+"_prepare_val", window, obj.id, id_record, index);
-				}
-				/*
-				switch( field.widget )
-					{
-						case "checkbox":
-							record[index] = 0;
-							if( jQuery('#'+obj.id+'_'+id_record+'_'+index).prop('checked') )
-								record[index] = 1;
-							break;
-						
-						default:
-							record[index] = jQuery('#'+obj.id+'_'+id_record+'_'+index).val();
-							break;
-					}
-					*/
-				
+				}								
 			});
 			obj.insertRecord({ 'state':'ins', 'record': record} , id_record);
 }
@@ -863,20 +848,7 @@ Dbmng.prototype.prepareUpdate = function(id_record){
 						  it.record[index] =  executeFunctionByName("dbmng_"+field.widget+"_prepare_val", window, obj.id, id_record, index);
 					}
 
-				/**
-					switch( field.widget )
-						{
-							case "checkbox":
-								it.record[index] = 0;
-								if( jQuery('#'+obj.id+'_'+id_record+'_'+index).prop('checked') )
-									it.record[index] = 1;
-								break;
-							
-							default:
-								it.record[index] = jQuery('#'+obj.id+'_'+id_record+'_'+index).val();
-								break;
-						}
-				*/
+
 				}
 		});
 		it.state='upd';
