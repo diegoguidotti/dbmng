@@ -818,11 +818,18 @@ function layout_table_navigation($result, $aForm, $aParam)
 	$paging = "";
 	if( isset($aParam['tbl_navigation']) )
 		{
+			$pag = 1;
+			if( isset($_SESSION[$aForm['table_name'].'_pages']) )
+				$pag = $_SESSION[$aForm['table_name'].'_pages'];
+			
 			$recs   = dbmng_num_rows($result);
 			$pages = ceil($recs / $aParam['tbl_navigation']);
 			for( $i = 1; $i <= $pages; $i++ )
 				{
-					$paging .= "<a href='?tbl=".$tbl."&pages=".$i."'>".$i."</a> "; //?tbl=".$tbl."
+					if( $i == $pag )
+						$paging .= "<a href='?tbl=".$tbl."&pages=".$i."'><b>".$i."</b></a> "; //?tbl=".$tbl."
+					else
+						$paging .= "<a href='?tbl=".$tbl."&pages=".$i."'>".$i."</a> "; //?tbl=".$tbl."
 				}
 		}
 	return $paging;
