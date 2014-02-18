@@ -57,6 +57,25 @@ dbmng_xxxx_html = function(val, field ){
 }
 
 */
+dbmng_select_form = function(obj_id,  fld, field, id_record, value, more, act ){
+	var html='';
+	html = "<select  name='"+fld+"' id='"+obj_id+"_"+id_record+"_"+fld+"' ";
+	html += Dbmng.layout_get_nullable(field,act);
+	html += " >\n";
+	html += "<option/> \n";	
+
+	jQuery.each(field.voc_val, function(k, v){
+			s = "";
+			console.log(k+" "+value+ " " + (k==value));
+			if(k == value){
+				s = " selected='true' ";
+			}
+			html += "<option "+s+" value='" + k + "'>" + v + "</option> \n";	
+	});
+	html += "</select>\n";
+	return html;
+}
+
 
 
 

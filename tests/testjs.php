@@ -35,7 +35,7 @@
 
 	//get the array storing the table metadata from record 1 in table dbmng_tables
 	if( gethostname() == "Galveston" || $_SERVER["HTTP_HOST"] == "www.michelemammini.it" )
-		$id_table = 1;
+		$id_table = 5;
 	else if( $_SERVER["HTTP_HOST"] == "www.climasouth.eu" )
 		$id_table = 20;
 	else
