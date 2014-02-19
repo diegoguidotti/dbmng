@@ -134,7 +134,11 @@ dbmng_password_form = function(obj_id,  fld, field, id_record, value, more, act 
 }
 
 dbmng_password_html = function(val, field ){
-	var ret  = '*****';
+var ret  = '';
+
+	if( val != null )
+		ret = '*****';
+		
 	return ret;
 }
 
