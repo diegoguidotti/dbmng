@@ -819,17 +819,23 @@ function layout_table_navigation($result, $aForm, $aParam)
 {
 	$tbl = $aForm['table_name'];
 	$link = "";
-	if( $tbl == $_GET['tbl'] )
+	if( isset($_GET['tbl']) )
 		{
-			foreach( $_GET as $k => $v )
+			if( $tbl == $_GET['tbl'] )
 				{
-					if( $k != "q" )
+					foreach( $_GET as $k => $v )
 						{
-							$link .= $k."=".$v."&";
+							if( $k != "q" )
+								{
+									$link .= $k."=".$v."&";
+								}
 						}
 				}
 		}
-	
+	else
+		{
+			$link = "tbl=".$tbl."&";
+		}
 	//print_r($_GET);
 	
 	$paging = "";

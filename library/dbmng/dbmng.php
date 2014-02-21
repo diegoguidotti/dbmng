@@ -229,14 +229,15 @@ function dbmng_crud($aForm, $aParam=null)
 		}
 
 	//echo($_REQUEST["act"]."|".$view_table."|".$do_update);
-
 	if($view_table)
 		{
 			if( $do_update == 2 )
 				{
 					$html .= dbmng_create_form($aForm, $aParam, $do_update);
 				}
-			$html .= dbmng_create_table($aForm, $aParam);
+				$html .= dbmng_create_table($aForm, $aParam);
+				if( isset($_SESSION[$aForm['table_name'].'_goback']) )
+					print_r($_SESSION[$aForm['table_name'].'_goback']);
 		}
 	else
     $html .= dbmng_create_form($aForm, $aParam, $do_update);
@@ -428,7 +429,6 @@ function dbmng_get_js_array($aForm, $aParam)
 function dbmng_create_form($aForm, $aParam, $do_update) 
 {
 	$html      = "";
-	
 	//create the $val array storing all the record data
   if( $do_update == 1 )
     {
@@ -443,13 +443,13 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 						}
 				}
 			
-			if($aForm['table_name']==$_REQUEST['tbln'])
-				{
+//			if($aForm['table_name']==$_REQUEST['tbln'])
+//				{
 						$where = substr($where, 0, strlen($where)-4);			
 	
 						$result = dbmng_query("select * FROM " . $aForm['table_name'] . " WHERE $where ", $var);
 						$vals   = dbmng_fetch_object($result); //$result->fetchObject();
-				}
+//				}
 				//print_r($vals);
 		}
 						
@@ -533,7 +533,13 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 								}
 							else
 								{
-									if( $_REQUEST['act'] == 'ins' || $_REQUEST['act'] == 'upd' || $is_searchable )
+									$bViewFld = true;
+									if( isset($_REQUEST['act']) && $_REQUEST['act'] == "do_search" && !$is_searchable )
+										$bViewFld = false;
+									
+									
+										
+									if( $bViewFld ) //$_REQUEST['act'] == 'ins' || $_REQUEST['act'] == 'upd' || $is_searchable )
 										{
 											$html.='<div class="dbmng_form_row dbmng_form_field_'.$fld.'">';
 											$html .= layout_get_label($fld, $fld_value);
