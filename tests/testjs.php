@@ -39,7 +39,7 @@
 	else if( $_SERVER["HTTP_HOST"] == "www.climasouth.eu" )
 		$id_table = 20;
 	else
-		$id_table = 11;
+		$id_table = 14;
 
 	$aForm    = dbmng_get_form_array($id_table); 
 	//print_r($aForm);
@@ -57,8 +57,8 @@
 			'div_element':'table2',   //div id containing the table
 			'ajax_url':'ajax.php',    //Where is locate the php with ajax function (relative to the current PHP file)
 			'auto_sync': 1,    			  //Save automatically to the server record by record
-			'inline':1,               //Enable editing in the table without creating a new form
-			'auto_edit':1,            //Enable editing in the table without creating a new form
+			'inline':0,               //Enable editing in the table without creating a new form
+			'auto_edit':1,            //Run the synch after moving on a new row; auto edit is available only in auto_sync mode
 			'mobile':1								//Enable jQuery-mobile css style
 		});  
 		db.start();

@@ -60,7 +60,9 @@ dbmng_select_form = function(obj_id,  fld, field, id_record, value, more, act ){
 }
 
 dbmng_select_html = function(val, field ){
-	var ret  = field.voc_val[val];
+	var ret="-";
+	if(field.voc_val[val])
+		ret  = field.voc_val[val];
 	return ret;
 }
 

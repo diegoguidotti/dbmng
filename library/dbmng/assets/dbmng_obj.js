@@ -70,7 +70,8 @@ function Dbmng(f , p) {
 	}	
 
 	this.auto_edit=0;
-	if(p.auto_edit){
+	//auto edit is available only for auto_sync
+	if(p.auto_edit && this.auto_sync==1){
 		this.auto_edit=p.auto_edit;
 	}	
 
@@ -236,26 +237,28 @@ Dbmng.prototype.createTable = function()
 
 
 	if(!obj.auto_sync){
+
 		jQuery('#'+obj.id+'_view').append(" - <a id='"+obj.id+"_save'>"+t("Save")+"</a>");
-		jQuery('#'+obj.id+'_view').append(" - <a id='"+obj.id+"_reload'>"+t("Reset")+"</a>");
 	
 		jQuery('#'+obj.id+"_save").click(function(){
 			obj.syncData();		
-		});
-	
-		jQuery('#'+obj.id+"_reload").click(function(){
-
-				if(obj.isSaved()){
-					obj.resetDb();
-				}
-				else{
-					var r=confirm(t('Do you confirm? You will lose all the local changes.'));
-					if (r==true){
-						obj.resetDb();	
-					}
-				}
-		});
+		});	
 	}
+
+	jQuery('#'+obj.id+'_view').append(" - <a id='"+obj.id+"_reload'>"+t("Reset")+"</a>");
+	jQuery('#'+obj.id+"_reload").click(function(){
+
+			if(obj.isSaved()){
+				obj.resetDb();
+			}
+			else{
+				var r=confirm(t('Do you confirm? You will lose all the local changes.'));
+				if (r==true){
+					obj.resetDb();	
+				}
+			}
+	});
+
 
 
 	if(this.auto_edit && this.inline){
@@ -408,8 +411,18 @@ Dbmng.prototype.syncData = function()
 Dbmng.prototype.attachCommand = function (id_record) 
 	{
 		var obj=this;
-		jQuery('#'+obj.id+'_del_'+id_record).click(function(e){							
-			obj.deleteRecord(id_record); 
+		jQuery('#'+obj.id+'_del_'+id_record).click(function(e){		
+
+			if(!obj.auto_sync){
+				obj.deleteRecord(id_record);
+			}
+			else{
+				var r=confirm(t('Do you confirm?'));
+				if (r==true){
+								obj.deleteRecord(id_record); 
+
+				}			
+			}
 			e.stopPropagation(); //stopPropagation block the auto_edit features when clicking on table row
 		});
 		jQuery('#'+obj.id+'_restore_'+id_record).click(function(e){						
@@ -775,7 +788,22 @@ Dbmng.prototype.createForm = function(id_record) {
 		jQuery.each(this.aForm.fields, function(index, field){ 			
 			//console.log(index + ": " + dbmng_check_is_pk(field));
 			value = '';
-			if( ! dbmng_check_is_pk(field) )
+			
+
+			
+			var view_field=true;
+			if(dbmng_check_is_pk(field)){
+				view_field=false;
+			}
+			else{
+				if(!layout_view_field_table(field.skip_in_tbl) && obj.inline==1)
+					view_field=false;
+			}
+			
+
+
+			if( view_field )
+			//if( !dbmng_check_is_pk(field) )
 				{
 					if(obj.inline==1){
 						form+='<td>';
@@ -797,7 +825,7 @@ Dbmng.prototype.createForm = function(id_record) {
 						form+='</td>';
 					}
 				}
-			else
+			else if (dbmng_check_is_pk(field))
 				{
 					form+="<td>&nbsp</td>";
 				}

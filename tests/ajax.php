@@ -66,7 +66,7 @@
 												$aVal = array_merge( $aVal, array(":".$fld => $val['record'][$fld]) );
 											}
 											else{
-												$err_msg .= "Field ".	$fld ." not found in val ";																		
+												//$err_msg .= "Field ".	$fld ." not found in val ";																		
 											}
 										}
 								}
@@ -108,7 +108,9 @@
 												$aVal = array_merge( $aVal, array(":".$fld => $val['record'][$fld]) );
 											}
 											else{
-												$err_msg .= "Field ".	$fld ." not found in val ";																		
+												//there are a missing fields in update
+												//it may be thata field will not be editable
+												//$err_msg .= "Field ".	$fld ." not found in val ";																		
 											}
 										}
 									else{
