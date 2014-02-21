@@ -785,8 +785,11 @@ function layout_table( $result, $aForm, $aParam )
 		}
 
 	$html = "";
-	$html .= layout_table_navigation($result, $aForm, $aParam);
-	$html .= layout_table_insert($aForm, $aParam);
+	if( isset($aParam['tbl_navigation']) )
+		if( dbmng_num_rows($result) > $aParam['tbl_navigation'] )
+			$html .= layout_table_navigation($result, $aForm, $aParam);
+
+	//$html .= layout_table_insert($aForm, $aParam);
 	$html .= "<table $id_tbl $class>\n";
 	
 	$html .= layout_table_head( $aForm['fields'] );
@@ -815,21 +818,41 @@ function layout_table( $result, $aForm, $aParam )
 function layout_table_navigation($result, $aForm, $aParam)
 {
 	$tbl = $aForm['table_name'];
+	$link = "";
+	if( $tbl == $_GET['tbl'] )
+		{
+			foreach( $_GET as $k => $v )
+				{
+					if( $k != "q" )
+						{
+							$link .= $k."=".$v."&";
+						}
+				}
+		}
+	
+	//print_r($_GET);
+	
 	$paging = "";
 	if( isset($aParam['tbl_navigation']) )
 		{
 			$pag = 1;
-			if( isset($_SESSION[$aForm['table_name'].'_pages']) )
-				$pag = $_SESSION[$aForm['table_name'].'_pages'];
+			if( isset($_GET['pages'] ) )
+				{
+					$pag = $_GET['pages'];
+				}
+			else if( isset($_SESSION[$aForm['table_name'].'_pages']) )
+				{
+					$pag = $_SESSION[$aForm['table_name'].'_pages'];
+				}
 			
 			$recs   = dbmng_num_rows($result);
 			$pages = ceil($recs / $aParam['tbl_navigation']);
 			for( $i = 1; $i <= $pages; $i++ )
 				{
 					if( $i == $pag )
-						$paging .= "<a href='?tbl=".$tbl."&pages=".$i."'><b>".$i."</b></a> "; //?tbl=".$tbl."
+						$paging .= "<a href='?".$link."pages=".$i."'><b>".$i."</b></a> "; //?tbl=".$tbl."
 					else
-						$paging .= "<a href='?tbl=".$tbl."&pages=".$i."'>".$i."</a> "; //?tbl=".$tbl."
+						$paging .= "<a href='?".$link."pages=".$i."'>".$i."</a> "; //?tbl=".$tbl."
 				}
 		}
 	return $paging;
