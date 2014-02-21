@@ -182,7 +182,12 @@ function dbmng_fetch_object($res)
 			switch( DBMNG_DB )
 			{
 				case "pdo":
-					$fo = $res[0];
+					if(count($res)>0){
+						$fo = $res[0];
+					}
+					else{
+						$fo=null;
+					}
 					break;
 			}
 			break;

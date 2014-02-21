@@ -3,13 +3,6 @@
 <script type="text/javascript" src="../library/dbmng/assets/dbmng_obj.js?mpvqml"></script>
 <script type="text/javascript" src="../library/dbmng/assets/dbmng_widgets.js?mpvqml"></script>
 
-<!-- jQuery and JQ Mobile -->
-<!--
-<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
-<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-<script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
--->
-
 <link rel="stylesheet" href="../libs/jquery.mobile-1.3.2.min.css" />
 <script src="../libs/jquery-1.9.1.min.js"></script>
 <script src="../libs/jquery.mobile-1.3.2.min.js"></script>
@@ -42,6 +35,8 @@
 		$id_table = 14;
 
 	$aForm    = dbmng_get_form_array($id_table); 
+
+
 	//print_r($aForm);
 	//echo "<br/>" . DBMNG_LIB_PATH;
 	//echo dbmng_crud($aForm);
