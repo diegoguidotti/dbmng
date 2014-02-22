@@ -54,9 +54,9 @@ function prepare_hidden_var_form($aParam)
 function layout_get_nullable($fld_value)
 	{
 		$ht = "";
-		if( isset($_REQUEST['act']) )
+		if( isset($_REQUEST['act2']) )
 			{
-				if( !isset($_REQUEST['act']) == "search" && !isset($_REQUEST['act']) == "do_search" )
+				if( !isset($_REQUEST['act2']) == "do_search" ) //!isset($_REQUEST['act2']) == "search" && 
 					{
 						if(	isset($fld_value['nullable']) && $fld_value['nullable'] == 0 )
 								$ht .= "required ";
@@ -82,9 +82,9 @@ function layout_get_label($fld, $fld_value)
 			$lb =  $fld_value['label_long'];			
 		
 		$sRequired = "";
-		if( isset($_REQUEST['act']) )
+		if( isset($_REQUEST['act2']) )
 			{
-				if( $_REQUEST['act'] != "search" && !$_REQUEST['act'] == "do_search" )
+				if( !$_REQUEST['act2'] == "do_search" ) // $_REQUEST['act2'] != "search" && 
 					{
 						if(isset($fld_value['nullable']) && $fld_value['nullable'] == 0)
 							$sRequired = "<span class='dbmng_required'>*</span>";

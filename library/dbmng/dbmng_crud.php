@@ -40,9 +40,6 @@ function dbmng_create_form_process($aForm, $aParam)
 					if($_REQUEST['act']=='prt_tbl')
 						dbmng_print_table($aForm, $aParam);
 
-					// search record
-					if($_REQUEST['act']=='do_search')
-						dbmng_search($aForm, $aParam);
 				}
 			else
 				{
@@ -50,6 +47,18 @@ function dbmng_create_form_process($aForm, $aParam)
 					echo t('You have not the right to access to the table you request') .  ' ' . $aForm['table_name'] . ' ' . $_REQUEST['tbln'] . '!';
 				}
 		}
+
+	if(isset($_REQUEST['tbln']) && isset($_REQUEST['act2']))
+		{
+			//check if the table correspond to the table requested in the form
+			if($aForm['table_name']==$_REQUEST['tbln'])
+				{
+					// search record
+					if($_REQUEST['act2']=='do_search')
+						dbmng_search($aForm, $aParam);
+				}
+		}
+
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -94,9 +103,9 @@ function dbmng_delete($aForm, $aParam)
 */
 function dbmng_search($aForm, $aParam) 
 {
-	if( isset($_REQUEST['act']) )
+	if( isset($_REQUEST['act2']) )
 		{
-			if( $_REQUEST['act'] == 'do_search' )
+			if( $_REQUEST['act2'] == 'do_search' )
 				{
 
 				}

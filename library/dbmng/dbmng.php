@@ -210,17 +210,24 @@ function dbmng_crud($aForm, $aParam=null)
 
 	if( isset($_REQUEST["act"]) )
 		{
-			if($_REQUEST["act"]=='ins' || $_REQUEST["act"]=='upd' || $_REQUEST["act"]=='search' || $_REQUEST["act"]=='do_search' )
+			if($_REQUEST["act"]=='ins' || $_REQUEST["act"]=='upd')
 				{
 					$view_table = false;
 					if($_REQUEST["act"]=='upd')
 						$do_update = 1; //true;
-					
-					if($_REQUEST["act"]=='search' || $_REQUEST["act"]=='do_search' )
-						{
-							$do_update = 2;
-							$view_table = true;
-						}
+				}
+			else
+				{
+					$view_table = true;
+				}
+		}
+
+	if( isset($_REQUEST["act2"]) )
+		{
+			if( $_REQUEST["act2"]=='do_search' ) //$_REQUEST["act2"]=='search' || 
+				{
+					$do_update = 2;
+					$view_table = true;
 				}
 			else
 				{
@@ -271,9 +278,9 @@ function dbmng_get_data($aForm, $aParam)
 				}
 		}
 
-	if(isset($_REQUEST['act']))
+	if(isset($_REQUEST['act2']))
 		{
-			if($_REQUEST['act']=='do_search')
+			if($_REQUEST['act2']=='do_search')
 				{
 					foreach( $aForm['fields'] as $fld => $fld_value )
 						{
@@ -534,7 +541,7 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 							else
 								{
 									$bViewFld = true;
-									if( isset($_REQUEST['act']) && $_REQUEST['act'] == "do_search" && !$is_searchable )
+									if( isset($_REQUEST['act2']) && $_REQUEST['act2'] == "do_search" && !$is_searchable )
 										$bViewFld = false;
 									
 									
@@ -621,7 +628,7 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 		}
 	elseif( $do_update == 2 )
 		{
-			$html .= "<input type='hidden' name='act' value='do_search' />\n";
+			$html .= "<input type='hidden' name='act2' value='do_search' />\n";
 			$html .= "<input type='hidden' name='tbln' value='" . $aForm['table_name'] . "' />\n";
 			$html .= "<div class='dbmng_form_button'><input class='dbmng_form_button' type='submit' value='" . t('Search') . "' /></div>\n";
 			//$html .= "<div class='dbmng_form_button'><input class='dbmng_form_button' type='reset' value='" . t('Reset') . "' /></div>\n";
