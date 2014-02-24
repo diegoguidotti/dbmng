@@ -617,9 +617,13 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 						}
 				} //End of fields
 		} //End of form
-
+	
+	$hv = dbmng_search_add_hidden($aForm, $aParam, "POST");
+	
+	
 	if( $do_update == 1 )
 		{
+		
 			$html .= "<input type='hidden' name='act' value='do_upd' />\n";
 			$html .= "<input type='hidden' name='tbln' value='" . $aForm['table_name'] . "' />\n";
 			$html .= "<div class='dbmng_form_button'><input  type='submit' value='". t('Update') ."' /></div>\n";
@@ -638,6 +642,7 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 			//$html .= "<div class='dbmng_form_button'><input class='dbmng_form_button' type='reset' value='" . t('Reset') . "' /></div>\n";
 		}
 
+	$html .= $hv;
   $html .= "</form>\n";
   $html .= "</div>\n";
 

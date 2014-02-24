@@ -561,7 +561,10 @@ function layout_table_action( $aForm, $aParam, $id_record )
 				}
 			$act2="";
 			if( isset($_REQUEST['act2']) )
-				$act2="&amp;act2=".$_REQUEST['act2'];
+				{
+					$act2="&amp;act2=".$_REQUEST['act2'];
+					$hv.= dbmng_search_add_hidden($aForm, $aParam, "GET");
+				}
 
 			if( $nUpd == 1 ) 
 				{

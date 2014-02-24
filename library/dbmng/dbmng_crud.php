@@ -101,15 +101,35 @@ function dbmng_delete($aForm, $aParam)
 \param $aForm  		Associative array with all the characteristics
 \param $aParam  	Associative array with some custom variable used by the renderer
 */
-function dbmng_search($aForm, $aParam) 
+function dbmng_search_add_hidden($aForm, $aParam, $type) 
 {
-	if( isset($_REQUEST['act2']) )
+	$hv = "";
+	if(isset($_REQUEST['act2']))
 		{
-			if( $_REQUEST['act2'] == 'do_search' )
+			if($_REQUEST['act2']=='do_search')
 				{
-
+					if( $type == "POST" )
+						$hv .= "<input type='hidden' name='act2' value='".$_REQUEST['act2']."'\>";
+						
+					foreach( $aForm['fields'] as $fld => $fld_value )
+						{
+							if( $fld_value['is_searchable'] == 1 )
+								{
+									if(isset($_REQUEST[$fld]))
+										{
+											if( $_REQUEST[$fld] != '' )
+												{
+													if( $type == "POST" )
+														$hv .= "<input type='hidden' name='".$fld."' value='".$_REQUEST[$fld]."'/>";
+													else
+														$hv .= "&".$fld ."=". $_REQUEST[$fld];
+												}
+										}
+								}
+						}
 				}
 		}
+return $hv;
 }
 
 function dbmng_check_is_pk($fld_value)
