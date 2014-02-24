@@ -114,6 +114,8 @@
 											}
 										}
 									else{
+										//TODO: check if $val['record'][$fld] exists
+											//IF not exists block the update
 										$where = '  '.$fld.'=:'.$fld.' ';
 										$aVal = array_merge( $aVal, array(":".$fld => $val['record'][$fld]) );
 									}

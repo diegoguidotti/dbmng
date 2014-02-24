@@ -51,7 +51,7 @@
 		db  = new Dbmng(aForm, {
 			'div_element':'table2',   //div id containing the table
 			'ajax_url':'ajax.php',    //Where is locate the php with ajax function (relative to the current PHP file)
-			'auto_sync': 1,    			  //Save automatically to the server record by record
+			'auto_sync': 0,    			  //Save automatically to the server record by record
 			'inline':0,               //Enable editing in the table without creating a new form
 			'auto_edit':1,            //Run the synch after moving on a new row; auto edit is available only in auto_sync mode
 			'mobile':1								//Enable jQuery-mobile css style

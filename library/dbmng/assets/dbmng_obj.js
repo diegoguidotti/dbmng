@@ -682,15 +682,26 @@ Dbmng.prototype.updateRecord = function(item, id_record) {
 	 	if(!obj.aData.updated){
 				obj.aData.updated={};
 		}
-		obj.aData.updated[id_record]=(item);	
+
+		console.log(item);
+		if(item.state=='ins'){
+			console.log('do insert');
+			obj.aData.inserted[id_record]=(item);
+		}
+		else{
+			console.log('do update');
+			obj.aData.updated[id_record]=(item);	
+		}
 
 		//go back to table
 		if(!this.inline){
 			jQuery("#"+obj.id+"_view").show();	
 			jQuery("#"+obj.id+"_form").hide();
 		}	
-
-		jQuery('#'+obj.id+"_"+id_record).removeClass( "ok" ).addClass( "upd" );
+		
+		if(!jQuery('#'+obj.id+"_"+id_record).hasClass("ins")){
+			jQuery('#'+obj.id+"_"+id_record).removeClass( "ok" ).addClass( "upd" );
+		}
 		jQuery('#'+obj.id+"_"+id_record).html(obj.createRow(item, id_record));
 		//You need to attach again the restore button
 		obj.attachCommand(id_record);
@@ -891,8 +902,9 @@ Dbmng.prototype.prepareUpdate = function(id_record){
 
 				}
 		});
-		it.state='upd';
-
+		if(it.state!='ins'){
+			it.state='upd';
+		}
 		obj.updateRecord(it, id_record);
 }
 
