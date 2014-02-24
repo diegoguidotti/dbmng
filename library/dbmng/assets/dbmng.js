@@ -415,4 +415,10 @@ function dbmng_leaflet(data, aForm, aParam){
 	});	
 }
 
-
+function dbmng_table_getaction ( idtable, actiontype )
+{
+  //jQuery('#idtableaction #actiontype').val(actiontype);
+  //jQuery('#idtableaction').submit();
+  jQuery('#'+idtable +' #actiontype').val(actiontype);
+  jQuery('#'+idtable).submit();
+}

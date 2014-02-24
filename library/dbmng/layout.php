@@ -90,7 +90,11 @@ function layout_get_label($fld, $fld_value)
 							$sRequired = "<span class='dbmng_required'>*</span>";
 					}
 			}
-		
+		else
+			{
+				if(isset($fld_value['nullable']) && $fld_value['nullable'] == 0)
+					$sRequired = "<span class='dbmng_required'>*</span>";
+			}		
 		return "<label for='$fld'>" . t($lb) . $sRequired . "</label>\n";
 	}
 
@@ -434,7 +438,7 @@ function layout_form_multiselect( $fld, $fld_value, $value )
 
 	$html .= "\n<script type='text/javascript'>\n";
 	$html .= "var aMultiSelectData={'res' : ".json_encode($aVoc).", 'field_name': '".$fld."', ".$sKey."};\n";
-	echo $sKey;
+
 	if( !isset($value) )
 		{
 			$html .= "dbmng_multi1();\n";
@@ -548,18 +552,53 @@ function layout_table_action( $aForm, $aParam, $id_record )
 	
 	$html = "";
 	$hv   = prepare_hidden_var($aParam);
-	if( $nDel == 1 )
+	if( true )
 		{
-			$jsc = "return confirm('".t('Are you sure?')."')";
-			$html .= '<a class="dbmng_delete_button" onclick="'.$jsc.'" href="?act=del&amp;tbln=' . $aForm['table_name'] . '&amp;' . $id_record .$hv.'">' . t('Delete') . '</a>' . "&nbsp;";
-		}
-	if( $nUpd == 1 ) 
-		$html .= "<a class='dbmng_update_button' href='?act=upd&amp;tbln=" . $aForm['table_name'] . "&amp;" . $id_record .$hv."'>" . t('Update') . "</a>" . "&nbsp;";
-	if( $nDup == 1 )
-		$html .= "<a class='dbmng_duplicate_button' href='?act=dup&amp;tbln=" . $aForm['table_name'] . "&amp;" . $id_record .$hv."'>" . t('Duplicate') . "</a>" . "&nbsp;";
-	if( $nPrt_rec == 1 )
-		$html .= "<a class='dbmng_print_rec_button' href='?act=prt_rec&amp;tbln=" . $aForm['table_name'] . "&amp;" . $id_record .$hv."' target='_blank'>" . t('PDF') . "</a>" . "&nbsp;";
+			if( $nDel == 1 )
+				{
+					$jsc = "return confirm('".t('Are you sure?')."')";
+					$html .= '<a class="dbmng_delete_button" onclick="'.$jsc.'" href="?act=del&amp;tbln=' . $aForm['table_name'] . '&amp;' . $id_record .$hv.'">' . t('Delete') . '</a>' . "&nbsp;";
+				}
+			$act2="";
+			if( isset($_REQUEST['act2']) )
+				$act2="&amp;act2=".$_REQUEST['act2'];
 
+			if( $nUpd == 1 ) 
+				{
+					$html .= "<a class='dbmng_update_button' href='?act=upd".$act2."&amp;tbln=" . $aForm['table_name'] . "&amp;" . $id_record .$hv."'>" . t('Update') . "</a>" . "&nbsp;";
+				}
+			if( $nDup == 1 )
+				$html .= "<a class='dbmng_duplicate_button' href='?act=dup".$act2."&amp;tbln=" . $aForm['table_name'] . "&amp;" . $id_record .$hv."'>" . t('Duplicate') . "</a>" . "&nbsp;";
+			if( $nPrt_rec == 1 )
+				$html .= "<a class='dbmng_print_rec_button' href='?act=prt_rec".$act2."&amp;tbln=" . $aForm['table_name'] . "&amp;" . $id_record .$hv."' target='_blank'>" . t('PDF') . "</a>" . "&nbsp;";
+		}
+	else
+		{
+			$id_rec = str_replace("&","",$id_record);
+			$id_rec = str_replace("=","",$id_record);
+			$fn = "frm_".$id_rec;
+			$html .= "<form name='tableaction' id='".$fn."' action='?' method='post'>";
+			$html .= '<input type="hidden" name="actiontype" id="actiontype" />';
+			if( isset($_REQUEST['act2']) )
+				{
+					$html .= '<input type="hidden" name="act2" id="act2" value="'.$_REQUEST['act2'].'"/>';
+				}
+			$html .= '<input type="hidden" name="tbln" id="tbln" value="'.$aForm['table_name'].'"/>';
+			$html .= '<input type="hidden" name="id_record" id="id_record" value=1/>';
+			//			echo '<br/><a href="javascript:dbmng_table_getaction(\''.$fn.'\', \'del\')">Delete</a>';
+			if( $nDel == 1 )
+				{
+					$jsc = "return confirm('".t('Are you sure?')."')";
+					$html .= '<a class="dbmng_delete_button" onclick="'.$jsc.'" href="javascript:dbmng_table_getaction(\''.$fn.'\', \'del\')">' . t('Delete') . '</a>' . "&nbsp;";
+				}
+			if( $nUpd == 1 ) 
+				$html .= '<a class="dbmng_update_button" href="javascript:dbmng_table_getaction(\''.$fn.'\', \'upd\')">' . t('Update') . "</a>" . "&nbsp;";
+			if( $nDup == 1 )
+				$html .= '<a class="dbmng_duplicate_button" href="javascript:dbmng_table_getaction(\''.$fn.'\', \'dup\')">' . t('Duplicate') . "</a>" . "&nbsp;";
+			if( $nPrt_rec == 1 )
+				$html .= '<a class="dbmng_print_rec_button" href="javascript:dbmng_table_getaction(\''.$fn.'\', \'prt_rec\')">' . t('PDF') . "</a>" . "&nbsp;";
+		}
+		
 	return $html;
 }
 

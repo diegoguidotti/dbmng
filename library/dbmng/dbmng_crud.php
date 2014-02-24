@@ -48,7 +48,7 @@ function dbmng_create_form_process($aForm, $aParam)
 				}
 		}
 
-	if(isset($_REQUEST['tbln']) && isset($_REQUEST['act2']))
+	if( isset($_REQUEST['tbln']) && isset($_REQUEST['act2']) && !isset($_REQUEST['act']) )
 		{
 			//check if the table correspond to the table requested in the form
 			if($aForm['table_name']==$_REQUEST['tbln'])

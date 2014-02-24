@@ -222,7 +222,7 @@ function dbmng_crud($aForm, $aParam=null)
 				}
 		}
 
-	if( isset($_REQUEST["act2"]) )
+	if( isset($_REQUEST["act2"]) && !isset($_REQUEST["act"]) )
 		{
 			if( $_REQUEST["act2"]=='do_search' ) //$_REQUEST["act2"]=='search' || 
 				{
@@ -243,11 +243,15 @@ function dbmng_crud($aForm, $aParam=null)
 					$html .= dbmng_create_form($aForm, $aParam, $do_update);
 				}
 				$html .= dbmng_create_table($aForm, $aParam);
-				if( isset($_SESSION[$aForm['table_name'].'_goback']) )
-					print_r($_SESSION[$aForm['table_name'].'_goback']);
+				//if( isset($_SESSION[$aForm['table_name'].'_goback']) )
+				//	print_r($_SESSION[$aForm['table_name'].'_goback']);
 		}
 	else
-    $html .= dbmng_create_form($aForm, $aParam, $do_update);
+		{
+			//echo "do_upd: ". $do_update;
+			$html .= dbmng_create_form($aForm, $aParam, $do_update);
+		}
+
 	return $html;
 }
 
@@ -541,7 +545,7 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 							else
 								{
 									$bViewFld = true;
-									if( isset($_REQUEST['act2']) && $_REQUEST['act2'] == "do_search" && !$is_searchable )
+									if( isset($_REQUEST['act2']) && $_REQUEST['act2'] == "do_search" && !isset($_REQUEST['act']) && !$is_searchable )
 										$bViewFld = false;
 									
 									
