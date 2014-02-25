@@ -49,7 +49,7 @@ dbmng_select_form = function(obj_id,  fld, field, id_record, value, more, act ){
 
 	jQuery.each(field.voc_val, function(k, v){
 		s = "";
-		console.log(k+" "+value+ " " + (k==value));
+		debug(k+" "+value+ " " + (k==value));
 		if(k == value){
 			s = " selected='true' ";
 		}
