@@ -9,7 +9,13 @@ function t(txt){
 	return txt;
 }
 
-/*  General class to visualize and edit a single table
+/////////////////////////////////////////////////////////////////////////////
+// Dbmng
+// ======================
+/// General class to visualize and edit a single table
+/**
+\param f  		Associative array with all the characteristics of the table
+\param p  		Associative array with some custom variable used by the renderer
 */
 function Dbmng(f , p) {
   this.aForm = f;
@@ -115,7 +121,12 @@ function Dbmng(f , p) {
 }
 
 
-//search for the data to the server and, if founded, create the table
+/////////////////////////////////////////////////////////////////////////////
+// Dbmng.prototype.start
+// ======================
+/// search for the data to the server and, if founded, create the table
+/**
+*/
 Dbmng.prototype.start = function()
 {
 	obj=this;
@@ -159,7 +170,12 @@ Dbmng.prototype.start = function()
 }
 
 
-//Populate the table using aData
+/////////////////////////////////////////////////////////////////////////////
+// Dbmng.prototype.createTable
+// ======================
+/// Populate the table using aData
+/**
+*/
 Dbmng.prototype.createTable = function(){	
 	//show the table and hide the form
 	jQuery("#"+this.id+"_view").show();	
@@ -288,14 +304,24 @@ Dbmng.prototype.createTable = function(){
 };
 
 
-//Populate the table using aData
+/////////////////////////////////////////////////////////////////////////////
+// Dbmng.prototype.resetDb
+// ======================
+/// Populate the table using aData
+/**
+*/
 Dbmng.prototype.resetDb = function() {
 	jQuery.jStorage.deleteKey(obj.id+"_data");
 	obj.start();		
 }
 
 
-//Populate the table using aData
+/////////////////////////////////////////////////////////////////////////////
+// Dbmng.prototype.syncData
+// ======================
+/// Populate the table using aData
+/**
+*/
 Dbmng.prototype.syncData = function() {	
 	var obj=this;
 	var q=jQuery(document).queue('myAjaxQueue', function() {
@@ -385,6 +411,12 @@ Dbmng.prototype.syncData = function() {
   }
 }
 
+/////////////////////////////////////////////////////////////////////////////
+// Dbmng.prototype.attachCommand
+// ======================
+/// this function add the available function for each table row
+/**
+*/
 Dbmng.prototype.attachCommand = function (id_record) {
 	var obj=this;
 
@@ -416,7 +448,12 @@ Dbmng.prototype.attachCommand = function (id_record) {
 	});
 }
 
-//check if there are data not synched with the db
+/////////////////////////////////////////////////////////////////////////////
+// Dbmng.prototype.isSaved
+// ======================
+/// check if there are data not synched with the db
+/**
+*/
 Dbmng.prototype.isSaved = function() {
 	var obj=this;
 	var il=0;
@@ -439,6 +476,12 @@ Dbmng.prototype.isSaved = function() {
 	}
 }
 
+/////////////////////////////////////////////////////////////////////////////
+// Dbmng.prototype.createRow
+// ======================
+/// this function create a table row
+/**
+*/
 Dbmng.prototype.createRow = function (value, id_record) {
 	var obj=this;
 	var state=value.state;
@@ -506,7 +549,12 @@ Dbmng.prototype.createRow = function (value, id_record) {
 }
 
 
-//The function delete one record
+/////////////////////////////////////////////////////////////////////////////
+// Dbmng.prototype.deleteRecord
+// ======================
+/// The function delete one record
+/**
+*/
 Dbmng.prototype.deleteRecord = function(id_record) {
 	//TODO deal with multiple key
 	var obj=this;
@@ -545,7 +593,12 @@ Dbmng.prototype.deleteRecord = function(id_record) {
 	obj.updateStorage();
 }				
 
-//The function delete one record
+/////////////////////////////////////////////////////////////////////////////
+// Dbmng.prototype.restoreRecord
+// ======================
+/// The function restore a record
+/**
+*/
 Dbmng.prototype.restoreRecord = function(id_record) {
 	//TODO deal with multiple key
 	var obj=this;
@@ -564,7 +617,12 @@ Dbmng.prototype.restoreRecord = function(id_record) {
 	obj.updateStorage();
 }			
 
-//The function duplicate one record
+/////////////////////////////////////////////////////////////////////////////
+// Dbmng.prototype.duplicateRecord
+// ======================
+/// The function duplicate a record
+/**
+*/
 Dbmng.prototype.duplicateRecord = function(id_record) {
 	//TODO deal with multiple key
 	var obj=this;
@@ -590,7 +648,12 @@ Dbmng.prototype.duplicateRecord = function(id_record) {
 }				
 
 
-//The function insert one record
+/////////////////////////////////////////////////////////////////////////////
+// Dbmng.prototype.insertRecord
+// ======================
+/// The function insert a new record
+/**
+*/
 Dbmng.prototype.insertRecord = function(item, temporary_id_record) {
 	//TODO deal with multiple key
 	var obj=this;
@@ -628,7 +691,12 @@ Dbmng.prototype.insertRecord = function(item, temporary_id_record) {
 	obj.updateStorage();
 }			
 
-//The function insert one record
+/////////////////////////////////////////////////////////////////////////////
+// Dbmng.prototype.updateRecord
+// ======================
+/// The function update a selected record
+/**
+*/
 Dbmng.prototype.updateRecord = function(item, id_record) {
 	//TODO deal with multiple key
 	var obj=this;
@@ -669,6 +737,12 @@ Dbmng.prototype.updateRecord = function(item, id_record) {
 }			
 
 
+/////////////////////////////////////////////////////////////////////////////
+// Dbmng.prototype.updateStorage
+// ======================
+/// The function update jStorage
+/**
+*/
 Dbmng.prototype.updateStorage = function() {
 	debug('upd storage on '+this.id);
 
@@ -682,8 +756,12 @@ Dbmng.prototype.updateStorage = function() {
 }
 
 	
-
-// The function get the label from metadb
+/////////////////////////////////////////////////////////////////////////////
+// Dbmng.layout_get_label
+// ======================
+/// The function get the label from metadb
+/**
+*/
 Dbmng.layout_get_label = function(field_name, field, act){
 	lb = field.label;
 
@@ -707,6 +785,12 @@ Dbmng.layout_get_label = function(field_name, field, act){
 }
 
 
+/////////////////////////////////////////////////////////////////////////////
+// Dbmng.prototype.createForm
+// ======================
+/// The function create the form
+/**
+*/
 //TODO: review create Form
 Dbmng.prototype.createForm = function(id_record) {
 	obj=this;
@@ -805,7 +889,12 @@ Dbmng.prototype.createForm = function(id_record) {
 }
 
 
-//create the record and lunch prepareInsert
+/////////////////////////////////////////////////////////////////////////////
+// Dbmng.prototype.prepareInsert
+// ======================
+/// create the record and lunch prepareInsert
+/**
+*/
 Dbmng.prototype.prepareInsert = function(id_record){
 	var record= {};			
 	jQuery.each(obj.aForm.fields, function(index, field){ 
@@ -820,7 +909,12 @@ Dbmng.prototype.prepareInsert = function(id_record){
 }
 
 
-//create the record and lunch prepareUpdate
+/////////////////////////////////////////////////////////////////////////////
+// Dbmng.prototype.prepareUpdate
+// ======================
+/// create the record and lunch prepareUpdate
+/**
+*/
 Dbmng.prototype.prepareUpdate = function(id_record){
 	var obj=this;
 	var it=(obj.aData.records[id_record]);
@@ -841,7 +935,12 @@ Dbmng.prototype.prepareUpdate = function(id_record){
 	obj.updateRecord(it, id_record);
 }
 
-// The function add an input widget
+/////////////////////////////////////////////////////////////////////////////
+// Dbmng.prototype.layout_form_widget
+// ======================
+/// The function add an input widget
+/**
+*/
 Dbmng.prototype.layout_form_widget = function( fld, field, id_record, value, more, act ){	
 	var obj=this;
 	var html='';
@@ -855,6 +954,12 @@ Dbmng.prototype.layout_form_widget = function( fld, field, id_record, value, mor
 	return html;
 }
 
+/////////////////////////////////////////////////////////////////////////////
+// Dbmng.layout_get_nullable
+// ======================
+/// The function get from metadb the nullable value for a specific fields
+/**
+*/
 Dbmng.layout_get_nullable = function( field, act ){
 	ht = "";
 	if(	typeof field.nullable != 'undefined' && field.nullable == 0 )
@@ -873,6 +978,12 @@ Dbmng.layout_get_nullable = function( field, act ){
 	return ht;
 }
 
+/////////////////////////////////////////////////////////////////////////////
+// dbmng_check_is_pk
+// ======================
+/// The function check if a field is a primary key
+/**
+*/
 function dbmng_check_is_pk(fld_value){
 	var ret=false;
 	if( typeof fld_value.key == 'undefined' ){
@@ -886,6 +997,12 @@ function dbmng_check_is_pk(fld_value){
 }
 
 
+/////////////////////////////////////////////////////////////////////////////
+// layout_view_field_table
+// ======================
+/// The function check if a field must be show in table view
+/**
+*/
 function layout_view_field_table(fld_value){
 	ret=true;	
 	if (typeof fld_value != 'undefined') {
