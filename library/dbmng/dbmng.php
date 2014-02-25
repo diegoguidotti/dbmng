@@ -409,9 +409,7 @@ function dbmng_get_js_array($aForm, $aParam)
 			$sObj .= "{";
 			//get the query results for each field
 			foreach ( $aForm['fields'] as $fld => $fld_value )
-				{
-					//Probably it is better to use the raw data instead of the formatted ones
-					//$value=dbmng_value_prepare_html($fld_value, $record->$fld);
+				{					
 					$value=$record->$fld;
 
 					//important! use json_encode to escape special characters
@@ -423,7 +421,11 @@ function dbmng_get_js_array($aForm, $aParam)
 		}
 	$sObj = substr($sObj, 0, strlen($sObj)-2);
 	
-	$html .= $sObj . "]}";
+	$html .= $sObj . "] ";
+
+	$html .= ', "aForm":'.json_encode($aForm);
+
+	$html .= "}";
 	return $html;
 }
 

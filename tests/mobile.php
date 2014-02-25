@@ -21,9 +21,12 @@
 </head>
 <body>
 
+
+
 	<div data-role="page"  id="login_page">
 		<div data-role="header" >
 			<h1>DBMNG - Login</h1>
+			<a href="#table_list" data-icon="home" data-role="button">Home</a>
 		</div>
 		<div data-role="content" >
 			<div id="login_message" ></div>
@@ -51,11 +54,15 @@
 	<div data-role="page"  id="table_list">
 		<div data-role="header" >
 			<h1>DBMNG - Table List</h1>
-			<a href="#login_page" data-icon="gear" data-role="button">Tools</a>
+			<a href="#table_list" data-icon="home" data-role="button">Home</a>
+			<a onClick="goToLogin()" data-icon="gear" data-role="button">Tools</a>
 		</div>
 		<div data-role="content" > <div id="table_list_container"></div>
 		</div>
 	</div>
+
+
+
 	<script type="text/javascript">
 
 		var base_call="ajax_mobile.php";

@@ -17,8 +17,8 @@ function t(txt){
 \param f  		Associative array with all the characteristics of the table
 \param p  		Associative array with some custom variable used by the renderer
 */
-function Dbmng(f , p) {
-  this.aForm = f;
+function Dbmng(idt , p) {
+  this.id_table = idt;
  
 	//check if an ajax call is running
 	this.running=false;
@@ -96,7 +96,7 @@ function Dbmng(f , p) {
 		this.ajax_url=this.aParam.ajax_url;
 	}
 
-	this.id='dbmng_'+f.table_name;
+	this.id='dbmng_'+this.id_table;
 	if(this.aParam.div_element){
 		this.id+='_'+this.aParam.div_element;
 	}
@@ -143,7 +143,7 @@ Dbmng.prototype.start = function()
 		this.am.addReq({ //jQuery.ajax({
 			url: this.ajax_url,
 			type: "POST",
-			data: {"aForm" : JSON.stringify(form), "get_records": true },
+			data: {"id_table" : obj.id_table, "get_records": true },
 			dataType: "json",
 			error: function (e) {
 				debug(e);
@@ -157,7 +157,9 @@ Dbmng.prototype.start = function()
 					jQuery.each(data.records,function(k,v){
 						newRecords[Guid.newGuid()]={'state':'ok', 'record':v};
 					});
-					obj.aData = {'records': newRecords};					
+					obj.aData = {'records': newRecords};
+					obj.aForm = data.aForm;
+					
 					obj.createTable();
 				}
 				else{
@@ -341,7 +343,7 @@ Dbmng.prototype.syncData = function() {
 			jQuery.ajax({
 				url: obj.ajax_url,
 				type: "POST",
-				data: {"aForm" : JSON.stringify(obj.aForm), "inserted":  JSON.stringify(obj.aData.inserted), "deleted": JSON.stringify(obj.aData.deleted) , "updated": JSON.stringify(obj.aData.updated) }, 
+				data: {"id_table" : obj.id_table, "inserted":  JSON.stringify(obj.aData.inserted), "deleted": JSON.stringify(obj.aData.deleted) , "updated": JSON.stringify(obj.aData.updated) }, 
 				dataType: "json",
 				success: function (data) {
 					if(data.deleted){

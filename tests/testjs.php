@@ -26,6 +26,7 @@
 	include(DBMNG_LIB_PATH.'dbmng/dbmng.php');
 	include(DBMNG_LIB_PATH.'dbmng/dbmng_standalone.php');
 
+	
 	//get the array storing the table metadata from record 1 in table dbmng_tables
 	if( gethostname() == "Galveston" || $_SERVER["HTTP_HOST"] == "www.michelemammini.it" )
 		$id_table = 1;
@@ -48,7 +49,7 @@
 <script type="text/javascript">
 	var db;
   jQuery(document).ready(function() {
-		db  = new Dbmng(aForm, {
+		db  = new Dbmng(<?php echo $id_table ?>, {
 			'div_element':'table2',   //div id containing the table
 			'ajax_url':'ajax.php',    //Where is locate the php with ajax function (relative to the current PHP file)
 			'auto_sync': 0,    			  //Save automatically to the server record by record
