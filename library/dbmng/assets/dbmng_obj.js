@@ -1,3 +1,13 @@
+var DEBUG=true;
+function debug(d){
+	if(DEBUG){
+		console.log(d);
+	}
+}
+
+function t(txt){
+	return txt;
+}
 
 /*  General class to visualize and edit a single table
 */
@@ -32,8 +42,8 @@ function Dbmng(f , p) {
 								requests.shift();
 								self.run.apply(self, []);
 	            };   
-							console.log('manda');
-							console.log(requests[0]);
+							debug('manda');
+							debug(requests[0]);
 	            $.ajax(requests[0]);
             } else {
               self.tid = setTimeout(function() {
@@ -85,7 +95,7 @@ function Dbmng(f , p) {
 		this.id+='_'+this.aParam.div_element;
 	}
 
-	console.log(this.id);
+	debug(this.id);
 	var obj=this;
 
 	var html="";
@@ -125,12 +135,12 @@ Dbmng.prototype.start = function()
 			data: {"aForm" : JSON.stringify(form), "get_records": true },
 			dataType: "json",
 			error: function (e) {
-				console.log(e);
-				console.log(e.responseText);
+				debug(e);
+				debug(e.responseText);
 			},
 
 			success: function (data) {
-				console.log(data);	
+				debug(data);	
 				if(data.records){
 					var newRecords={};
 					jQuery.each(data.records,function(k,v){
@@ -141,7 +151,7 @@ Dbmng.prototype.start = function()
 				}
 				else{
 					alert('no records returned');
-					console.log(data);
+					debug(data);
 				}
 			}
 		});
@@ -249,11 +259,11 @@ Dbmng.prototype.createTable = function(){
 	    }
 	    else{             
 	      var current=jQuery('#'+obj.id+"_table tr.working");
-	      console.log(current);
-	      console.log(current.length);
+	      debug(current);
+	      debug(current.length);
 	
 	      if(current.length>0){ //if exist an editing record save it
-	        console.log('save the record '+current.attr('id'));   
+	        debug('save the record '+current.attr('id'));   
 	        current.removeClass('working')
 	
 					var id_record=	current.attr('id').substring(obj.id.length+1,current.attr('id').length);
@@ -270,7 +280,7 @@ Dbmng.prototype.createTable = function(){
 					obj.createForm(id_record);	
 				}               
 	      el.addClass('working');
-	      console.log('Start editing record '+this.id);
+	      debug('Start editing record '+this.id);
 	    }        
 		}); 
 	}
@@ -292,13 +302,13 @@ Dbmng.prototype.syncData = function() {
 		obj.running=true;
 
 		if(obj.isSaved()){
-			console.log('NO DATA TO SAVE');
+			debug('NO DATA TO SAVE');
 			obj.running=false;
 		}
 		else {
 			obj.prog = obj.prog+1;
-			console.log('start '+obj.prog);
-			console.log(JSON.stringify(obj.aData.inserted));
+			debug('start '+obj.prog);
+			debug(JSON.stringify(obj.aData.inserted));
 
 			//TODO: check if it is better to use ajaxmanager
 			//obj.am.addReq({ //
@@ -347,7 +357,7 @@ Dbmng.prototype.syncData = function() {
 								}
 							}
 							else{							
-								console.log(v);
+								debug(v);
 								//obj.aData.records[k].error=v.error;
 							}
 						});
@@ -356,15 +366,15 @@ Dbmng.prototype.syncData = function() {
 					obj.createTable();
 					jQuery.jStorage.deleteKey(obj.id+"_data");
 
-					console.log('end '+obj.prog);
+					debug('end '+obj.prog);
 					obj.running=false;
 
 					//end of Success	
 				},
 				error: function (xhr, ajaxOptions, thrownError){
-			  	console.log(xhr);
+			  	debug(xhr);
 					obj.running=false;
-		  	 //console.log(thrownError);
+		  	 //debug(thrownError);
 			  }   
 			});	//end of Ajax
 		}
@@ -457,7 +467,7 @@ Dbmng.prototype.createRow = function (value, id_record) {
 				}
 			}
 			else{
-				console.log('field '+key+' not found in aForm' );
+				debug('field '+key+' not found in aForm' );
 			}
 		}
 	
@@ -500,10 +510,10 @@ Dbmng.prototype.createRow = function (value, id_record) {
 Dbmng.prototype.deleteRecord = function(id_record) {
 	//TODO deal with multiple key
 	var obj=this;
-	console.log("Find "+id_record+"to delete");
+	debug("Find "+id_record+"to delete");
 
 	var to_delete = obj.aData.records[id_record];	
-	console.log(to_delete);
+	debug(to_delete);
 
 	if(to_delete.state=='ins'){
 		delete obj.aData.records[id_record];
@@ -522,7 +532,7 @@ Dbmng.prototype.deleteRecord = function(id_record) {
 				obj.aData.deleted={};
 			}
 			obj.aData.deleted[id_record]=(to_delete);
-			console.log('delete record '+id_record);
+			debug('delete record '+id_record);
 		}
 		else{
 			alert('Error. record to delete not found');
@@ -539,12 +549,12 @@ Dbmng.prototype.deleteRecord = function(id_record) {
 Dbmng.prototype.restoreRecord = function(id_record) {
 	//TODO deal with multiple key
 	var obj=this;
-	console.log('restore');
+	debug('restore');
 
 	var to_restore = obj.aData.records[id_record];	
 	to_restore.state = 'ok';
 
-	console.log(to_restore);
+	debug(to_restore);
 	delete obj.aData.deleted[id_record];		
 	jQuery('#'+obj.id+"_"+id_record).removeClass( "del" ).addClass( "ok" );	
 	jQuery('#'+obj.id+"_"+id_record).html(obj.createRow(to_restore, id_record));
@@ -593,7 +603,7 @@ Dbmng.prototype.insertRecord = function(item, temporary_id_record) {
 		obj.aData.inserted[id_record]=(item);
 		obj.aData.records[id_record]=(item);
 
-		console.log('add record');
+		debug('add record');
 
 		//go back to table
 		if(!this.inline){
@@ -604,10 +614,10 @@ Dbmng.prototype.insertRecord = function(item, temporary_id_record) {
 		//Change the id to the temporary one
     jQuery('#'+obj.id+"_"+temporary_id_record).attr("id",obj.id+"_"+id_record);
 
-		console.log(jQuery('#'+obj.id+"_"+id_record));
+		debug(jQuery('#'+obj.id+"_"+id_record));
 		jQuery('#'+obj.id+"_"+id_record).html(obj.createRow(item, id_record));	
 
-		console.log('create row');
+		debug('create row');
 		jQuery('#'+obj.id+"_"+id_record).removeClass( "ok" ).addClass( "ins" );	
 		//You need to attach again the restore button
 		obj.attachCommand(id_record);
@@ -628,13 +638,13 @@ Dbmng.prototype.updateRecord = function(item, id_record) {
 			obj.aData.updated={};
 		}
 
-		console.log(item);
+		debug(item);
 		if(item.state=='ins'){
-			console.log('do insert');
+			debug('do insert');
 			obj.aData.inserted[id_record]=(item);
 		}
 		else{
-			console.log('do update');
+			debug('do update');
 			obj.aData.updated[id_record]=(item);	
 		}
 
@@ -660,12 +670,12 @@ Dbmng.prototype.updateRecord = function(item, id_record) {
 
 
 Dbmng.prototype.updateStorage = function() {
-	console.log('upd storage on '+this.id);
+	debug('upd storage on '+this.id);
 
 	jQuery.jStorage.set(this.id+"_data", this.aData);
 
 	if(obj.auto_sync){
-		console.log('start_sync');
+		debug('start_sync');
 		db.syncData();
 	}
 	//After update show the main table in not inline
@@ -707,7 +717,7 @@ Dbmng.prototype.createForm = function(id_record) {
 		item=obj.aData.records[id_record];
 	}		
 	
-	console.log('create_form'+obj.inline+" "+act);
+	debug('create_form'+obj.inline+" "+act);
 	
 	if(obj.inline==0){
 		//hide the table and show the form
@@ -730,7 +740,7 @@ Dbmng.prototype.createForm = function(id_record) {
 	
 	var form='<form >';
 	jQuery.each(this.aForm.fields, function(index, field){ 			
-		//console.log(index + ": " + dbmng_check_is_pk(field));
+		//debug(index + ": " + dbmng_check_is_pk(field));
 		value = '';
 		
 		var view_field=true;
@@ -884,17 +894,6 @@ function layout_view_field_table(fld_value){
 		}
 	}
 	return ret;
-}
-
-function t(txt){
-	return txt;
-}
-
-var DEBUG=true;
-function debug(d){
-	if(DEBUG){
-		console.log(d);
-	}
 }
 
 //Creat an object for unique identifier
