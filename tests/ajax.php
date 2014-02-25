@@ -167,8 +167,7 @@
 								else{
 									$json['deleted'][$index]['ok']=0;				
 									$json['deleted'][$index]['error']=$ret['error'][2];				
-								}
-						
+								}						
 							}
 					}
 

@@ -131,15 +131,28 @@ Dbmng.prototype.start = function()
 {
 	obj=this;
 
-	var saved_data= jQuery.jStorage.get(this.id+"_data");
-	if(saved_data){
+	var saved_form=jQuery.jStorage.get(this.id+"_form");
+	var saved_data=jQuery.jStorage.get(this.id+"_data");
+
+
+
+	if(saved_form && saved_data){
+		debug("load from jstore");
 		obj.aData =saved_data;
+		obj.aForm =saved_form;
 		obj.createTable();
 	}
 	else {
+		debug("load from ajax");
+		debug(saved_form);
+		debug(saved_data);
+
+		
 		var form=obj.aForm;
 		//form={"id_table":20,"table_name":"mm_test","table_label":"Questa tabella si chiama pippo","fields":{"nome":{}}};
-			
+
+					
+
 		this.am.addReq({ //jQuery.ajax({
 			url: this.ajax_url,
 			type: "POST",
@@ -159,6 +172,10 @@ Dbmng.prototype.start = function()
 					});
 					obj.aData = {'records': newRecords};
 					obj.aForm = data.aForm;
+
+					//save record and aForm in jStorage
+					jQuery.jStorage.set(obj.id+"_form", obj.aForm );
+					jQuery.jStorage.set(obj.id+"_data", obj.aData);
 					
 					obj.createTable();
 				}
@@ -189,25 +206,33 @@ Dbmng.prototype.createTable = function(){
 	//Create the two container for the table and the form
 	var html='';
 	if( obj.mobile == 1 ){
-		html += "<div data-role='header'><h1>" + obj.aForm.table_name + "</h1></div>\n";
-	}else{
-		html += "<div id='dbmng_table_header'><h1 class='dbmng_table_label'>" + obj.aForm.table_name + "</h1></div>\n";
+		jQuery('#table_edit_header').html(obj.aForm.table_label);
+		//html += "<div data-role='header'><h1>" + obj.aForm.table_name + "</h1></div>\n";
+	}
+	else{
+		html += "<div id='dbmng_table_header'><h1 class='dbmng_table_label'>" + obj.aForm.table_label + "</h1></div>\n";
 	}	
-	html += "<table class='dbmng_table' id='"+this.id+"_table'>\n";
 
-	//Add header
-	html += "<thead>\n";
-	html += "<tr >\n";
-	jQuery.each(obj.aForm.fields, function(index, field){ 
-		var f = field;
-		if( layout_view_field_table(f.skip_in_tbl) ){
-			html += "<th class='dbmng_field_$fld'>" + t(f.label) + "</th>\n";
-		}
-	});
-	html += "<th class='dbmng_functions'>" + t('actions') + "</th>\n";
-	html += "</tr>\n";
-	html += "</thead>\n";
-	html += "<tbody></tbody></table>";	
+	if( obj.mobile == 1 ){
+		html+="<ul class='dbmng_list_view' id='"+this.id+"_table' data-role='listview'  >";
+		html+="</ul>";
+	}
+	else { 
+		html += "<table class='dbmng_table' id='"+this.id+"_table'>\n";
+		//Add header
+		html += "<thead>\n";
+		html += "<tr >\n";
+		jQuery.each(obj.aForm.fields, function(index, field){ 
+			var f = field;
+			if( layout_view_field_table(f.skip_in_tbl) ){
+				html += "<th class='dbmng_field_$fld'>" + t(f.label) + "</th>\n";
+			}
+		});
+		html += "<th class='dbmng_functions'>" + t('actions') + "</th>\n";
+		html += "</tr>\n";
+		html += "</thead>\n";
+		html += "<tbody></tbody></table>";	
+	}
 
 	jQuery('#'+obj.id+'_view').html(html);
   
@@ -216,14 +241,26 @@ Dbmng.prototype.createTable = function(){
 		var o = value.record;
 		var state = value.state;
 		var id_record=k;
-	
-		var html_row = "<tr id='"+obj.id+"_"+k+"' class='"+state+"'>";
-	
-		html_row += obj.createRow(value, id_record);
-		html_row += "</tr>\n";	
 
-		//Save the table row in DOM
-		jQuery('#'+obj.id+'_view tbody').append(html_row);
+		if( obj.mobile == 1 ){
+
+			var html_row = "<li id='"+obj.id+"_"+k+"' class='"+state+"'>";
+			html_row += obj.createRow(value, id_record);
+			html_row += "</li>\n";
+
+			jQuery('#'+obj.id+'_view ul').append(html_row);
+
+		}
+		else{
+	
+			var html_row = "<tr id='"+obj.id+"_"+k+"' class='"+state+"'>";
+	
+			html_row += obj.createRow(value, id_record);
+			html_row += "</tr>\n";	
+
+			//Save the table row in DOM
+			jQuery('#'+obj.id+'_view tbody').append(html_row);
+		}
 
 		//attach command assign the click function to delete/update/restore/insert button			
 		obj.attachCommand(id_record);
@@ -314,6 +351,7 @@ Dbmng.prototype.createTable = function(){
 */
 Dbmng.prototype.resetDb = function() {
 	jQuery.jStorage.deleteKey(obj.id+"_data");
+	jQuery.jStorage.deleteKey(obj.id+"_form");
 	obj.start();		
 }
 
@@ -392,7 +430,7 @@ Dbmng.prototype.syncData = function() {
 					}
 
 					obj.createTable();
-					jQuery.jStorage.deleteKey(obj.id+"_data");
+					//jQuery.jStorage.deleteKey(obj.id+"_data");
 
 					debug('end '+obj.prog);
 					obj.running=false;
@@ -488,6 +526,9 @@ Dbmng.prototype.createRow = function (value, id_record) {
 	var obj=this;
 	var state=value.state;
 	var o=value.record;		
+
+	var added_field_mobile=0;
+
 	var html_row='';
 		for( var key in o )	{        
 			//get the field parameters
@@ -504,7 +545,16 @@ Dbmng.prototype.createRow = function (value, id_record) {
 						else{
 							html_value =  executeFunctionByName("dbmng_"+f.widget+"_html", window, field_value, f );
 						}
-						html_row += "<td>" + html_value + "</td>";
+
+						if(obj.mobile){
+							if(added_field_mobile<2){
+								html_row += html_value +" ";
+								added_field_mobile++;
+							}
+						}	
+						else{
+							html_row += "<td>" + html_value + "</td>";
+						}
 					}
 					else{
 						html_row += "<td>-</td>";
@@ -517,35 +567,43 @@ Dbmng.prototype.createRow = function (value, id_record) {
 		}
 	
 	// available functionalities
-	html_row += "<td class='dbmng_functions'>";
-	
-	var nDel=1; nUpd=1; nDup=1;
+	//if(obj.mobile){
+	if(false){
+		if(value.error){
+			html_row += '<span title="'+value.error+'" class="dbmng_error">'+t('Error!')+'</span>';
+		}
+	}
+	else{
+		html_row += "<td class='dbmng_functions'>";
 
-	if(aParam['user_function']){
-	  nUpd = ((aParam['user_function']['upd']) ? aParam['user_function']['upd'] : 1);
-	  nDel = ((aParam['user_function']['del']) ? aParam['user_function']['del'] : 1);
-	  nDup = ((aParam['user_function']['dup']) ? aParam['user_function']['dup'] : 1);
-	}
+		var nDel=1; nUpd=1; nDup=1;
 
-	if(state=='del'){
-			html_row += '<span id="'+obj.id+'_restore_'+id_record+'"><a  class="dbmng_restore_button"  >' + t('Restore') +'</a>' + "&nbsp;</span>";
-	}
-	else {
-		if( nDel == 1 ){				
-			html_row += '<span id="'+obj.id+'_del_'+id_record+'"><a  class="dbmng_delete_button"  >' + t('Delete') +'</a>' + "&nbsp;</span>";
+		if(obj.aParam['user_function']){
+			nUpd = ((obj.aParam['user_function']['upd']) ? obj.aParam['user_function']['upd'] : 1);
+			nDel = ((obj.aParam['user_function']['del']) ? obj.aParam['user_function']['del'] : 1);
+			nDup = ((obj.aParam['user_function']['dup']) ? obj.aParam['user_function']['dup'] : 1);
 		}
-		if( nUpd == 1 ){				
-			html_row += '<span id="'+obj.id+'_upd_'+id_record+'"><a  class="dbmng_update_button"  >' + t('Update') +'</a>' + "&nbsp;</span>";
+
+		if(state=='del'){
+				html_row += '<span id="'+obj.id+'_restore_'+id_record+'"><a  class="dbmng_restore_button"  >' + t('Restore') +'</a>' + "&nbsp;</span>";
 		}
-		if( nDup == 1 ){				
-			html_row += '<span id="'+obj.id+'_dup_'+id_record+'"><a  class="dbmng_duplicate_button"  >' + t('Duplicate') +'</a>' + "&nbsp;</span>";
+		else {
+			if( nDel == 1 ){				
+				html_row += '<span id="'+obj.id+'_del_'+id_record+'"><a  class="dbmng_delete_button"  >' + t('Delete') +'</a>' + "&nbsp;</span>";
+			}
+			if( nUpd == 1 ){				
+				html_row += '<span id="'+obj.id+'_upd_'+id_record+'"><a  class="dbmng_update_button"  >' + t('Update') +'</a>' + "&nbsp;</span>";
+			}
+			if( nDup == 1 ){				
+				html_row += '<span id="'+obj.id+'_dup_'+id_record+'"><a  class="dbmng_duplicate_button"  >' + t('Duplicate') +'</a>' + "&nbsp;</span>";
+			}
 		}
+
+		if(value.error){
+			html_row += '<span title="'+value.error+'" class="dbmng_error">'+t('Error!')+'</span>';
+		}
+		html_row += "</td>\n";
 	}
-	
-	if(value.error){
-		html_row += '<span title="'+value.error+'" class="dbmng_error">'+t('Error!')+'</span>';
-	}
-	html_row += "</td>\n";
 
 	return html_row;
 }
