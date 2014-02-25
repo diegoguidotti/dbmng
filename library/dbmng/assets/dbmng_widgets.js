@@ -48,12 +48,12 @@ dbmng_select_form = function(obj_id,  fld, field, id_record, value, more, act ){
 	html += "<option/> \n";	
 
 	jQuery.each(field.voc_val, function(k, v){
-			s = "";
-			console.log(k+" "+value+ " " + (k==value));
-			if(k == value){
-				s = " selected='true' ";
-			}
-			html += "<option "+s+" value='" + k + "'>" + v + "</option> \n";	
+		s = "";
+		console.log(k+" "+value+ " " + (k==value));
+		if(k == value){
+			s = " selected='true' ";
+		}
+		html += "<option "+s+" value='" + k + "'>" + v + "</option> \n";	
 	});
 	html += "</select>\n";
 	return html;
@@ -76,10 +76,9 @@ dbmng_checkbox_prepare_val = function(obj_id, id_record, index){
 dbmng_checkbox_form = function(obj_id,  fld, field, id_record, value, more, act ){
 	var html='';
 	html = "<input class='dbmng_checkbox' type='checkbox' name='"+fld+"' id='"+obj_id+"_"+id_record+"_"+fld+"' ";
-  if( value == 1 || (value != 0 && field.default == 1) )
-    {
-			html += " checked='true' ";
-		}	
+  if( value == 1 || (value != 0 && field.default == 1) ){
+		html += " checked='true' ";
+	}	
   //the field will never reply with a null value (true or false)
 	//if setted as a non_nullable it will accept only true values
 	//$html .= layout_get_nullable($fld_value);	
@@ -98,10 +97,10 @@ dbmng_checkbox_html = function(val, field ){
 dbmng_textarea_form = function(obj_id,  fld, field, id_record, value, more, act ){
 	var html='';
 	html  = "<textarea  name='" + fld + "' id='"+obj_id+"_"+id_record+"_"+fld+"' ";
-				html += Dbmng.layout_get_nullable(field,act);
-				html += " >\n";
-				html += value;	
-				html += "</textarea>\n";
+	html += Dbmng.layout_get_nullable(field,act);
+	html += " >\n";
+	html += value;	
+	html += "</textarea>\n";
 	return html;
 }
 
@@ -136,7 +135,7 @@ dbmng_password_form = function(obj_id,  fld, field, id_record, value, more, act 
 }
 
 dbmng_password_html = function(val, field ){
-var ret  = '';
+	var ret  = '';
 
 	if( val != null )
 		ret = '*****';
