@@ -75,15 +75,14 @@
 	</div>
 
 	<div data-role="page"  id="record_edit">
-
 		<div data-role="header" id="header">
 			<a href="#table_edit" data-icon="arrow-l" data-role="button">Back</a>
       <ul id="menu-right" data-role="menu">
           <li>
               <span data-role="button" data-icon="arrow-d" data-iconpos="right">Actions</span>
               <ul data-role="listview" data-inset="true">
-                 <li data-icon="false">Duplicate</li>
-                 <li data-icon="false">Delete</li>
+                 <li data-icon="false"><div id="record_edit_dup"></div></li>
+                 <li data-icon="false"><div id="record_edit_del"></div></li>
               </ul>
           </li>
       </ul>        
@@ -91,7 +90,7 @@
 			
 		</div>
 
-		<div data-role="content" > <div id="table_edit_container"></div>
+		<div data-role="content" > <div id="record_edit_container"></div>
 		</div>
 	</div>
 
