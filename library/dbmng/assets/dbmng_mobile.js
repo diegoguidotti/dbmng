@@ -4,6 +4,25 @@ function init_mobile(){
 	if(uid){
     createTableList(uid);
 	}
+
+	jQuery('body').bind('hideOpenMenus', function(){
+	    jQuery("ul:jqmData(role='menu')").find('li > ul').hide();
+	}); 
+	var menuHandler = function(e) {
+	    jQuery('body').trigger('hideOpenMenus');
+	    jQuery(this).find('li > ul').show();
+	    e.stopPropagation();
+	};
+	jQuery("ul:jqmData(role='menu') li > ul li").click(function(e) {
+	   jQuery('body').trigger('hideOpenMenus');
+	e.stopPropagation();
+	});
+	jQuery('body').delegate("ul:jqmData(role='menu')",'click',menuHandler);
+	jQuery('body').click(function(e){
+	   jQuery('body').trigger('hideOpenMenus');
+	});
+
+
 }
 
 

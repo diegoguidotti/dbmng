@@ -13,6 +13,7 @@
 	<script type="text/javascript" src="../library/dbmng/assets/dbmng_obj.js?mpvqml"></script>
 	<script type="text/javascript" src="../library/dbmng/assets/dbmng_widgets.js?mpvqml"></script>
 	<script type="text/javascript" src="../library/dbmng/assets/dbmng_mobile.js?mpvqml"></script>
+	<link rel="stylesheet" href="../library/dbmng/assets/dbmng_mobile.css" />
 
 
 	<style type="text/css" media="all">
@@ -67,7 +68,29 @@
 			<h1><span id="table_edit_header">Edit Table<span></h1>
 			<a href="#table_list" data-icon="home" data-role="button">Home</a>
 			<a onClick="goToLogin()" data-icon="gear" data-role="button">Tools</a>
+			<a href="#record_edit" data-icon="grid" data-role="button">Edit</a>
 		</div>
+		<div data-role="content" > <div id="table_edit_container"></div>
+		</div>
+	</div>
+
+	<div data-role="page"  id="record_edit">
+
+		<div data-role="header" id="header">
+			<a href="#table_edit" data-icon="arrow-l" data-role="button">Back</a>
+      <ul id="menu-right" data-role="menu">
+          <li>
+              <span data-role="button" data-icon="arrow-d" data-iconpos="right">Actions</span>
+              <ul data-role="listview" data-inset="true">
+                 <li data-icon="false">Duplicate</li>
+                 <li data-icon="false">Delete</li>
+              </ul>
+          </li>
+      </ul>        
+			<h1>Edit Record</h1>
+			
+		</div>
+
 		<div data-role="content" > <div id="table_edit_container"></div>
 		</div>
 	</div>
