@@ -358,7 +358,7 @@ Dbmng.prototype.createTable = function(){
 		}
 		catch(e){debug(e);
 			debug('err refresh');
-			alert('a');
+			
 		}
 	}
 
@@ -559,8 +559,10 @@ Dbmng.prototype.createRow = function (value, id_record) {
 	var o=value.record;		
 
 	var added_field_mobile=0;
+	debug(value.record);
 
-	var html_row='';
+	var html_row="";
+
 		for( var key in o )	{        
 			//get the field parameters
       var f = obj.aForm.fields[key];
@@ -577,7 +579,8 @@ Dbmng.prototype.createRow = function (value, id_record) {
 							html_value =  executeFunctionByName("dbmng_"+f.widget+"_html", window, field_value, f );
 						}
 
-						if(obj.mobile){
+						if(obj.mobile){							
+
 							if(added_field_mobile<2){
 								html_row += html_value +" ";
 								added_field_mobile++;
@@ -598,12 +601,9 @@ Dbmng.prototype.createRow = function (value, id_record) {
 		}
 	
 	// available functionalities
-	//if(obj.mobile){
-	if(false){
-		if(value.error){
-			html_row += '<span title="'+value.error+'" class="dbmng_error">'+t('Error!')+'</span>';
+	if( obj.mobile == 1 ){
+				html_row += '<span id="'+obj.id+'_edit_'+id_record+'"><a  class="dbmng_edit_button" href="#record_edit"  >' + t('Edit') +'</a>' + "&nbsp;</span>";
 		}
-	}
 	else{
 		html_row += "<td class='dbmng_functions'>";
 
@@ -619,10 +619,7 @@ Dbmng.prototype.createRow = function (value, id_record) {
 				html_row += '<span id="'+obj.id+'_restore_'+id_record+'"><a  class="dbmng_restore_button"  >' + t('Restore') +'</a>' + "&nbsp;</span>";
 		}
 		else {
-			if( obj.mobile == 1 ){
-				html_row += '<span id="'+obj.id+'_edit_'+id_record+'"><a  class="dbmng_edit_button" href="#record_edit"  >' + t('Edit') +'</a>' + "&nbsp;</span>";
-			}
-			else{
+						
 				if( nDel == 1 ){				
 					html_row += '<span id="'+obj.id+'_del_'+id_record+'"><a  class="dbmng_delete_button"  >' + t('Delete') +'</a>' + "&nbsp;</span>";
 				}
@@ -632,7 +629,7 @@ Dbmng.prototype.createRow = function (value, id_record) {
 				if( nDup == 1 ){				
 					html_row += '<span id="'+obj.id+'_dup_'+id_record+'"><a  class="dbmng_duplicate_button"  >' + t('Duplicate') +'</a>' + "&nbsp;</span>";
 				}
-			}
+			
 		} 
 
 		if(value.error){
@@ -880,7 +877,13 @@ Dbmng.layout_get_label = function(field_name, field, act){
 	}
 	*/
 
-	return "<label for='"+field_name+"'>" + t(lb) + " " + sRequired + "</label>";
+	var cl="";
+	//hiding label in jqueryMobile
+	//if(obj.mobile==1){
+	//	cl=' class="ui-hidden-accessible" ';
+	//}
+
+	return "<label "+cl+" for='"+field_name+"'>" + t(lb) + " " + sRequired + "</label>";
 }
 
 
