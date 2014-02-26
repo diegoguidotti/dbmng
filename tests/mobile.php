@@ -68,7 +68,6 @@
 			<h1><span id="table_edit_header">Edit Table<span></h1>
 			<a href="#table_list" data-icon="home" data-role="button">Home</a>
 			<a onClick="goToLogin()" data-icon="gear" data-role="button">Tools</a>
-			<a href="#record_edit" data-icon="grid" data-role="button">Edit</a>
 		</div>
 		<div data-role="content" > <div id="table_edit_container"></div>
 		</div>
