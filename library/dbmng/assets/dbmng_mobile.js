@@ -40,14 +40,16 @@ function createTableList(d){
 	  //h+='</div>';
 	});
 	h+="</ul>";
-
-	jQuery('#table_list_container').html(h).trigger("create");
+	jQuery('#table_list_container').html(h);
   jQuery.mobile.changePage("#table_list");
 }
 
 
 function showTable(id_table) {
 	//Check if exist an aForm in the jstorage
+	jQuery.mobile.changePage("#table_edit");
+
+
 	var db= new Dbmng(id_table, {
 			'div_element':'table_edit_container',   //div id containing the table
 			'ajax_url':'ajax.php',    //Where is locate the php with ajax function (relative to the current PHP file)
@@ -58,7 +60,7 @@ function showTable(id_table) {
 		});  
 		db.start();	
 
-		jQuery.mobile.changePage("#table_edit");
+
 }
 
 function doLogin(){

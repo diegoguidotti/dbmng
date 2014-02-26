@@ -101,7 +101,7 @@ function Dbmng(idt , p) {
 		this.id+='_'+this.aParam.div_element;
 	}
 
-	debug(this.id);
+	debug('create_db '+this.id);
 	var obj=this;
 
 	var html="";
@@ -196,6 +196,9 @@ Dbmng.prototype.start = function()
 /**
 */
 Dbmng.prototype.createTable = function(){	
+
+	debug("createTable - start");
+
 	//show the table and hide the form
 	jQuery("#"+this.id+"_view").show();	
 	jQuery("#"+this.id+"_form").hide();	
@@ -250,6 +253,8 @@ Dbmng.prototype.createTable = function(){
 
 			jQuery('#'+obj.id+'_view ul').append(html_row);
 
+			
+
 		}
 		else{
 	
@@ -260,11 +265,16 @@ Dbmng.prototype.createTable = function(){
 
 			//Save the table row in DOM
 			jQuery('#'+obj.id+'_view tbody').append(html_row);
+
+			
 		}
 
 		//attach command assign the click function to delete/update/restore/insert button			
 		obj.attachCommand(id_record);
 	});
+
+
+
 
 	//Add the insert button
 	jQuery('#'+obj.id+'_view').append("<a id='"+obj.id+"_add'>"+t("Add")+"</a>");
@@ -339,7 +349,22 @@ Dbmng.prototype.createTable = function(){
 	    }        
 		}); 
 	}
-	return html;
+
+
+	if(obj.mobile){
+		try{
+			jQuery('#'+this.id+'_table').listview().listview('refresh');
+			debug('ok refresh');
+		}
+		catch(e){debug(e);
+			debug('err refresh');
+			alert('a');
+		}
+	}
+
+
+	debug("createTable - end");
+	//return html;
 };
 
 
@@ -956,10 +981,10 @@ Dbmng.prototype.createForm = function(id_record) {
 		html_del = '<span id="'+obj.id+'_del_'+id_record+'"><a  class="dbmng_delete_button"  >' + t('Delete') +'</a>' + "&nbsp;</span>";
 		html_dup = '<span id="'+obj.id+'_dup_'+id_record+'"><a  class="dbmng_duplicate_button"  >' + t('Duplicate') +'</a>' + "&nbsp;</span>";
 
-		jQuery('#record_edit_dup').html(html_dup).trigger("create");
-		jQuery('#record_edit_del').html(html_del).trigger("create");
+		jQuery('#record_edit_dup').html(html_dup); //.trigger("create");
+		jQuery('#record_edit_del').html(html_del);//.trigger("create");
 
-		jQuery('#record_edit_container').html(form).trigger("create");
+		jQuery('#record_edit_container').html(form); //.trigger("create");
 	  jQuery.mobile.changePage("#record_edit");
 	}
 	else{
