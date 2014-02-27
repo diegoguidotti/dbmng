@@ -9,7 +9,7 @@
 \param $aParam  	Associative array with some custom variable used by the renderer
 \return           HTML generated code
 */
-function dbmng_create_form_process($aForm, $aParam) 
+function dbmng_create_form_process($aForm, $aParam, $actiontype="") 
 {
 	if(isset($_REQUEST['tbln']) && isset($_REQUEST['act']))
 		{
@@ -48,7 +48,7 @@ function dbmng_create_form_process($aForm, $aParam)
 				}
 		}
 
-	if( isset($_REQUEST['tbln']) && isset($_REQUEST['act2']) && !isset($_REQUEST['act']) )
+	if( isset($_REQUEST['tbln']) && isset($_REQUEST['act2']) &&  !isset($_REQUEST['act']) )
 		{
 			//check if the table correspond to the table requested in the form
 			if($aForm['table_name']==$_REQUEST['tbln'])

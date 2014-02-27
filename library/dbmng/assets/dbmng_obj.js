@@ -246,18 +246,13 @@ Dbmng.prototype.createTable = function(){
 		var id_record=k;
 
 		if( obj.mobile == 1 ){
-
 			var html_row = "<li id='"+obj.id+"_"+k+"' class='"+state+"'>";
-			html_row += obj.createRow(value, id_record);
+			html_row += obj.createRow(value, id_record);	//<a href = "#">record name</a>
 			html_row += "</li>\n";
 
 			jQuery('#'+obj.id+'_view ul').append(html_row);
-
-			
-
 		}
 		else{
-	
 			var html_row = "<tr id='"+obj.id+"_"+k+"' class='"+state+"'>";
 	
 			html_row += obj.createRow(value, id_record);
@@ -265,8 +260,6 @@ Dbmng.prototype.createTable = function(){
 
 			//Save the table row in DOM
 			jQuery('#'+obj.id+'_view tbody').append(html_row);
-
-			
 		}
 
 		//attach command assign the click function to delete/update/restore/insert button			
@@ -580,7 +573,6 @@ Dbmng.prototype.createRow = function (value, id_record) {
 						}
 
 						if(obj.mobile){							
-
 							if(added_field_mobile<2){
 								html_row += html_value +" ";
 								added_field_mobile++;
@@ -602,8 +594,9 @@ Dbmng.prototype.createRow = function (value, id_record) {
 	
 	// available functionalities
 	if( obj.mobile == 1 ){
-				html_row += '<span id="'+obj.id+'_edit_'+id_record+'"><a  class="dbmng_edit_button" href="#record_edit"  >' + t('Edit') +'</a>' + "&nbsp;</span>";
-		}
+		//html_row += '<span id="'+obj.id+'_edit_'+id_record+'"><a  class="dbmng_edit_button" href="#record_edit"  >' + t('Edit') +'</a>' + "&nbsp;</span>";
+		html_row = '<a class="dbmng_edit_button" href="#record_edit"><span id="'+obj.id+'_edit_'+id_record+'">' + html_row +'</span></a>';
+	}
 	else{
 		html_row += "<td class='dbmng_functions'>";
 
@@ -987,8 +980,8 @@ Dbmng.prototype.createForm = function(id_record) {
 		jQuery('#record_edit_dup').html(html_dup); //.trigger("create");
 		jQuery('#record_edit_del').html(html_del);//.trigger("create");
 
-		jQuery('#record_edit_container').html(form); //.trigger("create");
 	  jQuery.mobile.changePage("#record_edit");
+		jQuery('#record_edit_container').html(form); //.trigger("create");
 	}
 	else{
 		if(obj.inline==1){

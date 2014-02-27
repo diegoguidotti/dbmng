@@ -202,7 +202,7 @@ function dbmng_crud($aForm, $aParam=null)
 {
    //echo($_REQUEST["act"]." ".$view_table." ".$do_update);
 	$html  = "";
-  $html .= dbmng_create_form_process($aForm, $aParam);
+  dbmng_create_form_process($aForm, $aParam);
 
 	//show table if there is no act or it's working on update or duplicate
 	$view_table = true;
@@ -224,6 +224,7 @@ function dbmng_crud($aForm, $aParam=null)
 
 	if( isset($_REQUEST["act2"]) && !isset($_REQUEST["act"]) )
 		{
+		  //dbmng_create_form_process($aForm, $aParam, "search");
 			if( $_REQUEST["act2"]=='do_search' ) //$_REQUEST["act2"]=='search' || 
 				{
 					$do_update = 2;
@@ -235,16 +236,19 @@ function dbmng_crud($aForm, $aParam=null)
 				}
 		}
 
-	//echo($_REQUEST["act"]."|".$view_table."|".$do_update);
+	if( isset($_REQUEST["act"]) )
+		echo "<br/>act: ". $_REQUEST["act"];
+	if( isset($_REQUEST["act2"]) )
+		echo "<br/>act2: ". $_REQUEST["act2"];
+	echo "<br/>viewtable: ". $view_table;
+	echo "<br/>do_update: ". $do_update;
 	if($view_table)
 		{
 			if( $do_update == 2 )
 				{
-					$html .= dbmng_create_form($aForm, $aParam, $do_update);
+					$html .= dbmng_create_form($aForm, $aParam, $do_update, "search");
 				}
 				$html .= dbmng_create_table($aForm, $aParam);
-				//if( isset($_SESSION[$aForm['table_name'].'_goback']) )
-				//	print_r($_SESSION[$aForm['table_name'].'_goback']);
 		}
 	else
 		{
@@ -439,7 +443,7 @@ function dbmng_get_js_array($aForm, $aParam)
 \param $aParam  		Associative array with some custom variable used by the renderer
 \return           HTML generated code
 */
-function dbmng_create_form($aForm, $aParam, $do_update) 
+function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="") 
 {
 	$html      = "";
 	//create the $val array storing all the record data
@@ -484,7 +488,7 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 
 	//render the form
 	$class = "dbmng_form";
-	if( $do_update == 2 )
+	if( $do_update == 2 && $actiontype=="search")
 		$class .= "_search";
 			
 	$html .= "<div class='$class' id='dbmng_form_".$aForm['table_name']."' >\n<form method='POST' $more action='?' >\n".$hv."";
@@ -509,7 +513,7 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 							if(isset($vals->$fld))
 								$value = $vals->$fld;
 						}
-					elseif( $do_update == 2 )
+					elseif( $do_update == 2 && $actiontype=="search")
 						{
 							if(isset($_REQUEST[$fld]))
 								{
@@ -547,11 +551,10 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 							else
 								{
 									$bViewFld = true;
-									if( isset($_REQUEST['act2']) && $_REQUEST['act2'] == "do_search" && !isset($_REQUEST['act']) && !$is_searchable )
+									//if( isset($_REQUEST['act2']) && $_REQUEST['act2'] == "do_search" && !isset($_REQUEST['act']) && !$is_searchable )
+									if( $actiontype == "search" && !$is_searchable )
 										$bViewFld = false;
-									
-									
-										
+
 									if( $bViewFld ) //$_REQUEST['act'] == 'ins' || $_REQUEST['act'] == 'upd' || $is_searchable )
 										{
 											$html.='<div class="dbmng_form_row dbmng_form_field_'.$fld.'">';
@@ -622,7 +625,6 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 	
 	$hv = dbmng_search_add_hidden($aForm, $aParam, "POST");
 	
-	
 	if( $do_update == 1 )
 		{
 		
@@ -636,7 +638,7 @@ function dbmng_create_form($aForm, $aParam, $do_update)
 			$html .= "<input type='hidden' name='tbln' value='" . $aForm['table_name'] . "' />\n";
 			$html .= "<div class='dbmng_form_button'><input class='dbmng_form_button' type='submit' value='" . t('Insert') . "' /></div>\n";
 		}
-	elseif( $do_update == 2 )
+	elseif( $do_update == 2 && $actiontype == "search")
 		{
 			$html .= "<input type='hidden' name='act2' value='do_search' />\n";
 			$html .= "<input type='hidden' name='tbln' value='" . $aForm['table_name'] . "' />\n";
