@@ -246,9 +246,9 @@ Dbmng.prototype.createTable = function(){
 		var id_record=k;
 
 		if( obj.mobile == 1 ){
-			var html_row = "<li ><a class='dbmng_edit_button' href='#record_edit' ><span id='"+obj.id+"_"+k+"' class='"+state+"'>";
+			var html_row = "<li ><a class='dbmng_edit_button' href='#record_edit' ><div id='"+obj.id+"_"+k+"' class='"+state+"'>";
 			html_row += obj.createRow(value, id_record);	//<a href = "#">record name</a>
-			html_row += "</span></a></li>\n";
+			html_row += "</div></a></li>\n";
 
 			jQuery('#'+obj.id+'_view ul').append(html_row);
 
@@ -271,7 +271,7 @@ Dbmng.prototype.createTable = function(){
 
 
 	//Add the insert button
-	jQuery('#'+obj.id+'_view').append("<a id='"+obj.id+"_add'>"+t("Add")+"</a>");
+	jQuery('#'+obj.id+'_view').append("<a data-inline='true' data-role='button' id='"+obj.id+"_add'>"+t("Add")+"</a>");
 	jQuery('#'+obj.id+"_add").click(function(){
 		var current=jQuery('#'+obj.id+"_table tr.working");
 
@@ -290,13 +290,13 @@ Dbmng.prototype.createTable = function(){
 
 
 	if(!obj.auto_sync){
-		jQuery('#'+obj.id+'_view').append(" - <a id='"+obj.id+"_save'>"+t("Save")+"</a>");
+		jQuery('#'+obj.id+'_view').append(" - <a data-inline='true'data-role='button' id='"+obj.id+"_save'>"+t("Save")+"</a>");
 		jQuery('#'+obj.id+"_save").click(function(){
 			obj.syncData();		
 		});	
 	}
 
-	jQuery('#'+obj.id+'_view').append(" - <a id='"+obj.id+"_reload'>"+t("Reset")+"</a>");
+	jQuery('#'+obj.id+'_view').append(" - <a data-inline='true' data-role='button' id='"+obj.id+"_reload'>"+t("Reset")+"</a>");
 	jQuery('#'+obj.id+"_reload").click(function(){
 		if(obj.isSaved()){
 			obj.resetDb();

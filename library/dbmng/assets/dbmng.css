@@ -115,3 +115,27 @@ table.dbmng_table tr.upd td {
 	background-color: #FFFF66;
 }
 
+
+/* dbmng_mobile  */
+ul.dbmng_list_view div.del {
+	border-left: 10px solid #FFCC00;
+	padding-left: 3px;
+}
+
+
+ul.dbmng_list_view div.ins {
+	border-left: 10px solid #CFF66;
+	padding-left: 3px;
+}
+
+
+ul.dbmng_list_view div.upd  {
+	border-left: 10px solid #FFFF66;
+	padding-left: 3px;
+}
+
+ul.dbmng_list_view div.ok  {
+	padding-left: 13px;
+}
+
+
