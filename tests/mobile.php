@@ -99,7 +99,8 @@
 
 		var base_call="ajax_mobile.php";
 
-		jQuery(document).ready(function() {
+		//jQuery(document).ready(function() {
+		jQuery(document).on('mobileinit', function() {
 			init_mobile();
 		});
 	</script>

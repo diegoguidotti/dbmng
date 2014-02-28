@@ -804,6 +804,8 @@ Dbmng.prototype.updateRecord = function(item, id_record) {
 		
 		if( obj.mobile == 1 ){
 		  jQuery.mobile.changePage("#table_edit");
+		  
+			jQuery("#"+obj.id+"_view").trigger('updatelayout');	
 			jQuery("#"+obj.id+"_view").show();	
 		}
 		else if(!this.inline){
