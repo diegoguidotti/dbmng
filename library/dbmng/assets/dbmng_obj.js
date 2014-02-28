@@ -347,6 +347,7 @@ Dbmng.prototype.createTable = function(){
 
 	if(obj.mobile){
 		try{
+			jQuery('#table_edit').trigger("create");
 			jQuery('#'+this.id+'_table').listview().listview('refresh');
 			debug('ok refresh');
 		}
