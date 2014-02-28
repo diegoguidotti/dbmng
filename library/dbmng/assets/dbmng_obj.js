@@ -217,7 +217,7 @@ Dbmng.prototype.createTable = function(){
 	}	
 
 	if( obj.mobile == 1 ){
-		html+="<ul class='dbmng_list_view' id='"+this.id+"_table' data-role='listview'  >";
+		html+="<ul class='dbmng_list_view' id='"+this.id+"_table' data-role='listview' data-filter='true' >";
 		html+="</ul>";
 	}
 	else { 
