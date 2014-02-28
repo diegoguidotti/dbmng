@@ -55,7 +55,7 @@
 			'auto_sync': 0,    			  //Save automatically to the server record by record
 			'inline':0,               //Enable editing in the table without creating a new form
 			'auto_edit':1,            //Run the synch after moving on a new row; auto edit is available only in auto_sync mode
-			'mobile':1								//Enable jQuery-mobile css style
+			'mobile':0								//Enable jQuery-mobile css style
 		});  
 		db.start();
 		

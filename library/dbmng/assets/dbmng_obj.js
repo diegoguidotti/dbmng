@@ -246,11 +246,12 @@ Dbmng.prototype.createTable = function(){
 		var id_record=k;
 
 		if( obj.mobile == 1 ){
-			var html_row = "<li id='"+obj.id+"_"+k+"' class='"+state+"'>";
+			var html_row = "<li ><a class='dbmng_edit_button' href='#record_edit' ><span id='"+obj.id+"_"+k+"' class='"+state+"'>";
 			html_row += obj.createRow(value, id_record);	//<a href = "#">record name</a>
-			html_row += "</li>\n";
+			html_row += "</span></a></li>\n";
 
 			jQuery('#'+obj.id+'_view ul').append(html_row);
+
 		}
 		else{
 			var html_row = "<tr id='"+obj.id+"_"+k+"' class='"+state+"'>";
@@ -595,7 +596,12 @@ Dbmng.prototype.createRow = function (value, id_record) {
 	// available functionalities
 	if( obj.mobile == 1 ){
 		//html_row += '<span id="'+obj.id+'_edit_'+id_record+'"><a  class="dbmng_edit_button" href="#record_edit"  >' + t('Edit') +'</a>' + "&nbsp;</span>";
-		html_row = '<a class="dbmng_edit_button" href="#record_edit"><span id="'+obj.id+'_edit_'+id_record+'">' + html_row +'</span></a>';
+	
+//		html_row = '<a class="dbmng_edit_button" href="#record_edit"><span id="'+obj.id+'_edit_'+id_record+'">' + html_row +'</span></a>';
+
+		//html_row = '<span id="'+obj.id+'_edit_'+id_record+'"><a  class="dbmng_edit_button" href="#record_edit"  >' +  html_row +'</a>' + "</span>"; 
+		html_row = '<span id="'+obj.id+'_edit_'+id_record+'">' +  html_row + "</span>"; 
+
 	}
 	else{
 		html_row += "<td class='dbmng_functions'>";
