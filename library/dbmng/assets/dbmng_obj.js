@@ -745,6 +745,8 @@ Dbmng.prototype.duplicateRecord = function(id_record) {
 
 			jQuery('#'+obj.id+'_view ul').append(html_row);
 
+			obj.goBackToTable();
+
 		}
 		else{
 			jQuery("#"+obj.id+"_table").append("<tr id='"+obj.id+"_"+new_id_record+"' class='ins'></tr>");
@@ -1026,11 +1028,10 @@ Dbmng.prototype.createForm = function(id_record) {
 	}
 	
 	if( obj.mobile == 1 ){
-		html_del = '<span id="'+obj.id+'_del_'+id_record+'"><a  class="dbmng_delete_button"  >' + t('Delete') +'</a>' + "&nbsp;</span>";
-		html_dup = '<span id="'+obj.id+'_dup_'+id_record+'"><a  class="dbmng_duplicate_button"  >' + t('Duplicate') +'</a>' + "&nbsp;</span>";
-
-		jQuery('#record_edit_dup').html(html_dup); //.trigger("create");
-		jQuery('#record_edit_del').html(html_del);//.trigger("create");
+		//html_del = '<span id="'+obj.id+'_del_'+id_record+'"><a  class="dbmng_delete_button"  >' + t('Delete') +'</a>' + "&nbsp;</span>";
+		//html_dup = '<span id="'+obj.id+'_dup_'+id_record+'"><a  class="dbmng_duplicate_button"  >' + t('Duplicate') +'</a>' + "&nbsp;</span>";
+		//jQuery('#record_edit_dup').html(html_dup); //.trigger("create");
+		//jQuery('#record_edit_del').html(html_del);//.trigger("create");
 
 
 		jQuery('#record_edit_del').click(function(){
