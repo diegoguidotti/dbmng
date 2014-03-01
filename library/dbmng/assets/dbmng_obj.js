@@ -246,7 +246,7 @@ Dbmng.prototype.createTable = function(){
 		var id_record=k;
 
 		if( obj.mobile == 1 ){
-			var html_row = "<li ><a class='dbmng_edit_button' href='#record_edit' ><div id='"+obj.id+"_"+k+"' class='"+state+"'>";
+			var html_row = "<li ><a class='dbmng_edit_button'  ><div id='"+obj.id+"_"+k+"' class='"+state+"'>";
 			html_row += obj.createRow(value, id_record);	//<a href = "#">record name</a>
 			html_row += "</div></a></li>\n";
 
@@ -503,7 +503,7 @@ Dbmng.prototype.attachCommand = function (id_record) {
 	});
 	
 	if( obj.mobile == 1 ) {
-		jQuery('#'+obj.id+'_edit_'+id_record).click(function(e){						
+		jQuery('#'+obj.id+'_edit_'+id_record).click(function(e){								
 			obj.createForm(id_record);			
 		});
 	}
@@ -596,11 +596,13 @@ Dbmng.prototype.createRow = function (value, id_record) {
 	
 	// available functionalities
 	if( obj.mobile == 1 ){
-		//html_row += '<span id="'+obj.id+'_edit_'+id_record+'"><a  class="dbmng_edit_button" href="#record_edit"  >' + t('Edit') +'</a>' + "&nbsp;</span>";
-	
-//		html_row = '<a class="dbmng_edit_button" href="#record_edit"><span id="'+obj.id+'_edit_'+id_record+'">' + html_row +'</span></a>';
+		
+		if(html_row ==''){
+			html_row+='No data available';
+			debug('No data available');
+			debug(value);
+		}
 
-		//html_row = '<span id="'+obj.id+'_edit_'+id_record+'"><a  class="dbmng_edit_button" href="#record_edit"  >' +  html_row +'</a>' + "</span>"; 
 		html_row = '<span id="'+obj.id+'_edit_'+id_record+'">' +  html_row + "</span>"; 
 
 	}
@@ -915,7 +917,11 @@ Dbmng.layout_get_label = function(field_name, field, act){
 */
 //TODO: review create Form
 Dbmng.prototype.createForm = function(id_record) {
+
 	obj=this;
+
+	debug('createForm table |'+obj.id+'| id_record '+id_record);
+
 	var act = 'ins';
 	
 	if(typeof id_record!='undefined'){
