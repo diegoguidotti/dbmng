@@ -688,7 +688,8 @@ Dbmng.prototype.deleteRecord = function(id_record) {
 		//You need to attach again the restore button
 		obj.attachCommand(id_record);
 	}
-
+	
+	obj.goBackToTable();
 	obj.updateStorage();
 }				
 
@@ -1031,8 +1032,21 @@ Dbmng.prototype.createForm = function(id_record) {
 		jQuery('#record_edit_dup').html(html_dup); //.trigger("create");
 		jQuery('#record_edit_del').html(html_del);//.trigger("create");
 
+
+		jQuery('#record_edit_del').click(function(){
+			debug('delete');
+			obj.deleteRecord(id_record);
+			
+		});
+
+		jQuery('#record_edit_dup').click(function(e){						
+			obj.duplicateRecord(id_record);
+			e.stopPropagation();
+		});
+			
+
 	  jQuery.mobile.changePage("#record_edit");
-		jQuery('#record_edit_container').html(form); //.trigger("create");
+		jQuery('#record_edit_container').html(form).trigger("create");
 	}
 	else{
 		if(obj.inline==1){
