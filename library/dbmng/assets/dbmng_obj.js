@@ -926,9 +926,13 @@ Dbmng.prototype.createForm = function(id_record) {
 	debug('create_form'+obj.inline+" "+act);
 	
 	if(obj.inline==0){
-		//hide the table and show the form
-		jQuery("#"+obj.id+"_view").hide();	
-		jQuery("#"+obj.id+"_form").show();	
+
+		//in mobile app we do not need to hide the _view element otherwise the back button doesn't work
+		if(obj.mobile==0){
+			//hide the table and show the form
+			jQuery("#"+obj.id+"_view").hide();	
+			jQuery("#"+obj.id+"_form").show();	
+		}
 	}
 	else{
 		;
