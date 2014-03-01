@@ -501,17 +501,21 @@ Dbmng.prototype.attachCommand = function (id_record) {
 	jQuery('#'+obj.id+'_upd_'+id_record).click(function(e){						
 		obj.createForm(id_record);			
 	});
-	
-	if( obj.mobile == 1 ) {
-		jQuery('#'+obj.id+'_edit_'+id_record).click(function(e){								
-			obj.createForm(id_record);			
-		});
-	}
-	
+		
 	jQuery('#'+obj.id+'_dup_'+id_record).click(function(e){						
 		obj.duplicateRecord(id_record);
 		e.stopPropagation();
 	});
+
+
+	if( obj.mobile == 1 ) {
+		//the click event has to be associated to the parent of the div containing the record
+		//in that way will be triggered if you click in any way of the listview item
+		jQuery('#'+obj.id+'_'+id_record).parent().click(function(e){								
+			obj.createForm(id_record);			
+		});
+	}
+
 }
 
 /////////////////////////////////////////////////////////////////////////////
