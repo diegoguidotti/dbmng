@@ -58,8 +58,8 @@
 			<a href="#table_list" data-icon="home" data-role="button">Home</a>
 			<a onClick="goToLogin()" data-icon="gear" data-role="button">Tools</a>
 		</div>
-		<div data-role="content" > <div id="table_list_container"></div>
-		</div>
+		<div data-role="content" > <div id="table_list_container"></div></div>
+
 	</div>
 
 
@@ -69,8 +69,15 @@
 			<a href="#table_list" data-icon="home" data-role="button">Home</a>
 			<a onClick="goToLogin()" data-icon="gear" data-role="button">Tools</a>
 		</div>
-		<div data-role="content" > <div id="table_edit_container"></div>
-		</div>
+		<div data-role="content" > <div id="table_edit_container"></div></div>
+
+	  <div data-role="footer" data-position="fixed">
+	    <div data-role="controlgroup" data-type="horizontal">
+	      <a href=# data-role=button> Add </a> 
+	      <a href=# data-role=button> Save </a> 
+	      <a href=# data-role=button> Reset </a> 
+	    </div>
+	  </div>
 	</div>
 
 	<div data-role="page"  id="record_edit">
@@ -97,8 +104,8 @@
 			
 		</div>
 
-		<div data-role="content" > <div id="record_edit_container"></div>
-		</div>
+		<div data-role="content" > <div id="record_edit_container"></div></div>
+
 	</div>
 
 
