@@ -5,6 +5,7 @@ function init_mobile(){
     createTableList(uid);
 	}
 
+/**
 	jQuery('body').bind('hideOpenMenus', function(){
 	    jQuery("ul:jqmData(role='menu')").find('li > ul').hide();
 	}); 
@@ -21,7 +22,7 @@ function init_mobile(){
 	jQuery('body').click(function(e){
 	   jQuery('body').trigger('hideOpenMenus');
 	});
-
+*/
 
 	jQuery.mobile.pageContainer.on("pagechange", function(event, data) {
         var toPage = data.toPage[0].id;
