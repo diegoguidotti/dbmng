@@ -78,8 +78,8 @@
 			<a href="#table_edit" data-icon="arrow-l" data-role="button">Back</a>
 
 			<div data-type="horizontal" data-role="controlgroup" class="ui-btn-right">  
-		    <a href="#pagina1" data-role="button" data-inline="true">Duplicate</a> 
-		    <a href="#pagina2" data-role="button" data-inline="true" >Delete</a>	<!-- data-icon="delete" -->
+		    <a href="#pagina1" data-role="button" data-inline="true" data-icon="myapp-copy">Duplicate</a> 
+		    <a href="#pagina2" data-role="button" data-inline="true" data-icon="delete" data-iconpos="right">Delete</a>	<!-- data-icon="delete" -->
 		  </div>
 
 <!--
