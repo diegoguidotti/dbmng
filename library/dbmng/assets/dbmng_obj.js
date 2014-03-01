@@ -732,7 +732,17 @@ Dbmng.prototype.duplicateRecord = function(id_record) {
 		obj.aData.records[new_id_record]=to_duplicate;
 
 		//add a Row
-		jQuery("#"+obj.id+"_table").append("<tr id='"+obj.id+"_"+new_id_record+"' class='ins'></tr>");
+		if( obj.mobile == 1 ){
+			var html_row = "<li ><a class='dbmng_edit_button' href='#record_edit' ><div id='"+obj.id+"_"+new_id_record+"' class='ins'>";
+			html_row += "</div></a></li>\n";
+
+			jQuery('#'+obj.id+'_view ul').append(html_row);
+
+		}
+		else{
+			jQuery("#"+obj.id+"_table").append("<tr id='"+obj.id+"_"+new_id_record+"' class='ins'></tr>");
+		}
+
 		jQuery('#'+obj.id+"_"+new_id_record).html(obj.createRow(to_duplicate, new_id_record));	
 		obj.attachCommand(new_id_record);
 	}
@@ -762,10 +772,7 @@ Dbmng.prototype.insertRecord = function(item, temporary_id_record) {
 		debug('add record');
 
 		//go back to table
-		if(!this.inline){
-			jQuery("#"+obj.id+"_view").show();	
-			jQuery("#"+obj.id+"_form").hide();
-		}
+		obj.goBackToTable();
 
 		//Change the id to the temporary one
     jQuery('#'+obj.id+"_"+temporary_id_record).attr("id",obj.id+"_"+id_record);
@@ -809,16 +816,7 @@ Dbmng.prototype.updateRecord = function(item, id_record) {
 			obj.aData.updated[id_record]=(item);	
 		}
 		
-		if( obj.mobile == 1 ){
-		  jQuery.mobile.changePage("#table_edit");
-		  
-			jQuery("#"+obj.id+"_view").trigger('updatelayout');	
-			jQuery("#"+obj.id+"_view").show();	
-		}
-		else if(!this.inline){
-			jQuery("#"+obj.id+"_view").show();	
-			jQuery("#"+obj.id+"_form").hide();
-		}	
+		obj.goBackToTable();
 		
 		if(!jQuery('#'+obj.id+"_"+id_record).hasClass("ins")){
 			jQuery('#'+obj.id+"_"+id_record).removeClass( "ok" ).addClass( "upd" );
@@ -833,6 +831,26 @@ Dbmng.prototype.updateRecord = function(item, id_record) {
 	}		
 	obj.updateStorage();
 }			
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Dbmng.prototype.goBackToTable
+// ======================
+/// The function after insert or update goes back to table page
+/**
+*/
+Dbmng.prototype.goBackToTable = function() {
+	if( obj.mobile == 1 ){
+		  jQuery.mobile.changePage("#table_edit");
+		  
+			jQuery("#"+obj.id+"_view").trigger('updatelayout');	
+			jQuery("#"+obj.id+"_view").show();	
+		}
+		else if(!this.inline){
+			jQuery("#"+obj.id+"_view").show();	
+			jQuery("#"+obj.id+"_form").hide();
+		}	
+}
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -923,7 +941,17 @@ Dbmng.prototype.createForm = function(id_record) {
 		if(obj.auto_edit && obj.inline){
 			cl='class="working auto_edit_insert"';
 		}
-		jQuery("#"+obj.id+"_table").append("<tr "+cl+" id='"+obj.id+"_"+id_record+"'></tr>");
+
+		if( obj.mobile == 1 ){
+			var html_row = "<li ><a class='dbmng_edit_button' href='#record_edit' ><div id='"+obj.id+"_"+id_record+"' >";
+			html_row += "</div></a></li>\n";
+
+			jQuery('#'+obj.id+'_view ul').append(html_row);
+
+		}
+		else{
+			jQuery("#"+obj.id+"_table").append("<tr "+cl+" id='"+obj.id+"_"+id_record+"'></tr>");
+		}
 	}
 	
 	var form='<form >';

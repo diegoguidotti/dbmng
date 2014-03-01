@@ -27,8 +27,8 @@ function init_mobile(){
         var toPage = data.toPage[0].id;
 				debug('change page '+toPage)
         if(toPage=='table_edit'){
-						//jQuery("#"+toPage+" ul").trigger('create');
-            //jQuery("#"+toPage+" ul").listview().listview('refresh');
+						jQuery("#"+toPage+" ul").trigger('create');
+            jQuery("#"+toPage+" ul").listview().listview('refresh');
         }
 	});
 
