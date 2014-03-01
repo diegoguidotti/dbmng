@@ -139,3 +139,6 @@ ul.dbmng_list_view div.ok  {
 }
 
 
+.ui-icon-myapp-copy {
+	background: url("themes/copy_white.png") no-repeat rgba(0, 0, 0, 0.4) !important;
+}

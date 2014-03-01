@@ -13,7 +13,7 @@
 	<script type="text/javascript" src="../library/dbmng/assets/dbmng_obj.js?mpvqml"></script>
 	<script type="text/javascript" src="../library/dbmng/assets/dbmng_widgets.js?mpvqml"></script>
 	<script type="text/javascript" src="../library/dbmng/assets/dbmng_mobile.js?mpvqml"></script>
-	<link rel="stylesheet" href="../library/dbmng/assets/dbmng_mobile.css" />
+	<!-- <link rel="stylesheet" href="../library/dbmng/assets/dbmng_mobile.css" /> -->
 
 
 	<style type="text/css" media="all">
@@ -76,6 +76,13 @@
 	<div data-role="page"  id="record_edit">
 		<div data-role="header" id="header">
 			<a href="#table_edit" data-icon="arrow-l" data-role="button">Back</a>
+
+			<div data-type="horizontal" data-role="controlgroup" class="ui-btn-right">  
+		    <a href="#pagina1" data-role="button" data-inline="true" data-icon="myapp-copy">Duplicate</a> 
+		    <a href="#pagina2" data-role="button" data-inline="true" data-icon="delete" data-iconpos="right">Delete</a>	<!-- data-icon="delete" -->
+		  </div>
+
+<!--
       <ul id="menu-right" data-role="menu">
           <li>
               <span data-role="button" data-icon="arrow-d" data-iconpos="right">Actions</span>
@@ -84,7 +91,8 @@
                  <li data-icon="false"><div id="record_edit_del"></div></li>
               </ul>
           </li>
-      </ul>        
+      </ul>
+-->        
 			<h1>Edit Record</h1>
 			
 		</div>
