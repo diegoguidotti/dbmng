@@ -30,8 +30,8 @@ function init_mobile(){
 						jQuery("#"+toPage).trigger('create');
             jQuery("#"+toPage+" ul").listview().listview('refresh');
         }
-				else if(toPage=='record_edit'){ //format the form
-					jQuery("#"+toPage+"").trigger('create');
+				else if(toPage=='record_edit'){ 
+					//jQuery("#"+toPage+"").trigger('create');
 				}
 	});
 
