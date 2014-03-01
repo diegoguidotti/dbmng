@@ -27,9 +27,12 @@ function init_mobile(){
         var toPage = data.toPage[0].id;
 				debug('change page '+toPage)
         if(toPage=='table_edit'){
-						jQuery("#"+toPage+" ul").trigger('create');
+						jQuery("#"+toPage).trigger('create');
             jQuery("#"+toPage+" ul").listview().listview('refresh');
         }
+				else if(toPage=='record_edit'){ //format the form
+					jQuery("#"+toPage+"").trigger('create');
+				}
 	});
 
 }
