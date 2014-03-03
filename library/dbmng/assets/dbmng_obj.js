@@ -268,11 +268,25 @@ Dbmng.prototype.createTable = function(){
 	});
 
 
-
-
 	//Add the insert button
 	jQuery('#'+obj.id+'_view').append("<a data-inline='true' data-role='button' id='"+obj.id+"_add'>"+t("Add")+"</a>");
-	jQuery('#'+obj.id+"_add").click(function(){
+	jQuery('#'+obj.id+'_add').click(function(){
+		var current=jQuery('#'+obj.id+"_table tr.working");
+
+    if(current.length>0){ //if exist an editing record save it
+        current.removeClass('working')
+				var id_record=	current.attr('id').substring(obj.id.length+1,current.attr('id').length);
+				if(current.hasClass('auto_edit_insert')){
+					obj.prepareInsert(id_record);
+				}
+				else{
+					obj.prepareUpdate(id_record);
+				}
+    } 
+		obj.createForm();
+	});
+
+	jQuery('#record_add').click(function(){
 		var current=jQuery('#'+obj.id+"_table tr.working");
 
     if(current.length>0){ //if exist an editing record save it

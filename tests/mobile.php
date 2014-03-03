@@ -73,9 +73,9 @@
 
 	  <div data-role="footer" data-position="fixed">
 	    <div data-role="controlgroup" data-type="horizontal">
-	      <a href=# data-role=button> Add </a> 
-	      <a href=# data-role=button> Save </a> 
-	      <a href=# data-role=button> Reset </a> 
+	      <a href=# data-role=button id=record_add> Add </a> 
+	      <a href=# data-role=button id=record_save> Save </a> 
+	      <a href=# data-role=button id=record_reset> Reset </a> 
 	    </div>
 	  </div>
 	</div>
