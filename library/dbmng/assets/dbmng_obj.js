@@ -267,26 +267,20 @@ Dbmng.prototype.createTable = function(){
 		obj.attachCommand(id_record);
 	});
 
-
+	var id_sel_add    = '#'+obj.id+'_add';
+	var id_sel_save   = '#'+obj.id+'_save';
+	var id_sel_reload = '#'+obj.id+'_reload';
+	if( obj.mobile == 1 ){
+		id_sel_add 	  = '#record_add';
+		id_sel_save   = '#record_save';
+		id_sel_reload = '#record_reset';
+	}
+	
 	//Add the insert button
-	jQuery('#'+obj.id+'_view').append("<a data-inline='true' data-role='button' id='"+obj.id+"_add'>"+t("Add")+"</a>");
-	jQuery('#'+obj.id+'_add').click(function(){
-		var current=jQuery('#'+obj.id+"_table tr.working");
-
-    if(current.length>0){ //if exist an editing record save it
-        current.removeClass('working')
-				var id_record=	current.attr('id').substring(obj.id.length+1,current.attr('id').length);
-				if(current.hasClass('auto_edit_insert')){
-					obj.prepareInsert(id_record);
-				}
-				else{
-					obj.prepareUpdate(id_record);
-				}
-    } 
-		obj.createForm();
-	});
-
-	jQuery('#record_add').click(function(){
+	if( obj.mobile != 1 )
+		jQuery('#'+obj.id+'_view').append("<a data-inline='true' data-role='button' id='"+id_sel_add+"'>"+t("Add")+"</a>");
+	
+	jQuery(id_sel_add).click(function(){
 		var current=jQuery('#'+obj.id+"_table tr.working");
 
     if(current.length>0){ //if exist an editing record save it
@@ -304,14 +298,18 @@ Dbmng.prototype.createTable = function(){
 
 
 	if(!obj.auto_sync){
-		jQuery('#'+obj.id+'_view').append(" - <a data-inline='true'data-role='button' id='"+obj.id+"_save'>"+t("Save")+"</a>");
-		jQuery('#'+obj.id+"_save").click(function(){
+		if( obj.mobile != 1 )
+			jQuery('#'+obj.id+'_view').append(" - <a data-inline='true'data-role='button' id='"+id_sel_save+"'>"+t("Save")+"</a>");
+
+		jQuery(id_sel_save).click(function(){
 			obj.syncData();		
 		});	
 	}
 
-	jQuery('#'+obj.id+'_view').append(" - <a data-inline='true' data-role='button' id='"+obj.id+"_reload'>"+t("Reset")+"</a>");
-	jQuery('#'+obj.id+"_reload").click(function(){
+	if( obj.mobile != 1 )
+		jQuery('#'+obj.id+'_view').append(" - <a data-inline='true' data-role='button' id='"+id_sel_reload+"'>"+t("Reset")+"</a>");
+
+	jQuery(id_sel_reload).click(function(){
 		if(obj.isSaved()){
 			obj.resetDb();
 		}
