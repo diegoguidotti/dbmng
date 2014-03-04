@@ -58,7 +58,9 @@
 			<a href="#table_list" data-icon="home" data-role="button">Home</a>
 			<a onClick="goToLogin()" data-icon="gear" data-role="button">Tools</a>
 		</div>
-		<div data-role="content" > <div id="table_list_container"></div></div>
+		<div data-role="content" > 
+			<!-- <div id="table_list_container"></div> -->
+		</div>
 
 	</div>
 
@@ -104,7 +106,9 @@
 			
 		</div>
 
-		<div data-role="content" > <div id="record_edit_container"></div></div>
+		<div data-role="content" >
+			<!-- <div id="record_edit_container"></div> -->
+		</div>
 
 	</div>
 

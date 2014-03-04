@@ -53,8 +53,10 @@ function createTableList(d){
 	  //h+='</div>';
 	});
 	h+="</ul>";
-	jQuery('#table_list_container').html(h);
-  jQuery.mobile.changePage("#table_list");
+	
+	//jQuery('#table_list_container').html(h);
+	jQuery("#table_list div:jqmData(role=content)").html(h);
+  jQuery.mobile.changePage(jQuery("#table_list"));
 }
 
 

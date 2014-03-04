@@ -1059,7 +1059,8 @@ Dbmng.prototype.createForm = function(id_record) {
 			
 
 	  jQuery.mobile.changePage("#record_edit");
-		jQuery('#record_edit_container').html(form).trigger("create");
+		//jQuery('#record_edit_container').html(form).trigger("create");
+		jQuery("#record_edit div:jqmData(role=content)").html(form).trigger("create");
 	}
 	else{
 		if(obj.inline==1){
