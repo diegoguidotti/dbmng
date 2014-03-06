@@ -107,7 +107,10 @@ function Dbmng(idt , p) {
 	var html="";
   html += "<div id='"+this.id+"_form'></div>\n";
   html += "<div id='"+this.id+"_view'>\n";
-	jQuery('#'+this.aParam.div_element).html(html);
+
+//	jQuery('#'+this.aParam.div_element).html(html);
+	jQuery('#'+this.aParam.div_element+" div:jqmData(role=content)").html(html);
+
 
 	//check when exit the page
 	jQuery(window).bind('beforeunload', function(){ 
@@ -217,8 +220,10 @@ Dbmng.prototype.createTable = function(){
 	}	
 
 	if( obj.mobile == 1 ){
+		//html+="<div id='dbmng_list_wrapper'>";
 		html+="<ul class='dbmng_list_view' id='"+this.id+"_table' data-role='listview' data-filter='true' >";
 		html+="</ul>";
+		//html+="</div>";
 	}
 	else { 
 		html += "<table class='dbmng_table' id='"+this.id+"_table'>\n";

@@ -66,12 +66,14 @@
 
 
 	<div data-role="page"  id="table_edit">
-		<div data-role="header" >
+		<div data-role="header" data-position="fixed">
 			<h1><span id="table_edit_header">Edit Table<span></h1>
 			<a href="#table_list" data-icon="home" data-role="button">Home</a>
 			<a onClick="goToLogin()" data-icon="gear" data-role="button">Tools</a>
 		</div>
-		<div data-role="content" > <div id="table_edit_container"></div></div>
+		<div data-role="content" > 
+			<div id="table_edit_container"></div>
+		</div>
 
 	  <div data-role="footer" data-position="fixed">
 	    <div data-role="controlgroup" data-type="horizontal">

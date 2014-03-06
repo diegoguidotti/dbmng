@@ -66,7 +66,7 @@ function showTable(id_table) {
 
 
 	var db= new Dbmng(id_table, {
-			'div_element':'table_edit_container',   //div id containing the table
+			'div_element':'table_edit',   //div id containing the table
 			'ajax_url':'ajax.php',    //Where is locate the php with ajax function (relative to the current PHP file)
 			'auto_sync': 0,    			  //Save automatically to the server record by record
 			'inline':0,               //Enable editing in the table without creating a new form

@@ -142,3 +142,14 @@ ul.dbmng_list_view div.ok  {
 .ui-icon-myapp-copy {
 	background: url("themes/copy_white.png") no-repeat rgba(0, 0, 0, 0.4) !important;
 }
+
+#dbmng_list_wrapper {
+    padding-top : 45px;
+}
+#dbmng_list_wrapper form {
+    position :fixed;
+    top      : 15px;
+    left     : 15px;
+    width    : 100%;
+    z-index  : 1;
+}
