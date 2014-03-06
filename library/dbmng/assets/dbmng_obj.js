@@ -220,10 +220,8 @@ Dbmng.prototype.createTable = function(){
 	}	
 
 	if( obj.mobile == 1 ){
-		//html+="<div id='dbmng_list_wrapper'>";
 		html+="<ul class='dbmng_list_view' id='"+this.id+"_table' data-role='listview' data-filter='true' >";
 		html+="</ul>";
-		//html+="</div>";
 	}
 	else { 
 		html += "<table class='dbmng_table' id='"+this.id+"_table'>\n";
