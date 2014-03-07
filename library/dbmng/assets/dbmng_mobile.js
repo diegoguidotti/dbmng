@@ -58,7 +58,7 @@ function showTable(id_table) {
 
 	var default_call='ajax.php';
 	if(base_call){
-		default_call=base_call+"ajax_mobile.php";
+		default_call=base_call+"ajax.php";
 	}
 
 	var db= new Dbmng(id_table, {
@@ -111,7 +111,7 @@ function doLogin(){
 
 function doLogout(){
 	debug("doLogout");
-  var call=base_call+'?do_logout=on';
+  var call=base_call+'ajax_mobile.php?do_logout=on';
   jQuery.ajax({
     url: call,
     success: function(data) {

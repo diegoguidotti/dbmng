@@ -122,8 +122,8 @@
 
 	<script type="text/javascript">
 
-		//var base_call="";
-		var base_call="http://www.michelemammini.it/dbmng/tests/";//ajax_mobile.php";
+		var base_call="";
+		//var base_call="http://www.michelemammini.it/dbmng/tests/";//ajax_mobile.php";
 
 		jQuery(document).ready(function() {
 		//jQuery(document).on('mobileinit', function() {
