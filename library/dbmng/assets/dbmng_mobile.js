@@ -58,7 +58,7 @@ function showTable(id_table) {
 
 	var default_call='ajax.php';
 	if(base_call){
-		default_call=base_call+"ajax.php";
+		default_call=base_call+"ajax_mobile.php";
 	}
 
 	var db= new Dbmng(id_table, {
