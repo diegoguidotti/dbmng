@@ -283,7 +283,7 @@ Dbmng.prototype.createTable = function(){
 	if( obj.mobile != 1 )
 		jQuery('#'+obj.id+'_view').append("<a data-inline='true' data-role='button' id='"+id_sel_add+"'>"+t("Add")+"</a>");
 	
-	jQuery(id_sel_add).click(function(){
+	jQuery(id_sel_add).unbind().click(function(){
 		var current=jQuery('#'+obj.id+"_table tr.working");
 
     if(current.length>0){ //if exist an editing record save it
@@ -304,7 +304,7 @@ Dbmng.prototype.createTable = function(){
 		if( obj.mobile != 1 )
 			jQuery('#'+obj.id+'_view').append(" - <a data-inline='true'data-role='button' id='"+id_sel_save+"'>"+t("Save")+"</a>");
 
-		jQuery(id_sel_save).click(function(){
+		jQuery(id_sel_save).unbind().click(function(){
 			obj.syncData();		
 		});	
 	}
@@ -312,7 +312,7 @@ Dbmng.prototype.createTable = function(){
 	if( obj.mobile != 1 )
 		jQuery('#'+obj.id+'_view').append(" - <a data-inline='true' data-role='button' id='"+id_sel_reload+"'>"+t("Reset")+"</a>");
 
-	jQuery(id_sel_reload).click(function(){
+	jQuery(id_sel_reload).unbind().click(function(){
 		if(obj.isSaved()){
 			obj.resetDb();
 		}
@@ -333,8 +333,8 @@ Dbmng.prototype.createTable = function(){
 	    }
 	    else{             
 	      var current=jQuery('#'+obj.id+"_table tr.working");
-	      debug(current);
-	      debug(current.length);
+	      //debug(current);
+	      //debug(current.length);
 	
 	      if(current.length>0){ //if exist an editing record save it
 	        debug('save the record '+current.attr('id'));   
@@ -385,6 +385,7 @@ Dbmng.prototype.createTable = function(){
 /**
 */
 Dbmng.prototype.resetDb = function() {
+	var obj=this;
 	jQuery.jStorage.deleteKey(obj.id+"_data");
 	jQuery.jStorage.deleteKey(obj.id+"_form");
 	obj.start();		
@@ -403,7 +404,7 @@ Dbmng.prototype.syncData = function() {
 		obj.running=true;
 
 		if(obj.isSaved()){
-			debug('NO DATA TO SAVE');
+			debug('NO DATA TO SAVE '+obj.id);
 			obj.running=false;
 		}
 		else {
@@ -465,7 +466,9 @@ Dbmng.prototype.syncData = function() {
 					}
 
 					obj.createTable();
-					//jQuery.jStorage.deleteKey(obj.id+"_data");
+					
+					obj.updateStorage();
+					
 
 					debug('end '+obj.prog);
 					obj.running=false;
@@ -495,7 +498,7 @@ Dbmng.prototype.syncData = function() {
 Dbmng.prototype.attachCommand = function (id_record) {
 	var obj=this;
 
-	jQuery('#'+obj.id+'_del_'+id_record).click(function(e){		
+	jQuery('#'+obj.id+'_del_'+id_record).unbind().click(function(e){		
 		if(!obj.auto_sync){
 			obj.deleteRecord(id_record);
 		}
@@ -508,16 +511,16 @@ Dbmng.prototype.attachCommand = function (id_record) {
 		e.stopPropagation(); //stopPropagation block the auto_edit features when clicking on table row
 	});
 
-	jQuery('#'+obj.id+'_restore_'+id_record).click(function(e){						
+	jQuery('#'+obj.id+'_restore_'+id_record).unbind().click(function(e){						
 		obj.restoreRecord(id_record);
 		e.stopPropagation();
 	});
 
-	jQuery('#'+obj.id+'_upd_'+id_record).click(function(e){						
+	jQuery('#'+obj.id+'_upd_'+id_record).unbind().click(function(e){						
 		obj.createForm(id_record);			
 	});
 		
-	jQuery('#'+obj.id+'_dup_'+id_record).click(function(e){						
+	jQuery('#'+obj.id+'_dup_'+id_record).unbind().click(function(e){						
 		obj.duplicateRecord(id_record);
 		e.stopPropagation();
 	});
@@ -526,7 +529,7 @@ Dbmng.prototype.attachCommand = function (id_record) {
 	if( obj.mobile == 1 ) {
 		//the click event has to be associated to the parent of the div containing the record
 		//in that way will be triggered if you click in any way of the listview item
-		jQuery('#'+obj.id+'_'+id_record).parent().click(function(e){								
+		jQuery('#'+obj.id+'_'+id_record).parent().unbind().click(function(e){								
 			obj.createForm(id_record);			
 		});
 	}
@@ -553,6 +556,8 @@ Dbmng.prototype.isSaved = function() {
 	if(obj.aData.updated)
 		ul=Object.keys(obj.aData.updated).length ;
 
+	debug(obj.id+" ins:"+il+" de: "+dl+" up: "+ul);
+
 	if(il==0 && dl==0 && ul==0){
 		return true;
 	}
@@ -573,7 +578,7 @@ Dbmng.prototype.createRow = function (value, id_record) {
 	var o=value.record;		
 
 	var added_field_mobile=0;
-	debug(value.record);
+	//debug(value.record);
 
 	var html_row="";
 
@@ -864,6 +869,8 @@ Dbmng.prototype.updateRecord = function(item, id_record) {
 /**
 */
 Dbmng.prototype.goBackToTable = function() {
+	var obj=this;
+
 	if( obj.mobile == 1 ){
 		  jQuery.mobile.changePage("#table_edit");
 		  
@@ -884,7 +891,10 @@ Dbmng.prototype.goBackToTable = function() {
 /**
 */
 Dbmng.prototype.updateStorage = function() {
+	var obj=this;
+
 	debug('upd storage on '+this.id);
+	debug(this.aData);
 
 	jQuery.jStorage.set(this.id+"_data", this.aData);
 
@@ -1049,13 +1059,12 @@ Dbmng.prototype.createForm = function(id_record) {
 		//jQuery('#record_edit_del').html(html_del);//.trigger("create");
 
 
-		jQuery('#record_edit_del').click(function(){
-			debug('delete');
-			obj.deleteRecord(id_record);
-			
+		jQuery('#record_edit_del').unbind().click(function(e){
+			debug('delete '+id_record);
+			obj.deleteRecord(id_record);			
 		});
 
-		jQuery('#record_edit_dup').click(function(e){						
+		jQuery('#record_edit_dup').unbind().click(function(e){						
 			obj.duplicateRecord(id_record);
 			e.stopPropagation();
 		});
@@ -1074,11 +1083,11 @@ Dbmng.prototype.createForm = function(id_record) {
 		}
 	}
 	
-	jQuery('#'+obj.id+"_"+id_record+"_insert").click(function(){			
+	jQuery('#'+obj.id+"_"+id_record+"_insert").unbind().click(function(){			
 		obj.prepareInsert(id_record);		
 	});
 	
-	jQuery('#'+obj.id+"_"+id_record+"_update").click(function(){
+	jQuery('#'+obj.id+"_"+id_record+"_update").unbind().click(function(){
 		obj.prepareUpdate(id_record);		
 	});
 }
@@ -1091,6 +1100,7 @@ Dbmng.prototype.createForm = function(id_record) {
 /**
 */
 Dbmng.prototype.prepareInsert = function(id_record){
+	var obj=this;
 	var record= {};			
 	jQuery.each(obj.aForm.fields, function(index, field){ 
 		if(typeof window["dbmng_"+field.widget+"_prepare_val"] == "undefined") {

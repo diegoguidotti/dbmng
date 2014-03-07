@@ -5,24 +5,6 @@ function init_mobile(){
     createTableList(uid);
 	}
 
-/**
-	jQuery('body').bind('hideOpenMenus', function(){
-	    jQuery("ul:jqmData(role='menu')").find('li > ul').hide();
-	}); 
-	var menuHandler = function(e) {
-	    jQuery('body').trigger('hideOpenMenus');
-	    jQuery(this).find('li > ul').show();
-	    e.stopPropagation();
-	};
-	jQuery("ul:jqmData(role='menu') li > ul li").click(function(e) {
-	   jQuery('body').trigger('hideOpenMenus');
-	e.stopPropagation();
-	});
-	jQuery('body').delegate("ul:jqmData(role='menu')",'click',menuHandler);
-	jQuery('body').click(function(e){
-	   jQuery('body').trigger('hideOpenMenus');
-	});
-*/
 
 	jQuery.mobile.pageContainer.on("pagechange", function(event, data) {
         var toPage = data.toPage[0].id;
@@ -35,6 +17,16 @@ function init_mobile(){
 					//jQuery("#"+toPage+"").trigger('create');
 				}
 	});
+
+}
+
+
+function dbReset(){
+
+	jQuery.each(jQuery.jStorage.index(), function(k,v){
+		jQuery.jStorage.deleteKey(v);
+	});
+	init_mobile;
 
 }
 

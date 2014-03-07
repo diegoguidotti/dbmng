@@ -61,7 +61,11 @@
 		<div data-role="content" > 
 			<!-- <div id="table_list_container"></div> -->
 		</div>
-
+		<div data-role="footer" data-position="fixed">
+	    <div data-role="controlgroup" data-type="horizontal">
+	      <a data-role=button onClick="dbReset()" id=db_reset> Reset </a> 
+	    </div>
+	  </div>
 	</div>
 
 
