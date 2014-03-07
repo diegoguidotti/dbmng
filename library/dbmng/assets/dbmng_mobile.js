@@ -56,10 +56,14 @@ function showTable(id_table) {
 	//Check if exist an aForm in the jstorage
 	jQuery.mobile.changePage("#table_edit");
 
+	var default_call='ajax.php';
+	if(base_call){
+		default_call=base_call+"ajax.php";
+	}
 
 	var db= new Dbmng(id_table, {
 			'div_element':'table_edit',   //div id containing the table
-			'ajax_url':'ajax.php',    //Where is locate the php with ajax function (relative to the current PHP file)
+			'ajax_url':default_call,    //Where is locate the php with ajax function (relative to the current PHP file)
 			'auto_sync': 0,    			  //Save automatically to the server record by record
 			'inline':0,               //Enable editing in the table without creating a new form
 			'auto_edit':1,            //Run the synch after moving on a new row; auto edit is available only in auto_sync mode
@@ -76,7 +80,7 @@ function doLogin(){
 	debug('doLogin');
 
   if(user_id!='' && password!=''){
-    var call=base_call+'?do_login=on&name='+user_id+'&pass='+password;
+    var call=base_call+'ajax_mobile.php?do_login=on&name='+user_id+'&pass='+password;
     
     jQuery.ajax({
       url: call,

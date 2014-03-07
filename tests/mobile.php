@@ -122,7 +122,8 @@
 
 	<script type="text/javascript">
 
-		var base_call="ajax_mobile.php";
+		var base_call="";
+		//var base_call="http://www.yourserver.it/dbmng/";
 
 		jQuery(document).ready(function() {
 		//jQuery(document).on('mobileinit', function() {
