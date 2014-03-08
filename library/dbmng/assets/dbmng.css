@@ -153,3 +153,10 @@ ul.dbmng_list_view div.ok  {
     width    : 100%;
     z-index  : 1;
 }
+
+.center-wrapper {
+  text-align: center;
+}
+.center-wrapper * {
+  margin: 0 auto;
+}

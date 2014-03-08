@@ -30,6 +30,10 @@
 			<a href="#table_list" data-icon="home" data-role="button">Home</a>
 		</div>
 		<div data-role="content" >
+		  <div class="center-wrapper">
+		    <img src="../library/dbmng/assets/themes/logo1.png" alt="Header" />
+		  </div>
+			
 			<div id="login_message" ></div>
 			<form    action=""  onsubmit="return doLogin()" id="login_form" method="post" data-ajax="false" >
 				<div data-role="fieldcontain" class="ui-hide-label">
