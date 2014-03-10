@@ -111,7 +111,7 @@ function doLogin(){
 
 function doLogout(){
 	debug("doLogout");
-  var call=base_call+'?do_logout=on';
+  var call=base_call+'ajax_mobile.php?do_logout=on';
   jQuery.ajax({
     url: call,
     success: function(data) {
