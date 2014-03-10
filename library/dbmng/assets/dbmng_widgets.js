@@ -126,6 +126,16 @@ dbmng_date_form = function(obj_id,  fld, field, id_record, value, more, act ){
 }
 */
 
+dbmng_date_form = function(obj_id,  fld, field, id_record, value, more, act ){
+	var html  = "pippo<input type='date' name='"+fld+"' id='"+obj_id+"_"+id_record+"_"+fld+"' " + more;
+	html += " value= '"+value+"' ";	
+	html += Dbmng.layout_get_nullable(field,act);
+	html += " />\n";
+	return html;
+}
+
+
+
 dbmng_password_form = function(obj_id,  fld, field, id_record, value, more, act ){
 	var html  = "<input type='password' name='"+fld+"' id='"+obj_id+"_"+id_record+"_"+fld+"' " + more;
 	html += " value= '"+value+"' ";	
