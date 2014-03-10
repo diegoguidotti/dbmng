@@ -75,14 +75,14 @@
 
 
 	<div data-role="page"  id="table_edit">
-    <!-- Android-like menu -->
+    <!-- Android-like menu 
 		<div class="androidMenu">
 			<ul>
 			  <li data-menutype="dup">Duplicate</li>
 			  <li data-menutype="del">Delete</li>
 			</ul>
 		</div>
-
+		-->
 		<div data-role="header" data-position="fixed">
 			<h1><span id="table_edit_header">Edit Table<span></h1>
 			<a href="#table_list" data-icon="home" data-role="button">Home</a>

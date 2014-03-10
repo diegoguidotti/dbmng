@@ -530,10 +530,19 @@ Dbmng.prototype.attachCommand = function (id_record) {
 		//the click event has to be associated to the parent of the div containing the record
 		//in that way will be triggered if you click in any way of the listview item
 		
+		html  = '<div class="androidMenu" id=#'+obj.id+'_'+id_record+'>';
+		html += '	<ul>';
+		html += '	  <li data-menutype="dup">Duplicate</li>';
+		html += '	  <li data-menutype="del">Delete</li>';
+		html += '	</ul>';
+		html += '</div>';
+  	jQuery('#table_edit div:jqmData(role=page)').append(html);
+
 		//jQuery('#'+obj.id+'_'+id_record).parent().unbind().click(function(e){								
 		jQuery('#'+obj.id+'_'+id_record).parent().unbind().on('tap taphold', function(e){								
 	    if (e.type == 'taphold') {
 	        debug("dbmng Taphold show the content menu");
+
 	        jQuery('.androidMenu').toggle();
 	        
 	    } else if (e.type == 'tap') {
