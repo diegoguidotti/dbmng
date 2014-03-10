@@ -529,11 +529,24 @@ Dbmng.prototype.attachCommand = function (id_record) {
 	if( obj.mobile == 1 ) {
 		//the click event has to be associated to the parent of the div containing the record
 		//in that way will be triggered if you click in any way of the listview item
-		jQuery('#'+obj.id+'_'+id_record).parent().unbind().click(function(e){								
-			obj.createForm(id_record);			
+		//jQuery('#'+obj.id+'_'+id_record).parent().unbind().click(function(e){								
+		jQuery('#'+obj.id+'_'+id_record).parent().unbind().on('tap taphold', function(e){								
+	    if (e.type == 'taphold') {
+	        debug("dbmng Taphold show the content menu");
+	        jQuery('.androidMenu').toggle();
+	        
+	    } else if (e.type == 'tap') {
+	        debug("dbmng Tap");
+					obj.createForm(id_record);			
+	    }
 		});
+		
+		jQuery('.androidMenu').on('click', function (event) {
+		    console.log("Menu clicked");
+		    console.log(">>"+id_record);
+		    jQuery('.androidMenu').toggle();
+		});		
 	}
-
 }
 
 /////////////////////////////////////////////////////////////////////////////
