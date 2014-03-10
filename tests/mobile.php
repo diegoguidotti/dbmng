@@ -76,13 +76,16 @@
 
 	<div data-role="page"  id="table_edit">
     <!-- Android-like menu 
-		<div class="androidMenu">
+		<div class="androidMenu"> -->
+		<div data-role="popup" id="tapholdmenu">
+			<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
 			<ul>
-			  <li data-menutype="dup">Duplicate</li>
-			  <li data-menutype="del">Delete</li>
+			  <li id="tapholdmenu_dup">Duplicate</li>
+			  <li id="tapholdmenu_del">Delete</li>
+			  <li id="tapholdmenu_res">Restore</li>
 			</ul>
 		</div>
-		-->
+		
 		<div data-role="header" data-position="fixed">
 			<h1><span id="table_edit_header">Edit Table<span></h1>
 			<a href="#table_list" data-icon="home" data-role="button">Home</a>
