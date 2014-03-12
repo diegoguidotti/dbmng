@@ -630,15 +630,16 @@ Dbmng.prototype.createRow = function (value, id_record) {
 						}
 
 						if(obj.mobile){	
-							var added = false;						
-							if(added_field_mobile<2 && !added){
+							if(added_field_mobile<2){
+								//debug(added_field_mobile+"<2: "+html_value);
 								html_row += html_value +" ";
 								added_field_mobile++;
-								added = true;
 							}
-							if(added_field_mobile==2 && !added){
+							else if(added_field_mobile==2){
+								//debug(added_field_mobile+"=2: "+html_value);
 								html_row = "<h3>"+html_row+"</h3>";
 								html_row += "<p>"+html_value+"</p>";
+								added_field_mobile++;
 							}
 						}	
 						else{
