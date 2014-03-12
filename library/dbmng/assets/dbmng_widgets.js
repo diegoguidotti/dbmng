@@ -135,8 +135,26 @@ dbmng_date_form = function(obj_id,  fld, field, id_record, value, more, act ){
 }
 
 dbmng_date_html = function(val, field ){
-	datetime = new Date(val);
-	return datetime.toString("d-m-Y");
+	if(val){
+		if(val!='0000-00-00'){
+			datetime = new Date(val);
+			var mm=datetime.getMonth()+1;
+			if(mm<10)
+				mm="0"+mm;
+
+			var dd=datetime.getDate();
+			if(dd<10)
+				dd="0"+dd;
+
+			return dd+"-"+mm+"-"+datetime.getFullYear();
+		}
+		else{
+			return "-";
+		}
+	}
+	else{
+		return "-";
+	}
 }
 
 

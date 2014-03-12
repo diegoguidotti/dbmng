@@ -14,7 +14,7 @@
 </head>
 <body>
 
-<div id="table2"></div>
+<div id="table2">Table2</div>
 
 <?php 
   //we need to define some global variable to use dbmg independently by Drupal
