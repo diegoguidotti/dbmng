@@ -629,10 +629,16 @@ Dbmng.prototype.createRow = function (value, id_record) {
 							html_value =  executeFunctionByName("dbmng_"+f.widget+"_html", window, field_value, f );
 						}
 
-						if(obj.mobile){							
-							if(added_field_mobile<2){
+						if(obj.mobile){	
+							var added = false;						
+							if(added_field_mobile<2 && !added){
 								html_row += html_value +" ";
 								added_field_mobile++;
+								added = true;
+							}
+							if(added_field_mobile==2 && !added){
+								html_row = "<h3>"+html_row+"</h3>";
+								html_row += "<p>"+html_value+"</p>";
 							}
 						}	
 						else{
@@ -678,10 +684,10 @@ Dbmng.prototype.createRow = function (value, id_record) {
 		else {
 						
 				if( nDel == 1 ){				
-					html_row += '<span id="'+obj.id+'_del_'+id_record+'"><a  class="dbmng_delete_button"  >' + t('Delete') +'</a>' + "&nbsp;</span>";
+					html_row += '<span id="'+obj.id+'_del_'+id_record+'"><a  class="dbmng_delete_button" >' + t('Delete') +'</a>' + "&nbsp;</span>";
 				}
 				if( nUpd == 1 ){				
-					html_row += '<span id="'+obj.id+'_upd_'+id_record+'"><a  class="dbmng_update_button"  >' + t('Update') +'</a>' + "&nbsp;</span>";
+					html_row += '<span id="'+obj.id+'_upd_'+id_record+'"><a  class="dbmng_update_button" >' + t('Update') +'</a>' + "&nbsp;</span>";
 				}
 				if( nDup == 1 ){				
 					html_row += '<span id="'+obj.id+'_dup_'+id_record+'"><a  class="dbmng_duplicate_button"  >' + t('Duplicate') +'</a>' + "&nbsp;</span>";
@@ -1070,17 +1076,19 @@ Dbmng.prototype.createForm = function(id_record) {
 
 	form+="</form>";
 	
-	datarole = ""
+	datarole = "";
+	datatheme = "";
 	if( obj.mobile == 1 ){
-		datarole = "data-role='button'";
+		datarole  = "data-role='button'";
+		datatheme = "data-theme='b'";
 	}
 	
 	
 	if(act=='ins'){
-		form+="<a id='"+this.id+"_"+id_record+"_insert' "+datarole+">"+t("Insert")+"</a>";		
+		form+="<a id='"+this.id+"_"+id_record+"_insert' "+datarole+" "+datatheme+">"+t("Insert")+"</a>";		
 	}
 	else{
-		form+="<a id='"+this.id+"_"+id_record+"_update' "+datarole+">"+t("Update")+"</a>";		
+		form+="<a id='"+this.id+"_"+id_record+"_update' "+datarole+" "+datatheme+">"+t("Update")+"</a>";		
 	}
 	
 	if( obj.mobile == 1 ){
