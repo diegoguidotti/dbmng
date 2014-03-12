@@ -44,7 +44,7 @@
 					<label for="password">password</label>
 					<input type="password" name="password" id="password" value="" placeholder="password">
 				</div>
-				<button type="submit" data-theme="b" name="submit" value="submit-value">userID</button>
+				<button type="submit" data-theme="b" name="submit" value="submit-value">Login</button>
 				<span id="dialog_login"></span>
 			</form>
 			
@@ -108,22 +108,6 @@
 		<div data-role="header" id="header">
 			<a href="#table_edit" data-icon="arrow-l" data-role="button">Back</a>
 
-			<div data-type="horizontal" data-role="controlgroup" class="ui-btn-right">  
-		    <a id="record_edit_dup" data-role="button" data-inline="true" data-icon="myapp-copy">Duplicate</a> 
-		    <a id="record_edit_del" data-role="button" data-inline="true" data-icon="delete" data-iconpos="right">Delete</a>	<!-- data-icon="delete" -->
-		  </div>
-
-<!--
-      <ul id="menu-right" data-role="menu">
-          <li>
-              <span data-role="button" data-icon="arrow-d" data-iconpos="right">Actions</span>
-              <ul data-role="listview" data-inset="true">
-                 <li data-icon="false"><div id="record_edit_dup"></div></li>
-                 <li data-icon="false"><div id="record_edit_del"></div></li>
-              </ul>
-          </li>
-      </ul>
--->        
 			<h1>Edit Record</h1>
 			
 		</div>
