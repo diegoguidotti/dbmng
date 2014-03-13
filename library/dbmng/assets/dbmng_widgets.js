@@ -105,27 +105,6 @@ dbmng_textarea_form = function(obj_id,  fld, field, id_record, value, more, act 
 }
 
 
-/* review date form
-dbmng_date_form = function(obj_id,  fld, field, id_record, value, more, act ){
-	var html='';
-	if( typeof value!="undefined"  && value!='' )
-		{
-			datetime = new Date(value);             //DateTime::createFromFormat('Y-m-d', $value);
-			datetime_str= datetime.toString("d-m-Y"); //datetime->format('d-m-Y');
-		}
-			
-	//add a new input field for the datapicker ui
-	html  = "<input type='text' name='"+fld+"_tmp' id='"+obj_id+"_"+id_record+"_"+fld+"_tmp' value='"+datetime_str+"' />";
-	//keep hidden the "real" input form
-	html += "<input type='hidden' name='"+fld+"' id='"+obj_id+"_"+id_record+"_"+fld+"' ";
-	html += " value= '"+value+"' ";	
-	html += Dbmng.layout_get_nullable(field,act);	
-	html += " />\n";
-
-	return html;
-}
-*/
-
 dbmng_date_form = function(obj_id,  fld, field, id_record, value, more, act ){
 	var html  = "<input type='date' name='"+fld+"' id='"+obj_id+"_"+id_record+"_"+fld+"' " + more;
 	html += " value= '"+value+"' ";	

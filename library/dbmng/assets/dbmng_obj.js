@@ -551,8 +551,48 @@ Dbmng.prototype.attachCommand = function (id_record) {
 		//the click event has to be associated to the parent of the div containing the record
 		//in that way will be triggered if you click in any way of the listview item
 		
-		//jQuery('#'+obj.id+'_'+id_record).parent().unbind().click(function(e){								
-		jQuery('#'+obj.id+'_'+id_record).parent().unbind().on('tap taphold', function(e){								
+		//jQuery('#'+obj.id+'_'+id_record).parent().unbind().click(function(e){		
+		var tapTime = 0;						
+		jQuery('#'+obj.id+'_'+id_record).parent().unbind().on('vmousedown vmouseup', function(e){ //.on('taphold tap', function(e){ //
+	    if( e.type == 'vmousedown' ) {
+	    	tapTime = new Date().getTime();
+	    }
+	    else{
+	    	var duration = (new Date().getTime() - tapTime);
+	    	if( duration >1000 ){
+	    		//taphold
+		      debug("dbmng Taphold show the content menu");
+		      
+		      var state = obj.aData.records[id_record].state
+					if( state == 'del' ){
+						jQuery('#tapholdmenu_res').show();
+						jQuery('#tapholdmenu_del').hide();
+					}
+					else{
+						jQuery('#tapholdmenu_res').hide();
+						jQuery('#tapholdmenu_del').show();
+					}
+		      jQuery('#tapholdmenu').popup("open");
+		
+					jQuery('#tapholdmenu_del').unbind().on('click', function (event) {
+							obj.deleteRecord(id_record);
+					    //jQuery('.androidMenu').toggle();
+					});		
+					jQuery('#tapholdmenu_dup').unbind().on('click', function (event) {
+							obj.duplicateRecord(id_record);
+					    //jQuery('.androidMenu').toggle();
+					});		
+					jQuery('#tapholdmenu_res').unbind().on('click', function (event) {
+							obj.restoreRecord(id_record);
+					    //jQuery('.androidMenu').toggle();
+					});		
+	    	}
+	    	else{
+	        debug("dbmng Tap");
+					obj.createForm(id_record);			
+	    	}
+	  	}
+	  	/**
 	    if (e.type == 'taphold') {
 	      debug("dbmng Taphold show the content menu");
 	      
@@ -583,6 +623,7 @@ Dbmng.prototype.attachCommand = function (id_record) {
 	        debug("dbmng Tap");
 					obj.createForm(id_record);			
 	    }
+	    */
 		});
 		
 	}
