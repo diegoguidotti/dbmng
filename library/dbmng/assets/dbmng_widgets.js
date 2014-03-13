@@ -145,23 +145,30 @@ dbmng_password_form = function(obj_id,  fld, field, id_record, value, more, act 
 }
 //<button onclick="getImage();">Upload a Photo</button>
 dbmng_picture_form = function(obj_id,  fld, field, id_record, value, more, act ){
+
+	jQuery.jStorage.set('tmp_picture',{'obj_id':obj_id, 'id_record': id_record, 'fld': fld});
+
 	html = '<button onclick="dbmng_getImage();">Upload a Photo</button>';
 	html += "<input type='input' name='"+fld+"' id='"+obj_id+"_"+id_record+"_"+fld+"' " + more;
 	html += " value= '"+value+"' ";	
 	html += Dbmng.layout_get_nullable(field,act);
 	html += " />\n";
+
+	html+='<img id="'+obj_id+'_'+id_record+'_'+fld+'_image" width="300px" src="'+value+'" />';
 	return html;
 }
 
 dbmng_getImage = function(){
   // Retrieve image file location from specified source
   if(is_cordova()){
+
+		
 	  navigator.camera.getPicture(uploadPhoto, function(message) {
 			alert('get picture failed');
 			},{
 			quality: 50, 
 			destinationType: navigator.camera.DestinationType.FILE_URI,
-			sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY
+			sourceType: navigator.camera.PictureSourceType.CAMERA
 		});
 	}
 	else{
@@ -170,7 +177,17 @@ dbmng_getImage = function(){
 }
  
 function uploadPhoto(imageURI) {
+
 	debug("imageURI: "+imageURI);
+	var o=jQuery.jStorage.get('tmp_picture');
+	o['imageURI']=imageURI;
+	jQuery.jStorage.set('tmp_picture',o);
+
+	jQuery('#'+o['obj_id']+'_'+o['id_record']+'_'+o['fld']).val(imageURI);
+	jQuery('img#'+o['obj_id']+'_'+o['id_record']+'_'+o['fld']+'_image').attr("src",imageURI);
+
+	debug(JSON.stringify(o));
+	
 }
 
 dbmng_password_html = function(val, field ){

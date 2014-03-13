@@ -5,6 +5,11 @@ function init_mobile(){
     createTableList(uid);
 	}
 
+	if(is_cordova()){
+		document.addEventListener("resume", function(){
+			debug('resume!!!!!!!!');
+		}, false);
+	}
 
 	jQuery.mobile.pageContainer.on("pagechange", function(event, data) {
         var toPage = data.toPage[0].id;
@@ -15,6 +20,14 @@ function init_mobile(){
         }
 				else if(toPage=='record_edit'){ 
 					//jQuery("#"+toPage+"").trigger('create');
+				}
+				else if(toPage=='login_page'){ 
+					tmp=jQuery.jStorage.get('tmp_picture');
+					debug('post_login'+JSON.stringify(tmp));
+					//if(tmp){ //recover from the camera
+					//	jQuery.mobile.changePage("#record_edit");
+					//}
+
 				}
 	});
 
