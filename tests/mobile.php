@@ -124,11 +124,13 @@
 
 		var base_call="";
 		//var base_call="http://www.michelemammini.it/dbmng/tests/";//ajax_mobile.php";
-
-		jQuery(document).ready(function() {
-		//jQuery(document).on('mobileinit', function() {
-			init_mobile();
-		});
+		if ( is_cordova() ) {
+        document.addEventListener("deviceready", init_mobile, false);
+    } 
+    else {
+        jQuery(document).ready(init_mobile);
+    }
+    
 	</script>
 </body>
 </html>

@@ -136,13 +136,41 @@ dbmng_date_html = function(val, field ){
 	}
 }
 
-
 dbmng_password_form = function(obj_id,  fld, field, id_record, value, more, act ){
 	var html  = "<input type='password' name='"+fld+"' id='"+obj_id+"_"+id_record+"_"+fld+"' " + more;
 	html += " value= '"+value+"' ";	
 	html += Dbmng.layout_get_nullable(field,act);
 	html += " />\n";
 	return html;
+}
+//<button onclick="getImage();">Upload a Photo</button>
+dbmng_picture_form = function(obj_id,  fld, field, id_record, value, more, act ){
+	html = '<button onclick="dbmng_getImage();">Upload a Photo</button>';
+	html += "<input type='input' name='"+fld+"' id='"+obj_id+"_"+id_record+"_"+fld+"' " + more;
+	html += " value= '"+value+"' ";	
+	html += Dbmng.layout_get_nullable(field,act);
+	html += " />\n";
+	return html;
+}
+
+dbmng_getImage = function(){
+  // Retrieve image file location from specified source
+  if(is_cordova()){
+	  navigator.camera.getPicture(uploadPhoto, function(message) {
+			alert('get picture failed');
+			},{
+			quality: 50, 
+			destinationType: navigator.camera.DestinationType.FILE_URI,
+			sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY
+		});
+	}
+	else{
+		debug('Image upload available only in mobile');	
+	}
+}
+ 
+function uploadPhoto(imageURI) {
+	debug("imageURI: "+imageURI);
 }
 
 dbmng_password_html = function(val, field ){

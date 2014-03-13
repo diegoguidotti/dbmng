@@ -165,3 +165,12 @@ function showMessageBox (message) {
 	// show the dialog programmatically
 	jQuery.mobile.changePage(dlg, {role: "dialog"});
 }
+
+
+
+/*
+ * Return true/false indicating whether we're running under Cordova/Phonegap
+ */
+function is_cordova() {
+    return (typeof(cordova) !== 'undefined' || typeof(phonegap) !== 'undefined');
+};
