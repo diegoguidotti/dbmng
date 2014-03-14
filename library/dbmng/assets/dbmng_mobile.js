@@ -1,15 +1,30 @@
 function init_mobile(){
 	debug('start mobile');
+
+	
+
 	var uid = jQuery.jStorage.get("dbmng_user");
 	if(uid){
     createTableList(uid);
 	}
 
+/* I try but I failed 
 	if(is_cordova()){
-		document.addEventListener("resume", function(){
-			debug('resume!!!!!!!!');
-		}, false);
+		jQuery(document).on("mobileinit",function() {
+				jQuery('#loading').on('pageshow',function() {			
+					debug('!!!!!!!!!!!!!!!!loading');
+					var initial = '#login_page';
+					var tmp=jQuery.jStorage.get('tmp_picture');
+					if(tmp){
+						initial = '#record_edit';
+					}
+					debug('!!!!!!!!!!!!!!!!loading'+initial);
+					//change to our initial page
+					jQuery.mobile.changePage(initial);
+				}
+			}
 	}
+*/
 
 	jQuery.mobile.pageContainer.on("pagechange", function(event, data) {
         var toPage = data.toPage[0].id;
@@ -21,13 +36,8 @@ function init_mobile(){
 				else if(toPage=='record_edit'){ 
 					//jQuery("#"+toPage+"").trigger('create');
 				}
-				else if(toPage=='login_page'){ 
-					tmp=jQuery.jStorage.get('tmp_picture');
-					debug('post_login'+JSON.stringify(tmp));
-					//if(tmp){ //recover from the camera
-					//	jQuery.mobile.changePage("#record_edit");
-					//}
-
+				else if(toPage=='loading'){ 
+					;
 				}
 	});
 
