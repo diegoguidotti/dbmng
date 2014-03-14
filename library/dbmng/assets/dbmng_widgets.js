@@ -153,8 +153,20 @@ dbmng_picture_form = function(obj_id,  fld, field, id_record, value, more, act )
 	html += " value= '"+value+"' ";	
 	html += Dbmng.layout_get_nullable(field,act);
 	html += " />\n";
+	
+	//the value is a json object with imageURI and a field to chek if it has been uploaded
+	var img_src='';
+	if(value){
+		try{
+			var img = JSON.parse(value);
+			img_src=img.imageURI;
+		}
+		catch(e){
+			debug ('Error in parsing '+value);
+		}
+	}
+	html+='<img id="'+obj_id+'_'+id_record+'_'+fld+'_image" width="300px" src="'+img_src+'" />';
 
-	html+='<img id="'+obj_id+'_'+id_record+'_'+fld+'_image" width="300px" src="'+value+'" />';
 	return html;
 }
 
@@ -183,10 +195,12 @@ function uploadPhoto(imageURI) {
 	o['imageURI']=imageURI;
 	jQuery.jStorage.set('tmp_picture',o);
 
-	jQuery('#'+o['obj_id']+'_'+o['id_record']+'_'+o['fld']).val(imageURI);
+	var img={'imageURI': imageURI, 'uploaded': 0};
+
+	jQuery('#'+o['obj_id']+'_'+o['id_record']+'_'+o['fld']).val(JSON.stringify(img));
 	jQuery('img#'+o['obj_id']+'_'+o['id_record']+'_'+o['fld']+'_image').attr("src",imageURI);
 
-	debug(JSON.stringify(o));
+	
 	
 }
 

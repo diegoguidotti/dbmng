@@ -441,6 +441,7 @@ Dbmng.prototype.syncData = function() {
 				data: {"id_table" : obj.id_table, "inserted":  JSON.stringify(obj.aData.inserted), "deleted": JSON.stringify(obj.aData.deleted) , "updated": JSON.stringify(obj.aData.updated) }, 
 				dataType: "json",
 				success: function (data) {
+
 					if(data.deleted){
 						jQuery.each(data.deleted, function(k,v){
 							if(v.ok==1){
@@ -454,6 +455,18 @@ Dbmng.prototype.syncData = function() {
 					}
 
 					var pk_key=obj.aForm.primary_key[0];
+			
+
+					//check if exist a picture field
+					var fld_picture= new Array();
+					var img_to_upload= new Array();
+					jQuery.each(obj.aForm.fields, function(k,v){
+						if(v.widget=='picture'){
+							fld_picture.push(k);
+							debug ('add picture field '+k);
+						}
+					});
+
 
 					if(data.inserted){
 						jQuery.each(data.inserted, function(k,v){
@@ -461,6 +474,7 @@ Dbmng.prototype.syncData = function() {
 								obj.aData.records[k].state='ok';
 								obj.aData.records[k].record[pk_key] = v.inserted_id;
 								delete obj.aData.inserted[k];	
+
 							}
 							else{														
 									//obj.aData.records[k].error=v.error;
@@ -474,6 +488,7 @@ Dbmng.prototype.syncData = function() {
 								if(obj.aData.records[k]){
 									obj.aData.records[k].state='ok';							
 									delete obj.aData.updated[k];	
+
 								}
 								else{
 									alert('Record '+k+' not found in updated');
@@ -485,6 +500,27 @@ Dbmng.prototype.syncData = function() {
 							}
 						});
 					}
+
+
+					//if exist a picture field find some record to be uploaded
+					jQuery.each(fld_picture, function(k2,fld_name){										
+						jQuery.each(obj.aData.records, function(k,rec){	
+									try{
+										var img = JSON.parse(rec.record[fld_name]);
+										if(!img.uploaded){
+												var o={'imageURI': img.imageURI, rec: obj.aData.records[k]};
+												img_to_upload.push(o);												
+										}
+									}
+									catch(e){debug(e);}
+							});
+					});
+
+					jQuery.each(img_to_upload, function(k,v){
+						debug('Try to upload image '+JSON.stringify(v));
+					});
+
+
 
 					obj.createTable();
 					
