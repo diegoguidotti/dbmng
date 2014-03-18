@@ -1,13 +1,13 @@
 function init_mobile(){
 	debug('start mobile');
-  document.location.href='#login_page';
+  
 	
 
 	var uid = jQuery.jStorage.get("dbmng_user");
 	if(uid){
     createTableList(uid);
 	}
-
+	document.location.href='#loading';
 
 	jQuery.mobile.pageContainer.on("pagechange", function(event, data) {
         var toPage = data.toPage[0].id;
@@ -27,7 +27,13 @@ function init_mobile(){
 						jQuery.jStorage.deleteKey('tmp_picture')
 					}
 					else{
-						document.location.href='#login_page';
+						debug(jQuery.jStorage.get('dbmng_user'));
+						if(!jQuery.jStorage.get('dbmng_user')){
+							document.location.href='#login_page';
+						}
+						else{
+								document.location.href='#table_list';
+						}
 					}
 				}
 	});
