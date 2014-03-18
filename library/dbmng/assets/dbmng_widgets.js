@@ -170,6 +170,25 @@ dbmng_picture_form = function(obj_id,  fld, field, id_record, value, more, act )
 	return html;
 }
 
+dbmng_picture_html = function(val, field ){
+	var img_src='';
+	if(val){
+		try{
+			var img = JSON.parse(val);
+			img_src=img.imageURI;
+		}
+		catch(e){
+			debug ('Error in parsing '+val);
+		}
+	}
+	if(img_src != "" )
+		html = "<img src='"+img_src+"' class='dbmng_picture'  />";
+	else
+		html = "-";
+		
+	return html;
+}
+
 dbmng_getImage = function(){
   // Retrieve image file location from specified source
   if(is_cordova()){

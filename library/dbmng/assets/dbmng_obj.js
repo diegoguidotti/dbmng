@@ -75,6 +75,7 @@ function Dbmng(idt , p) {
 		this.inline=p.inline;
 	}	
 
+
 	this.prepend=0;
 	if(p.prepend){
 		this.prepend=p.prepend;
@@ -263,7 +264,6 @@ Dbmng.prototype.createTable = function(){
 			var html_row = "<li ><a class='dbmng_edit_button'  ><div id='"+obj.id+"_"+k+"' class='"+state+"'>";
 			html_row += obj.createRow(value, id_record);	//<a href = "#">record name</a>
 			html_row += "</div></a></li>\n";
-
 			
 			id_element='#'+obj.id+'_view ul';
 
@@ -710,7 +710,8 @@ Dbmng.prototype.createRow = function (value, id_record) {
 	//debug(value.record);
 
 	var html_row="";
-
+	var html_img="";
+	
 		for( var key in o )	{        
 			//get the field parameters
       var f = obj.aForm.fields[key];
@@ -731,13 +732,17 @@ Dbmng.prototype.createRow = function (value, id_record) {
 							}
 
 							if(obj.mobile){	
-								if(added_field_mobile<2){
-									//debug(added_field_mobile+"<2: "+html_value);
+								if( f.widget == "picture" ){
+									//debug("picture: "+html_row);
+									html_row = html_value+html_row;
+								}
+								else if(added_field_mobile<2){
+									//debug("added_field_mobile+<2: "+html_row);
 									html_row += html_value +" ";
 									added_field_mobile++;
 								}
 								else if(added_field_mobile==2){
-									//debug(added_field_mobile+"=2: "+html_value);
+									//debug("added_field_mobile+=2: "+html_row);
 									html_row = "<h3>"+html_row+"</h3>";
 									html_row += "<p>"+html_value+"</p>";
 									added_field_mobile++;

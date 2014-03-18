@@ -74,8 +74,9 @@ function showTable(id_table) {
 	if(base_call){
 		default_call=base_call+"ajax.php";
 	}
-
-	var db= new Dbmng(id_table, {
+	
+	
+	var param={
 			'div_element':'table_edit',   //div id containing the table
 			'ajax_url':default_call,  //Where is locate the php with ajax function (relative to the current PHP file)
 			'prepend': 1,    			  	//invert the order of records (new's one above)
@@ -83,7 +84,10 @@ function showTable(id_table) {
 			'inline':0,               //Enable editing in the table without creating a new form
 			'auto_edit':1,            //Run the synch after moving on a new row; auto edit is available only in auto_sync mode
 			'mobile':1								//Enable jQuery-mobile css style
-		});  
+		}
+		
+		
+	var db= new Dbmng(id_table, param);  
 		db.start();	
 
 

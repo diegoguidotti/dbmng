@@ -200,3 +200,6 @@ ul.dbmng_list_view div.ok  {
 /** 
 	end taphold css
 */
+li img.dbmng_picture{
+	width: 80px;
+}
