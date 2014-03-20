@@ -517,7 +517,7 @@ Dbmng.prototype.syncData = function() {
 					});
 
 					jQuery.each(img_to_upload, function(k,v){
-						debug('Try to upload image '+JSON.stringify(v));
+						obj.uploadImage(v);
 					});
 
 
@@ -545,6 +545,57 @@ Dbmng.prototype.syncData = function() {
 	  jQuery(document).dequeue('myAjaxQueue'); 
   }
 }
+
+
+Dbmng.prototype.uploadImage = function (v) {
+	var obj=this;
+	debug('Try to upload image '+JSON.stringify(v));
+
+	fileURL=v.imageURI;
+
+	
+
+  var uri = encodeURI(base_call+'ajax_mobile.php');
+
+	var options = new FileUploadOptions();
+	options.fileKey="file";
+	options.fileName=fileURL.substr(fileURL.lastIndexOf('/')+1);
+	options.mimeType="text/plain";
+
+		var params = new Object();
+    params.upload_picture = "ok";
+    options.params = params;
+	//var headers={'upload_picture':'ok'};
+
+	//options.headers = headers;
+
+	var ft = new FileTransfer();
+	
+	ft.onprogress = function(progressEvent) {
+		debug(progressEvent.loaded +" "+ progressEvent.total);
+			/*
+		  if (progressEvent.lengthComputable) {
+		    loadingStatus.setPercentage(progressEvent.loaded / progressEvent.total);
+		  } else {
+		    loadingStatus.increment();
+		  }*/
+	};
+	
+	ft.upload(fileURL, uri, dbmng_upload_win, dbmng_upload_fail, options);
+
+}
+
+function dbmng_upload_win(r) {
+            console.log("Code = " + r.responseCode);
+            console.log("Response = " + r.response);
+            console.log("Sent = " + r.bytesSent);
+        }
+
+        function dbmng_upload_fail(error) {
+            alert("An error has occurred: Code = " + error.code);
+            console.log("upload error source " + error.source);
+            console.log("upload error target " + error.target);
+        }
 
 /////////////////////////////////////////////////////////////////////////////
 // Dbmng.prototype.attachCommand

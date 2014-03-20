@@ -8,14 +8,17 @@
 	include(DBMNG_LIB_PATH.'dbmng/dbmng.php');
 	include(DBMNG_LIB_PATH.'dbmng/dbmng_standalone.php');
 
-
-
+ 
 	$ok=false;
 	$json="";
 
-	
+	if(isset($_REQUEST['upload_picture'])){
+		print_r($_FILES);
+   	$new_image_name = "YEAH.jpg";
+    move_uploaded_file($_FILES["file"]["tmp_name"], "/var/www/test/img/".$new_image_name);
 
-	if(isset($_REQUEST['do_login'])){
+	}
+	else if(isset($_REQUEST['do_login'])){
 
 		if(isset($_REQUEST['name']) && isset($_REQUEST['pass'])){	
 
