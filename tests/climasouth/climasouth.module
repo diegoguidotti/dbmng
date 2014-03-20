@@ -22,6 +22,18 @@ function climasouth_block_info()
 	$blocks['climasouth_map'] = array(
 		'info' => t('Climasouth Map block'),
 		);
+	$blocks['climasouth_toolbar'] = array(
+		'info' => t('Climasouth Toolbar'),
+		);
+	$blocks['climasouth_news'] = array(
+		'info' => t('Climasouth news'),
+		);
+	$blocks['climasouth_menu_country'] = array(
+		'info' => t('Climasouth menu country'),
+		);
+	$blocks['climasouth_menu_contacts'] = array(
+		'info' => t('Climasouth menu contacts'),
+		);
 	
 	return $blocks;
 }
@@ -40,6 +52,18 @@ function climasouth_block_view($delta='')
 				break;
 			case 'climasouth_login' :
 				$block['content'] = _climasouth_login();
+				break;
+			case 'climasouth_toolbar' :
+				$block['content'] = _climasouth_toolbar();
+				break;
+			case 'climasouth_news' :
+				$block['content'] = _climasouth_news();
+				break;
+			case 'climasouth_menu_country' :
+				$block['content'] = _climasouth_menu_country();
+				break;
+			case 'climasouth_menu_contacts' :
+				$block['content'] = _climasouth_menu_contacts();
 				break;
 		}
 	
@@ -81,6 +105,74 @@ function _climasouth_login()
 	return $html;
 }
 
+
+function _climasouth_toolbar() 
+{
+	global $base_path;
+	
+	$aClass = array('attributes' => array('class' => array('toolbar_link')));
+	$html = '<div id="climasouth_toolbar">';	
+	$html .= "<ul id='climasouth_toolbar_ul'>";
+	$html .= "<li class='climasouth_toolbar'>".t('Multimedia')."</li>";
+	$html .= "<li class='climasouth_toolbar'>".t('Press Packs')."</li>";
+	$html .= "<li class='climasouth_toolbar'>".t('CC Knowledge Navigator')."</li>";
+	$html .= "<li class='climasouth_toolbar'>".l(t('Contacts'), 'contacts', $aClass)."</li>";
+	//l(t('log out'), 'user/logout')
+	$html .= "</ul>";
+
+	$html.='</div>';
+	return $html;
+}
+
+function _climasouth_news() 
+{
+	$html = '<div id="climasouth_news">';
+	$html .= '<h2 id="climasouth_news_h2">News & Events</h2>';	
+	/** load dinamically from database*/
+	$html .= "<ul>";
+	$html .= "<li class='climasouth_news'>First Steering Committee Meeting: Brussel 11-12 September 2013</li>";
+	$html .= "<li class='climasouth_news'>Warsaw Climate Change Conference:  November 2013</li>";
+	$html .= "</ul>";
+
+	$html.='</div>';
+	return $html;
+}
+
+function _climasouth_menu_country()
+{
+	$html = "";
+	if( isset($_REQUEST['id_c_country']) )
+		{
+			$html = '<div id="climasouth_menu_country">';
+			$html .= "<ul>";
+			$html .= "<li class='climasouth_menu_country_li'>".t('Overview & key data')."</li>";
+			$html .= "<li class='climasouth_menu_country_li'>".t('National climate policy')."</li>";
+			$html .= "<li class='climasouth_menu_country_li'>".t('National reports')."</li>";
+			$html .= "<li class='climasouth_menu_country_li'>".t('Climate Change projects')."</li>";
+			$html .= "<li class='climasouth_menu_country_li'>".t('Focal Point')."</li>";
+			$html .= "<li class='climasouth_menu_country_li'>".t('EU Delegation')."</li>";
+			$html .= "</ul>";
+		
+			$html.='</div>';
+		}
+	return $html;
+}
+
+function _climasouth_menu_contacts()
+{
+	$html = "";
+	$html = '<div id="climasouth_menu_contacts">';
+	$html .= "<ul>";
+	$html .= "<li class='climasouth_menu_contacts_li'>".t('EC/ DEVCO')."</li>";
+	$html .= "<li class='climasouth_menu_contacts_li'>".t('EC/ DGCLIMA')."</li>";
+	$html .= "<li class='climasouth_menu_contacts_li'>".t('National Focal Points')."</li>";
+	$html .= "<li class='climasouth_menu_contacts_li'>".t('EU Delegations')."</li>";
+	$html .= "<li class='climasouth_menu_contacts_li'>".t('Agriconsulting Consortium')."</li>";
+	$html .= "</ul>";
+
+	$html.='</div>';
+	return $html;
+}
 
 function climasouth_menu() 
 {
@@ -265,10 +357,10 @@ function _climasouth_maps($block)
 	if(!$block)
 		{
 			drupal_set_title(t("Countries"));
-			$height="550";
+			$height="400";
 		}
 
-	$html .= '<div id="map_container" style="width:930px; height:'.$height.'px;"  ></div>';
+	$html .= '<div id="map_container" style="width:690px; height:'.$height.'px;"  ></div>';
 
 	$html .= "\n<script type='text/javascript'>\n";
 	$html .= "var data=".dbmng_get_js_array($aForm, null).";\n";

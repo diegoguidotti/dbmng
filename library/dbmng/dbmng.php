@@ -235,13 +235,15 @@ function dbmng_crud($aForm, $aParam=null)
 					$view_table = true;
 				}
 		}
-
+/*
 	if( isset($_REQUEST["act"]) )
 		echo "<br/>act: ". $_REQUEST["act"];
 	if( isset($_REQUEST["act2"]) )
 		echo "<br/>act2: ". $_REQUEST["act2"];
+	
 	echo "<br/>viewtable: ". $view_table;
 	echo "<br/>do_update: ". $do_update;
+*/
 	if($view_table)
 		{
 			if( $do_update == 2 )

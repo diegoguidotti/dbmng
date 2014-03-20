@@ -365,8 +365,6 @@ function dbmng_update($aForm, $aParam)
 // Move outside this file
 function dbmng_print_rec($aForm, $aParam)
 {
-	//require('sites/all/libraries/fpdf/fpdf.php');
-
 	$sql = "select * from " . $aForm['table_name'] . " where " . $aForm['primary_key'][0] . " = :" . $aForm['primary_key'][0]; 
 	$var = array(':'.$aForm['primary_key'][0] => $_GET[$aForm['primary_key'][0]]);
 	
@@ -374,13 +372,10 @@ function dbmng_print_rec($aForm, $aParam)
 	// Column headings
 	$data = $pdf->LoadData($sql,$var);
 	$pdf->SetFont('Arial','',14);
-	//$pdf->AddPage();
-	//$pdf->BasicTable($aForm, $aParam, $data);
-	//$pdf->AddPage();
-	//$pdf->ImprovedTable($aForm, $aParam, $data);
+
 	$pdf->AddPage();
-	$pdf->FancyTable($aForm, $aParam, $data);
-	$pdf->Output('pippo.pdf','D');
+	$pdf->printCV($aForm, $aParam, $data);
+	$pdf->Output($aForm['table_name'].'.pdf','D');
 
 /*
 	$result = dbmng_query($sql, $var);
