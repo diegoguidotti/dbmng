@@ -94,8 +94,15 @@ function layout_get_label($fld, $fld_value)
 			{
 				if(isset($fld_value['nullable']) && $fld_value['nullable'] == 0)
 					$sRequired = "<span class='dbmng_required'>*</span>";
-			}		
-		return "<label for='$fld'>" . t($lb) . $sRequired . "</label>\n";
+			}
+			
+		$labelfor = "dbmng_".$fld;
+		if( $fld_value['widget'] == "date" )		
+			{
+				$labelfor .= "_tmp";
+			}
+					
+		return "<label for='".$labelfor."'>" . t($lb) . $sRequired . "</label>\n";
 	}
 
 
@@ -127,7 +134,7 @@ function layout_form_date( $fld, $fld_value, $value )
 	$html .= " value= '$value' ";	
 	$html .= layout_get_nullable($fld_value);	
 	$html .= " />\n";
-	$html .='<script>  jQuery(function() { jQuery( "#'.$fld.'_tmp" ).datepicker({altField: \'#'.$fld.'\', dateFormat:\'dd-mm-yy\' , altFormat: \'yy-mm-dd\'});  });  </script>';
+	$html .='<script>  jQuery(function() { jQuery( "#dbmng_'.$fld.'_tmp" ).datepicker({altField: \'#dbmng_'.$fld.'\', dateFormat:\'dd-mm-yy\' , altFormat: \'yy-mm-dd\'});  });  </script>';
 	return $html;
 }
 
