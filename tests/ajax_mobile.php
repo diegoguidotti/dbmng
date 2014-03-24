@@ -14,8 +14,15 @@
 
 	if(isset($_REQUEST['upload_picture'])){
 		print_r($_FILES);
-   	$new_image_name = "YEAH.jpg";
-    move_uploaded_file($_FILES["file"]["tmp_name"], "/var/www/test/img/".$new_image_name);
+
+		$x="file";
+    $dir_upd_file= "/var/www/test/img/";
+
+		$val = dbmng_uploadfile($_FILES[$x]['name'], $dir_upd_file, $_FILES[$x]["tmp_name"]);
+		echo $val;
+
+   	//$new_image_name = "YEAH.jpg";
+    //move_uploaded_file($_FILES["file"]["tmp_name"], "/var/www/test/img/".$new_image_name);
 
 	}
 	else if(isset($_REQUEST['do_login'])){

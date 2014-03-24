@@ -461,6 +461,46 @@ function layout_form_multiselect( $fld, $fld_value, $value )
 	return $html;
 }
 
+/////////////////////////////////////////////////////////////////////////////
+// layout_form_select_nm
+// ======================
+/// This function allow to add the widget select (html tag) 
+/**
+\param $fld					field name
+\param $fld_value		field value
+\param $value				existing value
+\return             html
+*/
+function layout_form_select_nm( $fld, $fld_value, $value )
+{
+	$do_update = false;
+	if( !is_null($value) )
+		$do_update = true;
+	
+	
+	$aVoc = array();
+	$aVoc = $fld_value['voc_val'];
+
+	echo '|'.$value.'|';
+
+	$html = "<select  multiple='multiple' name='".$fld."[]' id='dbmng_$fld'  ".layout_get_nullable($fld_value)." >\n";
+	$html .= "<option/> \n";	
+	$nLen  = count($aVoc);
+	
+	foreach ( $aVoc as $vocKey => $vocValue )
+		{
+			$s = "";
+			$expl=explode('|', $value);
+			if($do_update && in_array($vocKey ,  $expl)){
+				$s = " selected='true' ";
+			}
+	
+			$html .= "<option $s value='" . $vocKey . "'>" . $vocValue . "</option> \n";	
+		}
+	$html .= "</select>\n";
+	return $html;
+}
+
 
 /////////////////////////////////////////////////////////////////////////////
 // layout_table_head

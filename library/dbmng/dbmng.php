@@ -448,6 +448,9 @@ function dbmng_get_js_array($aForm, $aParam)
 function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="") 
 {
 	$html      = "";
+
+	$nmvals = Array();
+
 	//create the $val array storing all the record data
   if( $do_update == 1 )
     {
@@ -462,14 +465,23 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 						}
 				}
 			
-//			if($aForm['table_name']==$_REQUEST['tbln'])
-//				{
-						$where = substr($where, 0, strlen($where)-4);			
-	
-						$result = dbmng_query("select * FROM " . $aForm['table_name'] . " WHERE $where ", $var);
-						$vals   = dbmng_fetch_object($result); //$result->fetchObject();
-//				}
-				//print_r($vals);
+			$where = substr($where, 0, strlen($where)-4);			
+
+			$result = dbmng_query("select * FROM " . $aForm['table_name'] . " WHERE $where ", $var);
+			$vals   = dbmng_fetch_object($result); //$result->fetchObject();
+
+			foreach ( $aForm['fields'] as $fld => $fld_value ){
+				if( $fld_value['widget']=='select_nm' )
+						{
+							$result = dbmng_query("select ".$fld_value['field_nm']." FROM " . $fld_value['table_nm'] . " WHERE $where ", $var);
+							$tx="";
+							foreach ($result as $record){							
+								$tx.=($record->$fld_value['field_nm']).'|';
+							}
+							$nmvals[$fld]=$tx;
+						}
+			}
+
 		}
 						
 	//if exists at least 1 file widget add enctype to form
@@ -582,6 +594,10 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 											else if ($widget==='multiselect')
 												{
 													$html .= layout_form_multiselect( $fld, $fld_value, $value );
+												}
+											else if ($widget==='select_nm')
+												{
+													$html .= layout_form_select_nm( $fld, $fld_value, $nmvals[$fld] );
 												}
 											else if ($widget==='date')
 												{
@@ -701,6 +717,18 @@ function dbmng_value_prepare($x_value, $x, $post, $aParam)
 				{
 				  $sValue=$post[$x."_res3"];
 				}
+		}
+
+ if($widget=='select_nm')
+	  {
+			$sValue='';
+			foreach ( $post[$x] as $vocKey => $vocValue )
+				{ 
+					$sValue.=$vocValue.'|';
+				}
+			if(strlen($sValue)>0){
+				$sValue = substr($sValue, 0, strlen($sValue)-1);		
+			}
 		}
 	
   if($widget=='checkbox')
