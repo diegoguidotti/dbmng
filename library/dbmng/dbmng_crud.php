@@ -229,9 +229,12 @@ function dbmng_insert($aForm, $aParam)
 			//if($fld !== $aForm['primary_key'][0])
 			if($fld_value['key'] != 1)
 				{
-					$sWhat .= $fld . ", ";
-					$sVal.=":$fld ,";	
-					$var = array_merge($var, array(":".$fld => dbmng_value_prepare($fld_value,$fld,$_POST,$aParam)));
+					if($fld_value['widget']!='select_nm')
+						{		
+							$sWhat .= $fld . ", ";
+							$sVal.=":$fld ,";	
+							$var = array_merge($var, array(":".$fld => dbmng_value_prepare($fld_value,$fld,$_POST,$aParam)));
+						}
 				}
 		}
 
@@ -268,7 +271,40 @@ function dbmng_insert($aForm, $aParam)
 
 	$sql    = "insert into " . $aForm['table_name'] . " (" . $sWhat . ") values (" . $sVal . ")";
 	$result = dbmng_query($sql, $var);
-	//print_r( $_FILES );
+
+	$id_key = $result['inserted_id'];
+	$whereFields='';
+	foreach ( $aForm['fields'] as $fld => $fld_value )
+		{									
+			if( dbmng_check_is_pk($fld_value) )
+				{
+					$whereFields .= "$fld ";
+				}
+		}
+	
+	foreach ( $aForm['fields'] as $fld => $fld_value )
+		{
+			if($fld_value['widget']=='select_nm')
+				{		
+					$table_nm=$fld_value['table_nm'];
+					$field_nm=$fld_value['field_nm'];
+	
+					$vals= explode('|',dbmng_value_prepare($fld_value,$fld,$_POST,$aParam));
+					foreach ( $vals as $k => $v )
+						{	
+							$aVals = array(':'.$whereFields => $id_key, ':'.$field_nm => $v);
+
+							//echo "<br/>key[$whereFields]: ".$id_key ." val[$field_nm]: ". $v ."<br/>";
+							echo debug_sql_statement("insert into ".$table_nm." (".$whereFields.", ".$field_nm.") values (:".$whereFields.", :".$field_nm.") ",$aVals).'<br/>';
+		
+							$result = dbmng_query("insert into ".$table_nm." (".$whereFields.", ".$field_nm.") values (:".$whereFields.", :".$field_nm.") ",$aVals);
+							if(isset($result['error'])){
+								print_r ($result);
+							}
+						}
+				}
+		}
+
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -372,29 +408,25 @@ function dbmng_update($aForm, $aParam)
 	
 	$result = dbmng_query("update " . $aForm['table_name'] . " set $sSet where $where ", $var);
 
-
 	foreach ( $aForm['fields'] as $fld => $fld_value )
 		{
-				if($fld_value['widget']=='select_nm')
-					{		
-							$table_nm=$fld_value['table_nm'];
-							$field_nm=$fld_value['field_nm'];
-
-							dbmng_query(" delete from ".$table_nm." WHERE ". $where, $aWhere);
-
-
-							$vals= explode('|',dbmng_value_prepare($fld_value,$fld,$_POST,$aParam));
-							foreach ( $vals as $k => $v ){	
-
-								$aVals = array_merge( $aWhere, array(":".$field_nm => intval($v) ) );
-								echo debug_sql_statement(" insert into ".$table_nm." (".$whereFields." ".$field_nm.") VALUES (".$whereFieldsV." :".$field_nm.") ",$aVals).'<br/>';
-
-								dbmng_query(" insert into ".$table_nm." (".$whereFields." ".$field_nm.") VALUES (".$whereFieldsV." :".$field_nm.") ",$aVals);
-							}
-							
-					}
-		}
+			if($fld_value['widget']=='select_nm')
+				{		
+					$table_nm=$fld_value['table_nm'];
+					$field_nm=$fld_value['field_nm'];
 	
+					dbmng_query(" delete from ".$table_nm." WHERE ". $where, $aWhere);
+	
+					$vals= explode('|',dbmng_value_prepare($fld_value,$fld,$_POST,$aParam));
+					foreach ( $vals as $k => $v )
+						{	
+							$aVals = array_merge( $aWhere, array(":".$field_nm => intval($v) ) );
+							//echo debug_sql_statement(" insert into ".$table_nm." (".$whereFields." ".$field_nm.") VALUES (".$whereFieldsV." :".$field_nm.") ",$aVals).'<br/>';
+		
+							dbmng_query("insert into ".$table_nm." (".$whereFields." ".$field_nm.") values (".$whereFieldsV." :".$field_nm.") ",$aVals);
+						}
+				}
+		}
 
 	if(isset($result['error'])){
 		print_r ($result['error']);
