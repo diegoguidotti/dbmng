@@ -477,24 +477,24 @@ function layout_form_select_nm( $fld, $fld_value, $value )
 	if( !is_null($value) )
 		$do_update = true;
 	
-	
 	$aVoc = array();
 	$aVoc = $fld_value['voc_val'];
 
 	echo '|'.$value.'|';
 
 	$html = "<select  multiple='multiple' name='".$fld."[]' id='dbmng_$fld'  ".layout_get_nullable($fld_value)." >\n";
-	$html .= "<option/> \n";	
+	//$html .= "<option/> \n";	
 	$nLen  = count($aVoc);
 	
 	foreach ( $aVoc as $vocKey => $vocValue )
 		{
 			$s = "";
 			$expl=explode('|', $value);
-			if($do_update && in_array($vocKey ,  $expl)){
-				$s = " selected='true' ";
-			}
-	
+			if($do_update && in_array($vocKey ,  $expl))
+				{
+					$s = " selected='true' ";
+				}
+		
 			$html .= "<option $s value='" . $vocKey . "'>" . $vocValue . "</option> \n";	
 		}
 	$html .= "</select>\n";
