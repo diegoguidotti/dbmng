@@ -200,7 +200,7 @@ function dbmng_get_form_array($id_table)
 */
 function dbmng_crud($aForm, $aParam=null)
 {
-   //echo($_REQUEST["act"]." ".$view_table." ".$do_update);
+  //echo($_REQUEST["act"]." ".$view_table." ".$do_update);
 	$html  = "";
   dbmng_create_form_process($aForm, $aParam);
 
@@ -347,6 +347,28 @@ function dbmng_get_data($aForm, $aParam)
 */
 function dbmng_create_table($aForm, $aParam)
 {
+	foreach ( $aForm['fields'] as $fld => $fld_value )
+		{
+			if( $fld_value['widget'] == 'select_nm' )
+				{
+					$table = $fld_value['table_nm'];
+					$sql = "select * from $table";
+					$result = dbmng_query($sql, array());
+					
+					$aNM = array();
+					foreach( $result as $record )
+						{
+							$keys=array_keys((array)$record);
+							$aNM[$record->$keys[1]][] = $record->$keys[2];
+						}
+					$aForm['fields'][$fld]['voc_nm'] = $aNM;
+				}
+		}
+	
+	//echo "<pre>";
+	//print_r($aForm);
+	//echo "</pre>";
+
 	$html = "";
 	//execute the query returning all the records filtered and ordered according to aForm and aParam
 	$result= dbmng_get_data($aForm, $aParam);			  
@@ -1021,6 +1043,7 @@ function dbmng_value_prepare_html($fld_value, $value, $aParam, $layout_type)
 	$widget='input';
 	if(isset($fld_value['widget']))
 		{
+			//echo $fld_value['widget']."<br/>";
 			$widget=$fld_value['widget'];
 		}	
 
@@ -1039,7 +1062,15 @@ function dbmng_value_prepare_html($fld_value, $value, $aParam, $layout_type)
 		}
 	elseif( $widget == "select_nm" )
 		{
-			$ret = "select_nm";
+			$aVocval = $fld_value['voc_val'];
+			$val = "";
+			
+			foreach( $value as $ind)
+				{
+					$val.= $aVocval[$ind]. " | ";
+				} 
+			//print_r($fld_value['voc_val']);
+			$ret = $val;
 		}
 	elseif( $widget == "multiselect" )
 		{
