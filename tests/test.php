@@ -13,7 +13,7 @@
 </style>
 </head>
 <body>
-<?
+<?php
 
 
   //we need to define some global variable to use dbmg independently by Drupal
@@ -26,18 +26,34 @@
 	include(DBMNG_LIB_PATH.'dbmng/dbmng_standalone.php');
 
 	//get the array storing the table metadata from record 1 in table dbmng_tables
-	$aForm    = dbmng_get_form_array(11); 
-
-	$aForm['fields']['id_diego_c_country'] = Array(
-		'label'   => 'Countries', 
-		'key' => 0, 
-		'type' => 'integer', 
-		'widget'=>'select_nm', 
-		'voc_val' => Array('1'=>'Italia', '2'=>'Francia') ,
-		'table_nm'=>'diego_c_country', 
-		'field_nm'=>'id_c_country'
-
-	);
+	if( gethostname() == "Galveston" )
+		{
+			$aForm    = dbmng_get_form_array(4); 
+		
+			$aForm['fields']['id_mm_agenda_mm_contact'] = Array(
+				'label'   => 'Contatti', 
+				'key' => 0, 
+				'type' => 'integer', 
+				'widget'=>'select_nm', 
+				'voc_val' => Array('1'=>'Michele', '2'=>'Diego') ,
+				'table_nm'=>'mm_agenda_mm_contact', 
+				'field_nm'=>'id_mm_contact'
+			);
+		}
+	else
+		{
+			$aForm    = dbmng_get_form_array(11); 
+		
+			$aForm['fields']['id_diego_c_country'] = Array(
+				'label'   => 'Countries', 
+				'key' => 0, 
+				'type' => 'integer', 
+				'widget'=>'select_nm', 
+				'voc_val' => Array('1'=>'Italia', '2'=>'Francia') ,
+				'table_nm'=>'diego_c_country', 
+				'field_nm'=>'id_c_country'
+			);
+		}
 
 	echo dbmng_crud($aForm);
 /*
