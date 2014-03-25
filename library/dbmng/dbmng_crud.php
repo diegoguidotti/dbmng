@@ -292,12 +292,13 @@ function dbmng_insert($aForm, $aParam)
 					$vals= explode('|',dbmng_value_prepare($fld_value,$fld,$_POST,$aParam));
 					foreach ( $vals as $k => $v )
 						{	
-							$aVals = array(':'.$whereFields => $id_key, ':'.$field_nm => $v);
+							$aVals = array(':'.$whereFields => intval($id_key), ':'.$field_nm => intval($v));
 
 							//echo "<br/>key[$whereFields]: ".$id_key ." val[$field_nm]: ". $v ."<br/>";
-							echo debug_sql_statement("insert into ".$table_nm." (".$whereFields.", ".$field_nm.") values (:".$whereFields.", :".$field_nm.") ",$aVals).'<br/>';
-		
-							$result = dbmng_query("insert into ".$table_nm." (".$whereFields.", ".$field_nm.") values (:".$whereFields.", :".$field_nm.") ",$aVals);
+							$sql = "insert into ".$table_nm." (".$whereFields.", ".$field_nm.") values (:".$whereFields.", :".$field_nm.")";
+							//$sql = debug_sql_statement($sql,$aVals);
+							$result = dbmng_query( $sql, $aVals);
+
 							if(isset($result['error'])){
 								print_r ($result);
 							}
