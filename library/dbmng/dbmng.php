@@ -1037,6 +1037,10 @@ function dbmng_value_prepare_html($fld_value, $value, $aParam, $layout_type)
 					$ret = null;
 				}
 		}
+	elseif( $widget == "select_nm" )
+		{
+			$ret = "select_nm";
+		}
 	elseif( $widget == "multiselect" )
 		{
 			$aVoc = array();
