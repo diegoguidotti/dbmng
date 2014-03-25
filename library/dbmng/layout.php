@@ -788,6 +788,10 @@ function layout_table_body( $result, $aForm, $aParam )
 					//get the query results for each field
 					foreach ( $aForm['fields'] as $fld => $fld_value )
 						{
+							if(	dbmng_check_is_pk($fld_value) )
+								{
+									$pkval = $record->$fld;
+								}
 							//echo '!'.$record->$fld.'!'.$fld.'<br/>';
 							if( layout_view_field_table($fld_value) )
 								{
@@ -797,7 +801,23 @@ function layout_table_body( $result, $aForm, $aParam )
 											$html.= "<td class='dbmng_field_$fld'>".$value."</td>";
 										}
 									else{//TODO: add a comma separated list if widget==multi
-											$html.= "<td class='dbmng_field_$fld'>&nbsp;</td>";							
+										if($fld_value['widget'] == 'select_nm')
+											{
+												$aNM = $fld_value['voc_nm'];
+												$val = "";
+												
+												foreach( $aNM[$pkval] as $ind)
+													{
+														$val.= $aVocval[$ind]. " | ";
+													}
+
+												$value=dbmng_value_prepare_html($fld_value, $aNM[$pkval], $aParam, "table");
+												$html.= "<td class='dbmng_field_$fld'>".$value."</td>";
+											}
+										else
+											{
+												$html.= "<td class='dbmng_field_$fld'>&nbsp;</td>";		
+											}
 									}
 		
 								}
