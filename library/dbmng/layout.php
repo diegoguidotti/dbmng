@@ -785,6 +785,8 @@ function layout_table_body( $result, $aForm, $aParam )
 				{
 					// table value
 					$html .= "<tr>";
+					
+					$pkval = "";
 					//get the query results for each field
 					foreach ( $aForm['fields'] as $fld => $fld_value )
 						{
@@ -806,11 +808,6 @@ function layout_table_body( $result, $aForm, $aParam )
 												$aNM = $fld_value['voc_nm'];
 												$val = "";
 												
-												foreach( $aNM[$pkval] as $ind)
-													{
-														$val.= $aVocval[$ind]. " | ";
-													}
-
 												$value=dbmng_value_prepare_html($fld_value, $aNM[$pkval], $aParam, "table");
 												$html.= "<td class='dbmng_field_$fld'>".$value."</td>";
 											}
