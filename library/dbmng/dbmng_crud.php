@@ -71,10 +71,10 @@ function dbmng_create_form_process($aForm, $aParam, $actiontype="")
 */
 function dbmng_delete($aForm, $aParam) 
 {
-	if( isset($_REQUEST['act']) )
-		{
-			if( $_REQUEST['act'] == 'del' )
-				{
+//	if( isset($_REQUEST['act']) )
+//		{
+//			if( $_REQUEST['act'] == 'del' )
+//				{
 					$where = "";
 					$var = array();
 					foreach ( $aForm['fields'] as $fld => $fld_value )
@@ -89,8 +89,21 @@ function dbmng_delete($aForm, $aParam)
 					$where = substr($where, 0, strlen($where)-4);
 					//TODO: add also filter fields in delete/update
 					$result = dbmng_query("delete from " . $aForm['table_name'] . " WHERE $where ", $var);
-				}
-		}
+					
+					foreach ( $aForm['fields'] as $fld => $fld_value )
+						{
+							if($fld_value['widget']=='select_nm')
+								{		
+									$table_nm=$fld_value['table_nm'];
+									$field_nm=$fld_value['field_nm'];
+					
+									$sql = "delete from ".$table_nm." where ".$where;
+									$result = dbmng_query( $sql, $var);
+								}
+						}
+					
+//				}
+//		}
 }
 
 /////////////////////////////////////////////////////////////////////////////
