@@ -1064,12 +1064,13 @@ function dbmng_value_prepare_html($fld_value, $value, $aParam, $layout_type)
 		{
 			$aVocval = $fld_value['voc_val'];
 			$val = "";
-			
-			foreach( $value as $ind)
+			if( isset($value) )
 				{
-					$val.= $aVocval[$ind]. " | ";
-				} 
-			//print_r($fld_value['voc_val']);
+					foreach( $value as $ind)
+						{
+							$val.= $aVocval[$ind]. " | ";
+						} 
+				}
 			$ret = $val;
 		}
 	elseif( $widget == "multiselect" )
