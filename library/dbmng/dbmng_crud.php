@@ -332,6 +332,7 @@ function dbmng_insert_nm($aForm, $aParam, $id_key)
 {
 	$aWhere = array();
 	$whereFields='';
+	$whereFieldsV='';
 	
 	foreach ( $aForm['fields'] as $fld => $fld_value )
 		{									

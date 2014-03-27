@@ -807,8 +807,11 @@ function layout_table_body( $result, $aForm, $aParam )
 											{
 												$aNM = $fld_value['voc_nm'];
 												$val = "";
-												
-												$value=dbmng_value_prepare_html($fld_value, $aNM[$pkval], $aParam, "table");
+
+												$value='';												
+												if(isset($aNM[$pkval])){
+													$value=dbmng_value_prepare_html($fld_value, $aNM[$pkval], $aParam, "table");
+												}
 												$html.= "<td class='dbmng_field_$fld'>".$value."</td>";
 											}
 										else
