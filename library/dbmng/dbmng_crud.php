@@ -363,8 +363,11 @@ function dbmng_insert_nm($aForm, $aParam, $id_key)
 					$where_del_v = substr($whereFieldsV,0,strlen($whereFieldsV)-2);
 					
 					dbmng_query("delete from ".$table_nm." WHERE ". $where_del ."=".$where_del_v, $aWhere);
+					echo "<br/>".debug_sql_statement("delete from ".$table_nm." WHERE ". $where_del ."=".$where_del_v, $aWhere);
 
 					$vals= explode('|',dbmng_value_prepare($fld_value,$fld,$_POST,$aParam));
+					print_r($vals);
+
 					foreach ( $vals as $k => $v )
 						{	
 							$aVals = array_merge( $aWhere, array(":".$field_nm => intval($v) ) );

@@ -117,16 +117,21 @@ function dbmng_get_form_array($id_table)
 																					 'skip_in_tbl' => $fld->skip_in_tbl,
 																					 'voc_sql' => $fld->voc_sql );
 				
-				if($fld->param){
-					$js = json_decode($fld->param);
-					foreach($js as $key => $val){
-						$aArray[$key]=$val;
+				if($fld->param)
+					{
+						$param = $fld->param;
+						$param = str_replace("'",'"',$param);
+						
+						$js = json_decode($param);
+	
+						foreach($js as $key => $val){
+							$aArray[$key]=$val;
+						}
 					}
-				}
 
 				$aFields[$fld->field_name] = $aArray;
 				
-				if( $fld->field_widget == 'select' )
+				if( $fld->field_widget == 'select' || $fld->field_widget == 'select_nm' )
 					{
 						if( !isset($fld->voc_sql) )
 							{

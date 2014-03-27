@@ -29,7 +29,8 @@
 	if( gethostname() == "Galveston" )
 		{
 			$aForm    = dbmng_get_form_array(4); 
-		
+			
+			/**
 			$aForm['fields']['id_mm_agenda_mm_contact'] = Array(
 				'label'   => 'Contatti', 
 				'key' => 0, 
@@ -39,11 +40,14 @@
 				'table_nm'=>'mm_agenda_mm_contact', 
 				'field_nm'=>'id_mm_contact'
 			);
+			*/
 		}
 	else
 		{
 			$aForm    = dbmng_get_form_array(11); 
-		
+			
+			//in param: {'table_nm':'diego_c_country', 'field_nm':'id_c_country'}
+			/**
 			$aForm['fields']['id_diego_c_country'] = Array(
 				'label'   => 'Countries', 
 				'key' => 0, 
@@ -53,6 +57,7 @@
 				'table_nm'=>'diego_c_country', 
 				'field_nm'=>'id_c_country'
 			);
+			*/
 		}
 
 	echo dbmng_crud($aForm);
