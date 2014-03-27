@@ -94,7 +94,18 @@ function dbmng_query($sql, $var=null)
 				{
 				try 
 						{
-							$ret = db_query($sql, $var);
+							if( startsWithL($sql,"insert") )
+								{
+									$id = db_query($sql, $var, array('return' => Database::RETURN_INSERT_ID));
+
+									$ret=Array();
+									$ret['inserted_id']=$id;	
+									$ret['ok']=true;
+								}
+							else
+								{
+									$ret = db_query($sql, $var);
+								}
 						}
 					catch( Exception $Exception ) {
 						echo ('PDO Exception: '.$Exception->getMessage( ).'<br/>');
