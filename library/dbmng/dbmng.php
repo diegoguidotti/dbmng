@@ -103,7 +103,8 @@ function dbmng_get_form_array($id_table)
 					//$aForm['primary_key'] = $fld->field_name; 
 
 				$sLabelLong = ( strlen($fld->field_label_long)>0 ? $fld->field_label_long : $fld->field_label );
-				$aFields[$fld->field_name] = array('label' => $fld->field_label, 
+
+				$aArray=array('label' => $fld->field_label, 
 																					 'type' => $fld->id_field_type, 
 																					 'widget' => $fld->field_widget, 
 																					 'value' => null, 
@@ -115,6 +116,14 @@ function dbmng_get_form_array($id_table)
 																					 'label_long' => $sLabelLong,
 																					 'skip_in_tbl' => $fld->skip_in_tbl,
 																					 'voc_sql' => $fld->voc_sql );
+				
+				if($fld->param){
+					$js = json_decode($fld->param);
+					//for each $js key)
+						//$aArray[k]=v;
+				}
+
+				$aFields[$fld->field_name] = $aArray;
 				
 				if( $fld->field_widget == 'select' )
 					{
