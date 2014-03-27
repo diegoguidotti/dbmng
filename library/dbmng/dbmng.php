@@ -119,8 +119,9 @@ function dbmng_get_form_array($id_table)
 				
 				if($fld->param){
 					$js = json_decode($fld->param);
-					//for each $js key)
-						//$aArray[k]=v;
+					foreach($js as $key => $val){
+						$aArray[$key]=$val;
+					}
 				}
 
 				$aFields[$fld->field_name] = $aArray;
