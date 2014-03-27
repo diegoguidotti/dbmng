@@ -481,23 +481,40 @@ function layout_form_select_nm( $fld, $fld_value, $value )
 	$aVoc = $fld_value['voc_val'];
 
 	//echo '|'.$value.'|';
-
-	$html = "<select  multiple='multiple' name='".$fld."[]' id='dbmng_$fld'  ".layout_get_nullable($fld_value)." >\n";
-	//$html .= "<option/> \n";	
-	$nLen  = count($aVoc);
-	
-	foreach ( $aVoc as $vocKey => $vocValue )
+	$outtype = 'checkbox';
+	if( $outtype == 'select' )
 		{
-			$s = "";
-			$expl=explode('|', $value);
-			if($do_update && in_array($vocKey ,  $expl))
+			$html = "<select  multiple='multiple' name='".$fld."[]' id='dbmng_$fld'  ".layout_get_nullable($fld_value)." >\n";
+			$html .= "<option/> \n";	
+			//$nLen  = count($aVoc);
+			
+			foreach ( $aVoc as $vocKey => $vocValue )
 				{
-					$s = " selected='true' ";
+					$s = "";
+					$expl=explode('|', $value);
+					if($do_update && in_array($vocKey ,  $expl))
+						{
+							$s = " selected='true' ";
+						}
+				
+					$html .= "<option $s value='" . $vocKey . "'>" . $vocValue . "</option> \n";	
 				}
-		
-			$html .= "<option $s value='" . $vocKey . "'>" . $vocValue . "</option> \n";	
+			$html .= "</select>\n";
 		}
-	$html .= "</select>\n";
+	elseif( $outtype == 'checkbox' )
+		{
+			foreach ( $aVoc as $vocKey => $vocValue )
+				{
+					$s = "";
+					$expl=explode('|', $value);
+					if($do_update && in_array($vocKey ,  $expl))
+						{
+							$s = " checked='true' ";
+						}
+				
+					$html .= "<input type='checkbox' name='".$fld."[]' $s value='" . $vocKey . "'/>" . $vocValue . "<br/> \n";	
+				}
+		} 
 	return $html;
 }
 
