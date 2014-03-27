@@ -47,8 +47,8 @@
 			$aForm    = dbmng_get_form_array(11); 
 			
 			//in param: {'table_nm':'diego_c_country', 'field_nm':'id_c_country'}
-			/**
-			$aForm['fields']['id_diego_c_country'] = Array(
+			/*
+			$aForm['fields']['aaa_id_diego_c_country'] = Array(
 				'label'   => 'Countries', 
 				'key' => 0, 
 				'type' => 'integer', 
@@ -57,7 +57,13 @@
 				'table_nm'=>'diego_c_country', 
 				'field_nm'=>'id_c_country'
 			);
-			*/
+
+			echo '<pre>';
+			print_r ($aForm);
+			echo '</pre>';
+ 		  */
+
+			
 		}
 
 	echo dbmng_crud($aForm);

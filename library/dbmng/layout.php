@@ -480,7 +480,7 @@ function layout_form_select_nm( $fld, $fld_value, $value )
 	$aVoc = array();
 	$aVoc = $fld_value['voc_val'];
 
-	echo '|'.$value.'|';
+	//echo '|'.$value.'|';
 
 	$html = "<select  multiple='multiple' name='".$fld."[]' id='dbmng_$fld'  ".layout_get_nullable($fld_value)." >\n";
 	//$html .= "<option/> \n";	

@@ -122,10 +122,13 @@ function dbmng_get_form_array($id_table)
 						$param = $fld->param;
 						$param = str_replace("'",'"',$param);
 						
+						//echo $param;
+
 						$js = json_decode($param);
-	
-						foreach($js as $key => $val){
-							$aArray[$key]=$val;
+						if(isset($js)){
+							foreach($js as $key => $val){
+								$aArray[$key]=$val;
+							}
 						}
 					}
 
@@ -762,13 +765,18 @@ function dbmng_value_prepare($x_value, $x, $post, $aParam)
  if($widget=='select_nm')
 	  {
 			$sValue='';
-			foreach ( $post[$x] as $vocKey => $vocValue )
-				{ 
-					$sValue.=$vocValue.'|';
-				}
+			if(isset($post[$x])){
+				foreach ( $post[$x] as $vocKey => $vocValue )
+					{ 
+					
+						$sValue.=$vocValue.'|';
+						//echo '<br/>'.$vocKey.' '.	$vocValue.' '.$sValue.'<br/>';
+					}
+			}
 			if(strlen($sValue)>0){
 				$sValue = substr($sValue, 0, strlen($sValue)-1);		
 			}
+			//echo '<br/><b>'.$sValue.'</b><br/>';
 		}
 	
   if($widget=='checkbox')
@@ -880,7 +888,10 @@ function dbmng_value_prepare($x_value, $x, $post, $aParam)
 
 				if (dbmng_is_field_type_numeric($sType)) 
 					{
-						if($sType=="int" || $sType=="bigint")
+						if ($widget=='select_nm'){
+							$sVal  = ($sValue);
+						}
+						else if($sType=="int" || $sType=="bigint")
 							$sVal  = intval($sValue);
 						else if($sType=="float" || $sType=="double")
 							$sVal  = doubleval($sValue);
@@ -1086,7 +1097,9 @@ function dbmng_value_prepare_html($fld_value, $value, $aParam, $layout_type)
 				{
 					foreach( $value as $ind)
 						{
-							$val.= $aVocval[$ind]. " | ";
+							if(isset($aVocval[$ind])){
+								$val.= $aVocval[$ind]. " | ";
+							}
 						} 
 				}
 			$ret = $val;
