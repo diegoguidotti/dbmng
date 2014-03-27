@@ -358,7 +358,12 @@ function dbmng_insert_nm($aForm, $aParam, $id_key)
 				{		
 					$table_nm=$fld_value['table_nm'];
 					$field_nm=$fld_value['field_nm'];
-	
+					
+					$where_del   = substr($whereFields,0,strlen($whereFields)-2);
+					$where_del_v = substr($whereFieldsV,0,strlen($whereFieldsV)-2);
+					
+					dbmng_query("delete from ".$table_nm." WHERE ". $where_del ."=".$where_del_v, $aWhere);
+
 					$vals= explode('|',dbmng_value_prepare($fld_value,$fld,$_POST,$aParam));
 					foreach ( $vals as $k => $v )
 						{	
