@@ -237,6 +237,7 @@ function dbmng_insert($aForm, $aParam)
 	$sVal  = "";
 
 	$var = array();
+	$bSelectNM = false;
 	foreach ( $aForm['fields'] as $fld => $fld_value )
 		{
 			//if($fld !== $aForm['primary_key'][0])
@@ -247,6 +248,10 @@ function dbmng_insert($aForm, $aParam)
 							$sWhat .= $fld . ", ";
 							$sVal.=":$fld ,";	
 							$var = array_merge($var, array(":".$fld => dbmng_value_prepare($fld_value,$fld,$_POST,$aParam)));
+						}
+					else
+						{
+							$bSelectNM = true;
 						}
 				}
 		}
@@ -284,8 +289,24 @@ function dbmng_insert($aForm, $aParam)
 
 	$sql    = "insert into " . $aForm['table_name'] . " (" . $sWhat . ") values (" . $sVal . ")";
 	$result = dbmng_query($sql, $var);
+	
+	if( $bSelectNM )
+		$res = dbmng_insert_nm($aForm, $aParam, $result['inserted_id']);
+	
+}
 
-	$id_key = $result['inserted_id'];
+
+/////////////////////////////////////////////////////////////////////////////
+// dbmng_insert_nm
+// ======================
+/// This function insert a new record in one-to-many table
+/**
+\param $aForm  		Associative array with all the characteristics
+\param $aParam  	Associative array with some custom variable used by the renderer
+\param $id_key  	primary key of "one" table
+*/
+function dbmng_insert_nm($aForm, $aParam, $id_key)
+{
 	$whereFields='';
 	foreach ( $aForm['fields'] as $fld => $fld_value )
 		{									
@@ -306,21 +327,27 @@ function dbmng_insert($aForm, $aParam)
 					foreach ( $vals as $k => $v )
 						{	
 							$aVals = array(':'.$whereFields => intval($id_key), ':'.$field_nm => intval($v));
-
+	
 							//echo "<br/>key[$whereFields]: ".$id_key ." val[$field_nm]: ". $v ."<br/>";
 							$sql = "insert into ".$table_nm." (".$whereFields.", ".$field_nm.") values (:".$whereFields.", :".$field_nm.")";
-							//$sql = debug_sql_statement($sql,$aVals);
-							$result = dbmng_query( $sql, $aVals);
-
+							if( true ) //to be further investigated
+								{
+									$sql = debug_sql_statement($sql,$aVals);
+									$result = dbmng_query( $sql, array());
+								}
+							else
+								{
+									$result = dbmng_query( $sql, $aVals);
+								}
+	
 							if(isset($result['error'])){
 								print_r ($result);
 							}
 						}
 				}
 		}
-
+	return $result;
 }
-
 /////////////////////////////////////////////////////////////////////////////
 // dbmng_create_form_upload_file
 // ======================
