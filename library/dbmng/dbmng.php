@@ -349,19 +349,22 @@ function dbmng_create_table($aForm, $aParam)
 {
 	foreach ( $aForm['fields'] as $fld => $fld_value )
 		{
-			if( $fld_value['widget'] == 'select_nm' )
+			if( isset($fld_value['widget']) ) 
 				{
-					$table = $fld_value['table_nm'];
-					$sql = "select * from $table";
-					$result = dbmng_query($sql, array());
-					
-					$aNM = array();
-					foreach( $result as $record )
+					if( $fld_value['widget'] == 'select_nm' )
 						{
-							$keys=array_keys((array)$record);
-							$aNM[$record->$keys[1]][] = $record->$keys[2];
+							$table = $fld_value['table_nm'];
+							$sql = "select * from $table";
+							$result = dbmng_query($sql, array());
+							
+							$aNM = array();
+							foreach( $result as $record )
+								{
+									$keys=array_keys((array)$record);
+									$aNM[$record->$keys[1]][] = $record->$keys[2];
+								}
+							$aForm['fields'][$fld]['voc_nm'] = $aNM;
 						}
-					$aForm['fields'][$fld]['voc_nm'] = $aNM;
 				}
 		}
 	
