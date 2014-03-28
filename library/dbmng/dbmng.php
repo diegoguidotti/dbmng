@@ -710,8 +710,11 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 											$html.='<div class="dbmbg_form_element">';
 
 
-											//var $aInput=Array();
-											
+											$aInput = Array();
+											$aInput['fld'] = $fld;
+											$aInput['fld_value'] = $fld_value;
+											$aInput['value'] = $value;
+
 											if ($widget==='textarea')
 												{
 													$html .= layout_form_textarea( $fld, $fld_value, $value );
@@ -763,8 +766,9 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 														{
 															$more="onkeypress=\"dbmng_validate_numeric(event)\"";		
 														}  
+													$aInput['more'] = $more;
 														
-													$html .= layout_form_input( $fld, $fld_value, $value, $more );		
+													$html .= layout_form_input($aInput);// ( $fld, $fld_value, $value, $more );		
 												}
 											$html.='</div>';
 											$html.='</div>';

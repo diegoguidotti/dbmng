@@ -157,8 +157,13 @@ function layout_form_date( $fld, $fld_value, $value )
 \param $more 				allow to insert other attributes
 \return             html
 */
-function layout_form_input( $fld, $fld_value, $value, $more='' )
+function layout_form_input($aInput) //( $fld, $fld_value, $value, $more='' )
 {
+	$fld = $aInput['fld'];
+	$fld_value = $aInput['fld_value'];
+	$value = $aInput['value'];
+	$more = $aInput['more'];
+	
 	$html  = "<input type='text' name='$fld' id='dbmng_$fld' $more";
 	$html .= " value= '$value' ";	
 	$html .= layout_get_nullable($fld_value);	
