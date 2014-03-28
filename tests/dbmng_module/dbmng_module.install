@@ -60,3 +60,9 @@ function dbmng_module_install()
 		}
 
 }
+
+function dbmng_module_update_1()
+{
+	$sql = "alter table dbmng_fields add column param text;";
+	$tbl = dbmng_query($sql, array());
+}
