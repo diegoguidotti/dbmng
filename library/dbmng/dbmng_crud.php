@@ -440,21 +440,31 @@ function dbmng_update($aForm, $aParam)
 	$var = array();
 
 	$bSelectNM = false;
-
+	
 	foreach ( $aForm['fields'] as $fld => $fld_value )
 		{
 			if($fld_value['key'] != 1)
 				{
-					if($fld_value['widget']!='select_nm')
-						{		
+					if( isset($fld_value['widget']) )
+						{
+							if($fld_value['widget']!='select_nm')
+								{		
+									$sSet .= $fld . " = :$fld, ";
+		
+									$var = array_merge($var, array(":".$fld => dbmng_value_prepare($fld_value,$fld,$_POST,$aParam)));
+									//$sSet.=dbmng_value_prepare($x_value,$x,$_POST).", ";
+								}
+							else
+								{
+									$bSelectNM = true;
+								}
+						}
+					else
+						{
 							$sSet .= $fld . " = :$fld, ";
 
 							$var = array_merge($var, array(":".$fld => dbmng_value_prepare($fld_value,$fld,$_POST,$aParam)));
 							//$sSet.=dbmng_value_prepare($x_value,$x,$_POST).", ";
-						}
-					else
-						{
-							$bSelectNM = true;
 						}
 				}
 		}
@@ -527,9 +537,9 @@ function dbmng_update($aForm, $aParam)
 				}
 		}
 
-	if(isset($result['error'])){
-		print_r ($result['error']);
-	}
+	//if(isset($result['error'])){
+	//	print_r ($result['error']);
+	//}
 
 }
 

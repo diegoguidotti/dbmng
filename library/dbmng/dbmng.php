@@ -513,18 +513,21 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 			$result = dbmng_query("select * FROM " . $aForm['table_name'] . " WHERE $where ", $var);
 			$vals   = dbmng_fetch_object($result); //$result->fetchObject();
 
-			foreach ( $aForm['fields'] as $fld => $fld_value ){
-				if( $fld_value['widget']=='select_nm' )
+			foreach ( $aForm['fields'] as $fld => $fld_value )
+				{
+					if( isset($fld_value['widget']) )
 						{
-							$result = dbmng_query("select ".$fld_value['field_nm']." FROM " . $fld_value['table_nm'] . " WHERE $where ", $var);
-							$tx="";
-							foreach ($result as $record){							
-								$tx.=($record->$fld_value['field_nm']).'|';
-							}
-							$nmvals[$fld]=$tx;
+							if( $fld_value['widget']=='select_nm' )
+								{
+									$result = dbmng_query("select ".$fld_value['field_nm']." FROM " . $fld_value['table_nm'] . " WHERE $where ", $var);
+									$tx="";
+									foreach ($result as $record){							
+										$tx.=($record->$fld_value['field_nm']).'|';
+									}
+									$nmvals[$fld]=$tx;
+								}
 						}
-			}
-
+				}
 		}
 						
 	//if exists at least 1 file widget add enctype to form

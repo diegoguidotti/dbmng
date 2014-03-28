@@ -97,9 +97,12 @@ function layout_get_label($fld, $fld_value)
 			}
 			
 		$labelfor = "dbmng_".$fld;
-		if( $fld_value['widget'] == "date" )		
+		if( isset($fld_value['widget']) )
 			{
-				$labelfor .= "_tmp";
+				if( $fld_value['widget'] == "date" )		
+					{
+						$labelfor .= "_tmp";
+					}
 			}
 					
 		return "<label for='".$labelfor."'>" . t($lb) . $sRequired . "</label>\n";
