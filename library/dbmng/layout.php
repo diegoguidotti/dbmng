@@ -472,6 +472,7 @@ function layout_form_multiselect( $fld, $fld_value, $value )
 */
 function layout_form_select_nm( $fld, $fld_value, $value )
 {
+	$html='';
 	$do_update = false;
 	if( !is_null($value) )
 		$do_update = true;
@@ -511,7 +512,7 @@ function layout_form_select_nm( $fld, $fld_value, $value )
 							$s = " checked='true' ";
 						}
 				
-					$html .= "<input type='checkbox' name='".$fld."[]' $s value='" . $vocKey . "'/>" . $vocValue . "<br/> \n";	
+					$html .= "<input class='dbmng_checkbox' type='checkbox' name='".$fld."[]' $s value='" . $vocKey . "'/>" . $vocValue . "<br/> \n";	
 				}
 		} 
 	return $html;

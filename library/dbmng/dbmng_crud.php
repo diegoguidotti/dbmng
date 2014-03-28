@@ -223,6 +223,8 @@ function dbmng_duplicate($aForm, $aParam)
 
 			$aWhere = array();
 			$aWhere = array_merge($aWhere, $var);
+			$whereFields='';
+
 			foreach ( $aForm['fields'] as $fld => $fld_value )
 				{									
 					if( dbmng_check_is_pk($fld_value) )

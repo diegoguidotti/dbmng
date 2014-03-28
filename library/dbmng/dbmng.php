@@ -83,11 +83,15 @@ function dbmng_get_form_array($id_table)
 			}
 		
 		$table = dbmng_query("select * from dbmng_tables where id_table=:id_table", array(':id_table' => intval($id_table)));
-		//print_r( $table );
+		
 		$aForm['id_table'] = $id_table;
-		$fo                = dbmng_fetch_object($table);
-		$aForm['table_name']  = $fo->table_name;
-		$aForm['table_label'] = $fo->table_label;
+		//if()
+		if(dbmng_num_rows($table)>0){
+			$fo                = dbmng_fetch_object($table);
+			$aForm['table_name']  = $fo->table_name;
+			$aForm['table_label'] = $fo->table_label;
+		}
+		
 
 		//TODO: ['primary key shoud be an array to manage multiples key']
 		$aFields = array();
@@ -218,65 +222,146 @@ function dbmng_get_form_array($id_table)
 */
 function dbmng_crud($aForm, $aParam=null)
 {
-  //echo($_REQUEST["act"]." ".$view_table." ".$do_update);
-	$html  = "";
-  dbmng_create_form_process($aForm, $aParam);
 
-	//show table if there is no act or it's working on update or duplicate
-	$view_table = true;
-	$do_update = 0; //false;
 
-	if( isset($_REQUEST["act"]) )
-		{
-			if($_REQUEST["act"]=='ins' || $_REQUEST["act"]=='upd')
-				{
-					$view_table = false;
-					if($_REQUEST["act"]=='upd')
-						$do_update = 1; //true;
-				}
-			else
-				{
-					$view_table = true;
-				}
-		}
+	$ret = dbmng_check_aForm($aForm, $aParam);
 
-	if( isset($_REQUEST["act2"]) && !isset($_REQUEST["act"]) )
-		{
-		  //dbmng_create_form_process($aForm, $aParam, "search");
-			if( $_REQUEST["act2"]=='do_search' ) //$_REQUEST["act2"]=='search' || 
-				{
-					$do_update = 2;
-					$view_table = true;
-				}
-			else
-				{
-					$view_table = true;
-				}
-		}
-/*
-	if( isset($_REQUEST["act"]) )
-		echo "<br/>act: ". $_REQUEST["act"];
-	if( isset($_REQUEST["act2"]) )
-		echo "<br/>act2: ". $_REQUEST["act2"];
 	
-	echo "<br/>viewtable: ". $view_table;
-	echo "<br/>do_update: ". $do_update;
-*/
-	if($view_table)
-		{
-			if( $do_update == 2 )
-				{
-					$html .= dbmng_create_form($aForm, $aParam, $do_update, "search");
+
+	$html='';
+
+	if($ret['ok']){
+
+		//echo($_REQUEST["act"]." ".$view_table." ".$do_update);
+		$html  = "";
+		dbmng_create_form_process($aForm, $aParam);
+
+		//show table if there is no act or it's working on update or duplicate
+		$view_table = true;
+		$do_update = 0; //false;
+
+		if( isset($_REQUEST["act"]) )
+			{
+				if($_REQUEST["act"]=='ins' || $_REQUEST["act"]=='upd')
+					{
+						$view_table = false;
+						if($_REQUEST["act"]=='upd')
+							$do_update = 1; //true;
+					}
+				else
+					{
+						$view_table = true;
+					}
+			}
+
+
+
+		$activate_search=false;
+
+		foreach( $aForm['fields'] as $fld => $fld_value )
+			{
+				if(isset($fld_value['is_searchable'])){
+					if($fld_value['is_searchable'] == 1){
+						$activate_search=true;
+						break;
+					}
 				}
-				$html .= dbmng_create_table($aForm, $aParam);
-		}
-	else
-		{
-			//echo "do_upd: ". $do_update;
-			$html .= dbmng_create_form($aForm, $aParam, $do_update);
-		}
+			}
+		
+/*
+		if( isset($_REQUEST["act2"]) && !isset($_REQUEST["act"]) )
+			{
+				//dbmng_create_form_process($aForm, $aParam, "search");
+				if( $_REQUEST["act2"]=='do_search' ) //$_REQUEST["act2"]=='search' || 
+					{
+						$do_update = 2;
+						$view_table = true;
+					}
+				else
+					{
+						$view_table = true;
+					}
+			}
+*/
+	/*
+		if( isset($_REQUEST["act"]) )
+			echo "<br/>act: ". $_REQUEST["act"];
+		if( isset($_REQUEST["act2"]) )
+			echo "<br/>act2: ". $_REQUEST["act2"];
+	
+		echo "<br/>viewtable: ". $view_table;
+		echo "<br/>do_update: ". $do_update;
+	*/
+		if($view_table)
+			{
+				if( $activate_search )
+					{
+						$do_update_search=2;
+						$html .= dbmng_create_form($aForm, $aParam, $do_update_search, "search");
+					}
+					$html .= dbmng_create_table($aForm, $aParam);
+			}
+		else
+			{
+				//echo "do_upd: ". $do_update;
+				$html .= dbmng_create_form($aForm, $aParam, $do_update);
+			}
+	}
+	else{
+		$html.='<div class="messages error">'.$ret['err_msg'].'</div>';
+	}
 
 	return $html;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////
+// dbmng_check_aForm
+// ======================
+/// This function checks if aForm is valid
+/**
+\param $aForm  		Associative array with all the characteristics of the table
+\param $aParam  		Associative array with some custom variable used by the renderer
+\return           HTML generated code
+*/
+function dbmng_check_aForm($aForm, $aParam)
+{
+	$ok=false;
+	$err_msg='No processed';
+
+
+	$tn=$aForm['id_table'];
+
+	//print_r($aForm);
+
+	if( !isset($aForm['table_name']) ){		
+		$err_msg='Table '.$tn.' is missing. Check if table exists in dbmng_table';
+	}
+	else if( $aForm['table_name']=='' ){		
+		$err_msg='Table '.$tn.' is missing. Check if table exists in dbmng_table';
+	}
+	else if( !isset($aForm['fields']) ){		
+		$err_msg='There are no fields for '.$tn.'. Check dbmng_fields table';
+	}
+	else if( count($aForm['fields'])==0 ){		
+		$err_msg='There are no fields for '.$tn.'. Check dbmng_fields table';
+	}
+	else if( !isset($aForm['primary_key']) ){		
+		$err_msg='There are no primary_keys for '.$tn.'. Check dbmng_fields table';
+	}
+	else if( count($aForm['primary_key'])==0 ){		
+		$err_msg='There are no primary_keys for '.$tn.'. Check dbmng_fields table';
+	}
+	else{
+		$ok=true;
+	}
+
+	$ret=Array();
+	$ret['ok']=$ok;
+	$ret['err_msg']=$err_msg;
+
+	return $ret;
+
 }
 
 
@@ -343,6 +428,8 @@ function dbmng_get_data($aForm, $aParam)
 	//if( isset($aParam['tbl_navigation']) )
 	//	$limit = 'limit 0, ' . $aParam['tbl_navigation'];
 	
+	//print_r ($aForm);
+
 	if( isset($aForm['table_view']) )
 	  $sql = 'select * from ' . $aForm['table_view'].' '. $where . ' ' . $order_by . ' ' . $limit;
 	else
@@ -424,11 +511,9 @@ function dbmng_crud_js($aForm, $aParam)
 	$html .= "<div id='table_container'></div>\n";
 
 	$html .= "\n<script type='text/javascript'>\n";
-	//$html .= "var data=".dbmng_get_js_array($aForm, $aParam).";\n";
 	$html .= "var aForm=".json_encode($aForm).";\n";
 	$html .= "var aParam=".json_encode($aParam).";\n";
 	
-	//$html .= "jQuery('#table_container').html(dbmng_create_table(data, aForm, aParam));\n";
 	$html .= "</script>\n";
 	return $html;
 }
@@ -1016,6 +1101,8 @@ function dbmng_file_create_link($value, $aParam)
 function dbmng_picture_create_link($value, $aParam, $layout_type)
 {
   $ret="";
+	$thumb='';
+
 	//echo realpath('.').'/'.$value;
 	if(!is_null($value) && $value!='')
 		{
