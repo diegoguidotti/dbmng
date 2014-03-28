@@ -415,12 +415,9 @@ function layout_form_multiselect( $fld, $fld_value, $value )
 	if( !is_null($value) )
 		$do_update = true;
 	
-	if( $fld_value['widget'] == "multiselect" )
-		{
-			$aVoc = array();
-			$aVoc = $fld_value['voc_val'];
-		} 
-	
+	$aVoc = array();
+	$aVoc = $fld_value['voc_val'];
+
 	$sKey = "";
 	foreach($aVoc as $voc1)
 		{
@@ -436,7 +433,6 @@ function layout_form_multiselect( $fld, $fld_value, $value )
 						}
 				}
 		}
-
 	$html = "<select  name='$fld' onChange='dbmng_update_multi2()' id='dbmng_".$fld."_res'  ".layout_get_nullable($fld_value)." >\n";
 	$html .= "</select><br/>\n";
 
@@ -447,7 +443,7 @@ function layout_form_multiselect( $fld, $fld_value, $value )
 	$html .= "</select><br/>\n";
 
 	$html .= "\n<script type='text/javascript'>\n";
-	$html .= "var aMultiSelectData={'res' : ".json_encode($aVoc).", 'field_name': '".$fld."', ".$sKey."};\n";
+	$html .= "var aMultiSelectData={'res' : ".json_encode($aVoc).", 'field_name': 'dbmng_".$fld."', ".$sKey."};\n";
 
 	if( !isset($value) )
 		{
