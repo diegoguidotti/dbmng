@@ -48,6 +48,8 @@ function dbmng_create_form_process($aForm, $aParam, $actiontype="")
 				}
 		}
 
+
+	/*
 	if( isset($_REQUEST['tbln']) && isset($_REQUEST['act2']) &&  !isset($_REQUEST['act']) )
 		{
 			//check if the table correspond to the table requested in the form
@@ -58,6 +60,7 @@ function dbmng_create_form_process($aForm, $aParam, $actiontype="")
 						dbmng_search($aForm, $aParam);
 				}
 		}
+		*/
 
 }
 

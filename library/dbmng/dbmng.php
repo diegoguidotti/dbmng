@@ -224,6 +224,9 @@ function dbmng_crud($aForm, $aParam=null)
 {
 
 
+	//echo '<pre>';
+	//print_r($_POST);
+	//echo '</pre>';
 	$ret = dbmng_check_aForm($aForm, $aParam);
 
 	
@@ -705,6 +708,9 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 											$html.='<div class="dbmng_form_row dbmng_form_field_'.$fld.'">';
 											$html .= layout_get_label($fld, $fld_value);
 											$html.='<div class="dbmbg_form_element">';
+
+
+											//var $aInput=Array();
 											
 											if ($widget==='textarea')
 												{
@@ -772,7 +778,7 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 				} //End of fields
 		} //End of form
 	
-	$hv = dbmng_search_add_hidden($aForm, $aParam, "POST");
+	$hv = '';//dbmng_search_add_hidden($aForm, $aParam, "POST");
 	
 	if( $do_update == 1 )
 		{

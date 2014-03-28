@@ -126,8 +126,12 @@ function layout_form_date( $fld, $fld_value, $value )
 
 	//format the date string 
 	if(!is_null($value) && $value!=''){
-		$datetime = DateTime::createFromFormat('Y-m-d', $value);
-		$datetime_str= $datetime->format('d-m-Y');
+
+			
+	
+			$datetime = DateTime::createFromFormat('Y-m-d', $value);
+			$datetime_str= $datetime->format('d-m-Y');
+
 	}
 
 	//add a new input field for the datapicker ui
@@ -137,7 +141,7 @@ function layout_form_date( $fld, $fld_value, $value )
 	$html .= " value= '$value' ";	
 	$html .= layout_get_nullable($fld_value);	
 	$html .= " />\n";
-	$html .='<script>  jQuery(function() { jQuery( "#dbmng_'.$fld.'_tmp" ).datepicker({altField: \'#dbmng_'.$fld.'\', dateFormat:\'dd-mm-yy\' , altFormat: \'yy-mm-dd\'});  });  </script>';
+	$html .='<script>  jQuery("#dbmng_'.$fld.'_tmp").blur(function(){ if(jQuery("#dbmng_'.$fld.'_tmp").val()==""){  jQuery("#dbmng_'.$fld.'").val("");} }); jQuery(function() { jQuery( "#dbmng_'.$fld.'_tmp" ).datepicker({altField: \'#dbmng_'.$fld.'\', dateFormat:\'dd-mm-yy\' , altFormat: \'yy-mm-dd\'});  });  </script>';
 	return $html;
 }
 
