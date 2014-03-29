@@ -714,50 +714,54 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 											$aInput['fld'] = $fld;
 											$aInput['fld_value'] = $fld_value;
 											$aInput['value'] = $value;
+											$aInput['actiontype'] = $actiontype;
+											$aInput['aParam'] = $aParam;
+											
 
 											if ($widget==='textarea')
 												{
-													$html .= layout_form_textarea( $fld, $fld_value, $value );
+													$html .= layout_form_textarea( $aInput );
 												}
 											else if ($widget==='html')
 												{
-													$html .= layout_form_html( $fld, $fld_value, $value );
+													$html .= layout_form_html( $aInput );
 												}
 											else if ($widget==='checkbox')
 												{
-													$html .= layout_form_checkbox( $fld, $fld_value, $value );
+													$html .= layout_form_checkbox( $aInput );
 												}
 											else if ($widget==='select')
 												{
-													$html .= layout_form_select( $fld, $fld_value, $value );
+													$html .= layout_form_select( $aInput );
 												}
 											else if ($widget==='multiselect')
 												{
-													$html .= layout_form_multiselect( $fld, $fld_value, $value );
+													$html .= layout_form_multiselect( $aInput );
 												}
 											else if ($widget==='select_nm')
 												{
-													$html .= layout_form_select_nm( $fld, $fld_value, $nmvals[$fld] );
+													$aInput['value'] = $nmvals[$fld];
+													$html .= layout_form_select_nm( $aInput ); //$fld, $fld_value, $nmvals[$fld] );
 												}
 											else if ($widget==='date')
 												{
-													$html .= layout_form_date( $fld, $fld_value, $value );
+													$html .= layout_form_date( $aInput );
 												}
 											else if ($widget==='file')
 												{
-													$html .= layout_form_file( $fld, $fld_value, $value, $aParam );
+													$html .= layout_form_file( $aInput );
 												}
 											else if ($widget==='picture')
 												{
-													$html .= layout_form_picture( $fld, $fld_value, $value, $aParam );
+													$html .= layout_form_picture( $aInput );
 												}
 											else if ($widget==='password')
 												{
-													$html .= layout_form_password( $fld, $fld_value, $value );
+													$html .= layout_form_password( $aInput );
 												}
 											else if ($widget==='multi')
 												{
-													$html .= layout_form_multi( $fld, $fld_value, $value );
+													$html .= layout_form_multi( $aInput );
 												}
 											else //use input by default
 												{

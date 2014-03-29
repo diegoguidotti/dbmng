@@ -114,30 +114,35 @@ function layout_get_label($fld, $fld_value)
 // ======================
 /// This function allow to add the data widget to the form
 /**
+\param $aInput			associative array that contains the follows param:
 \param $fld					field name
 \param $fld_value		field value
 \param $value				stored value
 \return             html
 */
-function layout_form_date( $fld, $fld_value, $value )
+function layout_form_date( $aInput )
 {
+	$fld = $aInput['fld'];
+	$fld_value = $aInput['fld_value'];
+	$value = $aInput['value'];
+	$actiontype = $aInput['actiontype'];
+
+	if( strlen($aInput['actiontype'])!= 0 )
+		$actiontype = "search_";
 
 	$datetime_str='';
 
 	//format the date string 
-	if(!is_null($value) && $value!=''){
-
-			
-	
+	if(!is_null($value) && $value!='')
+		{
 			$datetime = DateTime::createFromFormat('Y-m-d', $value);
 			$datetime_str= $datetime->format('d-m-Y');
-
-	}
+		}
 
 	//add a new input field for the datapicker ui
-	$html  = "<input type='text' name='".$fld."_tmp' id='dbmng_".$fld."_tmp' value='".$datetime_str."' />";
+	$html  = "<input type='text' name='".$actiontype.$fld."_tmp' id='dbmng_".$fld."_tmp' value='".$datetime_str."' />";
 	//keep hidden the "real" input form
-	$html .= "<input type='hidden' name='$fld' id='dbmng_".$fld."' ";
+	$html .= "<input type='hidden' name='$actiontype$fld' id='dbmng_".$fld."' ";
 	$html .= " value= '$value' ";	
 	$html .= layout_get_nullable($fld_value);	
 	$html .= " />\n";
@@ -151,6 +156,7 @@ function layout_form_date( $fld, $fld_value, $value )
 // ======================
 /// This function allow to add the widget input (html tag)
 /**
+\param $aInput			associative array that contains the follows param:
 \param $fld					field name
 \param $fld_value		field value
 \param $value				existing value
@@ -163,8 +169,12 @@ function layout_form_input($aInput) //( $fld, $fld_value, $value, $more='' )
 	$fld_value = $aInput['fld_value'];
 	$value = $aInput['value'];
 	$more = $aInput['more'];
-	
-	$html  = "<input type='text' name='$fld' id='dbmng_$fld' $more";
+	$actiontype = $aInput['actiontype'];
+
+	if( strlen($aInput['actiontype'])!= 0 )
+		$actiontype = "search_";
+			
+	$html  = "<input type='text' name='$actiontype$fld' id='dbmng_$fld' $more";
 	$html .= " value= '$value' ";	
 	$html .= layout_get_nullable($fld_value);	
 	$html .= " />\n";
@@ -198,15 +208,24 @@ function layout_form_hidden( $fld, $value )
 // ======================
 /// This function allow to add the widget password 
 /**
+\param $aInput			associative array that contains the follows param:
 \param $fld					field name
 \param $fld_value		field value
 \param $value				existing value
 \param $more 				allow to insert other attributes
 \return             html
 */
-function layout_form_password( $fld, $fld_value, $value, $more='' )
+function layout_form_password( $aInput )
 {
-	$html  = "<input type='password' name='$fld' id='dbmng_$fld' $more";
+	$fld = $aInput['fld'];
+	$fld_value = $aInput['fld_value'];
+	$value = $aInput['value'];
+	$actiontype = $aInput['actiontype'];
+	
+	if( strlen($aInput['actiontype'])!= 0 )
+		$actiontype = "search_";
+
+	$html  = "<input type='password' name='$actiontype$fld' id='dbmng_$fld'";
 	$html .= " value= '$value' ";	
 	$html .= layout_get_nullable($fld_value);	
 	$html .= " />\n";
@@ -219,15 +238,24 @@ function layout_form_password( $fld, $fld_value, $value, $more='' )
 // ======================
 /// This function allow to add the widget textarea (html tag) 
 /**
+\param $aInput			associative array that contains the follows param:
 \param $fld					field name
 \param $fld_value		field value
 \param $value				existing value
 \return             html
 */
-function layout_form_textarea( $fld, $fld_value, $value )
+function layout_form_textarea( $aInput )
 {		
+	$fld = $aInput['fld'];
+	$fld_value = $aInput['fld_value'];
+	$value = $aInput['value'];
+	$actiontype = $aInput['actiontype'];
+
+	if( strlen($aInput['actiontype'])!= 0 )
+		$actiontype = "search_";
+			
 	$html  = "";
-	$html .= "<textarea  name='$fld' id='dbmng_$fld'  ".layout_get_nullable($fld_value)." >";
+	$html .= "<textarea name='$actiontype$fld' id='dbmng_$fld' ".layout_get_nullable($fld_value)." >";
 	$html .= $value;	
 	$html .= "</textarea>\n";
 	return $html;
@@ -239,14 +267,22 @@ function layout_form_textarea( $fld, $fld_value, $value )
 // ======================
 /// This function allow to add the widget html (html tag) 
 /**
+\param $aInput			associative array that contains the follows param:
 \param $fld					field name
 \param $fld_value		field value
 \param $value				existing value
 \return             html
 */
-function layout_form_html( $fld, $fld_value, $value )
+function layout_form_html( $aInput )
 {		
-	
+	$fld = $aInput['fld'];
+	$fld_value = $aInput['fld_value'];
+	$value = $aInput['value'];
+	$actiontype = $aInput['actiontype'];
+
+	if( strlen($aInput['actiontype'])!= 0 )
+		$actiontype = "search_";
+			
 	$html='';
 	if(DBMNG_CMS)
 		drupal_add_js ( "sites/all/libraries/tinymce/jscripts/tiny_mce/tiny_mce.js" );
@@ -257,16 +293,36 @@ function layout_form_html( $fld, $fld_value, $value )
 	$html .= '<script>';
   $html .= '	tinymce.init({selector:"textarea#'.$fld.'"});';
 	$html .= '</script>';
-	$html .= "<textarea  class='html_widget' name='$fld' id='dbmng_$fld'  ".layout_get_nullable($fld_value)." >";
+	$html .= "<textarea class='html_widget' name='$actiontype$fld' id='dbmng_$fld' ".layout_get_nullable($fld_value)." >";
 	$html .= $value;	
 	$html .= "</textarea>\n";
 	return $html;
 }
 
 
-function layout_form_multi( $fld, $fld_value, $value )
+/////////////////////////////////////////////////////////////////////////////
+// layout_form_multi
+// ======================
+/// This function allow to add the widget multi (html tag)
+/**
+\param $aInput			associative array that contains the follows param:
+\param $fld					field name
+\param $fld_value		field value
+\param $value				existing value
+\param $more 				allow to insert other attributes
+\return             html
+*/
+function layout_form_multi( $aInput )
 {		
-	$html  = "<select class='dbmng_multi_left'  multiple  id='dbmng_$fld' name='$fld'  >";
+	$fld = $aInput['fld'];
+	$fld_value = $aInput['fld_value'];
+	$value = $aInput['value'];
+	$actiontype = $aInput['actiontype'];
+	
+	if( strlen($aInput['actiontype'])!= 0 )
+		$actiontype = "search_";
+
+	$html  = "<select class='dbmng_multi_left'  multiple  id='dbmng_$fld' name='$actiontype$fld'  >";
 	$html  .= '</select>';
 	// 'voc_table'=>'country', 'voc_table_pk'=>'id_country', 'voc_table_label'=>'country_label', 'rel_table'=>'test_country', 'rel_table_fk1'=>'id_test', 'rel_table_fk2'=>'id_country'  );
 	
@@ -274,7 +330,7 @@ function layout_form_multi( $fld, $fld_value, $value )
 	$res=dbmng_query($sql,array());
 	
 	
-	$html  .= "<select class='dbmng_multi_right' multiple id='dbmng_".$fld."_from' name='".$fld."_from'  >";
+	$html  .= "<select class='dbmng_multi_right' multiple id='dbmng_".$fld."_from' name='".$actiontype.$fld."_from'  >";
 	
 	foreach ($res as $val) {
 	 	  $html.="<option value='".$val->$fld_value['voc_table_pk']."' >".$val->$fld_value['voc_table_label']."</option>";
@@ -295,16 +351,26 @@ function layout_form_multi( $fld, $fld_value, $value )
 // ======================
 /// This function allow to add the widget file (html tag) 
 /**
+\param $aInput			associative array that contains the follows param:
 \param $fld					field name
 \param $fld_value		field value
 \param $value				existing value
 \param $aParam			parameters array
 \return             html
 */
-function layout_form_file( $fld, $fld_value, $value, $aParam )
+function layout_form_file( $aInput )
 {		
+	$fld = $aInput['fld'];
+	$fld_value = $aInput['fld_value'];
+	$value = $aInput['value'];
+	$actiontype = $aInput['actiontype'];
+	$aParam = $aInput['aParam'];
+	
+	if( strlen($aInput['actiontype'])!= 0 )
+		$actiontype = "search_";
+
   $html  = "<span id='dbmng_".$fld."_link_container'>".dbmng_file_create_link($value, $aParam).'</span><br/>';
-	$html .= "<div class='dbmng_file_hide_this'><input type='file' name='$fld' id='dbmng_$fld' ></div>";
+	$html .= "<div class='dbmng_file_hide_this'><input type='file' name='$actiontype$fld' id='dbmng_$fld' ></div>";
 
 	$html .= '<input class="dbmng_file_text" type="text" name="'.$fld.'_tmp_choosebox" id="dbmng_'.$fld.'_tmp_choosebox" value="'.$value.'" />';
 	$html .= '<a href="#" id="dbmng_'.$fld.'_tmp_choose">'.t('Choose').'</a>&nbsp';
@@ -321,16 +387,26 @@ function layout_form_file( $fld, $fld_value, $value, $aParam )
 // ======================
 /// This function allow to add the widget picture (html tag) 
 /**
+\param $aInput			associative array that contains the follows param:
 \param $fld					field name
 \param $fld_value		field value
 \param $value				existing value
 \param $aParam			parameters array
 \return             html
 */
-function layout_form_picture( $fld, $fld_value, $value, $aParam )
+function layout_form_picture( $aInput )
 {		
+	$fld = $aInput['fld'];
+	$fld_value = $aInput['fld_value'];
+	$value = $aInput['value'];
+	$actiontype = $aInput['actiontype'];
+	$aParam = $aInput['aParam'];
+	
+	if( strlen($aInput['actiontype'])!= 0 )
+		$actiontype = "search_";
+
   $html  = "<span id='dbmng_".$fld."_link_container'>".dbmng_picture_create_link($value, $aParam, "form").'</span><br/>';
-	$html .= "<div class='dbmng_file_hide_this'><input type='file' name='$fld' id='dbmng_$fld' accept='image/*' ></div>";
+	$html .= "<div class='dbmng_file_hide_this'><input type='file' name='$actiontype$fld' id='dbmng_$fld' accept='image/*' ></div>";
 
 	$html .= '<input class="dbmng_file_text" type="text" name="'.$fld.'_tmp_choosebox" id="dbmng_'.$fld.'_tmp_choosebox" value="'.$value.'" />';
 	$html .= '<a href="#" id="dbmng_'.$fld.'_tmp_choose">'.t('Choose').'</a>&nbsp';
@@ -347,14 +423,23 @@ function layout_form_picture( $fld, $fld_value, $value, $aParam )
 // ======================
 /// This function allow to add the widget checkbox (html tag) 
 /**
+\param $aInput			associative array that contains the follows param:
 \param $fld					field name
 \param $fld_value		field value
 \param $value				existing value
 \return             html
 */
-function layout_form_checkbox( $fld, $fld_value, $value )
+function layout_form_checkbox( $aInput )
 {
-	$html = "<input class='dbmng_checkbox' type='checkbox' name='$fld' id='dbmng_$fld' ";
+	$fld = $aInput['fld'];
+	$fld_value = $aInput['fld_value'];
+	$value = $aInput['value'];
+	$actiontype = $aInput['actiontype'];
+
+	if( strlen($aInput['actiontype'])!= 0 )
+		$actiontype = "search_";
+			
+	$html = "<input class='dbmng_checkbox' type='checkbox' name='$actiontype$fld' id='dbmng_$fld' ";
 	if($value==1 || ($value<>0 &&  $fld_value['default']=="1"))
     {
 			$html .= " checked='true' ";
@@ -374,13 +459,22 @@ function layout_form_checkbox( $fld, $fld_value, $value )
 // ======================
 /// This function allow to add the widget select (html tag) 
 /**
+\param $aInput			associative array that contains the follows param:
 \param $fld					field name
 \param $fld_value		field value
 \param $value				existing value
 \return             html
 */
-function layout_form_select( $fld, $fld_value, $value )
+function layout_form_select( $aInput )
 {
+	$fld = $aInput['fld'];
+	$fld_value = $aInput['fld_value'];
+	$value = $aInput['value'];
+	$actiontype = $aInput['actiontype'];
+
+	if( strlen($aInput['actiontype'])!= 0 )
+		$actiontype = "search_";
+			
 	$do_update = false;
 	if( !is_null($value) )
 		$do_update = true;
@@ -390,7 +484,7 @@ function layout_form_select( $fld, $fld_value, $value )
 			$aVoc = array();
 			$aVoc = $fld_value['voc_val'];
 		} 
-	$html = "<select  name='$fld' id='dbmng_$fld'  ".layout_get_nullable($fld_value)." >\n";
+	$html = "<select  name='$actiontype$fld' id='dbmng_$fld'  ".layout_get_nullable($fld_value)." >\n";
 	$html .= "<option/> \n";	
 	$nLen  = count($aVoc);
 	
@@ -413,13 +507,22 @@ function layout_form_select( $fld, $fld_value, $value )
 // ======================
 /// This function allow to add the widget select (html tag) 
 /**
+\param $aInput			associative array that contains the follows param:
 \param $fld					field name
 \param $fld_value		field value
 \param $value				existing value
 \return             html
 */
-function layout_form_multiselect( $fld, $fld_value, $value )
+function layout_form_multiselect( $aInput )
 {
+	$fld = $aInput['fld'];
+	$fld_value = $aInput['fld_value'];
+	$value = $aInput['value'];
+	$actiontype = $aInput['actiontype'];
+
+	if( strlen($aInput['actiontype'])!= 0 )
+		$actiontype = "search_";
+			
 	$do_update = false;
 	if( !is_null($value) )
 		$do_update = true;
@@ -442,13 +545,13 @@ function layout_form_multiselect( $fld, $fld_value, $value )
 						}
 				}
 		}
-	$html = "<select  name='$fld' onChange='dbmng_update_multi2()' id='dbmng_".$fld."_res'  ".layout_get_nullable($fld_value)." >\n";
+	$html = "<select  name='$actiontype$fld' onChange='dbmng_update_multi2()' id='dbmng_".$fld."_res'  ".layout_get_nullable($fld_value)." >\n";
 	$html .= "</select><br/>\n";
 
-	$html .= "<select  name='$fld' onChange='dbmng_update_multi3()' id='dbmng_".$fld."_res2'  ".layout_get_nullable($fld_value)." >\n";
+	$html .= "<select  name='$actiontype$fld' onChange='dbmng_update_multi3()' id='dbmng_".$fld."_res2'  ".layout_get_nullable($fld_value)." >\n";
 	$html .= "</select><br/>\n";
 
-	$html .= "<select  name='$fld' onChange='dbmng_update_multi()' id='dbmng_".$fld."_res3'  ".layout_get_nullable($fld_value)." >\n";
+	$html .= "<select  name='$actiontype$fld' onChange='dbmng_update_multi()' id='dbmng_".$fld."_res3'  ".layout_get_nullable($fld_value)." >\n";
 	$html .= "</select><br/>\n";
 
 	$html .= "\n<script type='text/javascript'>\n";
@@ -474,13 +577,22 @@ function layout_form_multiselect( $fld, $fld_value, $value )
 // ======================
 /// This function allow to add the widget select (html tag) 
 /**
+\param $aInput			associative array that contains the follows param:
 \param $fld					field name
 \param $fld_value		field value
 \param $value				existing value
 \return             html
 */
-function layout_form_select_nm( $fld, $fld_value, $value )
+function layout_form_select_nm( $aInput )
 {
+	$fld = $aInput['fld'];
+	$fld_value = $aInput['fld_value'];
+	$value = $aInput['value'];
+	$actiontype = $aInput['actiontype'];
+
+	if( strlen($aInput['actiontype'])!= 0 )
+		$actiontype = "search_";
+			
 	$html='';
 	$do_update = false;
 	if( !is_null($value) )
@@ -493,7 +605,7 @@ function layout_form_select_nm( $fld, $fld_value, $value )
 	$outtype = 'checkbox';
 	if( $outtype == 'select' )
 		{
-			$html = "<select  multiple='multiple' name='".$fld."[]' id='dbmng_$fld'  ".layout_get_nullable($fld_value)." >\n";
+			$html = "<select  multiple='multiple' name='".$actiontype.$fld."[]' id='dbmng_$fld'  ".layout_get_nullable($fld_value)." >\n";
 			$html .= "<option/> \n";	
 			//$nLen  = count($aVoc);
 			
