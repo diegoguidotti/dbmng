@@ -222,14 +222,10 @@ function dbmng_get_form_array($id_table)
 */
 function dbmng_crud($aForm, $aParam=null)
 {
-
-
 	//echo '<pre>';
 	//print_r($_POST);
 	//echo '</pre>';
 	$ret = dbmng_check_aForm($aForm, $aParam);
-
-	
 
 	$html='';
 
@@ -256,8 +252,6 @@ function dbmng_crud($aForm, $aParam=null)
 						$view_table = true;
 					}
 			}
-
-
 
 		$activate_search=false;
 
@@ -578,9 +572,8 @@ function dbmng_get_js_array($aForm, $aParam)
 */
 function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="") 
 {
-	$html      = "";
-
 	$nmvals = Array();
+	$html      = "";
 
 	//create the $val array storing all the record data
   if( $do_update == 1 )
@@ -740,6 +733,7 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 												}
 											else if ($widget==='select_nm')
 												{
+													print_r($nmvals);
 													$aInput['value'] = $nmvals[$fld];
 													$html .= layout_form_select_nm( $aInput ); //$fld, $fld_value, $nmvals[$fld] );
 												}
