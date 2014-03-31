@@ -575,6 +575,10 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 	$nmvals = Array();
 	$html      = "";
 
+
+
+
+
 	//create the $val array storing all the record data
   if( $do_update == 1 )
     {
@@ -656,9 +660,9 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 						}
 					elseif( $do_update == 2 && $actiontype=="search")
 						{
-							if(isset($_REQUEST[$fld]))
+							if(isset($_REQUEST["search_".$fld]))
 								{
-									$value = $_REQUEST[$fld];
+									$value = $_REQUEST["search_".$fld];
 								}
 							//print_r($_REQUEST);
 					 		//$value = 
@@ -733,8 +737,13 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 												}
 											else if ($widget==='select_nm')
 												{
-													print_r($nmvals);
-													$aInput['value'] = $nmvals[$fld];
+													//during insert there are no record associated; nmvalue is not created we added an empty array
+													if(isset($nmvals[$fld]))
+														$aInput['value'] = $nmvals[$fld];
+													else{
+														$aInput['value'] = "";
+													}
+										
 													$html .= layout_form_select_nm( $aInput ); //$fld, $fld_value, $nmvals[$fld] );
 												}
 											else if ($widget==='date')

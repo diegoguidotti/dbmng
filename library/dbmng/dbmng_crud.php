@@ -317,7 +317,9 @@ function dbmng_insert($aForm, $aParam)
 
 	$sql    = "insert into " . $aForm['table_name'] . " (" . $sWhat . ") values (" . $sVal . ")";
 	$result = dbmng_query($sql, $var);
-	
+
+	print_r ($result);
+
 	if( $bSelectNM )
 		$res = dbmng_insert_nm($aForm, $aParam, $result['inserted_id']);
 	
