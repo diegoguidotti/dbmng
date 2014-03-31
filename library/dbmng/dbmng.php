@@ -233,7 +233,7 @@ function dbmng_crud($aForm, $aParam=null)
 
 		//echo($_REQUEST["act"]." ".$view_table." ".$do_update);
 		$html  = "";
-		dbmng_create_form_process($aForm, $aParam);
+		$ret_form_process = dbmng_create_form_process($aForm, $aParam);
 
 		//show table if there is no act or it's working on update or duplicate
 		$view_table = true;
@@ -252,6 +252,18 @@ function dbmng_crud($aForm, $aParam=null)
 						$view_table = true;
 					}
 			}
+
+
+		if(isset($ret_form_process)){
+			if(!$ret_form_process['ok']){
+				$html.='<div class="message error">'.$ret_form_process['error'].'</div>';
+				if($_REQUEST["act"]=='do_ins' || $_REQUEST["act"]=='do_upd'){
+					$view_table=false;
+					if($_REQUEST["act"]=='upd')
+							$do_update = 1; //true;
+				}
+			}
+		}
 
 		$activate_search=false;
 
@@ -848,6 +860,8 @@ function dbmng_value_prepare($x_value, $x, $post, $aParam)
 
 	$widget='input';
 
+	
+
   $sValue=null;
 	if(isset($post[$x]))
 		{
@@ -963,6 +977,9 @@ function dbmng_value_prepare($x_value, $x, $post, $aParam)
 				}		
 		}
 
+
+	//echo '<br/>Prepare '.$x." |".$sValue."|<br/>";
+
 	$sVal=null;
 	$sType=$x_value['type'];
 
@@ -989,10 +1006,12 @@ function dbmng_value_prepare($x_value, $x, $post, $aParam)
 			if(strlen($sValue)==0)
 				{
 					$sValue=$sDefault;
+					echo 'set '.$x.' def to '+	$sDefault;
 				}
 
 				if (dbmng_is_field_type_numeric($sType)) 
 					{
+
 						if ($widget=='select_nm'){
 							$sVal  = ($sValue);
 						}
@@ -1008,6 +1027,9 @@ function dbmng_value_prepare($x_value, $x, $post, $aParam)
 						$sVal  = $sValue;
 					}
 		}
+
+	//$sVal=null;
+	//echo '<br/>Prepare '.$x." |".$sValue."|-|".$sVal."|".($sVal==null)."<br/>";
   return $sVal;
 }
 

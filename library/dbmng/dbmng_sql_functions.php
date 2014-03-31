@@ -47,7 +47,8 @@ function dbmng_query($sql, $var=null)
 									}
 
 								$link->commit();
-							
+								echo debug_sql_statement($sql, $var)."<br/>";	
+
 								//Temporary Fix: you can not fetch data after UPDATE INSERT and DELETE 
 								if(startsWithL($sql,"update") || startsWithL($sql,"insert") || startsWithL($sql,"delete") )
 									{
@@ -60,7 +61,7 @@ function dbmng_query($sql, $var=null)
 											}
 
 										$ret['res']=$res0;
-										$ret['ok']=true;
+										$ret['ok']=true;										
 										
 
 									}
@@ -72,16 +73,21 @@ function dbmng_query($sql, $var=null)
 							else
 								{
 										$ret=Array();
-										$ret['ok']=1;
+										$ret['ok']=false;
 										$ret['error']=$link->errorInfo();	
+										$ret['query'] = debug_sql_statement($sql, $var);	
+
 								}
 						}	
 					catch( PDOException $Exception ) {
 						// PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
 						// String.
 						$ret=Array();
-						$ret['ok']=0;
-						$ret['error']=$link->errorInfo();							
+						$ret['ok']=false;
+						$ret['error_pdo']=$link->errorInfo();							
+						$ret['error']=$Exception->getMessage( );	
+						$ret['query'] = debug_sql_statement($sql, $var);	
+						
 					}
 					break;
 					
@@ -94,23 +100,31 @@ function dbmng_query($sql, $var=null)
 				{
 				try 
 						{
-							if( startsWithL($sql,"insert") )
+							if(startsWithL($sql,"update") || startsWithL($sql,"insert") || startsWithL($sql,"delete") ) 
 								{
 									$id = db_query($sql, $var, array('return' => Database::RETURN_INSERT_ID));
 
 									$ret=Array();
-									$ret['inserted_id']=$id;	
+									if( startsWithL($sql,"insert") )
+										{
+											$ret['inserted_id']=$id;	
+										}
 									$ret['ok']=true;
 								}
 							else
 								{
-									$ret = db_query($sql, $var);
+									$ret = db_query($sql, $var);									
 								}
 						}
 					catch( Exception $Exception ) {
-						echo ('PDO Exception: '.$Exception->getMessage( ).'<br/>');
-						echo ('Query: '.$sql.'<br/>');
-						$ret = null;
+						//echo ('PDO Exception: '.$Exception->getMessage( ).'<br/>');
+						//echo ('Query: '.$sql.'<br/>');
+						$ret=Array();
+						$ret['ok']=false;
+						$ret['error_pdo']=$link->errorInfo();							
+						$ret['error']=$Exception->getMessage( );	
+						$ret['query'] = debug_sql_statement($sql, $var);	
+						
 					}
 				}
 			else 

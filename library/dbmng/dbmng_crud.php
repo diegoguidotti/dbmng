@@ -11,6 +11,8 @@
 */
 function dbmng_create_form_process($aForm, $aParam, $actiontype="") 
 {
+
+	$ret=null;
 	if(isset($_REQUEST['tbln']) && isset($_REQUEST['act']))
 		{
 			//check if the table correspond to the table requested in the form
@@ -18,19 +20,19 @@ function dbmng_create_form_process($aForm, $aParam, $actiontype="")
 				{
 					// update record
 					if($_REQUEST['act']=='do_upd')
-						dbmng_update($aForm, $aParam);
+						$ret=dbmng_update($aForm, $aParam);
 					
 					// insert record
 					if($_REQUEST['act']=='do_ins')
-						dbmng_insert($aForm, $aParam);		
+						$ret=dbmng_insert($aForm, $aParam);		
 					
 					// delete record
 					if($_REQUEST['act']=='del')
-						dbmng_delete($aForm, $aParam);		
+						$ret=dbmng_delete($aForm, $aParam);		
 	
 					// duplicate record
 					if($_REQUEST['act']=='dup')
-						dbmng_duplicate($aForm, $aParam);
+						$ret=dbmng_duplicate($aForm, $aParam);
 
 					// print record
 					if($_REQUEST['act']=='prt_rec')
@@ -47,6 +49,8 @@ function dbmng_create_form_process($aForm, $aParam, $actiontype="")
 					echo t('You have not the right to access to the table you request') .  ' ' . $aForm['table_name'] . ' ' . $_REQUEST['tbln'] . '!';
 				}
 		}
+
+	return $ret;
 
 
 	/*
@@ -89,17 +93,21 @@ function dbmng_delete($aForm, $aParam)
 	//TODO: add also filter fields in delete/update
 	$result = dbmng_query("delete from " . $aForm['table_name'] . " WHERE $where ", $var);
 	
-	foreach ( $aForm['fields'] as $fld => $fld_value )
-		{
-			if($fld_value['widget']=='select_nm')
-				{		
-					$table_nm=$fld_value['table_nm'];
-					$field_nm=$fld_value['field_nm'];
+	if($result['ok']){
+		foreach ( $aForm['fields'] as $fld => $fld_value )
+			{
+				if($fld_value['widget']=='select_nm')
+					{		
+						$table_nm=$fld_value['table_nm'];
+						$field_nm=$fld_value['field_nm'];
 	
-					$sql = "delete from ".$table_nm." where ".$where;
-					$result = dbmng_query( $sql, $var);
-				}
-		}
+						$sql = "delete from ".$table_nm." where ".$where;
+						$res_nm = dbmng_query( $sql, $var);
+					}
+			}
+	}
+
+	return $result;
 					
 }
 
@@ -220,7 +228,7 @@ function dbmng_duplicate($aForm, $aParam)
 	// $result = dbmng_query("delete from " . $aForm['table_name'] . " WHERE $where ", $var);
 	$result = dbmng_query("insert into " . $aForm['table_name'] . " (" . $sWhat . ") select " . $sWhat . " from " . $aForm['table_name'] . " where $where ", $var);
 	
-	if( $bSelectNM )
+	if( $result['ok'] && $bSelectNM )
 		{
 			$id_key=$result['inserted_id'];
 
@@ -247,6 +255,8 @@ function dbmng_duplicate($aForm, $aParam)
 						}
 				}
 		}
+
+	return $result ;
 
 }
 
@@ -318,10 +328,13 @@ function dbmng_insert($aForm, $aParam)
 	$sql    = "insert into " . $aForm['table_name'] . " (" . $sWhat . ") values (" . $sVal . ")";
 	$result = dbmng_query($sql, $var);
 
-	print_r ($result);
+	if($result['ok']){
+		if( $bSelectNM )
+			$res = dbmng_insert_nm($aForm, $aParam, $result['inserted_id']);
+	}
 
-	if( $bSelectNM )
-		$res = dbmng_insert_nm($aForm, $aParam, $result['inserted_id']);
+
+	return $result;
 	
 }
 
@@ -507,20 +520,29 @@ function dbmng_update($aForm, $aParam)
 					$whereFields .= "$fld, ";
 					$whereFieldsV  .= ":$fld, ";
 
-					$aWhere = array_merge( $aWhere, array(":".$fld => $_REQUEST[$fld]) );
+					$val=$_REQUEST[$fld];
+					if($fld_value['type']=='date'){
+						if($val==''){
+							$val=null;
+						}
+					}
+					
+					$aWhere = array_merge( $aWhere, array(":".$fld => $val) );
 				}
 		}
 
 	$where = substr($where, 0, strlen($where)-4);		
 	$var   = array_merge($var, $aWhere);
+	print_r ($var);
 
 	//TODO: add also filter fields in delete/update
 	
 	$result = dbmng_query("update " . $aForm['table_name'] . " set $sSet where $where ", $var);
 	
-	if( $bSelectNM )
+	if($result['ok'] && $bSelectNM )
 		$res = dbmng_insert_nm($aForm, $aParam, null);
 
+/*
 	if( false && $bSelectNM )
 		{
 			foreach ( $aForm['fields'] as $fld => $fld_value )
@@ -543,6 +565,10 @@ function dbmng_update($aForm, $aParam)
 						}
 				}
 		}
+*/
+
+
+	return $result;
 
 	//if(isset($result['error'])){
 	//	print_r ($result['error']);
