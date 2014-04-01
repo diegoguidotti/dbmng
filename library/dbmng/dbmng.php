@@ -254,15 +254,19 @@ function dbmng_crud($aForm, $aParam=null)
 			}
 
 
-		if(isset($ret_form_process)){
-			if(!$ret_form_process['ok']){
-				$html.='<div class="message error">'.$ret_form_process['error'].'</div>';
-				if($_REQUEST["act"]=='do_ins' || $_REQUEST["act"]=='do_upd'){
-					$view_table=false;
-					if($_REQUEST["act"]=='upd')
-							$do_update = 1; //true;
-				}
-			}
+		if(isset($ret_form_process))
+			{
+				if(!$ret_form_process['ok'])
+					{
+						$html.='<div class="message error">'.$ret_form_process['error'].'</div>';
+						if($_REQUEST["act"]=='do_ins' || $_REQUEST["act"]=='do_upd')
+							{
+								$view_table=false;
+								$do_update = 3;
+								if($_REQUEST["act"]=='upd' || $_REQUEST["act"]=='ins')
+									$do_update = 3; //true;
+							}
+					}
 		}
 
 		$activate_search=false;
@@ -301,6 +305,7 @@ function dbmng_crud($aForm, $aParam=null)
 		echo "<br/>viewtable: ". $view_table;
 		echo "<br/>do_update: ". $do_update;
 	*/
+
 		if($view_table)
 			{
 				if( $activate_search )
@@ -587,12 +592,8 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 	$nmvals = Array();
 	$html      = "";
 
-
-
-
-
 	//create the $val array storing all the record data
-  if( $do_update == 1 )
+  if( $do_update == 1 || $do_update == 3 )
     {
 			$where = "";
 			$var = array();
@@ -618,15 +619,25 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 								{
 									$result = dbmng_query("select ".$fld_value['field_nm']." FROM " . $fld_value['table_nm'] . " WHERE $where ", $var);
 									$tx="";
-									foreach ($result as $record){							
-										$tx.=($record->$fld_value['field_nm']).'|';
-									}
+									
+									if( $do_update == 1 )
+										{
+											foreach ($result as $record)
+												{							
+													$tx.=($record->$fld_value['field_nm']).'|';
+												}
+										}
+									else if( $do_update == 3 )
+										{
+											foreach( $_POST[$fld] as $v )
+												$tx.=$v."|";
+										} 
 									$nmvals[$fld]=$tx;
 								}
 						}
 				}
 		}
-						
+
 	//if exists at least 1 file widget add enctype to form
 	$more = "";
 	foreach ( $aForm['fields'] as $fld => $fld_value )
@@ -647,8 +658,9 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 	$class = "dbmng_form";
 	if( $do_update == 2 && $actiontype=="search")
 		$class .= "_search";
-			
+
 	$html .= "<div class='$class' id='dbmng_form_".$aForm['table_name']."' >\n<form method='POST' $more action='?' >\n".$hv."";
+	
 	foreach ( $aForm['fields'] as $fld => $fld_value )
 		{
 			//render the form field
@@ -678,6 +690,11 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 								}
 							//print_r($_REQUEST);
 					 		//$value = 
+						}
+					elseif($do_update == 3)
+						{
+							if(isset($_POST[$fld]))
+								$value = $_POST[$fld];
 						}
 					elseif( isset($fld_value['default']) && !is_null($fld_value['default'])  )
 						{
@@ -810,7 +827,7 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 			$html .= "<input type='hidden' name='tbln' value='" . $aForm['table_name'] . "' />\n";
 			$html .= "<div class='dbmng_form_button'><input  type='submit' value='". t('Update') ."' /></div>\n";
 		}
-	elseif( $do_update == 0 )
+	elseif( $do_update == 0 || $do_update == 3 )
 		{
 			$html .= "<input type='hidden' name='act' value='do_ins' />\n";
 			$html .= "<input type='hidden' name='tbln' value='" . $aForm['table_name'] . "' />\n";
@@ -1006,7 +1023,7 @@ function dbmng_value_prepare($x_value, $x, $post, $aParam)
 			if(strlen($sValue)==0)
 				{
 					$sValue=$sDefault;
-					echo 'set '.$x.' def to '+	$sDefault;
+					//echo 'set '.$x.' def to '+	$sDefault;
 				}
 
 				if (dbmng_is_field_type_numeric($sType)) 
@@ -1030,6 +1047,10 @@ function dbmng_value_prepare($x_value, $x, $post, $aParam)
 
 	//$sVal=null;
 	//echo '<br/>Prepare '.$x." |".$sValue."|-|".$sVal."|".($sVal==null)."<br/>";
+	//echo "<br/>value:|".strlen($sVal)."|<br/>";
+	if( strlen($sVal) == 0 )
+		$sVal = null;
+		
   return $sVal;
 }
 

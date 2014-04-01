@@ -11,7 +11,6 @@
 */
 function dbmng_create_form_process($aForm, $aParam, $actiontype="") 
 {
-
 	$ret=null;
 	if(isset($_REQUEST['tbln']) && isset($_REQUEST['act']))
 		{
@@ -533,7 +532,6 @@ function dbmng_update($aForm, $aParam)
 
 	$where = substr($where, 0, strlen($where)-4);		
 	$var   = array_merge($var, $aWhere);
-	print_r ($var);
 
 	//TODO: add also filter fields in delete/update
 	
