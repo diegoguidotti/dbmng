@@ -23,13 +23,15 @@ function dbmng_query($sql, $var=null)
 	switch(DBMNG_CMS)
 	{
 		case "none": // to be developed
-			switch( DBMNG_DB )
-			{
-				case "pdo":
+			
 
 					try 
 						{
-							$sConnection = "mysql:dbname=".DBMNG_DB_NAME.";host=".DBMNG_DB_HOST.";charset=utf8";
+							$sConnection = DBMNG_DB.":dbname=".DBMNG_DB_NAME.";host=".DBMNG_DB_HOST."";
+							if(DBMNG_DB=='mysql')
+								$sConnection .= ";charset=utf8";
+
+							//echo $sConnection;
 							$link = new PDO($sConnection, DBMNG_DB_USER, DBMNG_DB_PASS);
 							$link->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 							$link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -82,14 +84,14 @@ function dbmng_query($sql, $var=null)
 					catch( PDOException $Exception ) {
 						// PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
 						// String.
+						echo $Exception->getMessage( );	
+
 						$ret=Array();
 						$ret['ok']=false;
-						$ret['error_pdo']=$link->errorInfo();							
+						/*$ret['error_pdo']=$link->errorInfo();	*/						
 						$ret['error']=$Exception->getMessage( );	
 						$ret['query'] = debug_sql_statement($sql, $var);	
 						
-					}
-					break;
 					
 			}
 			break;
@@ -204,16 +206,12 @@ function dbmng_fetch_object($res)
 	switch( DBMNG_CMS )
 	{
 		case "none":  // to be developed
-			switch( DBMNG_DB )
-			{
-				case "pdo":
-					if(count($res)>0){
-						$fo = $res[0];
-					}
-					else{
-						$fo=null;
-					}
-					break;
+			
+			if(count($res)>0){
+				$fo = $res[0];
+			}
+			else{
+				$fo=null;
 			}
 			break;
 			
@@ -234,15 +232,14 @@ function dbmng_fetch_object($res)
 */
 function dbmng_num_rows($res)
 {
+
+	$nr=0;
+
 	switch( DBMNG_CMS )
 	{
 		case "none":  // to be developed
-			switch( DBMNG_DB )
-			{
-				case "pdo":
-					$nr = count($res); //todo
-					break;
-			}
+			
+			$nr = count($res); //todo
 			break;
 			
 		case "drupal":

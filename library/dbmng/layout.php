@@ -291,7 +291,7 @@ function layout_form_html( $aInput )
 	}
 
 	$html .= '<script>';
-  $html .= '	tinymce.init({selector:"textarea#'.$fld.'"});';
+  $html .= '	tinymce.init({selector:"textarea#dbmng_'.$fld.'"});';
 	$html .= '</script>';
 	$html .= "<textarea class='html_widget' name='$actiontype$fld' id='dbmng_$fld' ".layout_get_nullable($fld_value)." >";
 	$html .= $value;	
