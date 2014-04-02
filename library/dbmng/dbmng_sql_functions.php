@@ -36,7 +36,8 @@ function dbmng_query($sql, $var=null)
 							$link->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 							$link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 					
-
+								//echo $sql;
+								//print_r ($var);
 
 							$link->beginTransaction();
 						  $res0 = $link->prepare($sql);
@@ -84,7 +85,7 @@ function dbmng_query($sql, $var=null)
 					catch( PDOException $Exception ) {
 						// PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
 						// String.
-						echo $Exception->getMessage( );	
+						//echo $Exception->getMessage( );	
 
 						$ret=Array();
 						$ret['ok']=false;
@@ -263,12 +264,8 @@ function dbmng_num_columns($res)
 	switch( DBMNG_CMS )
 	{
 		case "none":  // to be developed
-			switch( DBMNG_DB )
-			{
-				case "pdo":
-					$nr = $res->columnCount(); //todo
-					break;
-			}
+			
+			$nr = $res->columnCount(); //todo
 			break;
 			
 		case "drupal":

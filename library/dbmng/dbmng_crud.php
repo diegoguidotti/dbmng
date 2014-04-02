@@ -273,6 +273,8 @@ function dbmng_insert($aForm, $aParam)
 	$sWhat = "";
 	$sVal  = "";
 
+	
+
 	$var = array();
 	$bSelectNM = false;
 	foreach ( $aForm['fields'] as $fld => $fld_value )

@@ -501,24 +501,25 @@ Dbmng.prototype.syncData = function() {
 						});
 					}
 
-
-					//if exist a picture field find some record to be uploaded
-					jQuery.each(fld_picture, function(k2,fld_name){										
-						jQuery.each(obj.aData.records, function(k,rec){	
-									try{
-										var img = JSON.parse(rec.record[fld_name]);
-										if(!img.uploaded){
-												var o={'imageURI': img.imageURI, rec: obj.aData.records[k]};
-												img_to_upload.push(o);												
+					if(is_cordova()){
+						//if exist a picture field find some record to be uploaded
+						jQuery.each(fld_picture, function(k2,fld_name){										
+							jQuery.each(obj.aData.records, function(k,rec){	
+										try{
+											var img = JSON.parse(rec.record[fld_name]);
+											if(!img.uploaded){
+													var o={'imageURI': img.imageURI, rec: obj.aData.records[k]};
+													img_to_upload.push(o);												
+											}
 										}
-									}
-									catch(e){debug(e);}
-							});
-					});
+										catch(e){debug(e);}
+								});
+						});
 
-					jQuery.each(img_to_upload, function(k,v){
-						obj.uploadImage(v);
-					});
+						jQuery.each(img_to_upload, function(k,v){
+							obj.uploadImage(v);
+						});
+					}
 
 
 
@@ -1464,3 +1465,9 @@ return {
 };})();
 
 
+/*
+ * Return true/false indicating whether we're running under Cordova/Phonegap
+ */
+function is_cordova() {
+    return (typeof(cordova) !== 'undefined' || typeof(phonegap) !== 'undefined');
+};

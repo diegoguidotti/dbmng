@@ -28,6 +28,8 @@ CREATE TABLE dbmng_fields
 	field_function varchar(100) DEFAULT NULL,
 	skip_in_tbl INT DEFAULT 0,
 	voc_sql VARCHAR ( 255 ),
+	param text,
+	is_sercheable int default 0,
   CONSTRAINT id_field PRIMARY KEY (id_field),
   CONSTRAINT table_fieldname UNIQUE (id_table, field_name)
 );

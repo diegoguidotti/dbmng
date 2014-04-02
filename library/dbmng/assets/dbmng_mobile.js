@@ -192,9 +192,3 @@ function showMessageBox (message) {
 
 
 
-/*
- * Return true/false indicating whether we're running under Cordova/Phonegap
- */
-function is_cordova() {
-    return (typeof(cordova) !== 'undefined' || typeof(phonegap) !== 'undefined');
-};

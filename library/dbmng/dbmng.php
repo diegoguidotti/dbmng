@@ -107,21 +107,23 @@ function dbmng_get_form_array($id_table)
 					//$aForm['primary_key'] = $fld->field_name; 
 
 				$sLabelLong = ( strlen($fld->field_label_long)>0 ? $fld->field_label_long : $fld->field_label );
+				$isSearcheable = ( isset($fld->is_searchable) ? ($fld->is_searchable) : "0" );
+				$sWidget = ( isset($fld->field_widget) ? $fld->field_widget : "input" );
 
 				$aArray=array('label' => $fld->field_label, 
-																					 'type' => $fld->id_field_type, 
-																					 'widget' => $fld->field_widget, 
-																					 'value' => null, 
-																					 'nullable' => $fld->nullable, 
-																					 'default' => $fld->default_value,
-																					 'is_searchable' => $fld->is_searchable,
-																					 'key' => $fld->pk, //MM [26-07-13]
-																					 'field_function' => $fld->field_function,
-																					 'label_long' => $sLabelLong,
-																					 'skip_in_tbl' => $fld->skip_in_tbl,
-																					 'voc_sql' => $fld->voc_sql );
+					 'type' => $fld->id_field_type, 
+					 'widget' => $sWidget, 
+					 'value' => null, 
+					 'nullable' => $fld->nullable, 
+					 'default' => $fld->default_value,
+					 'is_searchable' => $isSearcheable,
+					 'key' => $fld->pk, //MM [26-07-13]
+					 'field_function' => $fld->field_function,
+					 'label_long' => $sLabelLong,
+					 'skip_in_tbl' => $fld->skip_in_tbl,
+					 'voc_sql' => $fld->voc_sql );
 				
-				if($fld->param)
+				if(isset($fld->param))
 					{
 						$param = $fld->param;
 						$param = str_replace("'",'"',$param);
