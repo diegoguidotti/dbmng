@@ -280,15 +280,18 @@ function dbmng_insert($aForm, $aParam)
 			//if($fld !== $aForm['primary_key'][0])
 			if($fld_value['key'] != 1)
 				{
-					if($fld_value['widget']!='select_nm')
-						{		
-							$sWhat .= $fld . ", ";
-							$sVal.=":$fld ,";	
-							$var = array_merge($var, array(":".$fld => dbmng_value_prepare($fld_value,$fld,$_POST,$aParam)));
-						}
-					else
+					if( isset($fld_value['widget']) ) 
 						{
-							$bSelectNM = true;
+							if($fld_value['widget']!='select_nm')
+								{		
+									$sWhat .= $fld . ", ";
+									$sVal.=":$fld ,";	
+									$var = array_merge($var, array(":".$fld => dbmng_value_prepare($fld_value,$fld,$_POST,$aParam)));
+								}
+							else
+								{
+									$bSelectNM = true;
+								}
 						}
 				}
 		}

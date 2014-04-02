@@ -343,9 +343,10 @@ function dbmng_check_aForm($aForm, $aParam)
 	$ok=false;
 	$err_msg='No processed';
 
-
-	$tn=$aForm['id_table'];
-
+	$tn = 0;
+	if( isset($aForm['id_table']) )
+		$tn=$aForm['id_table'];
+		
 	//print_r($aForm);
 
 	if( !isset($aForm['table_name']) ){		

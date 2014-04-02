@@ -192,9 +192,9 @@ function dbmng_manager()
 												'label_long' => t('Field Name'),
 												'nullable' => false,
 												'type' => 'varchar',
-												'widget'=>'select' ,
-												'key' => 0,
-										    'voc_val' => $varField
+												'widget'=>'input' ,
+												'key' => 0
+										    //'voc_val' => $varField
 									), 
 								'field_label'  => 
 									array('label'   => t('Label') , 

@@ -941,16 +941,23 @@ function layout_table_body( $result, $aForm, $aParam )
 											$html.= "<td class='dbmng_field_$fld'>".$value."</td>";
 										}
 									else{//TODO: add a comma separated list if widget==multi
-										if($fld_value['widget'] == 'select_nm')
+										if( isset($fld_value['widget']) )
 											{
-												$aNM = $fld_value['voc_nm'];
-												$val = "";
-
-												$value='';												
-												if(isset($aNM[$pkval])){
-													$value=dbmng_value_prepare_html($fld_value, $aNM[$pkval], $aParam, "table");
-												}
-												$html.= "<td class='dbmng_field_$fld'>".$value."</td>";
+												if($fld_value['widget'] == 'select_nm')
+													{
+														$aNM = $fld_value['voc_nm'];
+														$val = "";
+		
+														$value='';												
+														if(isset($aNM[$pkval])){
+															$value=dbmng_value_prepare_html($fld_value, $aNM[$pkval], $aParam, "table");
+														}
+														$html.= "<td class='dbmng_field_$fld'>".$value."</td>";
+													}
+												else
+													{
+														$html.= "<td class='dbmng_field_$fld'>&nbsp;</td>";		
+													}
 											}
 										else
 											{
