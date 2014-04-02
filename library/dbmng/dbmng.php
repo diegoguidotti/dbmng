@@ -263,8 +263,8 @@ function dbmng_crud($aForm, $aParam=null)
 							{
 								$view_table=false;
 								$do_update = 3;
-								if($_REQUEST["act"]=='upd' || $_REQUEST["act"]=='ins')
-									$do_update = 3; //true;
+								//if($_REQUEST["act"]=='upd' || $_REQUEST["act"]=='ins')
+								//	$do_update = 3; //true;
 							}
 					}
 		}
@@ -405,6 +405,8 @@ function dbmng_get_data($aForm, $aParam)
 				}
 		}
 
+	//print_r ($_POST);
+
 	if(isset($_REQUEST['act2']))
 		{
 			if($_REQUEST['act2']=='do_search')
@@ -413,19 +415,19 @@ function dbmng_get_data($aForm, $aParam)
 						{
 							if( $fld_value['is_searchable'] == 1 )
 								{
-									if(isset($_REQUEST[$fld]))
+									if(isset($_REQUEST["search_".$fld]))
 										{
-											if( $_REQUEST[$fld] != '' )
+											if( $_REQUEST["search_".$fld] != '' )
 												{
 													if( $fld_value['widget'] == 'input' )
 														{
 															$where.=" AND $fld like :$fld ";														
-															$var = array_merge($var, array(":$fld" => '%'.$_REQUEST[$fld].'%'));
+															$var = array_merge($var, array(":$fld" => '%'.$_REQUEST["search_".$fld].'%'));
 														}
 													else
 														{
 															$where.=" AND $fld = :$fld ";														
-															$var = array_merge($var, array(":$fld" => $_REQUEST[$fld]));
+															$var = array_merge($var, array(":$fld" => $_REQUEST["search_".$fld]));
 														}
 												}
 										}

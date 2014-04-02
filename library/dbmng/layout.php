@@ -376,7 +376,7 @@ function layout_form_file( $aInput )
 	$html .= '<a href="#" id="dbmng_'.$fld.'_tmp_choose">'.t('Choose').'</a>&nbsp';
 	$html .= '<a href="#" id="dbmng_'.$fld.'_tmp_remove">'.t('Remove').'</a>';
 
-	$html .= "<script type=\"text/javascript\">dbmng_style_fileform('".$fld."');</script>";
+	$html .= "<script type=\"text/javascript\">dbmng_style_fileform('dbmng_".$fld."');</script>";
 
 	return $html;
 }

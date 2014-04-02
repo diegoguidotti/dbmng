@@ -47,7 +47,7 @@ function dbmng_query($sql, $var=null)
 									}
 
 								$link->commit();
-								echo debug_sql_statement($sql, $var)."<br/>";	
+								//echo debug_sql_statement($sql, $var)."<br/>";	
 
 								//Temporary Fix: you can not fetch data after UPDATE INSERT and DELETE 
 								if(startsWithL($sql,"update") || startsWithL($sql,"insert") || startsWithL($sql,"delete") )
@@ -178,7 +178,7 @@ function dbmng_query2array($res)
 		}
 	else
 		{
-			echo "aaa";
+			//echo "aaa";
 			foreach( $res as $data )
 				{
 					$aData[] = (array)$data;
