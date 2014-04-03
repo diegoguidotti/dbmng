@@ -330,7 +330,11 @@ function _climasouth_assistance()
 									)
 						)
 				);
-			$html = dbmng_create_form($aForm, array(), 0);
+			
+			$aParam = array();
+			$aParam['ui']['btn_name'] = "Send";
+			
+			$html = dbmng_create_form($aForm, $aParam, 0);
 		}
 	else
 		{	

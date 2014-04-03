@@ -596,7 +596,13 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 {
 	$nmvals = Array();
 	$html      = "";
-
+	
+	$btn_name = t("Insert");
+	if( isset($aParam['ui']['btn_name']) )
+		{
+			$btn_name = t($aParam['ui']['btn_name']);
+		}
+	
 	//create the $val array storing all the record data
   if( $do_update == 1 || $do_update == 3 )
     {
@@ -836,7 +842,7 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 		{
 			$html .= "<input type='hidden' name='act' value='do_ins' />\n";
 			$html .= "<input type='hidden' name='tbln' value='" . $aForm['table_name'] . "' />\n";
-			$html .= "<div class='dbmng_form_button'><input class='dbmng_form_button' type='submit' value='" . t('Insert') . "' /></div>\n";
+			$html .= "<div class='dbmng_form_button'><input class='dbmng_form_button' type='submit' value='" . $btn_name . "' /></div>\n";
 		}
 	elseif( $do_update == 2 && $actiontype == "search")
 		{
