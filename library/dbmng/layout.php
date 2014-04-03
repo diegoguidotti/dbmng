@@ -261,6 +261,52 @@ function layout_form_textarea( $aInput )
 	return $html;
 }
 
+/////////////////////////////////////////////////////////////////////////////
+// layout_form_captcha
+// ======================
+/// This function allow to add the widget textarea (html tag) 
+/**
+\param $aInput			associative array that contains the follows param:
+\param $fld					field name
+\param $fld_value		field value
+\param $value				existing value
+\return             html
+*/
+function layout_form_captcha( )
+{		
+	$x = rand(0,10);
+	$y = rand(0,10);
+	$html  = "";
+	if( true )
+		{
+			$html .= '<br/><br/><br/><fieldset class="captcha form-wrapper">';
+			$html .= '<legend><span class="fieldset-legend">CAPTCHA</span></legend>';
+			$html .= '<div class="fieldset-wrapper">';
+			$html .= '<div class="fieldset-description">This question is for testing whether or not you are a human visitor and to prevent automated spam submissions.</div>';
+			$html .= '<input type="hidden" name="dbmng_x" id="dbmng_x" value='.$x.' />'; 
+			$html .= '<input type="hidden" name="dbmng_y" id="dbmng_y" value='.$y.' />'; 
+			
+			$html .= '<div class="form-item form-type-textfield form-item-captcha-response">';
+			$html .= "<label for='captcha'>" . t("Math question") . "<span class='dbmng_required' title='This field is required.'>*</span>" . "</label>\n"; 
+			$html .= '<span class="field-prefix">'.$x.' + '.$y.' = </span> <input type="text" id="edit-captcha" name="captcha" value="" size="4" maxlength="2" class="form-text required" />';
+			$html .= '<div class="description">Solve this simple math problem and enter the result. E.g. for 1+3, enter 4.</div>';
+			$html .= '</div></div></fieldset>';
+		}
+	else
+		{
+			$html .= "<div class='dbmng_form_row dbmng_form_field_res_date'>";
+			$html .= "<p>This question is for testing whether or not you are a human visitor and to prevent automated spam submissions.</p>";
+			$html .= "<label for='captcha'>" . t("Math question") . "<span class='dbmng_required'>*</span>" . "</label>\n";
+			$html .= "<div class='dbmbg_form_element'>";
+			$html .= '<input type="hidden" name="dbmng_x" id="dbmng_x" value='.$x.' />'; 
+			$html .= '<input type="hidden" name="dbmng_y" id="dbmng_y" value='.$y.' />'; 
+			$html .= "$x + $y = <input class='dbmng_captcha' type='text' name='captcha'>";
+			$html .= "Solve this simple math problem and enter the result. E.g. for 1+3, enter 4.";
+			$html .= "</div></div>";
+		}
+	return $html;
+}
+
 
 /////////////////////////////////////////////////////////////////////////////
 // layout_form_html

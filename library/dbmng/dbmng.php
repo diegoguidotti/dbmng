@@ -604,7 +604,7 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 		}
 	
 	//create the $val array storing all the record data
-  if( $do_update == 1 || $do_update == 3 )
+  if( $do_update == 1 )
     {
 			$where = "";
 			$var = array();
@@ -638,11 +638,6 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 													$tx.=($record->$fld_value['field_nm']).'|';
 												}
 										}
-									else if( $do_update == 3 )
-										{
-											foreach( $_POST[$fld] as $v )
-												$tx.=$v."|";
-										} 
 									$nmvals[$fld]=$tx;
 								}
 						}
@@ -705,7 +700,19 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 					elseif($do_update == 3)
 						{
 							if(isset($_POST[$fld]))
-								$value = $_POST[$fld];
+								{
+									$value = $_POST[$fld];
+									
+									if( isset($fld_value['widget']) ) 
+										if( $fld_value['widget'] == 'select_nm' )
+											{
+												$tx = "";
+												foreach( $_POST[$fld] as $v )
+													$tx.=$v."|";
+	
+												$nmvals[$fld]=$tx;
+											}
+							}
 						}
 					elseif( isset($fld_value['default']) && !is_null($fld_value['default'])  )
 						{
@@ -830,6 +837,8 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 		} //End of form
 	
 	$hv = '';//dbmng_search_add_hidden($aForm, $aParam, "POST");
+	if( isset($aParam['captcha']) )
+		$html .= layout_form_captcha();
 	
 	if( $do_update == 1 )
 		{
