@@ -222,6 +222,13 @@ function climasouth_menu()
       'type' => MENU_CALLBACK,
    );
 
+  $items['climasouth/assistance'] = array(
+      'title' => 'Request Assistance',
+      'page callback' => '_climasouth_assistance',
+      'access arguments' => array('view workspace'),
+      'type' => MENU_CALLBACK,
+   );
+
   return $items;
 }
 
@@ -275,6 +282,76 @@ function lst_country()
 	
 	$html .= implode(' ', service_links_render(null, FALSE));  
 return ($html);
+}
+
+function _climasouth_assistance()
+{
+	dbmng_add_drupal_libraries();
+	//print_r($_GET);
+	if( !isset($_POST['req_name']) )
+		{
+			$aForm=array(  
+					'table_name' => 'c_requeste_assistance' ,
+						'primary_key'=> array('id_c_requeste_assistance'), 
+						'fields'     => array(
+								'id_c_requeste_assistance'  => 
+									array('label'   => t('ID') , 
+												'label_long' => t('ID Table'),
+												'type' => 'bigint',
+												'skip_in_tbl' => '1',
+												'key' => 1
+									), 
+								'req_name'  => 
+									array('label'   => t('Your name (required)') , 
+												'type' => 'varchar',
+												'widget' => 'input',
+												'nullable' => false,
+												'key' => 0
+									), 
+								'req_email'     => 
+									array('label'   => t('Your email (required)'), 
+												'type' => 'varchar', 
+												'widget'=>'input' ,
+												'nullable' => false,
+												'key' => 0
+									) ,
+								'req_organisation'  => 
+									array('label'   => t('Your organisation') , 
+												'type' => 'varchar',
+												'key' => 0,
+												'skip_in_tbl' => '1'
+									), 
+								'req_message'  => 
+									array('label'   => t('Your message') , 
+												'type' => 'varchar',
+												'widget'=>'html' ,
+												'key' => 0,
+												'skip_in_tbl' => '1'
+									)
+						)
+				);
+			$html = dbmng_create_form($aForm, array(), 0);
+		}
+	else
+		{	
+			print_r($_POST);
+			//print_r($_GET);
+			$to      = 'info@climasouth.eu';
+			$subject = '[climasouth] Request assistance';
+			$message = $_POST['req_message'];
+			$headers = 'From: '.$_POST['req_email'].'' . "\r\n" .
+			    'Reply-To: '.$_POST['req_email']."\r\n" .
+			    'X-Mailer: PHP/' . phpversion();
+			
+			//mail($to, $subject, $message , $headers);
+			$html = "";
+			$html .= "To: ".$to."<br/>Subject: ".$subject;
+			$html .= "Message: ".$message."<br/>headers: ".$headers."<br/>";
+
+			$html .= "Your request has been sent ...";
+		}
+	
+	return $html;
 }
 
 function _climasouth_graph( $aCountry )
@@ -449,7 +526,8 @@ function _climasouth_workspace()
 					$aParam['hidden_vars']           = array();
 					$aParam['hidden_vars']['tbl']	   = $_REQUEST['tbl']; //save the table id
 					$aParam['user_function']['dup']	 = 0;	              // allow to enabled=1 or disabled=0 the duplication function
-		
+					$aParam['user_function']['prt_rec'] = 0;
+					$aParam['user_function']['prt_tbl'] = 0;
 					$aParam['tbl_sorter']              = '1';
 					// update record
 					$html .= dbmng_crud($aForm, $aParam);

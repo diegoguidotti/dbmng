@@ -124,7 +124,7 @@ function dbmng_query($sql, $var=null)
 						//echo ('Query: '.$sql.'<br/>');
 						$ret=Array();
 						$ret['ok']=false;
-						$ret['error_pdo']=$link->errorInfo();							
+						//$ret['error_pdo']=$link->errorInfo();							
 						$ret['error']=$Exception->getMessage( );	
 						$ret['query'] = debug_sql_statement($sql, $var);	
 						
