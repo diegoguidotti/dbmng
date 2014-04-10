@@ -34,6 +34,12 @@ function climasouth_block_info()
 	$blocks['climasouth_menu_contacts'] = array(
 		'info' => t('Climasouth menu contacts'),
 		);
+	$blocks['climasouth_contribute_view'] = array(
+		'info' => t('Climasouth contribute view'),
+		);
+	$blocks['climasouth_contribute_edit'] = array(
+		'info' => t('Climasouth contribute edit'),
+		);
 	
 	return $blocks;
 }
@@ -64,6 +70,12 @@ function climasouth_block_view($delta='')
 				break;
 			case 'climasouth_menu_contacts' :
 				$block['content'] = _climasouth_menu_contacts();
+				break;
+			case 'climasouth_contribute_view' :
+				$block['content'] = _climasouth_contribute_view();
+				break;
+			case 'climasouth_contribute_edit' :
+				$block['content'] = _climasouth_contribute_edit();
 				break;
 		}
 	
@@ -201,6 +213,27 @@ function _climasouth_menu_contacts()
 	$html .= "</ul>";
 
 	$html.='</div>';
+	return $html;
+}
+
+function _climasouth_contribute_view()
+{
+	$html = "";
+
+	$_REQUEST['tbl'] = 'c_resource';
+	$html = _climasouth_workspace();
+
+	return $html;
+}
+
+function _climasouth_contribute_edit()
+{
+	$html = "";
+
+	$_REQUEST['tbl'] = 'c_resource';
+	$_REQUEST['act'] = 'ins';
+	$html = _climasouth_workspace();
+
 	return $html;
 }
 
