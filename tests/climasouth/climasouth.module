@@ -164,6 +164,17 @@ function _climasouth_toolbar()
 	return $html;
 }
 
+
+function _climasouth_knowledge_navigator()
+{
+	drupal_add_js ( "http://kn.ids.ac.uk/widget/kn-widget.js" );
+	$html = "";
+	$html .= '<span id="kn-widget"></span>';
+	
+	return $html;
+}
+
+
 function _climasouth_news() 
 {
 	$html = '<div id="climasouth_news">';
@@ -413,25 +424,36 @@ function _climasouth_assistance()
 				{
 					if( intval($_POST['captcha']) == intval($_POST['dbmng_x'])+intval($_POST['dbmng_y']) )
 						{
-							$to      = 'info@climasouth.eu';
-							$subject = '[climasouth] Request assistance';
-							$message = $_POST['req_message'];
-
 							// To send HTML mail, the Content-type header must be set
 							$headers  = 'MIME-Version: 1.0' . "\r\n";
 							$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 							$headers .= 'From: '.$_POST['req_email'].'' . "\r\n" .
-							    'Reply-To: '.$_POST['req_email']."\r\n" .
-							    'X-Mailer: PHP/' . phpversion();
-							$attachfile = $_FILES['req_file'];
+											    'Reply-To: '.$_POST['req_email']."\r\n" .
+											    'X-Mailer: PHP/' . phpversion();
+
+							$aInput['to'] = 'info@climasouth.eu';
+							$aInput['subject'] = '[climasouth] Request assistance';
+							$aInput['req_organisation'] = $_POST['req_organisation'];
+							$aInput['message'] = $_POST['req_message'];
+							$aInput['headers'] = $headers;
+							$aInput['email'] = $_POST['req_email'];
+							$aInput['attach_file'] = $_FILES['req_file'];
 							
-							mail($to, $subject, $message , $headers);
-							climasouth_mailto($attachfile);
-							
-							$html .= "To: ".$to."<br/>Subject: ".$subject;
-							$html .= "Message: ".$message."<br/>headers: ".$headers."<br/>";
-							$html .= "Attach file: ".$attachfile."<br/>";
-							$html .= "Your request has been sent ...";
+							$bmail = climasouth_mailto($aInput);
+							if( $bmail )
+								{
+									$html .= t("Your request has been sent");
+									$html .= "<br>From: ".$aInput['email'];
+									$html .= "<br/>To: ".$aInput['to'];
+									$html .= "<br/>Subject: ".$aInput['subject'];
+									$html .= "<br/>Message: ".$aInput['message'];
+									//$html .= "headers: ".$aInput['headers']."<br/>";
+									$html .= "<br/>Attach file: ".$aInput['attach_file']['name'];
+								}
+							else
+								{
+									$html .= t("there was an error in sending the email. Try it again!");
+								}
 						}
 					else
 						{
@@ -449,45 +471,51 @@ function _climasouth_assistance()
 	return $html;
 }
 
-function climasouth_mailto($attfile)
+function climasouth_mailto($aInput)
 {
-	$htmlbody = " Your Mail Contant Here.... You can use html tags here...";
+
+	$htmlbody = "Organisation: ".$aInput['req_organisation']."<br/>"; //" Your Mail Contant Here.... You can use html tags here...";
+	$htmlbody .= $aInput['message']; //" Your Mail Contant Here.... You can use html tags here...";
 	$to = "info@climasouth.eu"; //Recipient Email Address
-	$subject = "Test email with attachment"; //Email Subject
-	$headers = "From: name@domain.com\r\nReply-To: name@domain.com";
+	$subject = $aInput['subject']; //"Test email with attachment"; //Email Subject
+	$email = $aInput['email'];
+	
+	$headers = "From: ".$email."\r\nReply-To: ".$email;
 	$random_hash = md5(date('r', time()));
 	$headers .= "\r\nContent-Type: multipart/mixed; 
 	boundary=\"PHP-mixed-".$random_hash."\"";
+	
 	// Set your file path here
-	$attachment = chunk_split(base64_encode(file_get_contents($attfile['tmp_name']))); 
-	
-	
+	$attachfile = $aInput['attach_file'];
+	$attachment = chunk_split(base64_encode(file_get_contents($attachfile['tmp_name']))); 
+
 	//define the body of the message.
 	$message = "--PHP-mixed-$random_hash\r\n"."Content-Type: multipart/alternative; 
 	boundary=\"PHP-alt-$random_hash\"\r\n\r\n";
-	$message .= "--PHP-alt-$random_hash\r\n"."Content-Type: text/plain; 
+	$message .= "--PHP-alt-$random_hash\r\n"."Content-Type: text/html; 
 	charset=\"iso-8859-1\"\r\n"."Content-Transfer-Encoding: 7bit\r\n\r\n";
-	
-	
+
+
 	//Insert the html message.
 	$message .= $htmlbody;
 	$message .="\r\n\r\n--PHP-alt-$random_hash--\r\n\r\n";
-	
-	
+
+
 	//include attachment
 	$message .= "--PHP-mixed-$random_hash\r\n"."Content-Type: application/zip; 
-	name=".$attfile['name']."\r\n"."Content-Transfer-Encoding: 
+	name=".$attachfile['name']."\r\n"."Content-Transfer-Encoding: 
 	base64\r\n"."Content-Disposition: attachment\r\n\r\n";
-	
+
 	$message .= $attachment;
 	$message .= "/r/n--PHP-mixed-$random_hash--";
-	
-	
+
+
 	//send the email
 	$mail = mail( $to, $subject , $message, $headers );
-	
-	echo $mail ? "Mail sent" : "Mail failed";
+
+	return $mail;
 }
+
 
 function _climasouth_graph( $aCountry )
 {
@@ -617,9 +645,6 @@ function _climasouth_maps($block)
 
 function _climasouth_workspace() 
 {
-
-	
-
 	dbmng_add_drupal_libraries();
 
 	$html='';
