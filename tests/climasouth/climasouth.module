@@ -91,6 +91,34 @@ function _climasouth_map_block()
 	return $html;
 }
 
+
+/* NOT Workig
+function climasouth_init() 
+{
+	echo $_GET['q'];
+	if(isset($_GET['q']) ) {
+		if( $_GET['q'] == 'climasouth/workspace/resource/view') {
+		  drupal_goto('climasouth/workspace?act=ins&tbl=c_resource');
+       
+    }
+	}
+}
+*/
+
+function climasouth_url_inbound_alter(&$path, $original_path, $path_language) {
+	
+		if( $path == 'climasouth/workspace/resource/view') {
+       $path = 'climasouth/workspace';
+			 $_REQUEST['act'] = 'search';
+			 $_REQUEST['tbl'] = 'c_resource';
+    }  
+		else if ( $path == 'climasouth/workspace/resource/edit') {
+       $path = 'climasouth/workspace';
+			 $_REQUEST['act'] = 'ins';
+			 $_REQUEST['tbl'] = 'c_resource';
+    }  
+}
+
 function _climasouth_block() 
 {
 	$html = "";
@@ -219,6 +247,8 @@ function _climasouth_menu_contacts()
 function _climasouth_contribute_view()
 {
 	$html = "";
+
+	
 
 	$_REQUEST['tbl'] = 'c_resource';
 	$html = _climasouth_workspace();
@@ -587,6 +617,9 @@ function _climasouth_maps($block)
 
 function _climasouth_workspace() 
 {
+
+	
+
 	dbmng_add_drupal_libraries();
 
 	$html='';
