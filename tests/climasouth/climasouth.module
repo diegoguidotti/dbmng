@@ -107,12 +107,12 @@ function climasouth_init()
 
 function climasouth_url_inbound_alter(&$path, $original_path, $path_language) {
 	
-		if( $path == 'climasouth/workspace/resource/view') {
+		if( $path == 'climasouth/resource/view') {
        $path = 'climasouth/workspace';
 			 $_REQUEST['act'] = 'search';
 			 $_REQUEST['tbl'] = 'c_resource';
     }  
-		else if ( $path == 'climasouth/workspace/resource/edit') {
+		else if ( $path == 'climasouth/resource/edit') {
        $path = 'climasouth/workspace';
 			 $_REQUEST['act'] = 'ins';
 			 $_REQUEST['tbl'] = 'c_resource';
