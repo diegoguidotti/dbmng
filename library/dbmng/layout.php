@@ -415,10 +415,10 @@ function layout_form_file( $aInput )
 	if( strlen($aInput['actiontype'])!= 0 )
 		$actiontype = "search_";
 
-  $html  = "<span id='dbmng_".$fld."_link_container'>".dbmng_file_create_link($value, $aParam).'</span><br/>';
+  $html  = "<span id='dbmng_".$fld."_link_container'>".dbmng_file_create_link($value, $aParam).'</span>';
 	$html .= "<div class='dbmng_file_hide_this'><input type='file' name='$actiontype$fld' id='dbmng_$fld' ></div>";
 
-	$html .= '<input class="dbmng_file_text" type="text" name="'.$fld.'_tmp_choosebox" id="dbmng_'.$fld.'_tmp_choosebox" value="'.$value.'" />';
+	$html .= '<input class="dbmng_file_text" type="text" name="'.$fld.'_tmp_choosebox" id="dbmng_'.$fld.'_tmp_choosebox" value="'.$value.'" />&nbsp';
 	$html .= '<a href="#" id="dbmng_'.$fld.'_tmp_choose">'.t('Choose').'</a>&nbsp';
 	$html .= '<a href="#" id="dbmng_'.$fld.'_tmp_remove">'.t('Remove').'</a>';
 
@@ -670,6 +670,7 @@ function layout_form_select_nm( $aInput )
 		}
 	elseif( $outtype == 'checkbox' )
 		{
+			$html .= "<ul class='pippo'>";
 			foreach ( $aVoc as $vocKey => $vocValue )
 				{
 					$s = "";
@@ -679,8 +680,9 @@ function layout_form_select_nm( $aInput )
 							$s = " checked='true' ";
 						}
 				
-					$html .= "<input class='dbmng_checkbox' type='checkbox' name='".$fld."[]' $s value='" . $vocKey . "'/>" . $vocValue . "<br/> \n";	
+					$html .= "<li><input class='dbmng_checkbox' type='checkbox' name='".$fld."[]' $s value='" . $vocKey . "'/>" . $vocValue . "</li> \n";	
 				}
+			$html .= "</ul>";
 		} 
 	return $html;
 }
