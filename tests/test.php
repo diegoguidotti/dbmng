@@ -26,10 +26,9 @@
 	include(DBMNG_LIB_PATH.'dbmng/dbmng_standalone.php');
 
 	//get the array storing the table metadata from record 1 in table dbmng_tables
-	if( gethostname() == "Galveston" )
+	if( gethostname() == "galveston" )
 		{
 			$aForm    = dbmng_get_form_array(4); 
-			
 			/**
 			$aForm['fields']['id_mm_agenda_mm_contact'] = Array(
 				'label'   => 'Contatti', 
