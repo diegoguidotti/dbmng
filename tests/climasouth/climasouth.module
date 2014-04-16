@@ -34,6 +34,12 @@ function climasouth_block_info()
 	$blocks['climasouth_menu_contacts'] = array(
 		'info' => t('Climasouth menu contacts'),
 		);
+	$blocks['climasouth_knowledge_navigator'] = array(
+		'info' => t('Climasouth Navigator'),
+		);
+	$blocks['climasouth_country_flag'] = array(
+		'info' => t('Climasouth Country Flag'),
+		);
 	$blocks['climasouth_contribute_view'] = array(
 		'info' => t('Climasouth contribute view'),
 		);
@@ -70,6 +76,12 @@ function climasouth_block_view($delta='')
 				break;
 			case 'climasouth_menu_contacts' :
 				$block['content'] = _climasouth_menu_contacts();
+				break;
+			case 'climasouth_knowledge_navigator' :
+				$block['content'] = _climasouth_knowledge_navigator();
+				break;
+			case 'climasouth_country_flag' :
+				$block['content'] = _climasouth_country_flag();
 				break;
 			case 'climasouth_contribute_view' :
 				$block['content'] = _climasouth_contribute_view();
@@ -148,16 +160,28 @@ function _climasouth_login()
 
 function _climasouth_toolbar() 
 {
+	dbmng_add_drupal_libraries();
 	global $base_path;
+
+	$reader   = $base_path."sites/default/social_icons/rss.png";
+	$youtube  = $base_path."sites/default/social_icons/youtube.png";
+	$twitter  = $base_path."sites/default/social_icons/twitter.png";
+	$facebook = $base_path."sites/default/social_icons/facebook.png";
+	$googlepl = $base_path."sites/default/social_icons/googleplus.png";
 	
 	$aClass = array('attributes' => array('class' => array('toolbar_link')));
 	$html = '<div id="climasouth_toolbar">';	
 	$html .= "<ul id='climasouth_toolbar_ul'>";
-	$html .= "<li class='climasouth_toolbar'>".t('Multimedia')."</li>";
-	$html .= "<li class='climasouth_toolbar'>".t('Press Packs')."</li>";
-	$html .= "<li class='climasouth_toolbar'>".t('CC Knowledge Navigator')."</li>";
-	$html .= "<li class='climasouth_toolbar'>".l(t('Contacts'), 'contacts', $aClass)."</li>";
-	//l(t('log out'), 'user/logout')
+	$html .= "<li class='climasouth_toolbar'>".t('MULTIMEDIA')."</li>";
+	$html .= "<li class='climasouth_toolbar'>".t('PRESS PACKS')."</li>";
+	$html .= "<li class='climasouth_toolbar'>".l(t('CC KNOWLEDGE NAVIGATOR'),'navigator')."</li>";
+	$html .= "<li class='climasouth_toolbar'>".l(t('CONTACTS'), 'contacts', $aClass)."</li>";
+	$html .= "<li class='climasouth_toolbar'>".t('Official European Commission Website').": <a href='http://ec.europa.eu/europeaid/what/development-policies/intervention-areas/environment/climate_en.htm'>EuropeAid's page on climate change</a><br/>".t('This programme is founded by the European Union')."</li>";
+	$html .= "<li class='climasouth_toolbar'><img src='".$reader."'></li>";
+	$html .= "<li class='climasouth_toolbar'><img src='".$youtube."'></li>";
+	$html .= "<li class='climasouth_toolbar'><img src='".$twitter."'></li>";
+	$html .= "<li class='climasouth_toolbar'><img src='".$facebook."'></li>";
+	$html .= "<li class='climasouth_toolbar'><img src='".$googlepl."'></li>";
 	$html .= "</ul>";
 
 	$html.='</div>';
@@ -174,6 +198,28 @@ function _climasouth_knowledge_navigator()
 	return $html;
 }
 
+function _climasouth_country_flag()
+{
+
+	global $base_path;
+	$html = "<table id='flag_container'>";
+	$html .= "<tr>";
+	$html .= "<td><a href='".$base_path."climasouth/country?id_c_country=1' class='country_link'><img src='".$base_path."docs/Algeria.png' title='".t('Algeria')." '/></a></td>";
+	$html .= "<td><a href='".$base_path."climasouth/country?id_c_country=2' class='country_link'><img src='".$base_path."docs/Egypt.png' title='".t('Egypt')."' /></a></td>";
+	$html .= "<td><a href='".$base_path."climasouth/country?id_c_country=3' class='country_link'><img src='".$base_path."docs/Israel.png' title='".t('Israel')."' /></a></td>";
+	$html .= "<td><a href='".$base_path."climasouth/country?id_c_country=9' class='country_link'><img src='".$base_path."docs/Jordan.png' title='".t('Jordan')."' /></a></td>";
+	$html .= "<td><a href='".$base_path."climasouth/country?id_c_country=4' class='country_link'><img src='".$base_path."docs/Lebanon.png' title='".t('Lebanon')."' /></a></td>";
+	$html .= "</tr>";
+	$html .= "<tr>";
+	$html .= "<td><a href='".$base_path."climasouth/country?id_c_country=5' class='country_link'><img src='".$base_path."docs/Libya.png' title='".t('Libya')."' /></a></td>";
+	$html .= "<td><a href='".$base_path."climasouth/country?id_c_country=7' class='country_link'><img src='".$base_path."docs/Morocco.png' title='".t('Morocco')."' /></a></td>";
+	$html .= "<td><a href='".$base_path."climasouth/country?id_c_country=8' class='country_link'><img src='".$base_path."docs/Palestine.png' title='".t('Palestine')."' /></a></td>";
+	$html .= "<td><a href='".$base_path."climasouth/country?id_c_country=10' class='country_link'><img src='".$base_path."docs/Syria.png' title='".t('Syria')."' /></a></td>";
+	$html .= "<td><a href='".$base_path."climasouth/country?id_c_country=6' class='country_link'><img src='".$base_path."docs/Tunisia.png' title='".t('Tunisia')."' /></a></td>";
+	$html .= "</tr>";
+	$html .= "</table>";
+	return $html;
+}
 
 function _climasouth_news() 
 {
@@ -181,7 +227,7 @@ function _climasouth_news()
 	$html .= '<h2 id="climasouth_news_h2">'.l(t('News & Events'),'news_events').'</h2>';	
 	
 	/** load dinamically from database*/
-	$html .= "<ul>";
+	$html .= "<ul>"; 
 	
 	$res = dbmng_query("select * from c_news order by date_from", array());
 	foreach ($res as $rec) {
@@ -630,7 +676,7 @@ function _climasouth_maps($block)
 			$height="400";
 		}
 
-	$html .= '<div id="map_container" style="width:690px; height:'.$height.'px;"  ></div>';
+	$html .= '<div id="map_container" style="width:1170px; height:'.$height.'px;"  ></div>';
 
 	$html .= "\n<script type='text/javascript'>\n";
 	$html .= "var data=".dbmng_get_js_array($aForm, null).";\n";
