@@ -670,7 +670,7 @@ function layout_form_select_nm( $aInput )
 		}
 	elseif( $outtype == 'checkbox' )
 		{
-			$html .= "<ul class='pippo'>";
+			$html .= "<ul class='dbmng_checkbox_ul'>";
 			foreach ( $aVoc as $vocKey => $vocValue )
 				{
 					$s = "";
