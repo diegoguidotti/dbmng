@@ -204,4 +204,14 @@ li img.dbmng_picture{
 	width: 80px;
 }
 
+.dbmng_checkbox_ul{
+	width: 400px;
+	float: left;
+	list-style: none;
+	margin: 0px;
+}
 
+.dbmng_checkbox_ul li{
+	float: left;
+	width: 45%;
+}
