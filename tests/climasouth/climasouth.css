@@ -26,8 +26,6 @@ climasouth_login {
 /** from the old theme*/
 /*
 
-#climasouth_toolbar a {color:white !important; text-decoration:none;}
-#climasouth_news a {color:white !important; text-decoration:none;}
 
 .climasouth_toolbar {
 	list-style: none;
@@ -53,29 +51,5 @@ climasouth_login {
 	padding: 0px;
 }
 
-#block-climasouth-climasouth-news {
-	padding: 0px;
-	border:0px;
-	margin:0px;
-	height: 390px;
-}
 
-#climasouth_news_h2 {
-	border-bottom: 0px;
-	text-shadow: none;
-	text-align: center;
-	font-weight: bold;
-	line-height: 30px;
-	border: 1px solid #dc4e4e;
-	background: #dc4e4e;
-	vertical-align: middle;
-	color: white;
-}
-
-.climasouth_news {
-list-style: none;
-margin: 0px 0px 4px 0px;
-border-bottom: 1px solid #62a9c6;
-padding: 15px 0 2px 0px;
-}
 
