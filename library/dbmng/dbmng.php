@@ -825,9 +825,9 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 													$html .= layout_form_input($aInput);// ( $fld, $fld_value, $value, $more );		
 												}
 											$html.='</div>';
-											$html.='<div class="dbmng_separator"></div>';
 											
 											$html.='</div>';
+											$html.='<div class="dbmng_separator">&nbsp</div>';
 										}
 								}
 						}
