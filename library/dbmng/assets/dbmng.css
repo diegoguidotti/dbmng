@@ -31,7 +31,7 @@ div.dbmng_form_button {
 }
 
 div.dbmng_form_row input, div.dbmng_form_row select, div.dbmng_form_row textarea  {
-  width:300px;
+  width:500px;
 }
 
 
@@ -79,6 +79,14 @@ div.dbmng_form_search div.dbmng_form_row {
 div.dbmng_form_search div.dbmng_form_row input, div.dbmng_form_search div.dbmng_form_row select, div.dbmng_form_search div.dbmng_form_row textarea  {
   width:100px;
 }
+
+div.dbmng_separator {
+ border-bottom: 1px solid #CCC;
+ margin-bottom: 10px;
+ width: 700px;
+ clear: both;
+}
+
 
 /* Table sorter CSS */
 table.tablesorter thead tr .header {
