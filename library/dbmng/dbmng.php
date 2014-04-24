@@ -750,12 +750,11 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 									if( $bViewFld ) //$_REQUEST['act'] == 'ins' || $_REQUEST['act'] == 'upd' || $is_searchable )
 										{
 											$html.='<div class="dbmng_form_row dbmng_form_field_'.$fld.'">&nbsp;';
-											if( !isset($aParam['hide_label'] )
+											if( !isset($aParam['hide_label']) )
 												{
 													$html .= layout_get_label($fld, $fld_value);
 												}
 											$html.='<div class="dbmbg_form_element">&nbsp;';
-
 
 											$aInput = Array();
 											$aInput['fld'] = $fld;
