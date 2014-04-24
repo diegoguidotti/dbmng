@@ -126,6 +126,13 @@ function layout_form_date( $aInput )
 	$fld_value = $aInput['fld_value'];
 	$value = $aInput['value'];
 	$actiontype = $aInput['actiontype'];
+	$aParam = $aInput['aParam'];
+
+	$placeholder = "";
+	if(isset($aParam['hide_label']))
+		{
+			$placeholder = "placeholder='".$fld_value['label']."'";
+		}
 
 	if( strlen($aInput['actiontype'])!= 0 )
 		$actiontype = "search_";
@@ -142,7 +149,7 @@ function layout_form_date( $aInput )
 	//add a new input field for the datapicker ui
 	$html  = "<input type='text' name='".$actiontype.$fld."_tmp' id='dbmng_".$fld."_tmp' value='".$datetime_str."' />";
 	//keep hidden the "real" input form
-	$html .= "<input type='hidden' name='$actiontype$fld' id='dbmng_".$fld."' ";
+	$html .= "<input type='hidden' name='$actiontype$fld' id='dbmng_".$fld."' $placeholder ";
 	$html .= " value= '$value' ";	
 	$html .= layout_get_nullable($fld_value);	
 	$html .= " />\n";
