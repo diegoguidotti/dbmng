@@ -343,8 +343,16 @@ function climasouth_menu()
    );
 	
 	// this entry is similar to the previous one except the path
-  $items['climasouth/workspace_edit'] = array(
-      'title' => 'Collaborative Workspaces edit mode',
+  $items['climasouth/resource_edit'] = array(
+      'title' => 'Collaborative Workspaces resource edit mode',
+      'page callback' => '_climasouth_workspace',
+      'access arguments' => array('view workspace'),
+      'type' => MENU_CALLBACK,
+   );
+
+   // this entry is similar to the previous one except the path
+  $items['climasouth/resource_search'] = array(
+      'title' => 'Collaborative Workspaces resource search mode',
       'page callback' => '_climasouth_workspace',
       'access arguments' => array('view workspace'),
       'type' => MENU_CALLBACK,
