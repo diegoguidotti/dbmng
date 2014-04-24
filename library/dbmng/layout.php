@@ -235,11 +235,19 @@ function layout_form_password( $aInput )
 	$fld_value = $aInput['fld_value'];
 	$value = $aInput['value'];
 	$actiontype = $aInput['actiontype'];
+	$aParam = $aInput['aParam'];
+
+	$placeholder = "";
+	if(isset($aParam['hide_label']))
+		{
+			$placeholder = "placeholder='".$fld_value['label']."'";
+		}
+	
 	
 	if( strlen($aInput['actiontype'])!= 0 )
 		$actiontype = "search_";
 
-	$html  = "<input type='password' name='$actiontype$fld' id='dbmng_$fld'";
+	$html  = "<input type='password' name='$actiontype$fld' $placeholder id='dbmng_$fld'";
 	$html .= " value= '$value' ";	
 	$html .= layout_get_nullable($fld_value);	
 	$html .= " />\n";
@@ -531,6 +539,13 @@ function layout_form_select( $aInput )
 	$fld_value = $aInput['fld_value'];
 	$value = $aInput['value'];
 	$actiontype = $aInput['actiontype'];
+	$aParam = $aInput['aParam'];
+
+	$placeholder = "";
+	if(isset($aParam['hide_label']))
+		{
+			$placeholder = $fld_value['label'];
+		}
 
 	if( strlen($aInput['actiontype'])!= 0 )
 		$actiontype = "search_";
@@ -544,8 +559,8 @@ function layout_form_select( $aInput )
 			$aVoc = array();
 			$aVoc = $fld_value['voc_val'];
 		} 
-	$html = "<select  name='$actiontype$fld' id='dbmng_$fld'  ".layout_get_nullable($fld_value)." >\n";
-	$html .= "<option/> \n";	
+	$html = "<select name='$actiontype$fld' id='dbmng_$fld'  ".layout_get_nullable($fld_value)." >\n";
+	$html .= "<option>".$placeholder."</option> \n";	
 	$nLen  = count($aVoc);
 	
 	foreach ( $aVoc as $vocKey => $vocValue )
