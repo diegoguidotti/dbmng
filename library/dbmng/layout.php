@@ -170,12 +170,19 @@ function layout_form_input($aInput) //( $fld, $fld_value, $value, $more='' )
 	$value = $aInput['value'];
 	$more = $aInput['more'];
 	$actiontype = $aInput['actiontype'];
+	$aParam = $aInput['aParam'];
 
+	$placeholder = "";
+	if(isset($aParam['hide_label']))
+		{
+			$placeholder = "placeholder='".$fld_value['label']."'";
+		}
+	
 	if( strlen($aInput['actiontype'])!= 0 )
 		$actiontype = "search_";
 			
 	$html  = "<input type='text' name='$actiontype$fld' id='dbmng_$fld' $more";
-	$html .= " value= '$value' ";	
+	$html .= " value= '$value' $placeholder ";	
 	$html .= layout_get_nullable($fld_value);	
 	$html .= " />\n";
 
