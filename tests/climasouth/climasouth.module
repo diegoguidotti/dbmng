@@ -125,7 +125,7 @@ function climasouth_url_inbound_alter(&$path, $original_path, $path_language) {
 			 $_REQUEST['tbl'] = 'c_resource';
     }  
 		else if ( $path == 'climasouth/resource/edit') {
-       $path = 'climasouth/workspace';
+       $path = 'climasouth/workspace_edit';
 			 $_REQUEST['act'] = 'ins';
 			 $_REQUEST['tbl'] = 'c_resource';
     }  
@@ -341,8 +341,16 @@ function climasouth_menu()
       'access arguments' => array('view workspace'),
       'type' => MENU_CALLBACK,
    );
+	
+	// this entry is similar to the previous one except the path
+  $items['climasouth/workspace_edit'] = array(
+      'title' => 'Collaborative Workspaces edit mode',
+      'page callback' => '_climasouth_workspace',
+      'access arguments' => array('view workspace'),
+      'type' => MENU_CALLBACK,
+   );
 
-  $items['climasouth/assistance'] = array(
+   $items['climasouth/assistance'] = array(
       'title' => 'Request Assistance',
       'page callback' => '_climasouth_assistance',
       'access arguments' => array('view workspace'),
