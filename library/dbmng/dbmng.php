@@ -1,7 +1,7 @@
 <?php
 
 
-//use by default the Drupal location for library
+//use by default the Drupal location for library.
 if(!defined( 'DBMNG_LIB_PATH'))
 	{
 		define( 'DBMNG_LIB_PATH', 'sites/all/libraries/' ); 
