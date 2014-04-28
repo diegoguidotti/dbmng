@@ -353,7 +353,7 @@ function climasouth_menu()
    // this entry is similar to the previous one except the path
   $items['climasouth/resource_search'] = array(
       'title' => 'Collaborative Workspaces resource search mode',
-      'page callback' => '_climasouth_workspace',
+      'page callback' => '_climasouth_resource_search',
       'access arguments' => array('view workspace'),
       'type' => MENU_CALLBACK,
    );
@@ -364,6 +364,8 @@ function climasouth_menu()
       'access arguments' => array('view workspace'),
       'type' => MENU_CALLBACK,
    );
+
+
 
   return $items;
 }
@@ -419,6 +421,106 @@ function lst_country()
 	$html .= implode(' ', service_links_render(null, FALSE));  
 return ($html);
 }
+
+function  _climasouth_resource_search(){
+	dbmng_add_drupal_libraries();
+
+	
+
+	$html='<div id="resource_search">';
+
+	$html.='<div id="resource_search_items"><h3>Filter</h3>';
+
+	$html.='<form method="POST" action="'.base_path().'climasouth/resource_search">';
+
+	$html.='Filter by country<br/><select name="id_c_country"><option value="*">All</option>';
+	$rc=dbmng_query("SELECT id_c_country, country_name FROM c_country c ",  array() );
+	foreach($rc as $r)
+		{
+			$sel="";			
+			if(_is_equal('id_c_country', $r->id_c_country)) {
+				$sel=' selected = "TRUE" ';
+			}
+
+			$html.='<option '.$sel.' value="'.$r->id_c_country.'">'.$r->country_name.'</option>';
+		}
+	$html.='</select>';
+	
+	$html.='<br/><input  type="submit" value="Filter"/>';
+	$html.='</form>';
+
+	$html.='</div>';
+
+	$html.='<div id="resource_search_res">';
+
+	$q = "SELECT * FROM c_resource c ";
+  $q .= " WHERE true ";
+
+
+	if(isset($_REQUEST['id_c_country'])) {
+		if($_REQUEST['id_c_country']<>'*'){
+			$q.=' AND id_c_resource in (select id_c_resource from c_resource_c_country WHERE id_c_country='.intval($_REQUEST['id_c_country']).') ';
+		}
+	}	
+
+	$res = dbmng_query( $q, array() );
+
+	foreach($res as $r)
+		{
+			$html.=_climasouth_render_res($r);
+		}
+
+	//$q .= "AND id_c_visibility="
+
+
+	$html.='</div>';
+
+	$html.='</div>';
+
+	return $html;
+}
+
+
+function _is_equal($val_name, $value) {
+
+	$ret=false;
+	if(isset($_REQUEST[$val_name])){
+		if($_REQUEST[$val_name]==$value){
+			$ret=true;
+		}
+	}
+	return $ret;
+
+}
+
+function _climasouth_render_res($r)
+{
+	global $user;
+	$edit=false;
+	if(in_array('administrator', $user->roles)){
+		$edit=true;
+	}
+
+	$html='<div class="climasouth_res"><div class="climasouth_res_header">&nbsp;<div class="res_head"><h3>'.$r->res_title.'</h3></div>';
+	if($edit){
+		$html.='<div class="res_edit"><a href="'.base_path().'resources?act=upd&tbln=c_resource&id_c_resource='.$r->id_c_resource.'&tbl=c_resource">Edit</a></div>';
+	}
+	$html.="</div>";
+
+
+	$html.='<div class="climasouth_res_author">';
+	if($r->res_author!=null)
+		$html.=' Author: '.$r->res_author;
+	if($r->organisation!=null)
+		$html.=' Organisation: '.$r->organisation;
+
+	$html.='</div>';
+	$html.='<div class="climasouth_res_des">'.$r->res_description.'</div>';
+	$html.="</div>";
+	return $html;
+}
+
+
 
 function _climasouth_assistance()
 {
