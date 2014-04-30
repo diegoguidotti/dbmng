@@ -1024,6 +1024,12 @@ function layout_table_body( $result, $aForm, $aParam )
 													{
 														$aNM = $fld_value['voc_nm'];
 														$val = "";
+
+														//if( $fld == "id_c_resource_c_language" )
+														//	{
+														//	echo "<br/>".$fld . ": " . $fld_value['widget']."<br/>";
+														//	print_r($aNM[$pkval]);
+														//	}
 		
 														$value='';												
 														if(isset($aNM[$pkval])){
