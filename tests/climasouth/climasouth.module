@@ -462,7 +462,7 @@ function  _climasouth_resource_search(){
 	if($fs<>''){
 		$q .= "AND (lower(res_description) LIKE '%".$fs."%' OR  lower(res_title) LIKE '%".$fs."%' OR  lower(res_author) LIKE '%".$fs."%' OR  lower(organisation) LIKE '%".$fs."%' OR  lower(res_tags) LIKE '%".$fs."%' ) ";
 	}
-echo $q;
+
 
 	$res = dbmng_query( $q, array() );
 
