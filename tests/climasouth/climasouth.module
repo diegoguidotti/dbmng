@@ -433,9 +433,17 @@ function  _climasouth_resource_search(){
 
 	$html.='<form method="POST" action="'.base_path().'climasouth/resource_search">';
 
+	$fs="";
+
+
+	if(isset($_REQUEST['free_search'])){
+		$fs=strtolower($_REQUEST['free_search']);
+	}
+
+	$html.= 'Free search<br/><input type="input" name="free_search" value="'.$fs.'" />';
 	$html.=_add_filter('Filter by country', 'id_c_country', "SELECT id_c_country, country_name FROM c_country c WHERE id_c_country in (select id_c_country from c_resource_c_country)  " );
 	$html.=_add_filter('Filter by language', 'id_c_language', "SELECT * FROM c_language c WHERE id_c_language in (select id_c_language from c_resource_c_language) " );
-	$html.=_add_filter('Filter by subjet', 'id_c_subject', "SELECT * FROM c_subject c WHERE id_c_subject in (select id_c_subject from c_resource_c_subject) " );
+	$html.=_add_filter('Filter by subject', 'id_c_subject', "SELECT * FROM c_subject c WHERE id_c_subject in (select id_c_subject from c_resource_c_subject) " );
 	
 	$html.='<br/><input  type="submit" value="Filter"/>';
 	$html.='</form>';
@@ -450,6 +458,11 @@ function  _climasouth_resource_search(){
 	$q.=_add_condition('id_c_country', 'c_resource_c_country' );
 	$q.=_add_condition('id_c_language', 'c_resource_c_language' );
 	$q.=_add_condition('id_c_subject', 'c_resource_c_subject' );
+
+	if($fs<>''){
+		$q .= "AND (lower(res_description) LIKE '%".$fs."%' OR  lower(res_title) LIKE '%".$fs."%' OR  lower(res_author) LIKE '%".$fs."%' OR  lower(organisation) LIKE '%".$fs."%' OR  lower(res_tags) LIKE '%".$fs."%' ) ";
+	}
+echo $q;
 
 	$res = dbmng_query( $q, array() );
 
