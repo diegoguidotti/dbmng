@@ -646,10 +646,13 @@ function _climasouth_assistance()
 									$html .= t("Your request has been sent");
 									$html .= "<br>From: ".$aInput['email'];
 									$html .= "<br/>To: ".$aInput['to'];
+									$html .= "<br/>Organisation: ".$aInput['req_organisation'];
 									$html .= "<br/>Subject: ".$aInput['subject'];
 									$html .= "<br/>Message: ".$aInput['message'];
 									//$html .= "headers: ".$aInput['headers']."<br/>";
 									$html .= "<br/>Attach file: ".$aInput['attach_file']['name'];
+print_r($_POST);
+									$ret = dbmng_insert($aForm, $aParam);
 								}
 							else
 								{
@@ -688,7 +691,10 @@ function climasouth_mailto($aInput)
 	
 	// Set your file path here
 	$attachfile = $aInput['attach_file'];
-	$attachment = chunk_split(base64_encode(file_get_contents($attachfile['tmp_name']))); 
+	
+	//print_r($attachfile);
+	//if( !isset($attachfile['error']) && $attachfile['error'] == 0 )
+		$attachment = chunk_split(base64_encode(file_get_contents($attachfile['tmp_name']))); 
 
 	//define the body of the message.
 	$message = "--PHP-mixed-$random_hash\r\n"."Content-Type: multipart/alternative; 
@@ -706,8 +712,10 @@ function climasouth_mailto($aInput)
 	$message .= "--PHP-mixed-$random_hash\r\n"."Content-Type: application/zip; 
 	name=".$attachfile['name']."\r\n"."Content-Transfer-Encoding: 
 	base64\r\n"."Content-Disposition: attachment\r\n\r\n";
-
-	$message .= $attachment;
+	
+	//if( !isset($attachfile['error']) && $attachfile['error'] == 0 )
+		$message .= $attachment;
+	
 	$message .= "/r/n--PHP-mixed-$random_hash--";
 
 
