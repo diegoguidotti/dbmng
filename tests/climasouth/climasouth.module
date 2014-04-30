@@ -429,7 +429,7 @@ function  _climasouth_resource_search(){
 
 	$html='<div id="resource_search">';
 
-	$html.='<div id="resource_search_items"><h3>Filter</h3>';
+	$html.='<div id="resource_search_items"><h3>'.t('Filter').'</h3>';
 
 	$html.='<form method="POST" action="'.base_path().'climasouth/resource_search">';
 
@@ -440,10 +440,10 @@ function  _climasouth_resource_search(){
 		$fs=strtolower($_REQUEST['free_search']);
 	}
 
-	$html.= 'Free search<br/><input type="input" name="free_search" value="'.$fs.'" />';
-	$html.=_add_filter('Filter by country', 'id_c_country', "SELECT id_c_country, country_name FROM c_country c WHERE id_c_country in (select id_c_country from c_resource_c_country)  " );
-	$html.=_add_filter('Filter by language', 'id_c_language', "SELECT * FROM c_language c WHERE id_c_language in (select id_c_language from c_resource_c_language) " );
-	$html.=_add_filter('Filter by subject', 'id_c_subject', "SELECT * FROM c_subject c WHERE id_c_subject in (select id_c_subject from c_resource_c_subject) " );
+	$html.= t('Free search').'<br/><input type="input" name="free_search" value="'.$fs.'" />';
+	$html.=_add_filter(t('Filter by country'), 'id_c_country', "SELECT id_c_country, country_name FROM c_country c WHERE id_c_country in (select id_c_country from c_resource_c_country)  " );
+	$html.=_add_filter(t('Filter by language'), 'id_c_language', "SELECT * FROM c_language c WHERE id_c_language in (select id_c_language from c_resource_c_language) " );
+	$html.=_add_filter(t('Filter by subject'), 'id_c_subject', "SELECT * FROM c_subject c WHERE id_c_subject in (select id_c_subject from c_resource_c_subject) " );
 	
 	$html.='<br/><input  type="submit" value="Filter"/>';
 	$html.='</form>';
