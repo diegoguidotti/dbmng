@@ -1002,13 +1002,19 @@ function layout_table_body( $result, $aForm, $aParam )
 					$html .= "<tr>";
 					
 					$pkval = "";
-					//get the query results for each field
 					foreach ( $aForm['fields'] as $fld => $fld_value )
 						{
 							if(	dbmng_check_is_pk($fld_value) )
 								{
 									$pkval = $record->$fld;
 								}
+						}
+
+
+
+					//get the query results for each field
+					foreach ( $aForm['fields'] as $fld => $fld_value )
+						{
 							//echo '!'.$record->$fld.'!'.$fld.'<br/>';
 							if( layout_view_field_table($fld_value) )
 								{
@@ -1024,12 +1030,13 @@ function layout_table_body( $result, $aForm, $aParam )
 													{
 														$aNM = $fld_value['voc_nm'];
 														$val = "";
-
-														//if( $fld == "id_c_resource_c_language" )
-														//	{
-														//	echo "<br/>".$fld . ": " . $fld_value['widget']."<br/>";
-														//	print_r($aNM[$pkval]);
-														//	}
+														/*
+														if( $record->id_c_resource == 5 ) //$fld == "id_c_resource_c_language" )
+															{
+															echo "<br/>".$fld . ": " . $fld_value['widget']." ".$pkval."<br/>";
+															print_r($aNM);
+															}
+															*/
 		
 														$value='';												
 														if(isset($aNM[$pkval])){
