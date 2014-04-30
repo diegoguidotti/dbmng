@@ -590,6 +590,7 @@ function _climasouth_assistance()
 						'req_organisation'  => 
 							array('label'   => t('Your organisation') , 
 										'type' => 'varchar',
+										'widget'=>'input' ,
 										'key' => 0,
 										'skip_in_tbl' => '1'
 							), 
@@ -651,7 +652,7 @@ function _climasouth_assistance()
 									$html .= "<br/>Message: ".$aInput['message'];
 									//$html .= "headers: ".$aInput['headers']."<br/>";
 									$html .= "<br/>Attach file: ".$aInput['attach_file']['name'];
-print_r($_POST);
+
 									$ret = dbmng_insert($aForm, $aParam);
 								}
 							else
