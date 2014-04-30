@@ -433,18 +433,9 @@ function  _climasouth_resource_search(){
 
 	$html.='<form method="POST" action="'.base_path().'climasouth/resource_search">';
 
-	$html.='Filter by country<br/><select name="id_c_country"><option value="*">All</option>';
-	$rc=dbmng_query("SELECT id_c_country, country_name FROM c_country c ",  array() );
-	foreach($rc as $r)
-		{
-			$sel="";			
-			if(_is_equal('id_c_country', $r->id_c_country)) {
-				$sel=' selected = "TRUE" ';
-			}
-
-			$html.='<option '.$sel.' value="'.$r->id_c_country.'">'.$r->country_name.'</option>';
-		}
-	$html.='</select>';
+	$html.=_add_filter('Filter by country', 'id_c_country', "SELECT id_c_country, country_name FROM c_country c WHERE id_c_country in (select id_c_country from c_resource_c_country)  " );
+	$html.=_add_filter('Filter by language', 'id_c_language', "SELECT * FROM c_language c WHERE id_c_language in (select id_c_language from c_resource_c_language) " );
+	$html.=_add_filter('Filter by subjet', 'id_c_subject', "SELECT * FROM c_subject c WHERE id_c_subject in (select id_c_subject from c_resource_c_subject) " );
 	
 	$html.='<br/><input  type="submit" value="Filter"/>';
 	$html.='</form>';
@@ -456,12 +447,9 @@ function  _climasouth_resource_search(){
 	$q = "SELECT * FROM c_resource c ";
   $q .= " WHERE true ";
 
-
-	if(isset($_REQUEST['id_c_country'])) {
-		if($_REQUEST['id_c_country']<>'*'){
-			$q.=' AND id_c_resource in (select id_c_resource from c_resource_c_country WHERE id_c_country='.intval($_REQUEST['id_c_country']).') ';
-		}
-	}	
+	$q.=_add_condition('id_c_country', 'c_resource_c_country' );
+	$q.=_add_condition('id_c_language', 'c_resource_c_language' );
+	$q.=_add_condition('id_c_subject', 'c_resource_c_subject' );
 
 	$res = dbmng_query( $q, array() );
 
@@ -479,6 +467,42 @@ function  _climasouth_resource_search(){
 
 	return $html;
 }
+
+
+function _add_filter($filter_label, $field_name, $q){	
+	$rc=dbmng_query($q,  array() );
+	$html="";
+
+	if($rc->rowCount()>0){	
+
+		$html=$filter_label.'<br/><select name="'.$field_name.'"><option value="*">All</option>';
+		foreach($rc as $r)
+			{
+				$r=array_values((array) $r);
+				//print_r($r);
+
+				$sel="";			
+				if(_is_equal($field_name, $r[0])) {
+					$sel=' selected = "TRUE" ';
+				}
+
+				$html.='<option '.$sel.' value="'.$r[0].'">'.$r[1].'</option>';
+			}
+		$html.='</select>';
+	}
+	return $html;
+}
+
+function _add_condition($field_name, $table_name){
+	$q='';
+	if(isset($_REQUEST[$field_name])) {
+		if($_REQUEST[$field_name]<>'*'){
+			$q.=' AND id_c_resource in (select id_c_resource from '.$table_name.' WHERE '.$field_name.'='.intval($_REQUEST[ $field_name ]).') ';
+		}
+	}	
+	return $q;
+}
+
 
 
 function _is_equal($val_name, $value) {
@@ -503,16 +527,16 @@ function _climasouth_render_res($r)
 
 	$html='<div class="climasouth_res"><div class="climasouth_res_header">&nbsp;<div class="res_head"><h3>'.$r->res_title.'</h3></div>';
 	if($edit){
-		$html.='<div class="res_edit"><a href="'.base_path().'resources?act=upd&tbln=c_resource&id_c_resource='.$r->id_c_resource.'&tbl=c_resource">Edit</a></div>';
+		$html.='<div class="res_edit"><a href="'.base_path().'/climasouth/resource_search?id_c_resource='.$r->id_c_resource.'">Edit</a></div>';
 	}
 	$html.="</div>";
 
 
 	$html.='<div class="climasouth_res_author">';
 	if($r->res_author!=null)
-		$html.=' Author: '.$r->res_author;
+		$html.=t('Author').': '.$r->res_author;
 	if($r->organisation!=null)
-		$html.=' Organisation: '.$r->organisation;
+		$html.=t('Organisation').': '.$r->organisation;
 
 	$html.='</div>';
 	$html.='<div class="climasouth_res_des">'.$r->res_description.'</div>';
@@ -856,6 +880,8 @@ function _climasouth_workspace()
 					$aParam['user_function']['prt_rec'] = 0;
 					$aParam['user_function']['prt_tbl'] = 0;
 					$aParam['tbl_sorter']              = '1';
+					$aParam['ui']['btn_name'] = t('Insert new');
+
 					// update record
 					$html .= dbmng_crud($aForm, $aParam);
 				}
