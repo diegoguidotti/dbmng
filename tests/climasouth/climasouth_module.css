@@ -1,0 +1,58 @@
+
+/* ---------- Climasouth Specifications ---------- */
+
+
+table tfoot tr td{
+  background: #757575;
+  background: rgba(0, 0, 0, 0.51);
+  border-bottom-style: none;
+  color: #FFF;
+  font-weight: bold;
+}
+
+climasouth_login {
+	padding:5px;
+  clear: right;
+}
+
+
+.leaflet-top, .leaflet-bottom {
+    position: absolute !important;
+    z-index: 10 !important;
+    //pointer-events: none;
+}
+
+
+/** from the old theme*/
+/*
+
+
+.climasouth_toolbar {
+	list-style: none;
+	margin: 0px 0px 4px 0px;
+	line-height: 30px;
+	width: 210px;
+	text-align: center;
+	font-weight: bold;
+	color: #000000;
+	background: #dc4e4e;
+}
+*/
+#block-climasouth-climasouth-toolbar {
+	background: white !important;
+	border: 0px;
+}
+
+#climasouth_toolbar_ul {
+	padding: 0px;
+}
+
+#block-climasouth-climasouth-toolbar {
+	padding: 0px;
+}
+
+#climasouth_mng_ass{
+	border: 1px solid #ccc !important;
+	border-radius: 10px !important;
+	padding: 10px !important;
+}
