@@ -46,6 +46,9 @@ function climasouth_block_info()
 	$blocks['climasouth_contribute_edit'] = array(
 		'info' => t('Climasouth contribute edit'),
 		);
+	$blocks['climasouth_mng_req_ass'] = array(
+		'info' => t('Climasouth manage request assistance'),
+		);
 	
 	return $blocks;
 }
@@ -88,6 +91,9 @@ function climasouth_block_view($delta='')
 				break;
 			case 'climasouth_contribute_edit' :
 				$block['content'] = _climasouth_contribute_edit();
+				break;
+			case 'climasouth_mng_req_ass' :
+				$block['content'] = _climasouth_mng_request_assistance();
 				break;
 		}
 	
@@ -558,7 +564,6 @@ function _climasouth_render_res($r)
 }
 
 
-
 function _climasouth_assistance()
 {
 	dbmng_add_drupal_libraries();
@@ -645,19 +650,19 @@ function _climasouth_assistance()
 							if( $bmail )
 								{
 									$html .= t("Your request has been sent");
-									$html .= "<br>From: ".$aInput['email'];
-									$html .= "<br/>To: ".$aInput['to'];
-									$html .= "<br/>Organisation: ".$aInput['req_organisation'];
-									$html .= "<br/>Subject: ".$aInput['subject'];
-									$html .= "<br/>Message: ".$aInput['message'];
+									$html .= "<br/>".t('From').": ".$aInput['email'];
+									$html .= "<br/>".t('To').": ".$aInput['to'];
+									$html .= "<br/>".t('Organization').": ".$aInput['req_organisation'];
+									$html .= "<br/>".t('Subject').": ".$aInput['subject'];
+									$html .= "<br/>".t('Message').": ".$aInput['message'];
 									//$html .= "headers: ".$aInput['headers']."<br/>";
-									$html .= "<br/>Attach file: ".$aInput['attach_file']['name'];
+									$html .= "<br/>".t('Attach file').": ".$aInput['attach_file']['name'];
 
 									$ret = dbmng_insert($aForm, $aParam);
 								}
 							else
 								{
-									$html .= t("there was an error in sending the email. Try it again!");
+									$html .= t("There was an error in sending the email. Try it again!");
 								}
 						}
 					else
@@ -675,6 +680,7 @@ function _climasouth_assistance()
 	
 	return $html;
 }
+
 
 function climasouth_mailto($aInput)
 {
@@ -731,6 +737,31 @@ function climasouth_mailto($aInput)
 	return $mail;
 }
 
+function _climasouth_mng_request_assistance()
+{
+	drupal_add_css( "sites/all/modules/climasouth/climasouth_module.css" );
+
+	//$aForm  = dbmng_get_form_array('c_requeste_assistance');
+	$aParam = array();
+	
+	$sql = "select * from c_requeste_assistance";
+	$res = dbmng_query($sql, array());
+	
+	$html = "";
+	foreach( $res as $rec)
+	{
+		$html .= "<div id='climasouth_mng_ass'>";
+		$html .= t('From').": ".$rec->req_name;
+		$html .= "<br/>".t('Email').": ".$rec->req_email;
+		$html .= "<br/>".t('Organization').": ".$rec->req_organisation;
+		$html .= "<br/>".t('Message').": ".$rec->req_message;
+		$html .= "<br/>".t('Attach file').": ".$rec->req_file;
+		$html .= "</div>";
+	}
+	//$html .= dbmng_create_table($aForm, $aParam);
+	
+	return $html;
+}
 
 function _climasouth_graph( $aCountry )
 {
@@ -775,7 +806,8 @@ function _climasouth_graph( $aCountry )
 	
 	$aVal2 = array();
 	foreach($res as $r)
-		{
+		{		$html .= $rec->req_name;
+
 			$aVal2[] = $r->current_rating;
 		}
 	
@@ -802,7 +834,8 @@ function _climasouth_graph( $aCountry )
 	$aRadar2['color2'] = "lightred";
 	$aRadar2['line_weight'] = 10;
 	$aRadar2['mark'] = MARK_IMG_SBALL;
-	
+			$html .= $rec->req_name;
+
 	$aPlot['Title']      = t("Assessment of current GHG inventory preparation process versus needs in") . " " . $country_name;
 	$aPlot['Titles']     = $aTitles;
 	$aPlot['Filename']   = "GHG";
@@ -830,7 +863,7 @@ function _climasouth_maps($block)
 {
 	$html='';
 
-	drupal_add_css( "sites/all/modules/climasouth/climasouth.css" );
+	drupal_add_css( "sites/all/modules/climasouth/climasouth_module.css" );
 	drupal_add_css('http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css',array('type' => 'external'));
 	drupal_add_js('http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js',array('type' => 'external'));
 
