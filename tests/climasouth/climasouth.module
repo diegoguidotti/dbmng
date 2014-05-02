@@ -678,7 +678,6 @@ function _climasouth_assistance()
 
 function climasouth_mailto($aInput)
 {
-
 	$htmlbody = "Organisation: ".$aInput['req_organisation']."<br/>"; //" Your Mail Contant Here.... You can use html tags here...";
 	$htmlbody .= $aInput['message']; //" Your Mail Contant Here.... You can use html tags here...";
 	$to = "info@climasouth.eu"; //Recipient Email Address
@@ -694,7 +693,7 @@ function climasouth_mailto($aInput)
 	$attachfile = $aInput['attach_file'];
 	
 	//print_r($attachfile);
-	//if( !isset($attachfile['error']) && $attachfile['error'] == 0 )
+	if( !isset($attachfile['error']) && $attachfile['error'] == 0 )
 		$attachment = chunk_split(base64_encode(file_get_contents($attachfile['tmp_name']))); 
 
 	//define the body of the message.
@@ -714,14 +713,20 @@ function climasouth_mailto($aInput)
 	name=".$attachfile['name']."\r\n"."Content-Transfer-Encoding: 
 	base64\r\n"."Content-Disposition: attachment\r\n\r\n";
 	
-	//if( !isset($attachfile['error']) && $attachfile['error'] == 0 )
+	if( !isset($attachfile['error']) && $attachfile['error'] == 0 )
 		$message .= $attachment;
 	
 	$message .= "/r/n--PHP-mixed-$random_hash--";
-
-
-	//send the email
-	$mail = mail( $to, $subject , $message, $headers );
+	
+	if( $_SERVER["HTTP_HOST"] != 'localhost' )
+		{
+			//send the email
+			$mail = mail( $to, $subject , $message, $headers );
+		}
+	else
+		{
+			$mail = true;
+		}
 
 	return $mail;
 }
