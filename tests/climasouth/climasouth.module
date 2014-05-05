@@ -568,10 +568,10 @@ function _climasouth_assistance()
 {
 	dbmng_add_drupal_libraries();
 	$aForm=array(  
-			'table_name' => 'c_requeste_assistance' ,
-				'primary_key'=> array('id_c_requeste_assistance'), 
+			'table_name' => 'c_request_assistance' ,
+				'primary_key'=> array('id_c_request_assistance'), 
 				'fields'     => array(
-						'id_c_requeste_assistance'  => 
+						'id_c_request_assistance'  => 
 							array('label'   => t('ID') , 
 										'label_long' => t('ID Table'),
 										'type' => 'bigint',
@@ -741,10 +741,10 @@ function _climasouth_mng_request_assistance()
 {
 	drupal_add_css( "sites/all/modules/climasouth/climasouth_module.css" );
 
-	//$aForm  = dbmng_get_form_array('c_requeste_assistance');
+	//$aForm  = dbmng_get_form_array('c_request_assistance');
 	$aParam = array();
 	 
-	$sql = "select * from c_requeste_assistance";
+	$sql = "select * from c_request_assistance";
 	$res = dbmng_query($sql, array());
 	
 	$html = "";
