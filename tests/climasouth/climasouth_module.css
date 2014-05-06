@@ -52,7 +52,8 @@ climasouth_login {
 }
 
 #climasouth_mng_ass{
-	border: 1px solid #ccc !important;
-	border-radius: 10px !important;
-	padding: 10px !important;
+	border: 1px solid #ccc;
+	border-radius: 10px;
+	padding: 10px;
+	margin: 10px 0px 10px 0px;
 }
