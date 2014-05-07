@@ -570,6 +570,8 @@ function _climasouth_assistance()
 	$aForm = _climasouth_create_aForm_assistance();
 	
 	global $user;
+	drupal_set_message("<pre>".print_r($user,TRUE)."</pre>");
+	
 	$aParam = array();
 	$aParam['ui']['btn_name'] = "Send";
 	$aParam['captcha'] = 1;
