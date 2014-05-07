@@ -569,16 +569,28 @@ function _climasouth_assistance()
 	dbmng_add_drupal_libraries();
 	$aForm = _climasouth_create_aForm_assistance();
 	
+	unset($aForm['fields']['req_name']);
+	unset($aForm['fields']['req_email']);
+		
 	global $user;
-	drupal_set_message("<pre>".print_r($user,TRUE)."</pre>");
+	$user = user_load($user->uid);
+//	drupal_set_message("<pre>".print_r($user,true)."</pre>");
+
+	$firstname = check_plain(field_get_items('user', $user, 'field_first_name')[0]['value']);
+	$lastname = check_plain(field_get_items('user', $user, 'field_last_name')[0]['value']);
+	
+//	drupal_set_message("Name: ".$firstname."<br/>Surname:".$lastname."<br/>email:".$user->mail);
 	
 	$aParam = array();
 	$aParam['ui']['btn_name'] = "Send";
 	$aParam['captcha'] = 1;
 	$aParam['auto_field']['uid']['I'] = $user->uid;
+
+	$aParam['auto_field']['req_name']['I'] = $firstname." ".$lastname;
+	$aParam['auto_field']['req_email']['I'] = $user->mail;
 	
 	$html = "";
-	if( !isset($_POST['req_name']) )
+	if( !isset($_POST['id_c_voc_topic']) )
 		{
 			$html .= dbmng_create_form($aForm, $aParam, 0);
 		}
@@ -588,6 +600,9 @@ function _climasouth_assistance()
 				{
 					if( intval($_POST['captcha']) == intval($_POST['dbmng_x'])+intval($_POST['dbmng_y']) )
 						{
+							$_POST['req_name']  = $firstname." ".$lastname;
+							$_POST['req_email'] = $user->mail;
+							
 							$sql = "select * from c_voc_topic where id_c_voc_topic = :id_c_voc_topic";
 							$var = array(':id_c_voc_topic'=> $_POST['id_c_voc_topic']);
 							$res = dbmng_query( $sql, $var );
