@@ -576,16 +576,21 @@ function _climasouth_assistance()
 	$user = user_load($user->uid);
 //	drupal_set_message("<pre>".print_r($user,true)."</pre>");
 
-echo ("PIPPOPOPOp");
 
-			if(field_get_items('user', $user, 'field_first_name')){
-				$firstname = check_plain(field_get_items('user', $user, 'field_first_name')[0]['value']);
+
+			$ii= field_get_items('user', $user, 'field_first_name');
+			if(isset($ii[0]['value'])){
+				$firstname = check_plain($ii[0]['value']);
 			}
 
-			$lastname = check_plain(field_get_items('user', $user, 'field_last_name' )[0]['value']);
+			$iilast= field_get_items('user', $user, 'field_last_name');
+			if(isset($ii[0]['value'])){
+				$lastname = check_plain($iilast[0]['value']);
+			}
+
 
 	
-//	drupal_set_message("Name: ".$firstname."<br/>Surname:".$lastname."<br/>email:".$user->mail);
+	drupal_set_message("Name: ".$firstname."<br/>Surname:".$lastname."<br/>email:".$user->mail);
 	
 	$aParam = array();
 	$aParam['ui']['btn_name'] = "Send";
@@ -995,12 +1000,18 @@ function _climasouth_maps($block)
 	$aForm    = dbmng_get_form_array("c_country"); 	
 	//TODO: do not change title if called in a block
 
-	$height="350";
+	$height="310";
 	if(!$block)
 		{
 			drupal_set_title(t("Countries"));
 			$height="400";
 		}
+
+
+		
+	$html .= '<div id="map_new_container">'._climasouth_news().'</div>';
+	$html .= '<div id="map_info_container">&nbsp;</div>';
+	$html .= '<div id="map_blue_left">&nbsp;</div>';
 
 	$html .= '<div id="map_container" style="width:1170px; height:'.$height.'px;"  ></div>';
 

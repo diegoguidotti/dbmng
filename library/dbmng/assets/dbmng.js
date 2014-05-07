@@ -363,6 +363,9 @@ function dbmng_tablesorter(id_tbl, nCol){
 //draw a leaflet maps containing data
 function dbmng_leaflet(data, aForm, aParam){
 
+
+	
+
 	var coord=[40, 13];
 	if(aParam.coord)
 		coord=aParam.coord;

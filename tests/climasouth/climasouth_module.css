@@ -57,3 +57,78 @@ climasouth_login {
 	padding: 10px;
 	margin: 10px 0px 10px 0px;
 }
+
+
+#map_new_container{
+	float:left;
+	background-color: #71b1cb;
+  position: absolute;
+	right:0px;	
+	height: 310px;		
+	overflow: auto;
+	padding: 0px;
+	margin: 0px;
+}
+
+
+#map_new_container #climasouth_news{
+	width: 300px;
+	height:305px;
+	padding: 0px;
+	margin: 0px;
+	
+}
+
+
+#map_info_container{
+	position: absolute;
+	float:left;
+	left: 0px;
+	bottom: 0px;
+	width: 250px; 
+	height: 150px; 
+	z-index: 200;
+	overflow: auto;
+	border: 0px solid #000;
+	background-color: #FFF;
+	padding:10px;
+	text-align:center;
+}
+
+#map_blue_left {
+	background-color: #cfeaf3;
+  float:left;
+	left:0px;
+	position: absolute;
+	width:200px;
+	height: 310px;
+	z-index: 200;
+	
+}
+
+div.climasouth_popup h3{
+	font-size:15px;
+
+}
+div.climasouth_popup h3 a{ 
+color: #919191;
+}
+
+div.climasouth_popup div.cs_left {
+	float:left;
+	width: 90px;
+}
+
+div.climasouth_popup div.cs_right {
+	float:right;
+	text-align: left;
+	font-size:11px;
+	width: 150px;
+  color: #dd6659;
+}
+
+div.climasouth_popup div.cs_right b{
+  color: #919191;
+}
+
+
