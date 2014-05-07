@@ -379,24 +379,12 @@ function dbmng_leaflet(data, aForm, aParam){
 
 	//add a background layer
 
-	if(false){
-		var mapquestUrl = 'http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png',
-		subDomains = ['otile1','otile2','otile3','otile4'],
-		mapquestAttrib = 'Data, imagery and map information provided by <a href="http://open.mapquest.co.uk" target="_blank">MapQuest</a>, <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> and contributors.';
-		var mapquest = new L.TileLayer(mapquestUrl, {maxZoom: 18, attribution: mapquestAttrib, subdomains: subDomains});
-		map.addLayer(mapquest);  
-	}
-	else{
-		var back_map = L.tileLayer.wms("http://95.240.35.64:8181/geoserver/climasouth/wms", {
-		  layers: 'climasouth:countries',
-		  format: 'image/png',
-		  'BGCOLOR': '0xcfeaf3'					  			
-		});
-
-		
-		map.addLayer(back_map); 		
-	}
-
+	
+	var mapquestUrl = 'http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png',
+	subDomains = ['otile1','otile2','otile3','otile4'],
+	mapquestAttrib = 'Data, imagery and map information provided by <a href="http://open.mapquest.co.uk" target="_blank">MapQuest</a>, <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> and contributors.';
+	var mapquest = new L.TileLayer(mapquestUrl, {maxZoom: 18, attribution: mapquestAttrib, subdomains: subDomains});
+	map.addLayer(mapquest);  
 
 
 
@@ -411,7 +399,7 @@ function dbmng_leaflet(data, aForm, aParam){
 			var geo = JSON.parse(v.geojson);
 			geo['features'][0]['custom_vars']=v;
 
-			var style={"color": "#ffffff", "opacity": 0, "fillColor": "#ff7800", "fillOpacity": 0, "weight":3};;
+			var style={"color": "#ffffff", "opacity": 0.7, "fillColor": "#ff7800", "fillOpacity": 0.7, "weight":3};;
 
 
 			//create a feature

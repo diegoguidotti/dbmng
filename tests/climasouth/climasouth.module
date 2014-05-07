@@ -576,8 +576,14 @@ function _climasouth_assistance()
 	$user = user_load($user->uid);
 //	drupal_set_message("<pre>".print_r($user,true)."</pre>");
 
-	$firstname = check_plain(field_get_items('user', $user, 'field_first_name')[0]['value']);
-	$lastname = check_plain(field_get_items('user', $user, 'field_last_name')[0]['value']);
+echo ("PIPPOPOPOp");
+
+			if(field_get_items('user', $user, 'field_first_name')){
+				$firstname = check_plain(field_get_items('user', $user, 'field_first_name')[0]['value']);
+			}
+
+			$lastname = check_plain(field_get_items('user', $user, 'field_last_name' )[0]['value']);
+
 	
 //	drupal_set_message("Name: ".$firstname."<br/>Surname:".$lastname."<br/>email:".$user->mail);
 	
@@ -983,6 +989,7 @@ function _climasouth_maps($block)
 	drupal_add_css( "sites/all/modules/climasouth/climasouth_module.css" );
 	drupal_add_css('http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css',array('type' => 'external'));
 	drupal_add_js('http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js',array('type' => 'external'));
+	drupal_add_js('sites/all/modules/climasouth/climasouth_module.js');
 
 
 	$aForm    = dbmng_get_form_array("c_country"); 	
@@ -1001,7 +1008,7 @@ function _climasouth_maps($block)
 	$html .= "var data=".dbmng_get_js_array($aForm, null).";\n";
 	$html .= "var aForm=".json_encode($aForm).";\n";
 	$html .= "var aParam={ 'div_element':'map_container', 'zoom': 4, 'base_path':'".base_path()."', 'coord': [30, 13] };\n";
-	$html .= "dbmng_leaflet(data,aForm, aParam);\n";
+	$html .= "climasouth_leaflet(data,aForm, aParam);\n";
 	$html .= "</script>\n";
 
 	return $html;
