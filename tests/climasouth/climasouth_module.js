@@ -21,7 +21,7 @@ function climasouth_leaflet(data, aForm, aParam){
   var map = L.map(aParam.div_element).setView(coord, zoom);
 
 	//add a background layer	
-	var back_map = L.tileLayer.wms("http://95.240.35.64:8181/geoserver/climasouth/wms", {
+	var back_map = L.tileLayer.wms("http://95.240.35.64/geoserver_ae/wms", {
 	  layers: 'climasouth:countries',
 	  format: 'image/png',
 	  'BGCOLOR': '0xcfeaf3'					  			
