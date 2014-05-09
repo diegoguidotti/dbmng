@@ -1,0 +1,196 @@
+
+
+#block-menu-menu-tools{
+	position: absolute;
+	top: 0px;
+	right: 200px;
+}
+
+#block-menu-menu-tools ul li{
+	list-style: none;
+	float:left;
+}
+
+
+
+#flag_container{
+	position: relative;
+	/*top: -90px;*/
+	right: 100px;
+	border: 4px solid #FFFFFF !important;
+	float: right;
+	font-size:15px
+}
+
+#flag_container td{
+	padding:0px 20px 0px 10px;
+}
+
+#flag_container a{
+	color: #919191;
+}
+
+
+#flag_container img{
+	width: 30px;
+}
+
+
+
+#flag_container td, #flag_container tr{
+	border: 0px solid #FFFFFF !important;
+}
+
+#logo{
+	float: left;
+}
+
+#block-locale-language{
+	float:right;
+  margin:0px !important;
+  padding:0px !important;
+}
+
+#block-locale-language h2{
+  display: none;
+}
+
+#block-locale-language li{
+  list-style: none;
+  float:left;
+  padding:5px;
+}
+
+#block-climasouth-climasouth-login{
+	float: right;
+	margin:15px;
+}
+
+#header-content{
+	float: left;
+	position: relative;
+	top:0px;
+	
+}
+
+#block-climasouth-climasouth-country-flag{
+		width: 200px;
+		
+		position: absolute;
+		top: -90px;
+		right: 0px;
+	
+}
+.title{
+	color: #dd6659;
+	font-size: 25px;
+}
+
+.climasouth_link_blu{
+	color: #71b1cb !important;
+}
+
+/**
+ CLIMASOUTH MODULE
+ */
+#block-climasouth-climasouth-toolbar{
+	float: left;
+	border-top: 1px solid #e8e8e8;
+	border-bottom: 1px solid #e8e8e8;	
+}
+
+.climasouth_toolbar {
+	list-style: none;
+	float: left;
+	padding: 8px;
+	font-size: 15px;
+}
+
+
+.climasouth_news {
+list-style: none;
+margin: 0px 0px 4px 0px;
+padding: 10px 0 2px 0px;
+color:white;
+font-size:15px;
+}
+
+
+#block-climasouth-climasouth-news {
+	padding: 0px;
+	border:0px;
+	margin:0px;
+	height: 390px;
+	background: #62a9c6;
+	margin-bottom: 10px;
+	border-radius: 5px;
+}
+
+#climasouth_news_h2 {
+	border-bottom: 0px;
+	text-shadow: none;
+	text-align: center;
+	font-weight: bold;
+	line-height: 30px;
+	border-bottom: 1px solid #fff;
+	vertical-align: middle;
+	color: white;
+	font-size: 17px;
+	text-transform:uppercase;
+}
+
+#climasouth_toolbar a {color:#919191 !important; text-decoration:none;}
+#climasouth_news a {color:white !important; text-decoration:none;}
+
+
+
+
+/* ---------- Search result ---------- */
+
+/*
+climasouth_res{
+	float:left;
+	width: 710px;
+	
+}
+div.res_edit{
+	float: right;
+	margin: 10px;
+	width: 170px;
+	border: 1px solid #CCC;
+	clear: right;
+}
+
+div.res_head{
+	float:left;
+clear: left;
+	width: 600px;
+	border: 1px solid #CCC;
+}
+
+div.climasouth_res_header{
+	width: 910px;
+	clear:both;
+border: 1px solid red;
+}
+*/
+
+#resource_search_items {
+	float:left;
+	width:300px;
+}
+
+#resource_search_items input, #resource_search_items select{
+	width:280px;
+}
+
+#resource_search_res{
+	float:left;
+	width:800px;
+}
+
+
+div.climasouth_res{
+	border-bottom: 1px solid #CCC;
+	margin-bottom: 10px;
+}
