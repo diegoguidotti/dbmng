@@ -16,7 +16,7 @@
 #flag_container{
 	position: relative;
 	/*top: -90px;*/
-	right: 100px;
+	right: 0px;
 	border: 4px solid #FFFFFF !important;
 	float: right;
 	font-size:15px
@@ -86,10 +86,26 @@
 	font-size: 25px;
 }
 
-.climasouth_link_blu{
+.climasouth_link_blu, td.loginlogout a {
 	color: #71b1cb !important;
+	margin-left:70px;
+	text-decoration: none;
 }
 
+
+#flag_container a.activel{
+	text-decoration: underline;
+}
+
+
+.navbar .nav li.dropdown.active-trail{
+	color:#555;background-color:#e5e5e5
+}
+
+
+img.rss_icon {
+ margin: 2px;
+}
 /**
  CLIMASOUTH MODULE
  */
@@ -105,42 +121,6 @@
 	padding: 8px;
 	font-size: 15px;
 }
-
-
-.climasouth_news {
-list-style: none;
-margin: 0px 0px 4px 0px;
-padding: 10px 0 2px 0px;
-color:white;
-font-size:15px;
-}
-
-
-#block-climasouth-climasouth-news {
-	padding: 0px;
-	border:0px;
-	margin:0px;
-	height: 390px;
-	background: #62a9c6;
-	margin-bottom: 10px;
-	border-radius: 5px;
-}
-
-#climasouth_news_h2 {
-	border-bottom: 0px;
-	text-shadow: none;
-	text-align: center;
-	font-weight: bold;
-	line-height: 30px;
-	border-bottom: 1px solid #fff;
-	vertical-align: middle;
-	color: white;
-	font-size: 17px;
-	text-transform:uppercase;
-}
-
-#climasouth_toolbar a {color:#919191 !important; text-decoration:none;}
-#climasouth_news a {color:white !important; text-decoration:none;}
 
 
 

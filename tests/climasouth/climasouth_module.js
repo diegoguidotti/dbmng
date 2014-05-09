@@ -70,6 +70,22 @@ function climasouth_leaflet(data, aForm, aParam){
 }
 
 
+function climasouth_no_map(){
+
+	
+	cs_mapResize();
+
+
+	jQuery("div.field-name-field-image").hide();
+	var src=jQuery("div.field-name-field-image img").attr('src');
+	jQuery('#map_info_container').hide();
+	jQuery('#map_container').css('background-image',"url('"+src+"')");
+	jQuery('#map_container').css('background-position','center');
+	jQuery('#map_container').css('background-size','900px 675px');
+
+
+}
+
 //lancia il reside della mappa ogni volta che si modifica
 jQuery( window ).resize(function() {
 	cs_mapResize();
@@ -90,7 +106,7 @@ function cs_mapResize(){
 	jQuery("#map_blue_left").width((pos));
 
 	jQuery("#map_new_container").css('margin-right',-(pos-10));
-  jQuery("#map_new_container").width(pos+300); 
+  jQuery("#map_new_container").width(pos+290); 
 	     
 
 }
