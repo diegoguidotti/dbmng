@@ -22,7 +22,6 @@ climasouth_login {
     //pointer-events: none;
 }
 
-
 /** from the old theme*/
 /*
 
@@ -45,6 +44,7 @@ climasouth_login {
 
 #climasouth_toolbar_ul {
 	padding: 0px;
+	margin: 0px;
 }
 
 #block-climasouth-climasouth-toolbar {
