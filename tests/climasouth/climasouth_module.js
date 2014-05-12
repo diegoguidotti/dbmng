@@ -18,7 +18,7 @@ function climasouth_leaflet(data, aForm, aParam){
 	var base_path=aParam.base_path;
 
 	//create the map objet
-  var map = L.map(aParam.div_element).setView(coord, zoom);
+  var map = L.map(aParam.div_element,{zoomControl: false}).setView(coord, zoom);
 
 	//add a background layer	
 	var back_map = L.tileLayer.wms("http://95.240.35.64/geoserver_ae/wms", {
@@ -26,9 +26,21 @@ function climasouth_leaflet(data, aForm, aParam){
 	  format: 'image/png',
 	  'BGCOLOR': '0xcfeaf3'					  			
 	});
+map.addLayer(back_map); 	
+
+
+console.log(map.getBounds());	
+
+	//var imageUrl = '/climasouth/sites/all/modules/climasouth/resources/map3.png';
+  //L.imageOverlay(imageUrl, map.getBounds()).addTo(map);
+
+
+	map.dragging.disable();
+	map.touchZoom.disable();
+	map.doubleClickZoom.disable();
+	map.scrollWheelZoom.disable();
 
 	
-	map.addLayer(back_map); 		
 
 
 
