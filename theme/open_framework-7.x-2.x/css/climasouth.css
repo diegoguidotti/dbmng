@@ -99,7 +99,8 @@
 
 
 .navbar .nav li.dropdown.active-trail{
-	color:#555;background-color:#e5e5e5
+	color:#71b1cb;
+	/*background-color:#e5e5e5*/
 }
 
 
@@ -112,7 +113,7 @@ img.rss_icon {
 #block-climasouth-climasouth-toolbar{
 	float: left;
 	border-top: 1px solid #e8e8e8;
-	border-bottom: 1px solid #e8e8e8;	
+	/*border-bottom: 1px solid #e8e8e8;	*/
 }
 
 .climasouth_toolbar {
@@ -122,7 +123,7 @@ img.rss_icon {
 	font-size: 15px;
 }
 
-
+a{color:#71b1cb;text-decoration:none}
 
 
 /* ---------- Search result ---------- */
@@ -174,3 +175,4 @@ div.climasouth_res{
 	border-bottom: 1px solid #CCC;
 	margin-bottom: 10px;
 }
+
