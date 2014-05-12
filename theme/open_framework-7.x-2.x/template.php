@@ -1,6 +1,8 @@
 <?php
 function open_framework_preprocess_html(&$vars) {
-  // theme option variables
+  // theme option variables @import url(http://fonts.googleapis.com/css?family=Roboto);
+  drupal_add_css('http://fonts.googleapis.com/css?family=Roboto',array('type' => 'external'));
+
   $vars['content_order_classes'] = theme_get_setting('content_order_classes'); 
   $vars['front_heading_classes'] = theme_get_setting('front_heading_classes'); 
   $vars['breadcrumb_classes'] = theme_get_setting('breadcrumb_classes'); 
