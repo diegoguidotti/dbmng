@@ -614,20 +614,23 @@ function _climasouth_assistance()
 //	drupal_set_message("<pre>".print_r($user,true)."</pre>");
 
 
+	$firstname = "";
+	$lastname  = "";
+	$ii= field_get_items('user', $user, 'field_first_name');
+	if(isset($ii[0]['value']))
+		{
+			$firstname = check_plain($ii[0]['value']);
+		}
 
-			$ii= field_get_items('user', $user, 'field_first_name');
-			if(isset($ii[0]['value'])){
-				$firstname = check_plain($ii[0]['value']);
-			}
-
-			$iilast= field_get_items('user', $user, 'field_last_name');
-			if(isset($ii[0]['value'])){
-				$lastname = check_plain($iilast[0]['value']);
-			}
+	$iilast= field_get_items('user', $user, 'field_last_name');
+	if(isset($ii[0]['value']))
+		{
+			$lastname = check_plain($iilast[0]['value']);
+		}
 
 
 	
-	drupal_set_message("Name: ".$firstname."<br/>Surname:".$lastname."<br/>email:".$user->mail);
+	//drupal_set_message("Name: ".$firstname."<br/>Surname:".$lastname."<br/>email:".$user->mail);
 	
 	$aParam = array();
 	$aParam['ui']['btn_name'] = "Send";
