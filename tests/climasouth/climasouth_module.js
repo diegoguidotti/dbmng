@@ -98,11 +98,12 @@ function climasouth_no_map(){
 	}
 	else{
 		var color = "71b1cb";
+		jQuery("div.field-name-field-video").hide();
 		var src = jQuery("div.field-name-field-video div.field-items").text();
-		html = '<iframe src="//'+src+'?color='+color+'" width="570" height="310" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>'; 
+		html = '<iframe src="//'+src+'?color='+color+'" width="552" height="310" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>'; 
 		jQuery('#map_info_container').hide();
 		jQuery('#map_container').html(html);
-		jQuery('#map_container iframe').css('margin-left','300px');
+		jQuery('#map_container iframe').css('margin-left','318px');
 		jQuery('#map_container').css('background', "#f3f3f3");
 		jQuery('#map_blue_left').css('background', "#f3f3f3");
 	}
