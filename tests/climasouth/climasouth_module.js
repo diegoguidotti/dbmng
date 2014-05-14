@@ -89,16 +89,19 @@ function climasouth_no_map(){
 
 
 	jQuery("div.field-name-field-image").hide();
+	jQuery("div.field-name-field-video").hide();
+	
 	var src=jQuery("div.field-name-field-image img").attr('src');
 	if( typeof src != 'undefined' ){
+		html = "<div class='cs_image_cropper'><img src='"+src+"'></div>";
 		jQuery('#map_info_container').hide();
-		jQuery('#map_container').css('background-image',"url('"+src+"')");
-		jQuery('#map_container').css('background-position','center');
-		jQuery('#map_container').css('background-size','900px 675px');
+		//jQuery('#map_container').css('background-image',"url('"+src+"')");
+		jQuery('#map_container').html(html);
+		jQuery('#map_container').css('background', "#f3f3f3");
+		jQuery('#map_blue_left').css('background', "#f3f3f3");
 	}
 	else{
 		var color = "71b1cb";
-		jQuery("div.field-name-field-video").hide();
 		var src = jQuery("div.field-name-field-video div.field-items").text();
 		html = '<iframe src="//'+src+'?color='+color+'" width="553" height="311" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>'; 
 		jQuery('#map_info_container').hide();

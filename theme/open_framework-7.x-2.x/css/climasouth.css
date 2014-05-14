@@ -178,4 +178,13 @@ div.climasouth_res{
 }
 
 [class*="span"] {
-margin-left: 40px;
+	margin-left: 40px;
+}
+
+.cs_image_cropper {
+  position: relative;
+  width: 553px;
+  height: 311px;
+  overflow: hidden;
+  margin-left: 317px;
+}
