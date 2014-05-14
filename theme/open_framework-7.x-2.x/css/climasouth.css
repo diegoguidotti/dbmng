@@ -177,3 +177,5 @@ div.climasouth_res{
 	margin-bottom: 10px;
 }
 
+[class*="span"] {
+margin-left: 40px;

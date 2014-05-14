@@ -1067,7 +1067,7 @@ function _climasouth_maps($block)
 		$html .= '<div id="map_new_container">'._climasouth_news().'</div>';
 		$html .= '<div id="map_info_container">&nbsp;</div>';
 		$html .= '<div id="map_blue_left">&nbsp;</div>';
-		$html .= '<div id="map_container" style="width:1170px; height:310px;"  ></div>';
+		$html .= '<div id="map_container" style="width:1170px; height:311px;"  ></div>';
 	$html .= '</div>';
 
 	$html .= "\n<script type='text/javascript'>jQuery( document ).ready(function() {\n";
