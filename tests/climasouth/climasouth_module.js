@@ -31,8 +31,8 @@ map.addLayer(back_map);
 
 console.log(map.getBounds());	
 
-	//var imageUrl = '/climasouth/sites/all/modules/climasouth/resources/map3.png';
-  //L.imageOverlay(imageUrl, map.getBounds()).addTo(map);
+	var imageUrl = '/climasouth/sites/all/modules/climasouth/resources/map4.png';
+  L.imageOverlay(imageUrl, map.getBounds()).addTo(map);
 
 
 	map.dragging.disable();
