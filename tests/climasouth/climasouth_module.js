@@ -29,7 +29,7 @@ function climasouth_leaflet(data, aForm, aParam){
 map.addLayer(back_map); 	
 
 
-console.log(map.getBounds());	
+debug(map.getBounds());	
 
 	var imageUrl = 'http://www.climasouth.eu/drupal/sites/all/modules/climasouth/resources/map4.png';
   L.imageOverlay(imageUrl, map.getBounds()).addTo(map);
@@ -125,7 +125,7 @@ function cs_mapResize(){
 
 	var pos=jQuery('#main-top').offset().left;
 
-	console.log(pos);
+	debug(pos);
   
   jQuery("#map_container").width(mw-300-(2*pos)); 
 
