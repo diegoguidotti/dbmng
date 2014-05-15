@@ -1,8 +1,14 @@
 var DEBUG=true;
 function debug(d){
 	if(DEBUG){
-		console.log(d);
+		if('console' in self && 'log' in console){
+			console.log(d);
+		}else{
+			alert(d);
+		}
 	}
+	
+	if(typeof window.console == 'undefined') { window.console = {log: function (msg) {} }; }
 }
 
 function t(txt){
