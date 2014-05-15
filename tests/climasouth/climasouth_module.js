@@ -53,7 +53,8 @@ debug(map.getBounds());
 		if(v.geojson!=null){
 
 			//transform the string in an object
-			var geo = JSON.parse(v.geojson);
+			//var geo = JSON.parse(v.geojson);
+			var geo = jQuery.parseJSON(v.geojson);
 			geo['features'][0]['custom_vars']=v;
 
 			var style={"color": "#ffffff", "opacity": 0, "fillColor": "#ff7800", "fillOpacity": 0, "weight":3};;
