@@ -104,7 +104,8 @@ function climasouth_no_map(){
 	else{
 		var color = "71b1cb";
 		var src = jQuery("div.field-name-field-video div.field-items").text();
-		if( typeof src != 'undefined' ){
+		if( typeof src != 'undefined' && src != '' ){
+			//alert("climasouth_no_map video");
 			html = '<iframe src="//'+src+'?color='+color+'" width="553" height="311" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>'; 
 			jQuery('#map_info_container').hide();
 			jQuery('#map_container').html(html);
