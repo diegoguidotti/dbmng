@@ -4,7 +4,8 @@ function debug(d){
 		if('console' in self && 'log' in console){
 			console.log(d);
 		}else{
-			alert(d);
+			;
+			//alert(d);
 		}
 	}
 	
