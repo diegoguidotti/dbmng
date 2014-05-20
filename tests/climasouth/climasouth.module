@@ -587,7 +587,7 @@ function _climasouth_render_res($r)
 
 	$html='<div class="climasouth_res"><div class="climasouth_res_header">&nbsp;<div class="res_head"><h3>'.$r->res_title.'</h3></div>';
 	if($edit){
-		$html.='<div class="res_edit"><a href="'.base_path().'/climasouth/resource_search?id_c_resource='.$r->id_c_resource.'">Edit</a></div>';
+		//$html.='<div class="res_edit"><a href="'.base_path().'/climasouth/resource_search?id_c_resource='.$r->id_c_resource.'">Edit</a></div>';
 	}
 	$html.="</div>";
 
