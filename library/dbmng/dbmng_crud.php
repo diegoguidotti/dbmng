@@ -12,10 +12,14 @@
 function dbmng_create_form_process($aForm, $aParam, $actiontype="") 
 {
 	$ret=null;
-	if(isset($_REQUEST['tbln']) && isset($_REQUEST['act']))
+	
+	//echo $_REQUEST['tbln'] ." ".$aForm['table_name']."|".$_REQUEST['act']."|";
+	//if(isset($_REQUEST['tbln']) && isset($_REQUEST['act']))
+	if(isset($_REQUEST['act']))
 		{
 			//check if the table correspond to the table requested in the form
-			if($aForm['table_name']==$_REQUEST['tbln'])
+			//if($aForm['table_name']==$_REQUEST['tbln'])
+			if(true)
 				{
 					// update record
 					if($_REQUEST['act']=='do_upd')
@@ -47,6 +51,9 @@ function dbmng_create_form_process($aForm, $aParam, $actiontype="")
 					//TODO: update error message
 					echo t('You have not the right to access to the table you request') .  ' ' . $aForm['table_name'] . ' ' . $_REQUEST['tbln'] . '!';
 				}
+		}
+		else{
+			echo(t('act variable is missing'));
 		}
 
 	return $ret;
