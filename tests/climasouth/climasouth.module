@@ -942,7 +942,7 @@ function _climasouth_prj_workspace()
 		{
 			$html .= "<ul>";
 			$html .= "<li><a href='?act=ins&tbl=c_resource'>" . t("Insert a new project workspace") . "</a></li>";
-			//$html .= "<li>" . t("Consult project workspace") . "</li>";
+			$html .= "<li><a href='?act=view&tbl=c_resource'>" . t("Consult project workspace") . "</a></li>";
 			$html .= "</ul>";
 		}
 	else
