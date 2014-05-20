@@ -94,7 +94,7 @@ function climasouth_no_map(){
 	jQuery("div.field-name-field-label").hide();
 
 	var src = jQuery("div.field-name-field-label div.field-items div.field-item").html();
-	if( typeof src != 'undefined' && src != '' ){
+	if( typeof src != 'undefined' && src != '' && src != null && src != 'null' ){
 		jQuery('#label_container').show();
 		jQuery('#label_container').html('<span style="vertical-align: middle;">'+src+'</span>');
 	}
