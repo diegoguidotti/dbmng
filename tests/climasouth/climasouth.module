@@ -471,59 +471,69 @@ return ($html);
 
 function  _climasouth_resource_search(){
 	dbmng_add_drupal_libraries();
+	$html="";
 
-	
+	if(isset($_REQUEST['id_c_resource'])){
+		$id_c_resource=$_REQUEST['id_c_resource'];
 
-	$html='<div id="resource_search">';
+		$html.="editing ".$id_c_resource;
 
-	$html.='<div id="resource_search_items"><h3>'.t('Filter').'</h3>';
-
-	$html.='<form method="POST" action="'.base_path().'climasouth/resource_search">';
-
-	$fs="";
-
-
-	if(isset($_REQUEST['free_search'])){
-		$fs=strtolower($_REQUEST['free_search']);
+		
 	}
+	else{
+		
 
-	$html.= t('Free search').'<br/><input type="input" name="free_search" value="'.$fs.'" />';
-	$html.=_add_filter(t('Filter by country'), 'id_c_country', "SELECT id_c_country, country_name FROM c_country c WHERE id_c_country in (select id_c_country from c_resource_c_country)  " );
-	$html.=_add_filter(t('Filter by language'), 'id_c_language', "SELECT * FROM c_language c WHERE id_c_language in (select id_c_language from c_resource_c_language) " );
-	$html.=_add_filter(t('Filter by subject'), 'id_c_subject', "SELECT * FROM c_subject c WHERE id_c_subject in (select id_c_subject from c_resource_c_subject) " );
-	
-	$html.='<br/><input  type="submit" value="Filter"/>';
-	$html.='</form>';
+		$html='<div id="resource_search">';
 
-	$html.='</div>';
+		$html.='<div id="resource_search_items"><h3>'.t('Filter').'</h3>';
 
-	$html.='<div id="resource_search_res">';
+		$html.='<form method="POST" action="'.base_path().'climasouth/resource_search">';
 
-	$q = "SELECT * FROM c_resource c ";
-  $q .= " WHERE true ";
-
-	$q.=_add_condition('id_c_country', 'c_resource_c_country' );
-	$q.=_add_condition('id_c_language', 'c_resource_c_language' );
-	$q.=_add_condition('id_c_subject', 'c_resource_c_subject' );
-
-	if($fs<>''){
-		$q .= "AND (lower(res_description) LIKE '%".$fs."%' OR  lower(res_title) LIKE '%".$fs."%' OR  lower(res_author) LIKE '%".$fs."%' OR  lower(organisation) LIKE '%".$fs."%' OR  lower(res_tags) LIKE '%".$fs."%' ) ";
-	}
+		$fs="";
 
 
-	$res = dbmng_query( $q, array() );
-
-	foreach($res as $r)
-		{
-			$html.=_climasouth_render_res($r);
+		if(isset($_REQUEST['free_search'])){
+			$fs=strtolower($_REQUEST['free_search']);
 		}
 
-	//$q .= "AND id_c_visibility="
+		$html.= t('Free search').'<br/><input type="input" name="free_search" value="'.$fs.'" />';
+		$html.=_add_filter(t('Filter by country'), 'id_c_country', "SELECT id_c_country, country_name FROM c_country c WHERE id_c_country in (select id_c_country from c_resource_c_country)  " );
+		$html.=_add_filter(t('Filter by language'), 'id_c_language', "SELECT * FROM c_language c WHERE id_c_language in (select id_c_language from c_resource_c_language) " );
+		$html.=_add_filter(t('Filter by subject'), 'id_c_subject', "SELECT * FROM c_subject c WHERE id_c_subject in (select id_c_subject from c_resource_c_subject) " );
+	
+		$html.='<br/><input  type="submit" value="Filter"/>';
+		$html.='</form>';
+
+		$html.='</div>';
+
+		$html.='<div id="resource_search_res">';
+
+		$q = "SELECT * FROM c_resource c ";
+		$q .= " WHERE true ";
+
+		$q.=_add_condition('id_c_country', 'c_resource_c_country' );
+		$q.=_add_condition('id_c_language', 'c_resource_c_language' );
+		$q.=_add_condition('id_c_subject', 'c_resource_c_subject' );
+
+		if($fs<>''){
+			$q .= "AND (lower(res_description) LIKE '%".$fs."%' OR  lower(res_title) LIKE '%".$fs."%' OR  lower(res_author) LIKE '%".$fs."%' OR  lower(organisation) LIKE '%".$fs."%' OR  lower(res_tags) LIKE '%".$fs."%' ) ";
+		}
 
 
-	$html.='</div>';
+		//$q .= "AND id_c_visibility="
 
-	$html.='</div>';
+		$res = dbmng_query( $q, array() );
+		foreach($res as $r)
+			{
+				$html.=_climasouth_render_res($r);
+			}
+
+
+
+		$html.='</div>';
+
+		$html.='</div>';
+	}
 
 	return $html;
 }
@@ -587,7 +597,7 @@ function _climasouth_render_res($r)
 
 	$html='<div class="climasouth_res"><div class="climasouth_res_header">&nbsp;<div class="res_head"><h3>'.$r->res_title.'</h3></div>';
 	if($edit){
-		//$html.='<div class="res_edit"><a href="'.base_path().'/climasouth/resource_search?id_c_resource='.$r->id_c_resource.'">Edit</a></div>';
+		$html.='<div class="res_edit"><a href="'.base_path().'/climasouth/resource_search?id_c_resource='.$r->id_c_resource.'">Edit</a></div>';
 	}
 	$html.="</div>";
 
@@ -1111,15 +1121,18 @@ function _climasouth_maps($block)
 }
 
 
-function _climasouth_workspace($typeres = null) 
+function _climasouth_workspace($typeres = null, $edit_id = null) 
 {
 	dbmng_add_drupal_libraries();
 
 	$html='';
 	global $user;
 
+	$table_name="c_resource";
+
 	if ($user->uid) 
 		{
+			/*
 			if( !isset($_REQUEST['tbl']) )
 				{
 					$html .= "Edit my data\n";
@@ -1140,11 +1153,12 @@ function _climasouth_workspace($typeres = null)
 					$html .= "<li>Search for related project</li>\n";
 					$html .= "</ul>\n";
 				}
+			*/
 
-			if( isset($_REQUEST['tbl']) )
+			if( isset($table_name) )
 				{
 					//get the form!!!
-					$id_table = $_REQUEST['tbl'];
+					$id_table = $table_name;
 					$aForm    = dbmng_get_form_array(($id_table));
 					
 					if( $id_table == "c_resource" )
@@ -1180,7 +1194,7 @@ function _climasouth_workspace($typeres = null)
 					$aParam                          = array();
 					$aParam['filters']               = array();
 					$aParam['hidden_vars']           = array();
-					$aParam['hidden_vars']['tbl']	   = $_REQUEST['tbl']; //save the table id
+					$aParam['hidden_vars']['tbl']	   = $table_name; //save the table id
 					$aParam['user_function']['dup']	 = 0;	              // allow to enabled=1 or disabled=0 the duplication function
 					$aParam['user_function']['prt_rec'] = 0;
 					$aParam['user_function']['prt_tbl'] = 0;
