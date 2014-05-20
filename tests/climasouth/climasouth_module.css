@@ -144,6 +144,22 @@ font-size:15px;
 	text-align:center;
 }
 
+
+#label_container{
+	position: absolute;
+	float:left;
+	left: 0px;
+	bottom: 0px;
+	width: 260px; 
+	max-height:270px; 
+	z-index: 200;
+	overflow: auto;
+	padding:20px;
+	text-align:center;
+	vertical-align:middle;
+	font-size:12px;
+}
+
 #map_blue_left {
 	background-color: #cfeaf3;
   float:left;

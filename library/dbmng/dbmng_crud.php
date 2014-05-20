@@ -13,6 +13,7 @@ function dbmng_create_form_process($aForm, $aParam, $actiontype="")
 {
 	$ret=null;
 
+	
 
 	//echo $_REQUEST['tbln'] ." ".$aForm['table_name']."|".$_REQUEST['act']."|";
 	//if(isset($_REQUEST['tbln']) && isset($_REQUEST['act']))
@@ -497,6 +498,8 @@ function dbmng_create_form_upload_file($aForm, $aParam)
 */
 function dbmng_update($aForm, $aParam) 
 {
+
+
 	$sSet = "";
 	$var = array();
 
@@ -586,7 +589,6 @@ function dbmng_update($aForm, $aParam)
 	//TODO: add also filter fields in delete/update
 	
 	$result = dbmng_query("update " . $aForm['table_name'] . " set $sSet where $where ", $var);
-	
 	if($result['ok'] && $bSelectNM )
 		$res = dbmng_insert_nm($aForm, $aParam, null);
 

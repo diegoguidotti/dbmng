@@ -1462,4 +1462,18 @@ function dbmng_get_table_structure($id_table)
 }
 
 
+
+function req_eq($type_var, $val){
+	$ret=false;
+	//echo $type_var;
+	if(isset($_REQUEST[$type_var])){
+		//echo $_REQUEST[$type_var];
+		if($_REQUEST[$type_var]==$val){
+			$ret=true;
+		}
+	}
+	//echo $ret;
+	return $ret;
+}
+
 ?>

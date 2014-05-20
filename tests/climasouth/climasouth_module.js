@@ -3,7 +3,7 @@
 //draw a leaflet maps containing data
 function climasouth_leaflet(data, aForm, aParam){
 
-
+	jQuery('#label_container').hide();
 	cs_mapResize();
 
 	var coord=[27.9, 9];
@@ -91,7 +91,15 @@ function climasouth_no_map(){
 
 	jQuery("div.field-name-field-image").hide();
 	jQuery("div.field-name-field-video").hide();
-	
+	jQuery("div.field-name-field-label").hide();
+
+	var src = jQuery("div.field-name-field-label div.field-items div.field-item").html();
+	if( typeof src != 'undefined' && src != '' ){
+		jQuery('#label_container').show();
+		jQuery('#label_container').html('<span style="vertical-align: middle;">'+src+'</span>');
+	}
+
+
 	var src=jQuery("div.field-name-field-image img").attr('src');
 	if( typeof src != 'undefined' ){
 		html = "<div class='cs_image_cropper'><img src='"+src+"'></div>";
@@ -103,6 +111,7 @@ function climasouth_no_map(){
 	}
 	else{
 		var color = "71b1cb";
+
 		var src = jQuery("div.field-name-field-video div.field-items").text();
 		if( typeof src != 'undefined' && src != '' ){
 			//alert("climasouth_no_map video");

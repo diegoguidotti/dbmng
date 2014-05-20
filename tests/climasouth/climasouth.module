@@ -472,15 +472,23 @@ return ($html);
 function  _climasouth_resource_search(){
 	dbmng_add_drupal_libraries();
 	$html="";
+	$show_list=true;
 
 	if(isset($_REQUEST['id_c_resource'])){
+		$show_list=false;
 		$id_c_resource=$_REQUEST['id_c_resource'];
 
-		$html.="editing ".$id_c_resource;
+		//$html.="editing ".$id_c_resource;
+		$html.=_climasouth_workspace('resource',$id_c_resource);
+		if(req_eq('act','do_upd')){
+				$show_list=true;
+		}		
 
 		
 	}
-	else{
+
+
+	if($show_list){
 		
 
 		$html='<div id="resource_search">';
@@ -1098,6 +1106,7 @@ function _climasouth_maps($block)
 
 	$html .= '<div id="cs_top_banner">';
 		$html .= '<div id="map_new_container">'._climasouth_news().'</div>';
+		$html .= '<div id="label_container">&nbsp;</div>';
 		$html .= '<div id="map_info_container">&nbsp;</div>';
 		$html .= '<div id="map_blue_left">&nbsp;</div>';
 		$html .= '<div id="map_container" style="width:1170px; height:311px;"  ></div>';
@@ -1177,6 +1186,12 @@ function _climasouth_workspace($typeres = null, $edit_id = null)
 									//$sql = "select id_c_tags, tags from c_tags where tag_type='project';";
 									$where = "tag_type='project'";
 								}
+							else
+								{
+									//$sql = "select id_c_tags, tags from c_tags where tag_type='project';";
+									$where = "tag_type='".$typeres."'";
+								}
+
 							$sql = "select id_c_tags, tags from c_tags where $where;";
 							
 							$res = dbmng_query($sql,array());
@@ -1211,7 +1226,18 @@ function _climasouth_workspace($typeres = null, $edit_id = null)
 							$aParam['filters']['is_project_workspace'] = 1;
 						}
 					// update record
-					$html .= dbmng_crud($aForm, $aParam);
+
+					if(!isset($edit_id)){
+
+						$html .= dbmng_crud($aForm, $aParam);
+					}
+					else{
+						dbmng_create_form_process($aForm, $aParam);
+
+						if(!req_eq('act','do_upd')){
+							$html .= dbmng_create_form($aForm, $aParam, 1);
+						}
+					}
 
 				}
 		}
