@@ -1125,6 +1125,8 @@ function _climasouth_workspace($typeres = null, $edit_id = null)
 {
 	dbmng_add_drupal_libraries();
 
+
+
 	$html='';
 	global $user;
 
@@ -1157,6 +1159,8 @@ function _climasouth_workspace($typeres = null, $edit_id = null)
 
 			if( isset($table_name) )
 				{
+
+
 					//get the form!!!
 					$id_table = $table_name;
 					$aForm    = dbmng_get_form_array(($id_table));
@@ -1186,6 +1190,7 @@ function _climasouth_workspace($typeres = null, $edit_id = null)
 							$aForm['fields']['id_c_resource_c_tags']['voc_val'] = $aFVoc;
 						}
 					//$aFields[$fld->field_name]['voc_val'] = $aFVoc;
+
 						
 					//the param array stores some custom variable used by the renderer
 					//hidden_vars are some hidden variables used by the form creation
@@ -1207,6 +1212,7 @@ function _climasouth_workspace($typeres = null, $edit_id = null)
 						}
 					// update record
 					$html .= dbmng_crud($aForm, $aParam);
+
 				}
 		}
 	else 

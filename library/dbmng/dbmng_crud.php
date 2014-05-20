@@ -12,7 +12,8 @@
 function dbmng_create_form_process($aForm, $aParam, $actiontype="") 
 {
 	$ret=null;
-	
+
+
 	//echo $_REQUEST['tbln'] ." ".$aForm['table_name']."|".$_REQUEST['act']."|";
 	//if(isset($_REQUEST['tbln']) && isset($_REQUEST['act']))
 	if(isset($_REQUEST['act']))
@@ -21,6 +22,7 @@ function dbmng_create_form_process($aForm, $aParam, $actiontype="")
 			//if($aForm['table_name']==$_REQUEST['tbln'])
 			if(true)
 				{
+
 					// update record
 					if($_REQUEST['act']=='do_upd')
 						$ret=dbmng_update($aForm, $aParam);
@@ -44,6 +46,7 @@ function dbmng_create_form_process($aForm, $aParam, $actiontype="")
 					// print table
 					if($_REQUEST['act']=='prt_tbl')
 						dbmng_print_table($aForm, $aParam);
+
 
 				}
 			else
@@ -280,12 +283,13 @@ function dbmng_insert($aForm, $aParam)
 	$sWhat = "";
 	$sVal  = "";
 
-	
+
 
 	$var = array();
 	$bSelectNM = false;
 	foreach ( $aForm['fields'] as $fld => $fld_value )
 		{
+			
 			//if($fld !== $aForm['primary_key'][0])
 			if($fld_value['key'] != 1)
 				{
@@ -304,6 +308,9 @@ function dbmng_insert($aForm, $aParam)
 						}
 				}
 		}
+
+
+
 
 	if( isset($aParam) )
 		{
@@ -347,13 +354,14 @@ function dbmng_insert($aForm, $aParam)
 	$sVal  = substr($sVal, 0, strlen($sVal)-2);
 
 	$sql    = "insert into " . $aForm['table_name'] . " (" . $sWhat . ") values (" . $sVal . ")";
+
 	$result = dbmng_query($sql, $var);
+
 
 	if($result['ok']){
 		if( $bSelectNM )
 			$res = dbmng_insert_nm($aForm, $aParam, $result['inserted_id']);
 	}
-
 
 	return $result;
 	
@@ -375,6 +383,7 @@ function dbmng_insert_nm($aForm, $aParam, $id_key)
 	$whereFields='';
 	$whereFieldsV='';
 	
+
 	foreach ( $aForm['fields'] as $fld => $fld_value )
 		{									
 			if( dbmng_check_is_pk($fld_value) )
@@ -392,7 +401,9 @@ function dbmng_insert_nm($aForm, $aParam, $id_key)
 						}
 				}
 		}
-	
+
+
+
 	foreach ( $aForm['fields'] as $fld => $fld_value )
 		{
 			if($fld_value['widget']=='select_nm')
@@ -402,6 +413,8 @@ function dbmng_insert_nm($aForm, $aParam, $id_key)
 					
 					$where_del   = substr($whereFields,0,strlen($whereFields)-2);
 					$where_del_v = substr($whereFieldsV,0,strlen($whereFieldsV)-2);
+
+					
 					
 					dbmng_query("delete from ".$table_nm." WHERE ". $where_del ."=".$where_del_v, $aWhere);
 					//echo "<br/>".debug_sql_statement("delete from ".$table_nm." WHERE ". $where_del ."=".$where_del_v, $aWhere);
@@ -412,16 +425,20 @@ function dbmng_insert_nm($aForm, $aParam, $id_key)
 					$vals= explode('|',dbmng_value_prepare($fld_value,$fld,$_POST,$aParam));
 					//print_r($vals);
 
+					
 					foreach ( $vals as $k => $v )
 						{	
+							
 							$aVals = array_merge( $aWhere, array(":".$field_nm => intval($v) ) );
-
+							
 							$sql = "insert into ".$table_nm." (".$whereFields." ".$field_nm.") values (".$whereFieldsV." :".$field_nm.")";
 							//echo "<br/>".$sql." ".$k." ".$v;
 
-							if( true ) //to be further investigated
+							if( false ) //to be further investigated
 								{
+									echo "pre";
 									$sql = debug_sql_statement($sql,$aVals);
+									echo "post";
 									$result = dbmng_query( $sql, array());
 								}
 							else
@@ -433,8 +450,11 @@ function dbmng_insert_nm($aForm, $aParam, $id_key)
 								print_r ($result);
 							}
 						}
+
 				}
 		}
+
+
 	return $result;
 }
 /////////////////////////////////////////////////////////////////////////////

@@ -231,6 +231,7 @@ function dbmng_crud($aForm, $aParam=null)
 
 	$html='';
 
+
 	if($ret['ok']){
 
 		//echo($_REQUEST["act"]." ".$view_table." ".$do_update);
@@ -283,6 +284,7 @@ function dbmng_crud($aForm, $aParam=null)
 				}
 			}
 		
+
 /*
 		if( isset($_REQUEST["act2"]) && !isset($_REQUEST["act"]) )
 			{
@@ -322,6 +324,7 @@ function dbmng_crud($aForm, $aParam=null)
 				//echo "do_upd: ". $do_update;
 				$html .= dbmng_create_form($aForm, $aParam, $do_update);
 			}
+
 	}
 	else{
 		$html.='<div class="messages error">'.$ret['err_msg'].'</div>';
