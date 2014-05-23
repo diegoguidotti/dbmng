@@ -493,7 +493,7 @@ function  _climasouth_resource_search(){
 
 		$html='<div id="resource_search">';
 
-		$html.='<div id="resource_search_items"><h3>'.t('Filter').'</h3>';
+		$html.='<div id="resource_search_items"><table width="100%" border="0"><tr><td width="200px">';
 
 		$html.='<form method="POST" action="'.base_path().'climasouth/resource_search">';
 
@@ -508,6 +508,8 @@ function  _climasouth_resource_search(){
 
 
 		$html.= t('Free search').'<br/><input id="free_search" type="input" name="free_search" value="'.$fs.'" />';
+		$html.='</td><td width="500px" valign="top"><div id="tag_cloud"></div></td></table>';
+
 /*
 		$html.=_add_filter(t('Filter by country'), 'id_c_country', "SELECT id_c_country, country_name FROM c_country c WHERE id_c_country in (select id_c_country from c_resource_c_country)  " );
 		$html.=_add_filter(t('Filter by language'), 'id_c_language', "SELECT * FROM c_language c WHERE id_c_language in (select id_c_language from c_resource_c_language) " );
@@ -693,23 +695,23 @@ function _climasouth_render_res($r)
 		$html.="<div class='year'><span class='clabel'>".t('Year').": </span><span class='cvalue'>".$r->res_date."</span></div>";
 
 	if($r->subject!=null){
-		$html.="<div class='subject'><span class='clabel'>".t('Subjects').": </span><span class='cvalue'>".str_replace('|', ', ', $r->subject)."</span></div>";
+		$html.="<div class='subject'><span class='clabel'>".t('Subjects').": </span><span class='cvalue'>".str_replace('|', '<span>,</span> ', $r->subject)."</span></div>";
 	}
 
 	if($r->country!=null){
-		$html.="<div class='country'><span class='clabel'>".t('Countries').": </span><span class='cvalue'>".str_replace('|', ', ', $r->country)."</span></div>";
+		$html.="<div class='country'><span class='clabel'>".t('Countries').": </span><span class='cvalue'>".str_replace('|', '<span>,</span> ', $r->country)."</span></div>";
 	}
 
 	if($r->tags!=null){
-		$html.="<div class='tags'><span class='clabel'>".t('Tags').": </span><span class='cvalue'>".str_replace('|', ', ', $r->tags)."</span></div>";
+		$html.="<div class='tags'><span class='clabel'>".t('Tags').": </span><span class='cvalue'>".str_replace('|', '<span>,</span> ', $r->tags)."</span></div>";
 	}
 
 	if($r->file_format!=null){
-		$html.="<div class='file_format'><span class='clabel'>".t('File Format').": </span><span class='cvalue'>".str_replace('|', ', ', $r->file_format)."</span></div>";
+		$html.="<div class='file_format'><span class='clabel'>".t('File Format').": </span><span class='cvalue'>".str_replace('|', '<span>,</span> ', $r->file_format)."</span></div>";
 	}
 
 	if($r->language!=null){
-		$html.="<div class='language'><span class='clabel'>".t('Language').": </span><span class='cvalue'>".str_replace('|', ', ', $r->language)."</span></div>";
+		$html.="<div class='language'><span class='clabel'>".t('Language').": </span><span class='cvalue'>".str_replace('|', '<span>,</span> ', $r->language)."</span></div>";
 	}
 
 	$html.='</div>';
@@ -1312,8 +1314,6 @@ function _climasouth_workspace($typeres = null, $edit_id = null)
 							$html .= dbmng_create_form($aForm, $aParam, 1);
 						}
 						else{
-
-								
 								dbmng_create_form_process($aForm, $aParam);
 						}
 					}

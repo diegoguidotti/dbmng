@@ -82,11 +82,14 @@ debug(map.getBounds());
 	});	
 }
 
+var tags;
+
 function formatTileResources(){
 	console.log('tile');
+	jQuery('#sidebar-first').hide();
+	searchTile('');
 
 	jQuery("#free_search").keydown(function(){
-
          var val = jQuery(this).val().trim();
          val = val.replace(/\s+/g, '');
 					val=val.toLowerCase();
@@ -94,26 +97,101 @@ function formatTileResources(){
 
          if(val.length >= 3) { //for checking 3 characters
 
-							jQuery.each(jQuery('.climasouth_res'), function(k,v){
-								v=jQuery(v);
-								
-								if(v.text().toLowerCase().indexOf(val) > -1){
-									v.slideDown();
-								}
-								else{
-									v.slideUp();
-								}
-							});
+							searchTile(val);
 
          }
 				else{
 					jQuery('.climasouth_res').show();
+					searchTile('');
 				}
-
     });     
 
 
 }
+
+
+function searchTile(val){
+
+	tags=new Array();
+
+	//navigate throush all resources
+	jQuery.each(jQuery('.climasouth_res'), function(k,v){
+		v=jQuery(v);
+
+		//activated tile that follow the search
+		if(v.text().toLowerCase().indexOf(val) > -1){
+			v.slideDown();
+
+			vars=v.children('div.climasouth_res_vars').children();
+			jQuery.each(vars, function(k2, v2){
+					v2=jQuery(v2);
+					cls=v2.attr('class');
+					txt=v2.children('span.cvalue').html();
+
+					var vvv=txt.split('<span>,</span>');
+				
+		
+					
+					for(var n=0; n<vvv.length; n++ ){	
+						if(tags[cls+'|'+vvv[n]]){
+							tags[cls+'|'+vvv[n]]=tags[cls+'|'+vvv[n]]+1;
+						}
+						else{
+							tags[cls+'|'+vvv[n]]=1;
+						}
+					}
+			});
+
+		}
+		//disactivate other tiles
+		else{
+			v.slideUp();
+		}
+	});
+
+	createTagCloud();
+
+}
+
+	function createTagCloud(){
+		
+		var html='';
+
+		var min=1;
+		var max=1;
+		for (var k in tags) {
+			min=Math.min(min,tags[k]);
+			max=Math.max(max,tags[k]);
+		}
+		var scarto=max-min;
+		if(scarto<=0) {
+			scarto=1;
+		}
+		console.log(min+" "+max);
+
+		for (var k in tags) {
+			//console.log('a');
+			console.log(k);
+			var cls=k.split('|')[0];			
+			var val=k.split('|')[1];			
+			var dim=tags[k];	
+
+			console.log(cls);
+	
+
+			//il minimo 5, il massimo 20
+			var size=Math.round(6+ (dim/scarto)*25);		
+						
+			html+='<div style="font-size: '+(size)+'px" class="tag '+cls+'">'+val+'</div>';
+
+		}
+
+
+
+		console.log(html);
+		jQuery('#tag_cloud').html(html);
+	}
+
 
 function climasouth_no_map(){
 

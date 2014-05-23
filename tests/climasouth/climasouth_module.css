@@ -263,5 +263,34 @@ div.climasouth_res_des{
 	font-size: 14px;
 
 }
+#tag_cloud {
+	width: 600px;
+}
+#tag_cloud div.tag{
+	float:left;
+	margin:2px;
+	padding: 5px;
+	background-color: #CCC;
+}
 
+#tag_cloud div.country{
+	background-color: #FCC;
+}
+
+#tag_cloud div.tags{
+	background-color: #FFC;
+}
+
+#tag_cloud div.subject{
+	background-color: #FCF;
+}
+
+#tag_cloud div.language{
+	background-color: #CCF;
+}
+
+
+#resource_search_items table{
+	width:100%;
+}
 
