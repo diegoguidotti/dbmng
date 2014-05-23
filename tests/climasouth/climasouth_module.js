@@ -82,6 +82,38 @@ debug(map.getBounds());
 	});	
 }
 
+function formatTileResources(){
+	console.log('tile');
+
+	jQuery("#free_search").keydown(function(){
+
+         var val = jQuery(this).val().trim();
+         val = val.replace(/\s+/g, '');
+					val=val.toLowerCase();
+					console.log(val.length);
+
+         if(val.length >= 3) { //for checking 3 characters
+
+							jQuery.each(jQuery('.climasouth_res'), function(k,v){
+								v=jQuery(v);
+								
+								if(v.text().toLowerCase().indexOf(val) > -1){
+									v.slideDown();
+								}
+								else{
+									v.slideUp();
+								}
+							});
+
+         }
+				else{
+					jQuery('.climasouth_res').show();
+				}
+
+    });     
+
+
+}
 
 function climasouth_no_map(){
 

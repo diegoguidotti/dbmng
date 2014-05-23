@@ -196,4 +196,72 @@ div.climasouth_popup div.cs_right b{
   color: #919191;
 }
 
+div.climasouth_res{
+	float:left;
+	width: 220px;
+	height: 250px;
+	border: 1px solid #CCC;
+	background-color: #EEE;
+	margin: 5px;
+	padding: 5px;
+	overflow: hidden;
+}
+
+div.climasouth_res div.climasouth_res_header{
+	float:left;
+	margin:0px: padding:0px;
+	width: 220px;
+	border-bottom: 1px solid #999;
+	margin-bottom: 10px;
+}
+
+
+div.climasouth_res div.res_head{
+	float: left;
+	padding:0px; margin:0px;
+}
+
+div.climasouth_res div.res_head h3{
+	font-size: 16px;
+	padding:0px; margin:0px;
+	margin-bottom:10px;
+	clear: both;  
+}
+
+div.climasouth_res span.res_edit{
+	float: right;
+	padding:1px; margin:6px 2px;
+	width:30px;
+	text-align: center;
+	background-color: #EEE;
+	font-size: 12px;
+}
+div.climasouth_res div.flag{
+	float:left;
+	margin:0px;
+	padding:0px;
+}
+
+div.climasouth_res div.flag img{
+	height:35px;
+	margin:0px;
+	padding:0px;
+}
+
+
+
+div.climasouth_res_vars{
+	font-size: 14px;
+}
+
+div.climasouth_res_vars span.clabel{
+	font-weight: bold;
+	width: 100px;
+}
+
+div.climasouth_res_des{
+	font-size: 14px;
+
+}
+
 

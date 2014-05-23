@@ -1463,7 +1463,7 @@ function dbmng_get_table_structure($id_table)
 
 
 
-function req_eq($type_var, $val){
+function req_equal($type_var, $val){
 	$ret=false;
 	//echo $type_var;
 	if(isset($_REQUEST[$type_var])){

@@ -480,7 +480,7 @@ function  _climasouth_resource_search(){
 
 		//$html.="editing ".$id_c_resource;
 		$html.=_climasouth_workspace('resource',$id_c_resource);
-		if(req_eq('act','do_upd')){
+		if(req_equal('act','do_upd') || req_equal('act','del')){
 				$show_list=true;
 		}		
 
@@ -504,19 +504,42 @@ function  _climasouth_resource_search(){
 			$fs=strtolower($_REQUEST['free_search']);
 		}
 
-		$html.= t('Free search').'<br/><input type="input" name="free_search" value="'.$fs.'" />';
+
+
+
+		$html.= t('Free search').'<br/><input id="free_search" type="input" name="free_search" value="'.$fs.'" />';
+/*
 		$html.=_add_filter(t('Filter by country'), 'id_c_country', "SELECT id_c_country, country_name FROM c_country c WHERE id_c_country in (select id_c_country from c_resource_c_country)  " );
 		$html.=_add_filter(t('Filter by language'), 'id_c_language', "SELECT * FROM c_language c WHERE id_c_language in (select id_c_language from c_resource_c_language) " );
 		$html.=_add_filter(t('Filter by subject'), 'id_c_subject', "SELECT * FROM c_subject c WHERE id_c_subject in (select id_c_subject from c_resource_c_subject) " );
 	
 		$html.='<br/><input  type="submit" value="Filter"/>';
+*/
 		$html.='</form>';
 
 		$html.='</div>';
 
+		
+
 		$html.='<div id="resource_search_res">';
 
-		$q = "SELECT * FROM c_resource c ";
+ 
+
+
+		$q = "SELECT c.id_c_resource, file, res_title, res_author, res_description, id_c_visibility, res_tags, res_date, organisation ";
+		$q .= ", GROUP_CONCAT(DISTINCT concat(co.country_name)  SEPARATOR '|') as country   ";
+		$q .= ", GROUP_CONCAT(DISTINCT concat(s.subject)  SEPARATOR '|') as subject   ";
+		$q .= ", GROUP_CONCAT(DISTINCT concat(t.tags)  SEPARATOR '|') as tags   ";
+		$q .= ", GROUP_CONCAT(DISTINCT concat(f.file_format)  SEPARATOR '|') as file_format   ";
+		$q .= ", GROUP_CONCAT(DISTINCT concat(l.language)  SEPARATOR '|') as language   ";
+
+		$q.=" FROM c_resource c left join c_resource_c_country crc ON crc.id_c_resource=c.id_c_resource LEFT JOIN c_country co ON crc.id_c_country=co.id_c_country ";
+
+		$q.=" LEFT JOIN c_resource_c_subject crs ON crs.id_c_resource=c.id_c_resource LEFT JOIN c_subject s ON crs.id_c_subject=s.id_c_subject ";
+		$q.=" LEFT JOIN c_resource_c_tags    crt ON crt.id_c_resource=c.id_c_resource LEFT JOIN c_tags    t ON crt.id_c_tags   =t.id_c_tags ";
+		$q.=" LEFT JOIN c_resource_c_file_format crf ON crf.id_c_resource=c.id_c_resource LEFT JOIN c_file_format  f ON crf.id_c_file_format  =f.id_c_file_format ";
+		$q.=" LEFT JOIN c_resource_c_language    crl ON crl.id_c_resource=c.id_c_resource LEFT JOIN c_language     l ON crl.id_c_language     =l.id_c_language ";
+
 		$q .= " WHERE true ";
 
 		$q.=_add_condition('id_c_country', 'c_resource_c_country' );
@@ -526,9 +549,28 @@ function  _climasouth_resource_search(){
 		if($fs<>''){
 			$q .= "AND (lower(res_description) LIKE '%".$fs."%' OR  lower(res_title) LIKE '%".$fs."%' OR  lower(res_author) LIKE '%".$fs."%' OR  lower(organisation) LIKE '%".$fs."%' OR  lower(res_tags) LIKE '%".$fs."%' ) ";
 		}
+		$q.=" group by c.id_c_resource, file, res_title, res_author, res_description, id_c_visibility, res_tags, res_date, organisation ";
+		$q.= "order by c.id_c_resource desc;";
 
+		$html.="<script>jQuery(document).ready(function(){formatTileResources();});</script>";
 
-		//$q .= "AND id_c_visibility="
+		global $user;
+		if(in_array('administrator', $user->roles)){
+			//shows all
+		}
+		else if(in_array('experts', $user->roles)){
+			$q .= "AND id_c_visibility>=5 ";
+		}
+		else if(in_array('official', $user->roles)){
+			$q .= "AND id_c_visibility>=10 ";
+		}
+		else if ( $user->uid ) {
+			$q .= "AND id_c_visibility>=20 ";
+		}
+		else{
+			$q .= "AND id_c_visibility=99 ";
+		}	
+		//echo $q;
 
 		$res = dbmng_query( $q, array() );
 		foreach($res as $r)
@@ -603,18 +645,72 @@ function _climasouth_render_res($r)
 		$edit=true;
 	}
 
-	$html='<div class="climasouth_res"><div class="climasouth_res_header">&nbsp;<div class="res_head"><h3>'.$r->res_title.'</h3></div>';
-	if($edit){
-		$html.='<div class="res_edit"><a href="'.base_path().'/climasouth/resource_search?id_c_resource='.$r->id_c_resource.'">Edit</a></div>';
+	$html='<div class="climasouth_res"><div class="climasouth_res_header">';
+
+	if($r->country!=null){
+		
+
+		$f=strtok($r->country, "|");
+		$flag = '<img src="'.base_path().'docs/'.$f .'.png" />';
+
+		while ($f !== false) {
+			$f=strtok("|");
+			if($f<>''){
+				$flag.= '<img src="'.base_path().'docs/'.$f .'.png" />';
+			}
+		}
+
+		$html.='<div class="flag">'.$flag.'</div>';
 	}
+
+	if($edit){
+		$html.='<span class="res_edit"><a href="'.base_path().'/climasouth/resource_search?id_c_resource='.$r->id_c_resource.'">'.t('Edit').'</a></span>';
+		$html.='<span class="res_edit"><a onclick="return confirm(\'Are you sure?\')" href="'.base_path().'/climasouth/resource_search?id_c_resource='.$r->id_c_resource.'&act=del">'.t('Delete').'</a></span>';
+	}
+
+
+	$html.='<div class="res_head"><h3>';
+
+	if($r->file!=null){
+		$html.='<a target="_NEW" href="'.base_path().'docs/'.$r->file.'">'.$r->res_title.'</a>';
+		
+	}
+	else{
+		$html.=$r->res_title;
+	}
+	$html.='</h3></div>';
 	$html.="</div>";
 
 
-	$html.='<div class="climasouth_res_author">';
+	$html.='<div class="climasouth_res_vars">';
 	if($r->res_author!=null)
-		$html.=t('Author').': '.$r->res_author;
+		$html.="<div class='author'><span class='clabel'>".t('Author').": </span><span class='cvalue'>".$r->res_author."</span></div>";
+
 	if($r->organisation!=null)
-		$html.=t('Organisation').': '.$r->organisation;
+		$html.="<div class='organisation'><span class='clabel'>".t('Organisation').": </span><span class='cvalue'>".$r->organisation."</span></div>";
+
+	if($r->res_date!=null)
+		$html.="<div class='year'><span class='clabel'>".t('Year').": </span><span class='cvalue'>".$r->res_date."</span></div>";
+
+	if($r->subject!=null){
+		$html.="<div class='subject'><span class='clabel'>".t('Subjects').": </span><span class='cvalue'>".str_replace('|', ', ', $r->subject)."</span></div>";
+	}
+
+	if($r->country!=null){
+		$html.="<div class='country'><span class='clabel'>".t('Countries').": </span><span class='cvalue'>".str_replace('|', ', ', $r->country)."</span></div>";
+	}
+
+	if($r->tags!=null){
+		$html.="<div class='tags'><span class='clabel'>".t('Tags').": </span><span class='cvalue'>".str_replace('|', ', ', $r->tags)."</span></div>";
+	}
+
+	if($r->file_format!=null){
+		$html.="<div class='file_format'><span class='clabel'>".t('File Format').": </span><span class='cvalue'>".str_replace('|', ', ', $r->file_format)."</span></div>";
+	}
+
+	if($r->language!=null){
+		$html.="<div class='language'><span class='clabel'>".t('Language').": </span><span class='cvalue'>".str_replace('|', ', ', $r->language)."</span></div>";
+	}
 
 	$html.='</div>';
 	$html.='<div class="climasouth_res_des">'.$r->res_description.'</div>';
@@ -1086,6 +1182,7 @@ function _climasouth_maps($block)
 
 	drupal_add_css( "sites/all/modules/climasouth/climasouth_module.css" );
 	drupal_add_js('sites/all/modules/climasouth/climasouth_module.js');
+	drupal_add_js('sites/all/modules/climasouth/jquery.tile.min.js');
 
 	if($show_map==1){
 		drupal_add_css('http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css',array('type' => 'external'));
@@ -1143,28 +1240,6 @@ function _climasouth_workspace($typeres = null, $edit_id = null)
 
 	if ($user->uid) 
 		{
-			/*
-			if( !isset($_REQUEST['tbl']) )
-				{
-					$html .= "Edit my data\n";
-					$html .= "<ul>\n";
-					$html .= "<li>add a  <a href='?act=ins&tbl=c_resource'>resources</a></li>\n";
-					$html .= "<li>add an <a href='?act=ins&tbl=c_expert'>expert</a></li>\n"; 
-					$html .= "<li>add an <a href='?act=ins&tbl=c_institution'>institution</a></li>\n";
-					$html .= "<li>add an <a href='?act=ins&tbl=c_activity'>Monitoring and evaluation indicators</a></li>\n";
-					$html .= "<li>add a link</li>\n";
-					$html .= "<li>add a <a href='?act=ins&tbl=c_project'>project</a></li>\n";
-					$html .= "</ul>\n";
-					$html .= "Search my data\n";
-					$html .= "<ul>\n";
-					$html .= "<li><a href='?act=search&tbl=c_country'>Countries</a></li>\n";
-					$html .= "<li><a href='?act=search&tbl=c_resource'>Search for resources</a></li>\n";
-					$html .= "<li><a href='?act=search&tbl=c_expert'>Search for expert or organisation</a></li>\n";
-					$html .= "<li><a href='?act=search&tbl=c_activity'>Search for M&E indicators</a></li>\n";
-					$html .= "<li>Search for related project</li>\n";
-					$html .= "</ul>\n";
-				}
-			*/
 
 			if( isset($table_name) )
 				{
@@ -1232,10 +1307,14 @@ function _climasouth_workspace($typeres = null, $edit_id = null)
 						$html .= dbmng_crud($aForm, $aParam);
 					}
 					else{
-						dbmng_create_form_process($aForm, $aParam);
 
-						if(!req_eq('act','do_upd')){
+						if(!req_equal('act','do_upd') && !req_equal('act','del') ){
 							$html .= dbmng_create_form($aForm, $aParam, 1);
+						}
+						else{
+
+								
+								dbmng_create_form_process($aForm, $aParam);
 						}
 					}
 
