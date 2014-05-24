@@ -493,7 +493,7 @@ function  _climasouth_resource_search(){
 
 		$html='<div id="resource_search">';
 
-		$html.='<div id="resource_search_items"><table width="100%" border="0"><tr><td width="200px">';
+		$html.='<div id="resource_search_items">';
 
 		$html.='<form method="POST" action="'.base_path().'climasouth/resource_search">';
 
@@ -503,12 +503,8 @@ function  _climasouth_resource_search(){
 		if(isset($_REQUEST['free_search'])){
 			$fs=strtolower($_REQUEST['free_search']);
 		}
-
-
-
-
-		$html.= t('Free search').'<br/><input id="free_search" type="input" name="free_search" value="'.$fs.'" />';
-		$html.='</td><td width="500px" valign="top"><div id="tag_cloud"></div></td></table>';
+		$html.= '<input placeHolder="Search across resources" id="free_search" type="input" name="free_search" value="'.$fs.'" />';
+		//$html.='</td><td width="500px" valign="top"><div id="tag_cloud"></div></td></table>';
 
 /*
 		$html.=_add_filter(t('Filter by country'), 'id_c_country', "SELECT id_c_country, country_name FROM c_country c WHERE id_c_country in (select id_c_country from c_resource_c_country)  " );

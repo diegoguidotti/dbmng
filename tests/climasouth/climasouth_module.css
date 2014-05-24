@@ -263,30 +263,71 @@ div.climasouth_res_des{
 	font-size: 14px;
 
 }
-#tag_cloud {
-	width: 600px;
+
+#resource_search_items #free_search {
+	width: 700px !important;
 }
+
+#tag_cloud {
+	width: 820px;
+	max-height: 200px;
+	text-align: center;
+	margin:20px;
+	clear: both;
+}
+
+#searched_tags {
+	float: left;
+	width: 820px;
+	text-align: left;
+	margin-top: 20px;
+}
+
+
+#searched_tags div.searched_label{
+	float:left;
+	margin:2px;
+	padding: 5px;
+	font-weight: bold;
+}
+
+#searched_tags div.searched {
+	float:left;
+	margin:2px;
+	padding: 5px;
+	background-color: #CCC;
+	cursor: pointer;
+}
+
+
 #tag_cloud div.tag{
 	float:left;
 	margin:2px;
 	padding: 5px;
 	background-color: #CCC;
+	cursor: pointer;
+	color: #444;
+	block: inline;
+}
+
+#tag_cloud div.year{
+	background-color: #CDD7EA;
 }
 
 #tag_cloud div.country{
-	background-color: #FCC;
+	background-color: #D85E4E;
 }
 
 #tag_cloud div.tags{
-	background-color: #FFC;
+	background-color: #E0F26A;
 }
 
 #tag_cloud div.subject{
-	background-color: #FCF;
+	background-color: #F2B600;
 }
 
 #tag_cloud div.language{
-	background-color: #CCF;
+	background-color: #7DB5CD;
 }
 
 

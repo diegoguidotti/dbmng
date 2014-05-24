@@ -83,19 +83,27 @@ debug(map.getBounds());
 }
 
 var tags;
+var search_tag;
 
 function formatTileResources(){
-	console.log('tile');
+
+	//enlarge the container
 	jQuery('#sidebar-first').hide();
+	jQuery('#content').width(1200);
+	jQuery('#map_info_container').hide();
+
+	search_tag=new Array();
+
+	//scan all resources to generate the tagcloud
 	searchTile('');
 
 	jQuery("#free_search").keydown(function(){
          var val = jQuery(this).val().trim();
-         val = val.replace(/\s+/g, '');
+         //val = val.replace(/\s+/g, '');
 					val=val.toLowerCase();
-					console.log(val.length);
+					//console.log(val.length);
 
-         if(val.length >= 3) { //for checking 3 characters
+         if(val.length >= 1) { //for checking 3 characters
 
 							searchTile(val);
 
@@ -117,10 +125,38 @@ function searchTile(val){
 	//navigate throush all resources
 	jQuery.each(jQuery('.climasouth_res'), function(k,v){
 		v=jQuery(v);
+		//console.log('res_'+k);
 
 		//activated tile that follow the search
-		if(v.text().toLowerCase().indexOf(val) > -1){
-			v.slideDown();
+		var use_tile=true;
+		var text_tile=v.text().toLowerCase();
+		
+		if(search_tag.length>0){
+			//console.log(search_tag);
+			
+			use_tile=true;
+			for(n=0; n<search_tag.length; n++){
+				if(text_tile.indexOf(search_tag[n].toLowerCase()) ==-1){
+					use_tile=false;
+				}
+				//console.log(text_tile+' contains '+search_tag[n]+' '+use_tile);
+
+			}
+		}
+
+		if(use_tile){
+			//console.log(text_tile);
+			//console.log(val);
+			if(text_tile.indexOf(val) > -1){
+				use_tile=true;
+			}
+			else{
+				use_tile=false;
+			}
+		}
+
+		if(use_tile){
+			v.show();
 
 			vars=v.children('div.climasouth_res_vars').children();
 			jQuery.each(vars, function(k2, v2){
@@ -138,6 +174,8 @@ function searchTile(val){
 						}
 						else{
 							tags[cls+'|'+vvv[n]]=1;
+
+							//console.log('add tag |'+cls+'|'+vvv[n]+' '+vvv);
 						}
 					}
 			});
@@ -145,7 +183,8 @@ function searchTile(val){
 		}
 		//disactivate other tiles
 		else{
-			v.slideUp();
+			
+			v.hide();
 		}
 	});
 
@@ -167,29 +206,55 @@ function searchTile(val){
 		if(scarto<=0) {
 			scarto=1;
 		}
-		console.log(min+" "+max);
 
-		for (var k in tags) {
-			//console.log('a');
-			console.log(k);
+		for (var k in tags) {			
 			var cls=k.split('|')[0];			
 			var val=k.split('|')[1];			
 			var dim=tags[k];	
 
-			console.log(cls);
-	
-
-			//il minimo 5, il massimo 20
-			var size=Math.round(6+ (dim/scarto)*25);		
+			//il minimo 5, il massimo 20 decide le dimensioni del tag
+			var size=Math.round(8+ (dim/scarto)*30);		
 						
-			html+='<div style="font-size: '+(size)+'px" class="tag '+cls+'">'+val+'</div>';
+			html+='<div style="font-size: '+(size)+'px;" class="tag '+cls+'">'+val+'</div>';
 
 		}
 
+		var searched='<div id="searched_tags">';
+		if(search_tag.length>0){
+			searched+='<div class="searched_label">Resources has been filtered by: </div>'
+			for(n=0; n<search_tag.length; n++){
+				searched+='<div class="searched">'+search_tag[n]+'<span ><sup>X</sup></span></div>';
+			}
+		}
+		searched+="</div>";
+		
+		//console.log(html);
+		jQuery('#map_container').html('<div id="tag_cloud">'+html+"</div>"+searched);
+
+		jQuery('#tag_cloud div.tag').click(function (k,v){
+			var t=jQuery(this);
+			
+
+			if(jQuery.inArray(t.text(), search_tag)==-1){
+				search_tag.push(t.text());
+				searchTile('');
+			}
+		});
+
+		jQuery('#searched_tags div.searched').click(function (k,v){
+			var t=jQuery(this);
+			var txt=t.text();
+
+			//remove the last letter (te X to delete)
+			txt=txt.substring(0,txt.length-1);
+
+			var pos=jQuery.inArray(txt, search_tag);
 
 
-		console.log(html);
-		jQuery('#tag_cloud').html(html);
+			search_tag.splice(pos,1);
+			searchTile('');
+		});
+
 	}
 
 
