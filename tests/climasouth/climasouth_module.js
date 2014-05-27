@@ -84,6 +84,7 @@ debug(map.getBounds());
 
 var tags;
 var search_tag;
+var open_tile;
 
 function formatTileResources(){
 
@@ -112,7 +113,32 @@ function formatTileResources(){
 					jQuery('.climasouth_res').show();
 					searchTile('');
 				}
-    });     
+    });    
+
+
+	//navigate throush all resources
+	jQuery('.climasouth_res').click(function(){
+
+		if(open_tile){
+			open_tile.width(220);
+			open_tile.height(250);
+			open_tile.children('div.climasouth_res_header').width(220);
+		}
+
+		
+		var t=jQuery(this);
+		if(!t.is(open_tile)){
+			t.width(461);
+			t.height(520);
+			t.children('div.climasouth_res_header').width(461);
+
+			open_tile=t;
+		}
+		else{
+			open_tile=null;
+		}
+
+	}); 
 
 
 }
@@ -130,7 +156,7 @@ function searchTile(val){
 		//activated tile that follow the search
 		var use_tile=true;
 		var text_tile=v.text().toLowerCase();
-		
+		//console.log(text_tile);
 		if(search_tag.length>0){
 			//console.log(search_tag);
 			
@@ -187,6 +213,8 @@ function searchTile(val){
 			v.hide();
 		}
 	});
+
+
 
 	createTagCloud();
 
