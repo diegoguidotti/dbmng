@@ -14,7 +14,7 @@ function climasouth_leaflet(data, aForm, aParam){
 	if(aParam.zoom)
 		zoom=aParam.zoom;
 
-
+	jQuery('#page-title').show();
 	var base_path=aParam.base_path;
 
 	//create the map objet
@@ -41,6 +41,10 @@ debug(map.getBounds());
 	map.scrollWheelZoom.disable();
 
 	
+	var html = "<div class='climasouth_popup'>";
+		html +='<div class="cs_left"><h3>South Mediterranean Region</h3></div>';
+		html += '<div class="cs_right"><b>N. of countries:</b><br/>10<br/><b>Total Area:</b><br/> xxx m2<br/><b>Population:</b><br/> xxxx<br/><b>Regional GDP per capita:</b><br/> xxxx</div></div>';
+		jQuery('#map_info_container').html(html);
 
 
 

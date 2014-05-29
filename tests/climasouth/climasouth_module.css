@@ -1,4 +1,18 @@
 
+
+h4 {
+	color: #dd6659 !important;
+}
+
+#main-content li{
+margin-left: 6px;
+}
+
+#block-block-4{
+	height:0px;
+}
+
+
 /* ---------- Climasouth Specifications ---------- */
 
 
@@ -137,7 +151,7 @@ font-size:15px;
 	width: 250px; 
 	height: 150px; 
 	z-index: 200;
-	overflow: auto;
+	overflow: hidden;
 	border: 0px solid #000;
 	background-color: #FFF;
 	padding:10px;
@@ -171,8 +185,13 @@ font-size:15px;
 	
 }
 
+div.climasouth_popup {
+	font-size:11px;
+}
+
 div.climasouth_popup h3{
 	font-size:15px;
+	margin:3px;
 
 }
 div.climasouth_popup h3 a{ 
@@ -181,14 +200,14 @@ color: #919191;
 
 div.climasouth_popup div.cs_left {
 	float:left;
-	width: 90px;
+	width: 100px;
 }
 
 div.climasouth_popup div.cs_right {
 	float:right;
 	text-align: left;
 	font-size:11px;
-	width: 150px;
+	width: 140px;
   color: #dd6659;
 }
 
