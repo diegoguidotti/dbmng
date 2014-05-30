@@ -6,12 +6,16 @@ h4 {
 
 #main-content li{
 margin-left: 6px;
+margin-bottom: 6px;
 }
 
 #block-block-4{
 	height:0px;
 }
 
+#block-menu-block-1 {
+	margin-top: 14px;
+}
 
 /* ---------- Climasouth Specifications ---------- */
 
