@@ -29,7 +29,7 @@ function climasouth_leaflet(data, aForm, aParam){
 map.addLayer(back_map); 	
 
 
-debug(map.getBounds());	
+//debug(map.getBounds());	
 
 	var imageUrl = 'http://www.climasouth.eu/drupal/sites/all/modules/climasouth/resources/map4.png';
   L.imageOverlay(imageUrl, map.getBounds()).addTo(map);
@@ -51,8 +51,6 @@ debug(map.getBounds());
 
   //get all the records adding the countries boundaries
 	jQuery.each(data.records, function(k,v){
-
-		
 
 		if(v.geojson!=null){
 
@@ -343,18 +341,39 @@ function cs_mapResize(){
 	//var mh=jQuery(window).height()-80;
 	var mw=jQuery(window).width();
 
+	jQuery('#toolbar').width(mw);
+	jQuery('#header').width(mw);
+	jQuery('#main').width(mw);
+	jQuery('#main-menu').width(mw);
+	jQuery('#footer').width(mw);
+
+	jQuery('#main-menu div.navbar').width(1170);
+	jQuery('#header div.span12').width(1170);
+	jQuery('#main-top').width(1170);
+
 	var pos=jQuery('#main-top').offset().left;
 
-	debug(pos);
+
+
   
-  jQuery("#map_container").width(mw-300-(2*pos)); 
+  //jQuery("#map_container").width(mw-300-(2*pos)); 
+  jQuery("#map_container").width(870); 
 
 	jQuery("#map_blue_left").css('margin-left',-(pos));
 	jQuery("#map_blue_left").width((pos));
 
 	jQuery("#map_new_container").css('margin-right',-(pos-10));
   jQuery("#map_new_container").width(pos+290); 
-	     
+
+
+	debug(jQuery('#main-menu div.navbar').width());
+
+	//if(mw<700){
+	//		jQuery('#logo img').width(400);
+	//}
+	//else {
+	//}
+
 
 }
 

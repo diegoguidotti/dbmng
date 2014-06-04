@@ -245,23 +245,23 @@ function _climasouth_country_flag()
 	
 	$html = "<table id='flag_container'>";
 	$html .= "<tr>";
-	$html .= "<td><a href='".$base_path."climasouth/country?id_c_country=1' class='country_link'>".t('Algeria')."</a></td>";
-	$html .= "<td><a href='".$base_path."climasouth/country?id_c_country=4' class='country_link'>".t('Lebanon')."</a></td>";
-	$html .= "<td><a href='".$base_path."climasouth/country?id_c_country=10' class='country_link'>".t('Syria')."</a></td>";
+	$html .= "<td><a href='".$base_path."node/136' class='country_link'>".t('Algeria')."</a></td>";
+	$html .= "<td><a href='".$base_path."node/139' class='country_link'>".t('Lebanon')."</a></td>";
+	$html .= "<td><a href='".$base_path."node/145' class='country_link'>".t('Syria')."</a></td>";
 	$html .= "<td><a class='climasouth_link_blu ".($lang_name=='ar'?'activel':'')."' href='".$base_path."ar' >".t('Arabic', array(), array('langcode'=>'ar'))."</a></td>";
 	$html .= "</tr><tr>";
-	$html .= "<td><a href='".$base_path."climasouth/country?id_c_country=2' class='country_link'>".t('Egypt')."</a></td>";
-	$html .= "<td><a href='".$base_path."climasouth/country?id_c_country=5' class='country_link'>".t('Libya')."</a></td>";
-	$html .= "<td><a href='".$base_path."climasouth/country?id_c_country=6' class='country_link'>".t('Tunisia')."</a></td>";
+	$html .= "<td><a href='".$base_path."node/137' class='country_link'>".t('Egypt')."</a></td>";
+	$html .= "<td><a href='".$base_path."node/140' class='country_link'>".t('Libya')."</a></td>";
+	$html .= "<td><a href='".$base_path."node/141' class='country_link'>".t('Tunisia')."</a></td>";
 	$html .= "<td><a class='climasouth_link_blu ".($lang_name=='en'?'activel':'')."' href='".$base_path."' >".t('English', array(), array('langcode'=>'en'))."</a></td>";
 	$html .= "</tr><tr>";
-	$html .= "<td><a href='".$base_path."climasouth/country?id_c_country=3' class='country_link'>".t('Israel')."</a></td>";
-	$html .= "<td><a href='".$base_path."climasouth/country?id_c_country=7' class='country_link'>".t('Morocco')."</a></td>";
+	$html .= "<td><a href='".$base_path."node/138' class='country_link'>".t('Israel')."</a></td>";
+	$html .= "<td><a href='".$base_path."node/142' class='country_link'>".t('Morocco')."</a></td>";
 	$html .= "<td>&nbsp;</td>";
 	$html .= "<td><a class='climasouth_link_blu ".($lang_name=='fr'?'activel':'')."' href='".$base_path."fr' >".t('French', array(), array('langcode'=>'fr'))."</a></td>";
 	$html .= "</tr><tr>";
-	$html .= "<td><a href='".$base_path."climasouth/country?id_c_country=9' class='country_link'>".t('Jordan')."</a></td>";
-	$html .= "<td><a href='".$base_path."climasouth/country?id_c_country=8' class='country_link'>".t('Palestine')."</a></td>";
+	$html .= "<td><a href='".$base_path."node/144' class='country_link'>".t('Jordan')."</a></td>";
+	$html .= "<td><a href='".$base_path."node/143' class='country_link'>".t('Palestine')."</a></td>";
 	$html .= "<td>&nbsp;</td>";
 	$html .= "<td class='loginlogout'>".$uid."</td>";
 	$html .= "</tr>";
@@ -591,8 +591,9 @@ function _climasouth_maps($block)
 	drupal_add_js('sites/all/modules/climasouth/climasouth_module.js');
 
 	if($show_map==1){
-		drupal_add_css('http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css',array('type' => 'external'));
-		drupal_add_js('http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js',array('type' => 'external'));
+		drupal_add_css('http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.ie.css', array('type' => 'external', 'weight' => CSS_THEME, 'browsers' => array('IE' => 'lt IE 8', '!IE' => FALSE), 'preprocess' => FALSE));
+		drupal_add_css('http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css',array('type' => 'external'));
+		drupal_add_js('http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js',array('type' => 'external'));
 
 		$aForm    = dbmng_get_form_array("c_country"); 	
 		/*

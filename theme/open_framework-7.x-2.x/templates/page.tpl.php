@@ -78,20 +78,20 @@
 <?php endif; ?>
 <div id="main" class="clearfix main" role="main">
   <div class="container">
-    <?php if (!($is_front) && ($breadcrumb)): ?>
-    <div id="breadcrumb"><?php print $breadcrumb; ?></div>
-    <?php endif; ?>
+    
     <?php if ($page['main_top']): ?>
     <div id="main-top" class="row-fluid main-top"> <?php print render($page['main_top']); ?> </div>
     <?php endif; ?>
 
-    <?php if ($page['main_top_col2']): ?>
-    <div id="main-top" class="row-fluid main-top"> <?php print render($page['main_top_col2']); ?> </div>
-    <?php endif; ?>
-    <?php if ($page['main_upper']): ?>
     
-    <div id="main-upper" class="row-fluid main-upper"> <?php print render($page['main_upper']); ?> </div>
+    <?php if ($page['main_upper']): ?>    
+	    <div id="main-upper" class="row-fluid main-upper"> <?php print render($page['main_upper']); ?> </div>
     <?php endif; ?>
+
+		<?php if (!($is_front) && ($breadcrumb)): ?>
+	    <div id="breadcrumb"><?php print $breadcrumb; ?></div>
+    <?php endif; ?>
+
     <div id="main-content" class="row main-content">
       <?php if ($page['sidebar_first']): ?>
       <div id="sidebar-first" class="sidebar span3 site-sidebar-first">

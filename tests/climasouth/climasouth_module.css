@@ -17,6 +17,12 @@ margin-bottom: 6px;
 	margin-top: 14px;
 }
 
+
+div#block-menu-block-2{
+	margin-top: 14px;
+}
+
+
 /* ---------- Climasouth Specifications ---------- */
 
 
@@ -356,5 +362,19 @@ div.climasouth_res_des{
 
 #resource_search_items table{
 	width:100%;
+}
+
+
+#main-menu, #main-menu div.navbar , #main-nav,  #main-nav ul, #main-nav li {
+	z-index: 200;
+}
+
+
+#breadcrumb div.breadcrumb{
+	background-color: #FFF !important;
+	font-size: 13px;
+	padding:0px;
+	margin:0px;
+	margin-bottom: 5px;
 }
 
