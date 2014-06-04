@@ -43,7 +43,7 @@ map.addLayer(back_map);
 	
 	var html = "<div class='climasouth_popup'>";
 		html +='<div class="cs_left"><h3>South Mediterranean Region</h3></div>';
-		html += '<div class="cs_right"><b>N. of countries:</b><br/>10<br/><b>Total Area:</b><br/> xxx m2<br/><b>Population:</b><br/> xxxx<br/><b>Regional GDP per capita:</b><br/> xxxx</div></div>';
+		html += '<div class="cs_right"><b>N. of countries:</b><br/>9<br/><b>Population:</b><br/> 189.9<br/></div></div>';
 		jQuery('#map_info_container').html(html);
 
 
@@ -65,9 +65,30 @@ map.addLayer(back_map);
 			//create a feature
 			var feature=L.geoJson(geo, {style: style });
 
+			var hdi='n/a';
+			var population='n/a';
+			var gdp='n/a';
+			var gdp_pc='n/a';
+
+			try{
+				var data= jQuery.parseJSON(v.html_content);
+				if(data.hdi)
+					hdi=data.hdi.value+" ("+data.hdi.year+")";
+				if(data.population)
+					population=data.population.value+" ("+data.population.year+")";
+				if(data.gdp)
+					gdp=data.gdp.value+" ("+data.gdp.year+")";
+				if(data.gdp_pc)
+					gdp_pc=data.gdp_pc.value+" ("+data.gdp_pc.year+")";
+			}
+			catch(e){
+				;
+			}
+
+
 			var html = "<div class='climasouth_popup'>";
 			html +='<div class="cs_left"><img class="fla" src="'+base_path+v.flag+'"/><h3><a href="'+base_path+'climasouth/country?id_c_country='+v.id_c_country+'">'+v.country_name+'</a></h3></div>';
-			html += '<div class="cs_right"><b>Total Area:</b><br/> xxx m2<br/><b>Population:</b><br/> xxxx<br/><b>GDP per capita:</b><br/> xxxx</div></div>';
+			html += '<div class="cs_right"><b>Population (millions):</b><br/>'+population+'<br/><b>GDP ($ billions):</b><br/>'+gdp+'<br/><b>GDP per capita ($):</b><br/>'+gdp_pc+'<b><br/>Human Development Index:</b><br/>'+hdi+'</div></div>';
 
 			//html += '<a hrgef="'+base_path+'climasouth/country?id_c_country='+v.id_c_country+'">'+Drupal.t('go to page')+'</a></div>';
 			//feature.bindPopup(html);
@@ -320,7 +341,7 @@ function climasouth_no_map(){
 		var src = jQuery("div.field-name-field-video div.field-items").text();
 		if( typeof src != 'undefined' && src != '' ){
 			//alert("climasouth_no_map video");
-			html = '<iframe src="//'+src+'?color='+color+'" width="553" height="311" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>'; 
+			html = '<iframe src="//'+src+'?color='+color+'&badge=0" width="553" height="311" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>'; 
 			jQuery('#map_info_container').hide();
 			jQuery('#map_container').html(html);
 			jQuery('#map_container iframe').css('margin-left','318px');
