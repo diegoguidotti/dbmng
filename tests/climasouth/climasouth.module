@@ -206,7 +206,7 @@ function _climasouth_toolbar()
 	$html .= "<ul id='climasouth_toolbar_ul'>";
 	$html .= "<li class='climasouth_toolbar'>".l(t('Legal notice & disclaimer'),'legal_notice')."</li>";
 	$html .= "<li class='climasouth_toolbar'>|</li>";
-	$html .= "<li class='climasouth_toolbar'>".l(t('Web site utilisation data'),'utilisation_data')."</li>";
+	$html .= "<li class='climasouth_toolbar'>".l(t('Contacts'),'utilisation_data')."</li>";
 	$html .= "<li class='climasouth_toolbar'>|</li>";
 	$html .= "<li class='climasouth_toolbar'>".l(t('Credit ClimaSouth ©2014'),'credit')."</li>";
 	$html .= "</ul>";

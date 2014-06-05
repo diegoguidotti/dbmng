@@ -43,7 +43,7 @@ map.addLayer(back_map);
 	
 	var html = "<div class='climasouth_popup'>";
 		html +='<div class="cs_left"><h3>South Mediterranean Region</h3></div>';
-		html += '<div class="cs_right"><b>N. of countries:</b><br/>9<br/><b>Population:</b><br/> 189.9<br/></div></div>';
+		html += '<div class="cs_right"><b>N. of countries:</b><br/>10<br/><b>Population (millions):</b><br/> 212.4<br/><b>GDP ($billions):</b><br/> 694.2*<br/><b>GDP per capita ($):</b><br/> 3665*<br/><b>* Excluding Syria</b></div></div>';
 		jQuery('#map_info_container').html(html);
 
 
