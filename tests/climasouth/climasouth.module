@@ -76,7 +76,7 @@ function climasouth_block_view($delta='')
 				$block['content'] = _climasouth_toolbar();
 				break;
 			case 'climasouth_news' :
-				$block['content'] = _climasouth_news();
+				$block['content'] = _climasouth_news(true);
 				break;
 			case 'climasouth_menu_country' :
 				$block['content'] = _climasouth_menu_country();
@@ -159,11 +159,11 @@ function _climasouth_login()
 	if ($user->uid) 
 		{
 		 $html .= '<span class="climasouth_username">'.l($user->name, 'user').'</span> - ';
-		 $html .= l(t('log out'), 'user/logout');
+		 $html .= l(t('Log out'), 'user/logout');
 		}
 	else
 		{
-			$html .=  l(t('log in'), 'user');
+			$html .=  l(t('Log in'), 'user');
 		}
 
 	$html.='</div>';
@@ -204,11 +204,18 @@ function _climasouth_toolbar()
 	$html = "";
 	$html .= "<div id='climasouth_toolbar'>";	
 	$html .= "<ul id='climasouth_toolbar_ul'>";
+	$html .= "<li class='climasouth_toolbar'><a href='http://capacity4dev.ec.europa.eu/'>Capacity4dev.eu</a></li>";
+	$html .= "<li class='climasouth_toolbar'>|</li>";
+	$html .= "<li class='climasouth_toolbar'><a href='http://www.enpi-info.eu/'>EU Neighbourhood InfoCenter</a></li>";
+	$html .= "<li class='climasouth_toolbar'>|</li>";
+	$html .= "<li class='climasouth_toolbar'>".l(t('CC Knowledge navigator'),'navigator')."</li>";
+	$html .= "<li class='climasouth_toolbar'>|</li>";
 	$html .= "<li class='climasouth_toolbar'>".l(t('Legal notice & disclaimer'),'legal_notice')."</li>";
 	$html .= "<li class='climasouth_toolbar'>|</li>";
 	$html .= "<li class='climasouth_toolbar'>".l(t('Contacts'),'utilisation_data')."</li>";
 	$html .= "<li class='climasouth_toolbar'>|</li>";
-	$html .= "<li class='climasouth_toolbar'>".l(t('Credit ClimaSouth ©2014'),'credit')."</li>";
+	$html .= "<li class='climasouth_toolbar'>".l(t('Credits'),'credit')."</li>";
+
 	$html .= "</ul>";
 	$html.='</div>';
 	return $html;
@@ -251,11 +258,11 @@ function _climasouth_country_flag()
 	$html .= "<td><a class='climasouth_link_blu ".($lang_name=='ar'?'activel':'')."' href='".$base_path."ar' >".t('Arabic', array(), array('langcode'=>'ar'))."</a></td>";
 	$html .= "</tr><tr>";
 	$html .= "<td><a href='".$base_path."node/137' class='country_link'>".t('Egypt')."</a></td>";
-	$html .= "<td><a href='".$base_path."node/140' class='country_link'>".t('Libya')."</a></td>";
+	$html .= "<td><a href='".$base_path."node/164' class='country_link'>".t('Libya')."</a></td>";
 	$html .= "<td><a href='".$base_path."node/141' class='country_link'>".t('Tunisia')."</a></td>";
 	$html .= "<td><a class='climasouth_link_blu ".($lang_name=='en'?'activel':'')."' href='".$base_path."' >".t('English', array(), array('langcode'=>'en'))."</a></td>";
 	$html .= "</tr><tr>";
-	$html .= "<td><a href='".$base_path."node/138' class='country_link'>".t('Israel')."</a></td>";
+	$html .= "<td><a href='".$base_path."node/154' class='country_link'>".t('Israel')."</a></td>";
 	$html .= "<td><a href='".$base_path."node/142' class='country_link'>".t('Morocco')."</a></td>";
 	$html .= "<td>&nbsp;</td>";
 	$html .= "<td><a class='climasouth_link_blu ".($lang_name=='fr'?'activel':'')."' href='".$base_path."fr' >".t('French', array(), array('langcode'=>'fr'))."</a></td>";
@@ -269,17 +276,28 @@ function _climasouth_country_flag()
 	return $html;
 }
 //&nbsp;
-function _climasouth_news() 
+function _climasouth_news($block) 
 {	
 	global $base_path;
-	$html = '<div id="climasouth_news">';
-	$html .= "<img class='rss_icon' src='".$base_path."/sites/all/modules/climasouth/resources/rss.png'>";
-	$html .= '<h2 id="climasouth_news_h2">'.l(t('News & Events'),'news_events').'</h2>';	
+
+	$id="climasouth_news";
+	if(!$block){
+		$id.='_page';
+	}
+	$html = '<div id="'.$id.'">';
+
+	if($block){
+		$html .= "<img class='rss_icon' src='".$base_path."/sites/all/modules/climasouth/resources/rss.png'>";
+		$html .= '<h2 id="climasouth_news_h2">'.l(t('News & Events'),'climasouth/news_events').'</h2>';	
+	}
+
+
+	
 	
 	/** load dinamically from database*/
 	$html .= "<ul>"; 
 	
-	$res = dbmng_query("select * from c_news order by date_from", array());
+	$res = dbmng_query("select * from c_news order by date_from desc", array());
 	foreach ($res as $rec) {
 		$place = $rec->place;
 		$title = $rec->title;
@@ -306,7 +324,7 @@ function _climasouth_news()
 			}
 		$date = $days." ".$months." ".$year;
 		
-		$html.="<li class='climasouth_news'>".strtoupper($place) . "<br/>" . $date . "<br/>" . l($title,$node)."</li>";
+		$html.="<li class='climasouth_news'><h3>".l($title,$node).'</h3>'.strtoupper($place) . " - " . $date . "<br/></li>";
 	}
 	
 	$html .= "</ul>";
@@ -383,6 +401,13 @@ function climasouth_menu()
       'type' => MENU_CALLBACK,
    );
 
+		$items['climasouth/news_events'] = array(
+      'title' => 'News & Events',
+      'page callback' => '_climasouth_news_events',
+      'access arguments' => array('access content'),
+      'type' => MENU_CALLBACK,
+   );
+
   $items['climasouth/workspace'] = array(
       'title' => 'Collaborative Workspaces',
       'page callback' => '_climasouth_workspace',
@@ -394,7 +419,7 @@ function climasouth_menu()
   $items['climasouth/resource_edit'] = array(
       'title' => 'Collaborative Workspaces resource edit mode',
       'page callback' => '_climasouth_workspace',
-      'access arguments' => array('view workspace'),
+      'access arguments' => array('add_resurce'),
       'type' => MENU_CALLBACK,
    );
 
@@ -414,6 +439,12 @@ function climasouth_menu()
    );
 
 
+   $items['climasouth/manage_assistance'] = array(
+      'title' => 'Manage Assistance',
+      'page callback' => '_climasouth_mng_request_assistance',
+      'access arguments' => array('manage_assistance'),
+      'type' => MENU_CALLBACK,
+   );
 
   return $items;
 }
@@ -471,7 +502,12 @@ return ($html);
 }
 
 
+function _climasouth_news_events() {
+	$html="";
+	$html=_climasouth_news(false);
 
+	return $html;
+}
 
 
 
@@ -587,8 +623,8 @@ function _climasouth_maps($block)
 		}
 	}
 
-	drupal_add_css( "sites/all/modules/climasouth/climasouth_module.css" );
-	drupal_add_js('sites/all/modules/climasouth/climasouth_module.js');
+	drupal_add_css( "sites/all/modules/climasouth/climasouth_module.css",array('cache' => false) );
+	drupal_add_js('sites/all/modules/climasouth/climasouth_module.js',array('cache' => false));
 
 	if($show_map==1){
 		drupal_add_css('http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.ie.css', array('type' => 'external', 'weight' => CSS_THEME, 'browsers' => array('IE' => 'lt IE 8', '!IE' => FALSE), 'preprocess' => FALSE));
@@ -609,7 +645,7 @@ function _climasouth_maps($block)
 
 
 	$html .= '<div id="cs_top_banner">';
-		$html .= '<div id="map_new_container">'._climasouth_news().'</div>';
+		$html .= '<div id="map_new_container">'._climasouth_news(true).'</div>';
 		$html .= '<div id="label_container">&nbsp;</div>';
 		$html .= '<div id="map_info_container">&nbsp;</div>';
 		$html .= '<div id="map_blue_left">&nbsp;</div>';
@@ -636,8 +672,11 @@ function _climasouth_maps($block)
 
 
 function climasouth_permission() {
-	return array('view workspace' => array('title'=>t('Access to the collarative workspace') ),
-					 'request assistance' => array('title'=> t('Request assistance') )
+	return array(
+			  		'view workspace' => array('title'=>t('View the collaborative workspace') ),
+  					 'add_resource' => array('title'=> t('Add resources to collaborative workspace') ),
+	  				 'request assistance' => array('title'=> t('Request assistance') ),
+		  			 'manage_assistance' => array('title'=> t('Manage Assistance') )
 					);
 }
 

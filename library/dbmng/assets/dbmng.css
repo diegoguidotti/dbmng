@@ -212,8 +212,11 @@ li img.dbmng_picture{
 	width: 80px;
 }
 
+input.dbmng_checkbox{
+	margin-right: 5px !important;
+}
 .dbmng_checkbox_ul{
-	width: 400px;
+	width: 500px;
 	float: left;
 	list-style: none;
 	margin: 0px;

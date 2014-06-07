@@ -26,7 +26,7 @@ function climasouth_leaflet(data, aForm, aParam){
 	  format: 'image/png',
 	  'BGCOLOR': '0xcfeaf3'					  			
 	});
-map.addLayer(back_map); 	
+	map.addLayer(back_map); 	
 
 
 //debug(map.getBounds());	
@@ -115,6 +115,9 @@ function formatTileResources(){
 	jQuery('#sidebar-first').hide();
 	jQuery('#content').width(1200);
 	jQuery('#map_info_container').hide();
+
+	//jQuery('#main-top').show()
+
 
 	search_tag=new Array();
 
@@ -218,11 +221,14 @@ function searchTile(val){
 		
 					
 					for(var n=0; n<vvv.length; n++ ){	
-						if(tags[cls+'|'+vvv[n]]){
-							tags[cls+'|'+vvv[n]]=tags[cls+'|'+vvv[n]]+1;
+
+						var val_ok=vvv[n].trim();	
+
+						if(tags[cls+'|'+val_ok]){
+							tags[cls+'|'+val_ok]=tags[cls+'|'+val_ok]+1;
 						}
 						else{
-							tags[cls+'|'+vvv[n]]=1;
+							tags[cls+'|'+val_ok]=1;
 
 							//console.log('add tag |'+cls+'|'+vvv[n]+' '+vvv);
 						}
@@ -246,6 +252,21 @@ function searchTile(val){
 	function createTagCloud(){
 		
 		var html='';
+		var sel='';
+
+		sel+='<select id="tag_sel_country"><option>Choose a country</option></select>';
+		sel+='<select id="tag_sel_tags"><option>Choose a Tag</option></select>';
+		sel+='<select id="tag_sel_subject"><option>Choose a Subject</option></select>';
+		sel+='<select id="tag_sel_language"><option>Choose a Language</option></select>';
+		sel+='<select id="tag_sel_year"><option>Choose a Year</option></select>';
+		sel+='<select id="tag_sel_file_format"><option>Choose a file format</option></select>';
+
+		jQuery("#tag_sel_container").html(sel);
+
+		jQuery("#tag_sel_container select").change(function(){
+			var s=jQuery(this);
+			addToSearchItem(s.val());
+		});
 
 		var min=1;
 		var max=1;
@@ -263,6 +284,11 @@ function searchTile(val){
 			var val=k.split('|')[1];			
 			var dim=tags[k];	
 
+			console.log(k);
+			if(jQuery('#tag_sel_'+cls)){					
+					jQuery('#tag_sel_'+cls).append('<option value="'+val+'">'+val+'</option>');
+			}
+
 			//il minimo 5, il massimo 20 decide le dimensioni del tag
 			var size=Math.round(8+ (dim/scarto)*30);		
 						
@@ -272,7 +298,7 @@ function searchTile(val){
 
 		var searched='<div id="searched_tags">';
 		if(search_tag.length>0){
-			searched+='<div class="searched_label">Resources has been filtered by: </div>'
+			searched+='<div  class="searched_label">Resources has been filtered by: </div>'
 			for(n=0; n<search_tag.length; n++){
 				searched+='<div class="searched">'+search_tag[n]+'<span ><sup>X</sup></span></div>';
 			}
@@ -280,16 +306,12 @@ function searchTile(val){
 		searched+="</div>";
 		
 		//console.log(html);
-		jQuery('#map_container').html('<div id="tag_cloud">'+html+"</div>"+searched);
+		jQuery('#tag_container').html('<div id="tag_cloud">'+html+"</div>"+searched);
 
 		jQuery('#tag_cloud div.tag').click(function (k,v){
 			var t=jQuery(this);
-			
+			addToSearchItem(t.text());
 
-			if(jQuery.inArray(t.text(), search_tag)==-1){
-				search_tag.push(t.text());
-				searchTile('');
-			}
 		});
 
 		jQuery('#searched_tags div.searched').click(function (k,v){
@@ -309,11 +331,22 @@ function searchTile(val){
 	}
 
 
+function addToSearchItem(txt){
+		if(jQuery.inArray(txt, search_tag)==-1){
+			search_tag.push(txt);
+			searchTile('');
+		}
+}
+
 function climasouth_no_map(){
 
 	
 	cs_mapResize();
-
+	if(jQuery('#main-nav ul.menu>li.last').hasClass('active-trail')){
+		jQuery('#main-top').hide();
+		jQuery('#sidebar-first').hide();
+		jQuery('#content').width(1200);
+	}
 
 	jQuery("div.field-name-field-image").hide();
 	jQuery("div.field-name-field-video").hide();

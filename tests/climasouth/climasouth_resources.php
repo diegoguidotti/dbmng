@@ -59,7 +59,7 @@ function _climasouth_workspace($typeres = null, $edit_id = null)
 									$where = "tag_type='".$typeres."'";
 								}
 
-							$sql = "select id_c_tags, tags from c_tags where $where;";
+							$sql = "select id_c_tags, tags from c_tags ";//where $where;";
 							
 							$res = dbmng_query($sql,array());
 
@@ -139,8 +139,11 @@ function  _climasouth_resource_search(){
 
 	if($show_list){
 		
+		$html ='<div id="tag_container">&nbsp;</div>';
+		$html .='<div id="tag_sel_container">&nbsp;</div>';
 
-		$html='<div id="resource_search">';
+		$html .='<div id="resource_search">';
+		
 
 		$html.='<div id="resource_search_items">';
 
@@ -152,7 +155,8 @@ function  _climasouth_resource_search(){
 		if(isset($_REQUEST['free_search'])){
 			$fs=strtolower($_REQUEST['free_search']);
 		}
-		$html.= '<input placeHolder="Search across resources" id="free_search" type="input" name="free_search" value="'.$fs.'" />';
+		
+		$html.= '<div style="clear:both; width:100%"><input placeHolder="Search across resources" id="free_search" type="input" name="free_search" value="'.$fs.'" /></div>';
 		//$html.='</td><td width="500px" valign="top"><div id="tag_cloud"></div></td></table>';
 
 /*
@@ -196,8 +200,6 @@ function  _climasouth_resource_search(){
 		if($fs<>''){
 			$q .= "AND (lower(res_description) LIKE '%".$fs."%' OR  lower(res_title) LIKE '%".$fs."%' OR  lower(res_author) LIKE '%".$fs."%' OR  lower(organisation) LIKE '%".$fs."%' OR  lower(res_tags) LIKE '%".$fs."%' ) ";
 		}
-		$q.=" group by c.id_c_resource, file, res_title, res_author, res_description, id_c_visibility, res_tags, res_date, organisation ";
-		$q.= "order by c.id_c_resource desc;";
 
 		$html.="<script>jQuery(document).ready(function(){formatTileResources();});</script>";
 
@@ -215,15 +217,29 @@ function  _climasouth_resource_search(){
 			$q .= "AND id_c_visibility>=20 ";
 		}
 		else{
-			$q .= "AND id_c_visibility=99 ";
+			$q .= "AND id_c_visibility>=99 ";
 		}	
+		$q.=" group by c.id_c_resource, file, res_title, res_author, res_description, id_c_visibility, res_tags, res_date, organisation ";
+		$q.= "order by c.id_c_resource desc;";
+
 		//echo $q;
 
 		$res = dbmng_query( $q, array() );
+		$n=0;
 		foreach($res as $r)
 			{
 				$html.=_climasouth_render_res($r);
+				$n++;				
 			}
+	
+		if($n==0){
+			if ( !($user->uid)){
+				$html.='There are no documents available to non-registered users. Please login.';
+			}
+			else{
+				$html.='There are no documents available.';
+			}
+		}
 
 
 

@@ -220,12 +220,12 @@ function _climasouth_mng_request_assistance()
 						{
 							foreach( $sres as $r)
 								{
-									$html .= "<br/>num. " . $nrecs . " replay";
+									$html .= "<br/>num. " . $nrecs . " reply";
 								}
 						}
 					else	
 						{
-							$html .= "<br/><a href='?act=replay&id=".$rec->id_c_request_assistance."'>".t('Replay')."</a>";
+							$html .= "<br/><a href='?act=reply&id=".$rec->id_c_request_assistance."'>".t('Reply')."</a>";
 						}
 					
 					$html .= "</div>";
@@ -240,7 +240,7 @@ function _climasouth_mng_request_assistance()
 			$aParam['ui']['btn_name'] = "Send";
 			$aParam['auto_field']['uid']['I'] = $user->uid;
 
-			if( $_REQUEST['act'] == "replay" )
+			if( $_REQUEST['act'] == "reply" )
 				{
 					$aParam['hidden_vars']['id'] = $_REQUEST['id'];
 
