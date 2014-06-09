@@ -289,6 +289,10 @@ function _climasouth_news($block)
 	if($block){
 		$html .= "<img class='rss_icon' src='".$base_path."/sites/all/modules/climasouth/resources/rss.png'>";
 		$html .= '<h2 id="climasouth_news_h2">'.l(t('News & Events'),'climasouth/news_events').'</h2>';	
+		}
+	else{
+		$html .='<div class="field field-name-field-image field-type-image field-label-above"><img typeof="foaf:Image" src="http://www.climasouth.eu/drupal/sites/all/modules/climasouth/resources/news.png" width="553" height="311" alt="" /></div>';
+
 	}
 
 
@@ -419,7 +423,7 @@ function climasouth_menu()
   $items['climasouth/resource_edit'] = array(
       'title' => 'Collaborative Workspaces resource edit mode',
       'page callback' => '_climasouth_workspace',
-      'access arguments' => array('add_resurce'),
+      'access arguments' => array('add_resource'),
       'type' => MENU_CALLBACK,
    );
 
