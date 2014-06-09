@@ -57,7 +57,7 @@ function dbmng_create_form_process($aForm, $aParam, $actiontype="")
 				}
 		}
 		else{
-			echo(t('act variable is missing'));
+			//echo(t('act variable is missing'));
 		}
 
 	return $ret;
