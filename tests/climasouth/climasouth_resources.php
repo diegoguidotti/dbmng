@@ -381,5 +381,3 @@ function _climasouth_render_res($r)
 	$html.="</div>";
 	return $html;
 }
-
-?>

@@ -5,7 +5,8 @@ include_once "sites/all/libraries/jpgraph/src/jpgraph.php";
 include_once "sites/all/libraries/jpgraph/src/jpgraph_radar.php";
 include_once "climasouth_assistance.php";
 include_once "climasouth_resources.php";
-//include_once "feed.php";
+
+
 
 //******************************************************************************
 // Drupal Module 
@@ -75,7 +76,7 @@ function climasouth_block_view($delta='')
 				break;
 			case 'climasouth_toolbar' :
 				$block['content'] = _climasouth_toolbar();
-				break;
+				break;			
 			case 'climasouth_news' :
 				$block['content'] = _climasouth_news(true);
 				break;
@@ -249,7 +250,7 @@ function _climasouth_country_flag()
 	global $language ;
 	$lang_name = $language->language ;
 	
-	$rss = _climasouth_news_rss();
+	//$rss = _climasouth_news_rss();
 
 	
 	$html = "<table id='flag_container'>";
@@ -276,9 +277,9 @@ function _climasouth_country_flag()
 	$html .= "</tr>";
 	$html .= "</table>";
 	
-	$html .= "<!--\n";
-	$html .= $rss;
-	$html .= "\n-->";
+	//$html .= "<!--\n";
+	//$html .= $rss;
+	//$html .= "\n-->";
 	
 	return $html;
 }
@@ -331,7 +332,14 @@ function _climasouth_news_rss()
 		}
 	$rss .= '</channel>';
 	$rss .= '</rss>';
-	return $rss;
+
+
+	header("Content-Type: text/plain; charset=utf-8");
+	echo $rss;
+	module_invoke_all('exit');
+	exit();
+
+	//return '';//$rss;
 }
 
 function _climasouth_news($block) 
@@ -346,7 +354,7 @@ function _climasouth_news($block)
 	
 	$sql_limit = "";
 	if($block){
-		$html .= "<a href='".$base_path."/sites/all/modules/climasouth/feed.php'>";
+		$html .= "<a href='".$base_path."/climasouth/news_events_rss'>";
 		$html .= "<img class='rss_icon' src='".$base_path."/sites/all/modules/climasouth/resources/rss.png'>";
 		$html .= "</a>";
 		$html .= '<h2 id="climasouth_news_h2">'.l(t('News & Events'),'climasouth/news_events').'</h2>';
@@ -472,6 +480,14 @@ function climasouth_menu()
       'access arguments' => array('access content'),
       'type' => MENU_CALLBACK,
    );
+
+		$items['climasouth/news_events_rss'] = array(
+      'title' => 'News & Events',
+      'page callback' => '_climasouth_news_rss',
+      'access arguments' => array('access content'),
+      'type' => MENU_CALLBACK,
+   );
+
 
   $items['climasouth/workspace'] = array(
       'title' => 'Collaborative Workspaces',

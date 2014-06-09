@@ -328,5 +328,3 @@ function _climasouth_create_aForm_assistance()
 	);
 	return $aForm;
 }
-
-?>
