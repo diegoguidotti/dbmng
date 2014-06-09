@@ -275,7 +275,60 @@ function _climasouth_country_flag()
 	$html .= "</table>";
 	return $html;
 }
-//&nbsp;
+
+function _climasouth_news_rss()
+{
+	$rss = '<?xml version="1.0" encoding="utf-8"?>';
+	$rss .= '<rss version="2.0">';
+	$rss .= '<channel>';
+	$rss .= '<title>ClimaSouth feed</title>';
+	$rss .= '<link>http://www.climasouth.eu/</link>';
+	$rss .= '<description>Add small description</description>';
+	
+	$res = dbmng_query("select * from c_news order by date_from desc ", array());
+	
+	foreach( $res as $rec )
+		{
+			$place = $rec->place;
+			$title = $rec->title;
+			$date_from = new DateTime($rec->date_from);
+			$date_to = $rec->date_to;
+			$node = $rec->linked_page;
+			if(isset($date_to))
+				$date_to = new DateTime($rec->date_to);
+
+			$days = $date_from->format("d");
+			$months = $date_from->format("F");
+			$year = $date_from->format("Y");
+			
+			if( isset($date_to) )
+				{
+					$date_to = new DateTime($rec->date_to);
+					$days .= "-".$date_to->format("d");
+					
+					if( $months != $date_to->format("F") )
+						$months .= " ".$date_to->format("F");
+
+					if( $year != $date_to->format("Y") )
+						$months .= " ".$date_to->format("Y");
+				}
+			$date = $days." ".$months." ".$year;
+		
+			$rss .= '<item>';
+			$rss .= '<title>'.$title.'</title>';
+			$rss .= '<link>'.l($title,$node).'</link>';
+			$rss .= '<guid>'.l($title,$node).'</guid>';
+			$rss .= '<pubDate>Wed, 27 Nov 2013 15:17:32 GMT</pubDate>';
+			$rss .= '<description>'.strtoupper($place) . " - " . $date.'</description>';
+			$rss .= '</item>';
+		}
+	
+	$filename = base_path().'docs/rss/rss.xml';
+	$handle = fopen($filename, 'w');
+	fwrite($handle, $rss);
+	fclose($handle);
+}
+
 function _climasouth_news($block) 
 {	
 	global $base_path;
@@ -285,14 +338,15 @@ function _climasouth_news($block)
 		$id.='_page';
 	}
 	$html = '<div id="'.$id.'">';
-
+	
+	$sql_limit = "";
 	if($block){
 		$html .= "<img class='rss_icon' src='".$base_path."/sites/all/modules/climasouth/resources/rss.png'>";
-		$html .= '<h2 id="climasouth_news_h2">'.l(t('News & Events'),'climasouth/news_events').'</h2>';	
+		$html .= '<h2 id="climasouth_news_h2">'.l(t('News & Events'),'climasouth/news_events').'</h2>';
+		$sql_limit = " limit 3";
 		}
 	else{
 		$html .='<div class="field field-name-field-image field-type-image field-label-above"><img typeof="foaf:Image" src="http://www.climasouth.eu/drupal/sites/all/modules/climasouth/resources/news.png" width="553" height="311" alt="" /></div>';
-
 	}
 
 
@@ -301,7 +355,7 @@ function _climasouth_news($block)
 	/** load dinamically from database*/
 	$html .= "<ul>"; 
 	
-	$res = dbmng_query("select * from c_news order by date_from desc", array());
+	$res = dbmng_query("select * from c_news order by date_from desc " . $sql_limit, array());
 	foreach ($res as $rec) {
 		$place = $rec->place;
 		$title = $rec->title;
