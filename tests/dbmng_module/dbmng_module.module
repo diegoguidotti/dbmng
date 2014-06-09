@@ -438,7 +438,8 @@ function dbmng_edit_tables()
 
 		$table = 'test';
 		
-		$html  = t('Document page');
+		//$html  = t('Document page');
+		$html = "";
 		if( isset($_REQUEST['tbl']) )
 		{
 			//get the form!!!
@@ -453,7 +454,9 @@ function dbmng_edit_tables()
 			$aParam['filters']               = array();
 			$aParam['hidden_vars']           = array();
 			$aParam['hidden_vars']['tbl']	   = $_REQUEST['tbl']; //save the table id
-
+			$aParam['user_function']['dup']	 = 0;
+			$aParam['user_function']['prt_rec'] = 0;          // export record in pdf format
+			$aParam['user_function']['prt_tbl'] = 0;			
 			//test filter records with a specific uid
 			//$aParam['filters']['id_user']	   = $user->uid;       // save the user id
 			$aParam['tbl_footer']            = 1;                // allow to add filtering
