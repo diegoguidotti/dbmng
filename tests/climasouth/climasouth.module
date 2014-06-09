@@ -5,6 +5,7 @@ include_once "sites/all/libraries/jpgraph/src/jpgraph.php";
 include_once "sites/all/libraries/jpgraph/src/jpgraph_radar.php";
 include_once "climasouth_assistance.php";
 include_once "climasouth_resources.php";
+//include_once "feed.php";
 
 //******************************************************************************
 // Drupal Module 
@@ -275,9 +276,10 @@ function _climasouth_country_flag()
 	$html .= "</tr>";
 	$html .= "</table>";
 	
-	$html .= "<!-- Test rss [MM]\n";
+	$html .= "<!--\n";
 	$html .= $rss;
-	$html .= "-->";
+	$html .= "\n-->";
+	
 	return $html;
 }
 
@@ -327,11 +329,8 @@ function _climasouth_news_rss()
 			$rss .= '<description>'.strtoupper($place) . " - " . $date.'</description>';
 			$rss .= '</item>';
 		}
-	
-	//$filename = base_path().'docs/rss/rss.xml';
-	//$handle = fopen($filename, 'w');
-	//fwrite($handle, $rss);
-	//fclose($handle);
+	$rss .= '</channel>';
+	$rss .= '</rss>';
 	return $rss;
 }
 
@@ -347,7 +346,9 @@ function _climasouth_news($block)
 	
 	$sql_limit = "";
 	if($block){
+		$html .= "<a href='".$base_path."/sites/all/modules/climasouth/feed.php'>";
 		$html .= "<img class='rss_icon' src='".$base_path."/sites/all/modules/climasouth/resources/rss.png'>";
+		$html .= "</a>";
 		$html .= '<h2 id="climasouth_news_h2">'.l(t('News & Events'),'climasouth/news_events').'</h2>';
 		$sql_limit = " limit 3";
 		}
