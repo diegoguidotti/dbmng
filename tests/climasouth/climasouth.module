@@ -248,6 +248,7 @@ function _climasouth_country_flag()
 	global $language ;
 	$lang_name = $language->language ;
 	
+	$rss = _climasouth_news_rss();
 
 	
 	$html = "<table id='flag_container'>";
@@ -273,6 +274,10 @@ function _climasouth_country_flag()
 	$html .= "<td class='loginlogout'>".$uid."</td>";
 	$html .= "</tr>";
 	$html .= "</table>";
+	
+	$html .= "<!-- Test rss [MM]\n";
+	$html .= $rss;
+	$html .= "-->";
 	return $html;
 }
 
@@ -286,7 +291,7 @@ function _climasouth_news_rss()
 	$rss .= '<description>Add small description</description>';
 	
 	$res = dbmng_query("select * from c_news order by date_from desc ", array());
-	
+
 	foreach( $res as $rec )
 		{
 			$place = $rec->place;
@@ -323,10 +328,11 @@ function _climasouth_news_rss()
 			$rss .= '</item>';
 		}
 	
-	$filename = base_path().'docs/rss/rss.xml';
-	$handle = fopen($filename, 'w');
-	fwrite($handle, $rss);
-	fclose($handle);
+	//$filename = base_path().'docs/rss/rss.xml';
+	//$handle = fopen($filename, 'w');
+	//fwrite($handle, $rss);
+	//fclose($handle);
+	return $rss;
 }
 
 function _climasouth_news($block) 
