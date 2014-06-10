@@ -457,6 +457,11 @@ function dbmng_edit_tables()
 			$aParam['user_function']['dup']	 = 0;
 			$aParam['user_function']['prt_rec'] = 0;          // export record in pdf format
 			$aParam['user_function']['prt_tbl'] = 0;			
+			
+			//[MM: 10.06.2014] - Be carefull! This is only for climasouth website
+			if( $_REQUEST['tbl'] == 21 )
+				$aParam['auto_field']['timestamp']['I']		  = time();
+				
 			//test filter records with a specific uid
 			//$aParam['filters']['id_user']	   = $user->uid;       // save the user id
 			$aParam['tbl_footer']            = 1;                // allow to add filtering
