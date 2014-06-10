@@ -1,12 +1,9 @@
 <?php
-
 include_once "sites/all/libraries/dbmng/dbmng.php";
 include_once "sites/all/libraries/jpgraph/src/jpgraph.php";
 include_once "sites/all/libraries/jpgraph/src/jpgraph_radar.php";
 include_once "climasouth_assistance.php";
 include_once "climasouth_resources.php";
-
-
 
 //******************************************************************************
 // Drupal Module 
@@ -310,6 +307,9 @@ function _climasouth_news_rss()
 			$months = $date_from->format("F");
 			$year = $date_from->format("Y");
 			
+			$timestamp = $rec->timestamp;
+			$pubdate = date("D, d M Y H:i:s T", $timestamp);
+    
 			if( isset($date_to) )
 				{
 					$date_to = new DateTime($rec->date_to);
@@ -327,15 +327,15 @@ function _climasouth_news_rss()
 			$rss .= '<title>'.$title.'</title>';
 			$rss .= '<link>'.l($title,$node).'</link>';
 			$rss .= '<guid>'.l($title,$node).'</guid>';
-			$rss .= '<pubDate>Wed, 27 Nov 2013 15:17:32 GMT</pubDate>';
-			$rss .= '<description>'.strtoupper($place) . " - " . $date.'</description>';
+			$rss .= '<pubDate>'.$pubdate.'</pubDate>';
+			$rss .= '<description>'.strtoupper($place) . " - " . $date. '</description>';
 			$rss .= '</item>';
 		}
 	$rss .= '</channel>';
 	$rss .= '</rss>';
 
 
-	header("Content-Type: text/plain; charset=utf-8");
+	header("Content-Type: text/xml; charset=utf-8");
 	echo $rss;
 	module_invoke_all('exit');
 	exit();
