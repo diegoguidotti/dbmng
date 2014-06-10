@@ -289,7 +289,7 @@ function _climasouth_news_rss()
 	$rss .= '<channel>';
 	$rss .= '<title>ClimaSouth feed</title>';
 	$rss .= '<link>http://www.climasouth.eu/</link>';
-	$rss .= '<description>Add small description</description>';
+	$rss .= '<description>News from the ClimaSouth News and Events web site.</description>';
 	
 	$res = dbmng_query("select * from c_news order by date_from desc ", array());
 
