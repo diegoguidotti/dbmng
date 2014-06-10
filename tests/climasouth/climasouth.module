@@ -238,11 +238,11 @@ function _climasouth_country_flag()
 	global $user;
 	global $base_path;
 
-	$uid =  l(t('log in'), 'user');
+	$uid =  l(t('Log in'), 'user');
 	if ($user->uid) 
 		{
 			$opt = array('attributes' => array('class' => 'climasouth_link_blu'));
-			$uid = l(t('log out'), 'user/logout', $opt); //l($user->name, 'user', $opt) . " | " . 
+			$uid = l(t('Log out'), 'user/logout', $opt); //l($user->name, 'user', $opt) . " | " . 
 		 //$html .= '<span class="climasouth_username">'.l($user->name, 'user').'</span> - ';
 		 //$html .= l(t('log out'), 'user/logout');
 		}
