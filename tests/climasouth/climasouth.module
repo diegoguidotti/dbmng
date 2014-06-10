@@ -245,6 +245,7 @@ function _climasouth_country_flag()
 			$uid = l(t('Log out'), 'user/logout', $opt); //l($user->name, 'user', $opt) . " | " . 
 		 //$html .= '<span class="climasouth_username">'.l($user->name, 'user').'</span> - ';
 		 //$html .= l(t('log out'), 'user/logout');
+		 
 		}
 
 	global $language ;
