@@ -1475,5 +1475,4 @@ function req_equal($type_var, $val){
 	//echo $ret;
 	return $ret;
 }
-
 ?>
