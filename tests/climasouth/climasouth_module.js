@@ -1,5 +1,44 @@
 
 
+jQuery(document).ready(function() {
+	
+
+
+	for(n=0; n<acronyms.length; n++){
+
+		var a=acronyms[n];
+		console.log(a);
+
+		var re = new RegExp(" "+a.acronym+" ","g");
+		
+
+		jQuery('#content div.field-name-body').html(jQuery('#content div.field-name-body').html().replace(re,' <span class="acronym" short_desc="'+a.acronym+'" long_desc="'+a.description+'">'+a.acronym+'</span> '));
+
+
+		var re2 = new RegExp(" "+a.acronym+"s ","g");
+		jQuery('#content div.field-name-body').html(jQuery('#content div.field-name-body').html().replace(re2,' <span class="acronym" short_desc="'+a.acronym+'s" long_desc="'+a.description+'s">'+a.acronym+'s</span> '));
+
+	}
+
+
+
+	jQuery('span.acronym').click(function(){
+		var s=jQuery(this);
+		
+		var lon=s.attr('long_desc');
+		var sho=s.attr('short_desc');
+		if(s.html()==sho){
+			s.html(lon+'');
+		}
+		else{
+			s.html(sho);
+		}
+		//alert(t);
+	});
+
+});
+
+
 //draw a leaflet maps containing data
 function climasouth_leaflet(data, aForm, aParam){
 
@@ -216,21 +255,22 @@ function searchTile(val){
 					cls=v2.attr('class');
 					txt=v2.children('span.cvalue').html();
 
-					var vvv=txt.split('<span>,</span>');
-				
-		
+					if(cls!='author'){
+
+						var vvv=txt.split('<span>,</span>');
 					
-					for(var n=0; n<vvv.length; n++ ){	
+						for(var n=0; n<vvv.length; n++ ){	
 
-						var val_ok=vvv[n].trim();	
+							var val_ok=vvv[n].trim();	
 
-						if(tags[cls+'|'+val_ok]){
-							tags[cls+'|'+val_ok]=tags[cls+'|'+val_ok]+1;
-						}
-						else{
-							tags[cls+'|'+val_ok]=1;
+							if(tags[cls+'|'+val_ok]){
+								tags[cls+'|'+val_ok]=tags[cls+'|'+val_ok]+1;
+							}
+							else{
+								tags[cls+'|'+val_ok]=1;
 
-							//console.log('add tag |'+cls+'|'+vvv[n]+' '+vvv);
+								//console.log('add tag |'+cls+'|'+vvv[n]+' '+vvv);
+							}
 						}
 					}
 			});

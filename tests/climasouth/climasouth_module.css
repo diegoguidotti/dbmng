@@ -1,4 +1,6 @@
-
+span.acronym{
+	text-decoration:underline;
+}
 
 h4 {
 	color: #dd6659 !important;

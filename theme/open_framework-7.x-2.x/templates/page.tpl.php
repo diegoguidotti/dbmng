@@ -92,6 +92,20 @@
 	    <div id="breadcrumb"><?php print $breadcrumb; ?></div>
     <?php endif; ?>
 
+		<?php
+			$q=db_query("select * from c_acronym;", array());
+			$ret=array();
+			foreach($q as $rec){
+				$a=Array();
+				$a['acronym']=$rec->acronym;
+				$a['description']=$rec->description;
+
+				$ret[]=($a);
+			}
+			echo "<script>var acronyms=".json_encode($ret),';</script>';
+		?>
+
+
     <div id="main-content" class="row main-content">
       <?php if ($page['sidebar_first']): ?>
       <div id="sidebar-first" class="sidebar span3 site-sidebar-first">
