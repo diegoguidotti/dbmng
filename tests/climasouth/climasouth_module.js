@@ -9,15 +9,16 @@ jQuery(document).ready(function() {
 		var a=acronyms[n];
 		console.log(a);
 
-		var re = new RegExp(" "+a.acronym+" ","g");
 		
+		if( jQuery('#content div.field-name-body').html() )
+		{
+			var re = new RegExp(" "+a.acronym+" ","g");
+			jQuery('#content div.field-name-body').html(jQuery('#content div.field-name-body').html().replace(re,' <span class="acronym" short_desc="'+a.acronym+'" long_desc="'+a.description+'">'+a.acronym+'</span> '));
 
-		jQuery('#content div.field-name-body').html(jQuery('#content div.field-name-body').html().replace(re,' <span class="acronym" short_desc="'+a.acronym+'" long_desc="'+a.description+'">'+a.acronym+'</span> '));
 
-
-		var re2 = new RegExp(" "+a.acronym+"s ","g");
-		jQuery('#content div.field-name-body').html(jQuery('#content div.field-name-body').html().replace(re2,' <span class="acronym" short_desc="'+a.acronym+'s" long_desc="'+a.description+'s">'+a.acronym+'s</span> '));
-
+			var re2 = new RegExp(" "+a.acronym+"s ","g");
+			jQuery('#content div.field-name-body').html(jQuery('#content div.field-name-body').html().replace(re2,' <span class="acronym" short_desc="'+a.acronym+'s" long_desc="'+a.description+'s">'+a.acronym+'s</span> '));
+		}
 	}
 
 
