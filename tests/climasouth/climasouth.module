@@ -250,35 +250,57 @@ function _climasouth_country_flag()
 	
 	//$rss = _climasouth_news_rss();
 
-	
-	$html = "<table id='flag_container'>";
+// 	$html = "<table id='flag_container'>";
+// 	$html .= "<tr>";
+// 	$html .= "<td><a href='".$base_path."node/136' class='country_link'>".t('Algeria')."</a></td>";
+// 	$html .= "<td><a href='".$base_path."node/139' class='country_link'>".t('Lebanon')."</a></td>";
+// 	$html .= "<td><a href='".$base_path."node/145' class='country_link'>".t('Syria')."</a></td>";
+// 	$html .= "<td><a class='climasouth_link_blu ".($lang_name=='ar'?'activel':'')."' href='".$base_path."ar' >".t('Arabic', array(), array('langcode'=>'ar'))."</a></td>";
+// 	$html .= "</tr><tr>";
+// 	$html .= "<td><a href='".$base_path."node/137' class='country_link'>".t('Egypt')."</a></td>";
+// 	$html .= "<td><a href='".$base_path."node/164' class='country_link'>".t('Libya')."</a></td>";
+// 	$html .= "<td><a href='".$base_path."node/141' class='country_link'>".t('Tunisia')."</a></td>";
+// 	$html .= "<td><a class='climasouth_link_blu ".($lang_name=='en'?'activel':'')."' href='".$base_path."' >".t('English', array(), array('langcode'=>'en'))."</a></td>";
+// 	$html .= "</tr><tr>";
+// 	$html .= "<td><a href='".$base_path."node/154' class='country_link'>".t('Israel')."</a></td>";
+// 	$html .= "<td><a href='".$base_path."node/142' class='country_link'>".t('Morocco')."</a></td>";
+// 	$html .= "<td>&nbsp;</td>";
+// 	$html .= "<td><a class='climasouth_link_blu ".($lang_name=='fr'?'activel':'')."' href='".$base_path."fr' >".t('French', array(), array('langcode'=>'fr'))."</a></td>";
+// 	$html .= "</tr><tr>";
+// 	$html .= "<td><a href='".$base_path."node/144' class='country_link'>".t('Jordan')."</a></td>";
+// 	$html .= "<td><a href='".$base_path."node/143' class='country_link'>".t('Palestine')."</a></td>";
+// 	$html .= "<td>&nbsp;</td>";
+// 	$html .= "<td class='loginlogout'>".$uid."</td>";
+// 	$html .= "</tr>";
+// 	$html .= "</table>";
+
+	$html = "<div id='flag_container'>";
+	$html .= "<table id='flag_container'>";
 	$html .= "<tr>";
 	$html .= "<td><a href='".$base_path."node/136' class='country_link'>".t('Algeria')."</a></td>";
 	$html .= "<td><a href='".$base_path."node/139' class='country_link'>".t('Lebanon')."</a></td>";
-	$html .= "<td><a href='".$base_path."node/145' class='country_link'>".t('Syria')."</a></td>";
 	$html .= "<td><a class='climasouth_link_blu ".($lang_name=='ar'?'activel':'')."' href='".$base_path."ar' >".t('Arabic', array(), array('langcode'=>'ar'))."</a></td>";
+	$html .= "<td rowspan='5'><a href='http://www.enpi-info.eu/'><span><img id='cs_enpi' src='http://www.climasouth.eu/drupal/sites/all/modules/climasouth/resources/logo_enpi64.png' /></span></a></td>";
 	$html .= "</tr><tr>";
 	$html .= "<td><a href='".$base_path."node/137' class='country_link'>".t('Egypt')."</a></td>";
 	$html .= "<td><a href='".$base_path."node/164' class='country_link'>".t('Libya')."</a></td>";
-	$html .= "<td><a href='".$base_path."node/141' class='country_link'>".t('Tunisia')."</a></td>";
 	$html .= "<td><a class='climasouth_link_blu ".($lang_name=='en'?'activel':'')."' href='".$base_path."' >".t('English', array(), array('langcode'=>'en'))."</a></td>";
 	$html .= "</tr><tr>";
 	$html .= "<td><a href='".$base_path."node/154' class='country_link'>".t('Israel')."</a></td>";
 	$html .= "<td><a href='".$base_path."node/142' class='country_link'>".t('Morocco')."</a></td>";
-	$html .= "<td>&nbsp;</td>";
+	//$html .= "<td>&nbsp;</td>";
 	$html .= "<td><a class='climasouth_link_blu ".($lang_name=='fr'?'activel':'')."' href='".$base_path."fr' >".t('French', array(), array('langcode'=>'fr'))."</a></td>";
 	$html .= "</tr><tr>";
 	$html .= "<td><a href='".$base_path."node/144' class='country_link'>".t('Jordan')."</a></td>";
 	$html .= "<td><a href='".$base_path."node/143' class='country_link'>".t('Palestine')."</a></td>";
-	$html .= "<td>&nbsp;</td>";
+	//$html .= "<td>&nbsp;</td>";
 	$html .= "<td class='loginlogout'>".$uid."</td>";
+	$html .= "</tr><tr>";
+	$html .= "<td><a href='".$base_path."node/145' class='country_link'>".t('Syria')."</a></td>";
+	$html .= "<td><a href='".$base_path."node/141' class='country_link'>".t('Tunisia')."</a></td>";
 	$html .= "</tr>";
 	$html .= "</table>";
-	
-	//$html .= "<!--\n";
-	//$html .= $rss;
-	//$html .= "\n-->";
-	
+	$html .= "</div>";
 	return $html;
 }
 
