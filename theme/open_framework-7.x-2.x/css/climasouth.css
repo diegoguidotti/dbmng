@@ -2,6 +2,12 @@
 	width:240px;
 }
 
+#content{
+	background-image:url('backround-pattern.png');
+	background-position: right top;
+background-repeat:no-repeat;
+}
+
 #block-menu-menu-tools{
 	position: absolute;
 	top: 0px;
