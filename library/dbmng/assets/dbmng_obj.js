@@ -179,11 +179,12 @@ Dbmng.prototype.start = function()
 			data: {"id_table" : obj.id_table, "get_records": true },
 			dataType: "json",
 			error: function (e) {
+				debug('Error request');
 				debug(e);
 				debug(e.responseText);
 			},
-
 			success: function (data) {
+				debug('send request success');
 				debug(data);	
 				if(data.records){
 					var newRecords={};
@@ -310,7 +311,7 @@ Dbmng.prototype.createTable = function(){
 		jQuery('#'+obj.id+'_view').append("<a data-inline='true' data-role='button' id='"+id_sel_add+"'>"+t("Add")+"</a>");
 	
 
-
+	console.log('bind '+id_sel_add);
 	jQuery("#"+id_sel_add).unbind().click(function(){
 		var current=jQuery('#'+obj.id+"_table tr.working");
 
@@ -1208,6 +1209,9 @@ Dbmng.prototype.createForm = function(id_record) {
 	}
 	
 	var form='<form >';
+
+	console.log(this.aForm);
+
 	jQuery.each(this.aForm.fields, function(index, field){ 			
 		//debug(index + ": " + dbmng_check_is_pk(field));
 		value = '';

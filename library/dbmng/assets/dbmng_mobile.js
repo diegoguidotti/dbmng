@@ -73,6 +73,7 @@ function createTableList(d){
 
 
 function showTable(id_table) {
+
 	//Check if exist an aForm in the jstorage
 	jQuery.mobile.changePage("#table_edit");
 
