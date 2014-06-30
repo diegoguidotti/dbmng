@@ -127,7 +127,11 @@ function climasouth_leaflet(data, aForm, aParam){
 
 
 			var html = "<div class='climasouth_popup'>";
-			html +='<div class="cs_left"><img class="fla" src="'+base_path+v.flag+'"/><h3><a href="'+base_path+'climasouth/country?id_c_country='+v.id_c_country+'">'+v.country_name+'</a></h3></div>';
+			html +='<div class="cs_left"><img class="fla" src="'+base_path+v.flag+'"/><h3>';
+			//html+='<a href="'+base_path+'climasouth/country?id_c_country='+v.id_c_country+'">';
+			html+=v.country_name;
+			//html+='</a>';
+			html+='</h3></div>';
 			html += '<div class="cs_right"><b>Population (millions):</b><br/>'+population+'<br/><b>GDP ($ billions):</b><br/>'+gdp+'<br/><b>GDP per capita ($):</b><br/>'+gdp_pc+'<b><br/>Human Development Index:</b><br/>'+hdi+'</div></div>';
 
 			//html += '<a hrgef="'+base_path+'climasouth/country?id_c_country='+v.id_c_country+'">'+Drupal.t('go to page')+'</a></div>';

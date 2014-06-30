@@ -1211,6 +1211,7 @@ Dbmng.prototype.createForm = function(id_record) {
 	var form='<form >';
 
 	console.log(this.aForm);
+console.log(this.aForm.fields);
 
 	jQuery.each(this.aForm.fields, function(index, field){ 			
 		//debug(index + ": " + dbmng_check_is_pk(field));
