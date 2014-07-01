@@ -1,4 +1,6 @@
 var DEBUG=true;
+if(typeof window.console == 'undefined') { window.console = {log: function (msg) {} }; }
+
 function debug(d){
 	if(DEBUG){
 		if('console' in self && 'log' in console){
