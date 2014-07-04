@@ -24,7 +24,12 @@ dbmng_widget_prepare_val = function(obj_id, id_record, index){
 * dbmng_*_form generate the html form for the field
 */
 dbmng_widget_form = function(obj_id,  fld, field, id_record, value, more, act ){
-	var html  = "<input type='text' name='"+fld+"' id='"+obj_id+"_"+id_record+"_"+fld+"' " + more;
+
+	console.log(field);
+	var ty="text";
+	if(field.type=='double')
+		ty="number"
+	var html  = "<input type='"+ty+"' name='"+fld+"' id='"+obj_id+"_"+id_record+"_"+fld+"' " + more;
 	html += " value= '"+value+"' ";	
 	html += Dbmng.layout_get_nullable(field,act);
 	html += " />\n";
@@ -146,26 +151,35 @@ dbmng_password_form = function(obj_id,  fld, field, id_record, value, more, act 
 //<button onclick="getImage();">Upload a Photo</button>
 dbmng_picture_form = function(obj_id,  fld, field, id_record, value, more, act ){
 
-	jQuery.jStorage.set('tmp_picture',{'obj_id':obj_id, 'id_record': id_record, 'fld': fld});
+	if(is_cordova()){
 
-	html = '<button onclick="dbmng_getImage();">Upload a Photo</button>';
-	html += "<input type='input' name='"+fld+"' id='"+obj_id+"_"+id_record+"_"+fld+"' " + more;
-	html += " value= '"+value+"' ";	
-	html += Dbmng.layout_get_nullable(field,act);
-	html += " />\n";
+		jQuery.jStorage.set('tmp_picture',{'obj_id':obj_id, 'id_record': id_record, 'fld': fld});
+
+		html = '<button onclick="dbmng_getImage();">Upload a Photo</button>';
+		html += "<input type='hidden' name='"+fld+"' id='"+obj_id+"_"+id_record+"_"+fld+"' " + more;
+		html += " value= '"+value+"' ";	
+		html += Dbmng.layout_get_nullable(field,act);
+		html += " />\n";
 	
-	//the value is a json object with imageURI and a field to chek if it has been uploaded
-	var img_src='';
-	if(value){
-		try{
-			var img = JSON.parse(value);
-			img_src=img.imageURI;
+		//the value is a json object with imageURI and a field to chek if it has been uploaded
+		var img_src='';
+		if(value){
+			try{
+				var img = JSON.parse(value);
+				img_src=img.imageURI;
+			}
+			catch(e){
+				debug ('Error in parsing '+value);
+			}
 		}
-		catch(e){
-			debug ('Error in parsing '+value);
-		}
+		html+='<img id="'+obj_id+'_'+id_record+'_'+fld+'_image" width="300px" src="'+img_src+'" />';
 	}
-	html+='<img id="'+obj_id+'_'+id_record+'_'+fld+'_image" width="300px" src="'+img_src+'" />';
+	else{
+		html+='';
+		html += "<input type='hidden' name='"+fld+"' id='"+obj_id+"_"+id_record+"_"+fld+"' " + more;
+		html += " value= '' ";	
+		html += " /><br/>Image upload available only in web version and mobile app.\n";
+	}
 
 	return html;
 }
@@ -203,7 +217,7 @@ dbmng_getImage = function(){
 		});
 	}
 	else{
-		debug('Image upload available only in mobile');	
+		alert('Image upload available only in mobile');	
 	}
 }
  

@@ -151,6 +151,8 @@ function doLogout(){
 	
 	      jQuery('#login_form').show();
 	      jQuery('#logout_form').hide();
+
+
       }
       else{                    
           ;

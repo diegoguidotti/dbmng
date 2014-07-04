@@ -518,7 +518,7 @@ Dbmng.prototype.syncData = function() {
 										try{
 											var img = JSON.parse(rec.record[fld_name]);
 											if(!img.uploaded){
-													var o={'imageURI': img.imageURI, rec: obj.aData.records[k]};
+													var o={'imageURI': img.imageURI, rec: obj.aData.records[k], 'fld_name':fld_name, 'gui':k};
 													img_to_upload.push(o);												
 											}
 										}
@@ -566,7 +566,9 @@ Dbmng.prototype.uploadImage = function (v) {
 
 	
 
-  var uri = encodeURI(base_call+'ajax_mobile.php');
+//  var uri = encodeURI(base_call+'ajax_mobile.php');
+
+	var uri = encodeURI(this.ajax_url);
 
 	var options = new FileUploadOptions();
 	options.fileKey="file";
@@ -575,6 +577,11 @@ Dbmng.prototype.uploadImage = function (v) {
 
 		var params = new Object();
     params.upload_picture = "ok";
+    params.json_picture = JSON.stringify(v);
+    params.id_table = obj.id_table; 
+		params.fld_name = v.fld_name;  
+		params.gui = v.gui;    
+
     options.params = params;
 	//var headers={'upload_picture':'ok'};
 
@@ -596,17 +603,75 @@ Dbmng.prototype.uploadImage = function (v) {
 
 }
 
-function dbmng_upload_win(r) {
-            console.log("Code = " + r.responseCode);
-            console.log("Response = " + r.response);
-            console.log("Sent = " + r.bytesSent);
-        }
 
-        function dbmng_upload_fail(error) {
-            alert("An error has occurred: Code = " + error.code);
-            console.log("upload error source " + error.source);
-            console.log("upload error target " + error.target);
+Dbmng.prototype.uploadedImage = function (gui, fld_name) {
+	var obj=this;
+
+
+	
+	if(obj.aData.records[gui]){
+		var img =JSON.parse(obj.aData.records[gui].record[fld_name]);
+		img.uploaded=1;
+		obj.aData.records[gui].record[fld_name]=JSON.stringify(img);
+		obj.updateStorage();
+	}
+	else{
+		console.log("XXX Not found "+gui+" "+fld_name+" "+obj.id);
+
+		
+		
+	}
+
+
+}
+
+function dbmng_upload_win(r) {
+    console.log("Code = " + r.responseCode);
+    console.log("Response = " + r.response);
+    console.log("Sent = " + r.bytesSent);
+
+		try{
+			var d=eval(' ('+r.response+');');
+
+			console.log("XXX "+d.ok+"  "+d.id_table+" "+d.pk+" "+d.fld_name+" "+d.gui);
+
+			if(d.ok==1){
+				var param={
+                'div_element':'table_edit',   //div id containing the table
+                'ajax_url':default_call,  //Where is locate the php with ajax function (relative to the current PHP file)
+                'prepend': 1,    			  	//invert the order of records (new's one above)
+                'auto_sync': 0,    			  //Save automatically to the server record by record
+                'inline':0,               //Enable editing in the table without creating a new form
+                'auto_edit':1,      //Run the synch after moving on a new row; auto edit is available only in auto_sync mode
+                'mobile':1		//Enable jQuery-mobile css style
         }
+		
+		
+				var db= new Dbmng(d.id_table, param); 
+				db.start(); 
+			console.log("XXX pre");
+				db.uploadedImage(d.gui, d.fld_name);
+			console.log("XXX post");
+				;
+
+			}
+			else if(d.ok==0){
+
+			}
+			else{
+				
+			}
+		}
+		catch (e){
+			alert(e+" "+r.response);
+		}
+}
+
+function dbmng_upload_fail(error) {
+    alert("An error has occurred: Code = " + error.code);
+    console.log("upload error source " + error.source);
+    console.log("upload error target " + error.target);
+}
 
 /////////////////////////////////////////////////////////////////////////////
 // Dbmng.prototype.attachCommand
@@ -829,12 +894,14 @@ Dbmng.prototype.createRow = function (value, id_record) {
 	if( obj.mobile == 1 ){
 		
 		if(html_row ==''){
-			html_row+='No data available';
-			debug('No data available');
+			//html_row+='No data available aaaa';
+			debug('No data availabl aaaa');
 			debug(value);
 		}
+		else{
 
-		html_row = '<span id="'+obj.id+'_edit_'+id_record+'">' +  html_row + "</span>"; 
+			html_row = '<span id="'+obj.id+'_edit_'+id_record+'">' +  html_row + "</span>"; 
+		}
 
 	}
 	else{
@@ -1212,8 +1279,8 @@ Dbmng.prototype.createForm = function(id_record) {
 	
 	var form='<form >';
 
-	console.log(this.aForm);
-console.log(this.aForm.fields);
+//	console.log(this.aForm);
+//console.log(this.aForm.fields);
 
 	jQuery.each(this.aForm.fields, function(index, field){ 			
 		//debug(index + ": " + dbmng_check_is_pk(field));
@@ -1304,14 +1371,47 @@ console.log(this.aForm.fields);
 	}
 	
 	jQuery('#'+obj.id+"_"+id_record+"_insert").unbind().click(function(){			
-		obj.prepareInsert(id_record);		
+
+		if(obj.validateForm(id_record)){
+			obj.prepareInsert(id_record);		
+		}
 	});
 	
 	jQuery('#'+obj.id+"_"+id_record+"_update").unbind().click(function(){
-		obj.prepareUpdate(id_record);		
+		if(obj.validateForm(id_record)){
+			obj.prepareUpdate(id_record);		
+		}
 	});
 }
 
+/////////////////////////////////////////////////////////////////////////////
+// Dbmng.prototype.prepareInsert
+// ======================
+/// check if it has been compiled the required field
+/**
+*/
+Dbmng.prototype.validateForm = function(id_record){
+	var obj=this;
+	var ok=true;
+	var msg='';
+	jQuery.each(obj.aForm.fields, function(index, field){ 
+		if(	typeof field.nullable != 'undefined' && field.nullable == 0 ){
+
+			var val= jQuery('#'+obj.id+'_'+id_record+'_'+index).val();
+			console.log(" validate "+val+" "+field.label);
+			if( val==''){
+				msg+="Field "+field.label+" can not be empty. ";
+				ok=false;
+			}
+		}
+	});
+
+	if(!ok){
+		alert(msg);
+	}
+
+	return ok;
+}
 
 /////////////////////////////////////////////////////////////////////////////
 // Dbmng.prototype.prepareInsert

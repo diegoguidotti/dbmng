@@ -226,3 +226,8 @@ input.dbmng_checkbox{
 	float: left;
 	width: 45%;
 }
+
+
+#tapholdmenu ul {
+list-style-type: none;
+}
