@@ -170,28 +170,6 @@ function goToLogin(){
 }
 
 
-// Create a dialog and display it
-function showMessageBox (message) {
-	
-	//console.log(message);
-	
-	// Create it in memory
-	var dlg = $("<div />")
-	    .attr("data-role", "dialog")
-	    .attr("id", "dialog");
-	var content = $("<div />")
-	    .attr("data-role", "content")
-	    .append($("<span />").html(message));
-	content.append("<a href=\"javascript:$('.ui-dialog').dialog('close'); " +
-	    "return false;\" data-role=\"button\" data-rel=\"back\">Close</a>");
-	
-	dlg.append(content);
-	
-	dlg.appendTo($.mobile.pageContainer);
-	
-	// show the dialog programmatically
-	jQuery.mobile.changePage(dlg, {role: "dialog"});
-}
 
 
 

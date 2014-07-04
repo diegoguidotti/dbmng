@@ -436,6 +436,10 @@ Dbmng.prototype.syncData = function() {
 
 		if(obj.isSaved()){
 			debug('NO DATA TO SAVE '+obj.id);
+
+
+			showMessageBox("There are no data to save");
+
 			obj.running=false;
 		}
 		else {
@@ -452,6 +456,10 @@ Dbmng.prototype.syncData = function() {
 				dataType: "json",
 				success: function (data) {
 
+
+					var error="";
+
+
 					if(data.deleted){
 						jQuery.each(data.deleted, function(k,v){
 							if(v.ok==1){
@@ -460,6 +468,7 @@ Dbmng.prototype.syncData = function() {
 							}
 							else{
 								obj.aData.records[k].error=v.error;
+								error++;
 							}
 						});
 					}
@@ -484,10 +493,12 @@ Dbmng.prototype.syncData = function() {
 								obj.aData.records[k].state='ok';
 								obj.aData.records[k].record[pk_key] = v.inserted_id;
 								delete obj.aData.inserted[k];	
+								obj.aData.records[k].error='';						
 
 							}
 							else{														
-									//obj.aData.records[k].error=v.error;
+									obj.aData.records[k].error=v.error;
+									error++;
 							}
 						});
 					}
@@ -496,7 +507,8 @@ Dbmng.prototype.syncData = function() {
 						jQuery.each(data.updated, function(k,v){
 							if(v.ok==1){
 								if(obj.aData.records[k]){
-									obj.aData.records[k].state='ok';							
+									obj.aData.records[k].state='ok';	
+									obj.aData.records[k].error='';						
 									delete obj.aData.updated[k];	
 
 								}
@@ -504,12 +516,20 @@ Dbmng.prototype.syncData = function() {
 									alert('Record '+k+' not found in updated');
 								}
 							}
-							else{							
-								debug(v);
-								//obj.aData.records[k].error=v.error;
+							else{		
+								obj.aData.records[k].error=v.error;
+								error++;
 							}
 						});
 					}
+
+					if(error==0){
+						showMessageBox("All the data has been uploaded correctly");
+					}
+					else{
+							showMessageBox("Some error occurred during data uploading. Records affected: "+error);
+					}
+
 
 					if(is_cordova()){
 						//if exist a picture field find some record to be uploaded
@@ -538,7 +558,7 @@ Dbmng.prototype.syncData = function() {
 					obj.updateStorage();
 					
 
-					debug('end '+obj.prog);
+					//debug('end '+obj.prog);
 					obj.running=false;
 
 					//end of Success	
@@ -886,7 +906,7 @@ Dbmng.prototype.createRow = function (value, id_record) {
 				}
 			}
 			else{
-				debug('field '+key+' not found in aForm' );
+				//debug('field '+key+' not found in aForm' );
 			}
 		}
 	
@@ -895,12 +915,15 @@ Dbmng.prototype.createRow = function (value, id_record) {
 		
 		if(html_row ==''){
 			//html_row+='No data available aaaa';
-			debug('No data availabl aaaa');
+			debug('No data available aaaa');
 			debug(value);
 		}
 		else{
 
 			html_row = '<span id="'+obj.id+'_edit_'+id_record+'">' +  html_row + "</span>"; 
+			if(value.error && value.error!=''){
+						html_row += '<span title="'+value.error+'" class="dbmng_error">'+t('Error')+': '+value.error+'</span>';
+			}
 		}
 
 	}
@@ -1577,6 +1600,34 @@ return {
   newGuid: create,
   empty: EMPTY
 };})();
+
+
+// Create a dialog and display it
+function showMessageBox (message) {
+	
+	//console.log(message);
+	if(jQuery.mobile)	{
+		// Create it in memory
+		var dlg = $("<div />")
+			  .attr("data-role", "dialog")
+			  .attr("id", "dialog");
+		var content = $("<div />")
+			  .attr("data-role", "content")
+			  .append($("<span />").html(message));
+		content.append("<a href=\"javascript:$('.ui-dialog').dialog('close'); " +
+			  "return false;\" data-role=\"button\" data-rel=\"back\">Close</a>");
+	
+		dlg.append(content);
+	
+		dlg.appendTo($.mobile.pageContainer);
+	
+		// show the dialog programmatically
+		jQuery.mobile.changePage(dlg, {role: "dialog"});
+	}
+	else{
+		alert(message);	
+	}
+}
 
 
 /*
