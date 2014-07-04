@@ -85,6 +85,7 @@ function dbmng_create_form_process($aForm, $aParam, $actiontype="")
 /**
 \param $aForm  		Associative array with all the characteristics
 \param $aParam  	Associative array with some custom variable used by the renderer
+\return $result	SQL result
 */
 function dbmng_delete($aForm, $aParam) 
 {
@@ -122,12 +123,13 @@ function dbmng_delete($aForm, $aParam)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// dbmng_search
+// dbmng_search_add_hidden
 // ======================
-/// This function return a subset of data
+/// This function add hidden var to the generated form
 /**
 \param $aForm  		Associative array with all the characteristics
 \param $aParam  	Associative array with some custom variable used by the renderer
+\return $hv			Hidden variable
 */
 function dbmng_search_add_hidden($aForm, $aParam, $type) 
 {
@@ -160,6 +162,14 @@ function dbmng_search_add_hidden($aForm, $aParam, $type)
 return $hv;
 }
 
+/////////////////////////////////////////////////////////////////////////////
+// dbmng_check_is_pk
+// ======================
+/// This function return true if the $fld_value is a primary key
+/**
+\param $fld_value  		Field name
+\return $ret			boolean
+*/
 function dbmng_check_is_pk($fld_value)
 {
 	$ret=false;
@@ -171,6 +181,14 @@ function dbmng_check_is_pk($fld_value)
 	return $ret;
 }
 
+/////////////////////////////////////////////////////////////////////////////
+// dbmng_check_is_autopk
+// ======================
+/// This function return true if the $fld_value is an autoincrement primary key
+/**
+\param $fld_value  		Field name
+\return $ret			boolean
+*/
 function dbmng_check_is_autopk($fld_value)
 {
 	$ret=false;
@@ -190,6 +208,7 @@ function dbmng_check_is_autopk($fld_value)
 /**
 \param $aForm  		Associative array with all the characteristics
 \param $aParam  	Associative array with some custom variable used by the renderer
+\result $return	SQL result
 */
 function dbmng_duplicate($aForm, $aParam) 
 {
@@ -278,13 +297,12 @@ function dbmng_duplicate($aForm, $aParam)
 /**
 \param $aForm  		Associative array with all the characteristics
 \param $aParam  	Associative array with some custom variable used by the renderer
+\result $result	SQL result
 */
 function dbmng_insert($aForm, $aParam) 
 {
 	$sWhat = "";
 	$sVal  = "";
-
-
 
 	$var = array();
 	$bSelectNM = false;
@@ -309,9 +327,6 @@ function dbmng_insert($aForm, $aParam)
 						}
 				}
 		}
-
-
-
 
 	if( isset($aParam) )
 		{
@@ -377,6 +392,7 @@ function dbmng_insert($aForm, $aParam)
 \param $aForm  		Associative array with all the characteristics
 \param $aParam  	Associative array with some custom variable used by the renderer
 \param $id_key  	primary key of "one" table
+\result $result	SQL result
 */
 function dbmng_insert_nm($aForm, $aParam, $id_key)
 {
@@ -384,7 +400,6 @@ function dbmng_insert_nm($aForm, $aParam, $id_key)
 	$whereFields='';
 	$whereFieldsV='';
 	
-
 	foreach ( $aForm['fields'] as $fld => $fld_value )
 		{									
 			if( dbmng_check_is_pk($fld_value) )
@@ -403,8 +418,6 @@ function dbmng_insert_nm($aForm, $aParam, $id_key)
 				}
 		}
 
-
-
 	foreach ( $aForm['fields'] as $fld => $fld_value )
 		{
 			if($fld_value['widget']=='select_nm')
@@ -414,8 +427,6 @@ function dbmng_insert_nm($aForm, $aParam, $id_key)
 					
 					$where_del   = substr($whereFields,0,strlen($whereFields)-2);
 					$where_del_v = substr($whereFieldsV,0,strlen($whereFieldsV)-2);
-
-					
 					
 					dbmng_query("delete from ".$table_nm." WHERE ". $where_del ."=".$where_del_v, $aWhere);
 					//echo "<br/>".debug_sql_statement("delete from ".$table_nm." WHERE ". $where_del ."=".$where_del_v, $aWhere);
@@ -425,11 +436,9 @@ function dbmng_insert_nm($aForm, $aParam, $id_key)
 
 					$vals= explode('|',dbmng_value_prepare($fld_value,$fld,$_POST,$aParam));
 					//print_r($vals);
-
 					
 					foreach ( $vals as $k => $v )
 						{	
-							
 							$aVals = array_merge( $aWhere, array(":".$field_nm => intval($v) ) );
 							
 							$sql = "insert into ".$table_nm." (".$whereFields." ".$field_nm.") values (".$whereFieldsV." :".$field_nm.")";
@@ -454,8 +463,6 @@ function dbmng_insert_nm($aForm, $aParam, $id_key)
 
 				}
 		}
-
-
 	return $result;
 }
 /////////////////////////////////////////////////////////////////////////////
@@ -495,11 +502,10 @@ function dbmng_create_form_upload_file($aForm, $aParam)
 /**
 \param $aForm  		Associative array with all the characteristics
 \param $aParam  	Associative array with some custom variable used by the renderer
+\result $result	SQL result
 */
 function dbmng_update($aForm, $aParam) 
 {
-
-
 	$sSet = "";
 	$var = array();
 
