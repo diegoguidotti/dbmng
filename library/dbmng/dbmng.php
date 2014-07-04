@@ -1345,8 +1345,10 @@ function dbmng_value_prepare_html($fld_value, $value, $aParam, $layout_type)
 	return $ret;
 }
 
-
-//add the js e css for drupal
+/////////////////////////////////////////////////////////////////////////////
+// dbmng_get_table_structure
+// ======================
+/// This function add javascript and css to drupal CMS
 function dbmng_add_drupal_libraries()
 	{
 		drupal_add_css( "sites/all/modules/dbmng_module/dbmng_module.css" );
@@ -1463,6 +1465,16 @@ function dbmng_get_table_structure($id_table)
 
 
 
+/////////////////////////////////////////////////////////////////////////////
+// req_equal
+// ======================
+/// This function return true if an element value is equal to the val
+/// parameter
+/**
+\param $type_var  		$_REQUEST element
+\param $val  				$_REQUEST value
+\return $ret				boolean
+*/
 function req_equal($type_var, $val){
 	$ret=false;
 	//echo $type_var;
