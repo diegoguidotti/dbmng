@@ -79,15 +79,30 @@ dbmng_checkbox_prepare_val = function(obj_id, id_record, index){
 }
 
 dbmng_checkbox_form = function(obj_id,  fld, field, id_record, value, more, act ){
-	var html='';
-	html = "<input class='dbmng_checkbox' type='checkbox' name='"+fld+"' id='"+obj_id+"_"+id_record+"_"+fld+"' ";
+
+
+
+/*
+	var html='';//dbmng_checkbox 
+	html = "<input class='custom' type='checkbox' name='"+fld+"' id='"+obj_id+"_"+id_record+"_"+fld+"' ";
   if( value == 1 || (value != 0 && field.default == 1) ){
 		html += " checked='true' ";
 	}	
+
+
   //the field will never reply with a null value (true or false)
 	//if setted as a non_nullable it will accept only true values
 	//$html .= layout_get_nullable($fld_value);	
-	html += " />\n";
+	html += " / >\n";
+*/
+	//html+='<input id=new type=checkbox name=news><label for=news>'+field.label+'</label>';
+	
+	   html='<input class="custom"  name='+fld+' id='+obj_id+"_"+id_record+"_"+fld+' type=checkbox  ';
+		if( value == 1 || (value != 0 && field.default == 1) ){
+			html += " checked='true' ";
+		}	
+
+		 html+='><label for='+obj_id+"_"+id_record+"_"+fld+'>'+field.label+'</label>';
 	return html;
 }
 
@@ -95,7 +110,7 @@ dbmng_checkbox_html = function(val, field ){
 	if(val==0)
 		ret='no';
 	else
-		ret='si';
+		ret='yes';
 	return ret;
 }
 
@@ -155,7 +170,8 @@ dbmng_picture_form = function(obj_id,  fld, field, id_record, value, more, act )
 
 		jQuery.jStorage.set('tmp_picture',{'obj_id':obj_id, 'id_record': id_record, 'fld': fld});
 
-		html = '<button onclick="dbmng_getImage();">Upload a Photo</button>';
+		html = '<button onclick="dbmng_getImage('+navigator.camera.PictureSourceType.CAMERA+');">Take a Photo</button>';
+		html += '<button onclick="dbmng_getImage('+navigator.camera.PictureSourceType.SAVEDPHOTOALBUM+');">Upload a Photo</button>';
 		html += "<input type='hidden' name='"+fld+"' id='"+obj_id+"_"+id_record+"_"+fld+"' " + more;
 		html += " value= '"+value+"' ";	
 		html += Dbmng.layout_get_nullable(field,act);
@@ -172,7 +188,21 @@ dbmng_picture_form = function(obj_id,  fld, field, id_record, value, more, act )
 				debug ('Error in parsing '+value);
 			}
 		}
-		html+='<img id="'+obj_id+'_'+id_record+'_'+fld+'_image" width="300px" src="'+img_src+'" />';
+
+		var exclude=false;
+
+		if(device.version.startsWith("4.4") && device.platform=='Android' ){
+			if(!img_src.startsWith('file')){
+				exclude=true;
+			}
+		}
+
+		if(!exclude){
+			html+='<img id="'+obj_id+'_'+id_record+'_'+fld+'_image" width="300px" src="'+img_src+'" />';
+		}
+		else{
+			html+="Image loaded";
+		}
 	}
 	else{
 		html ='';
@@ -195,15 +225,33 @@ dbmng_picture_html = function(val, field ){
 			debug ('Error in parsing '+val);
 		}
 	}
-	if(img_src != "" )
-		html = "<img src='"+img_src+"' class='dbmng_picture'  />";
-	else
-		html = "-";
+	if(is_cordova()){
+		var exclude=false;
+
+		if(device.version.startsWith("4.4") && device.platform=='Android' ){
+			if(!img_src.startsWith('file')){
+				exclude=true;
+			}
+		}
+		if(img_src != "" )
+			if(!exclude){
+				html = "<img src='"+img_src+"' class='dbmng_picture'  />";
+
+			}
+			else{
+				html= "i";
+			}
+		else
+			html = "-";
+	}
+	else{
+		html="-";
+	}
 		
 	return html;
 }
 
-dbmng_getImage = function(){
+dbmng_getImage = function(source_type){
   // Retrieve image file location from specified source
   if(is_cordova()){
 
@@ -213,7 +261,7 @@ dbmng_getImage = function(){
 			},{
 			quality: 50, 
 			destinationType: navigator.camera.DestinationType.FILE_URI,
-			sourceType: navigator.camera.PictureSourceType.CAMERA
+			sourceType: source_type
 		});
 	}
 	else{

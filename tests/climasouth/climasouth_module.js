@@ -446,6 +446,8 @@ function cs_mapResize(){
 	jQuery('#main-menu').width(mw);
 	jQuery('#footer').width(mw);
 
+	jQuery('#climasouth_toolbar').width(1170);
+
 	jQuery('#main-menu div.navbar').width(1170);
 	jQuery('#header div.span12').width(1170);
 	jQuery('#main-top').width(1170);

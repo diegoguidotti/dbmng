@@ -216,6 +216,9 @@ function _climasouth_toolbar()
 	$html .= "<li class='climasouth_toolbar'>".l(t('Credits'),'credit')."</li>";
 
 	$html .= "</ul>";
+
+	$html .= '<div class="agro_logo"><a href="http://www.agriconsulting.it/"><img src="'.$base_path.'/sites/all/modules/climasouth/resources/logo_agri.png" /></a></div>';
+
 	$html.='</div>';
 	return $html;
 }

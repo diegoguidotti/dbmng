@@ -72,11 +72,23 @@ climasouth_login {
 #climasouth_toolbar_ul {
 	padding: 0px;
 	margin: 0px;
+	float:left;
 }
 
 #block-climasouth-climasouth-toolbar {
 	padding: 0px;
 }
+
+
+div.agro_logo{
+	float:right;
+	padding-left: 100px;
+}
+
+div.agro_logo img{
+	width:200px;
+}
+
 
 #climasouth_mng_ass{
 	border: 1px solid #ccc;

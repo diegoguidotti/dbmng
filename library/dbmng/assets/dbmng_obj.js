@@ -443,9 +443,12 @@ Dbmng.prototype.syncData = function() {
 			obj.running=false;
 		}
 		else {
+
+
+			dialogStart("Starting to upload data & images");
+
 			obj.prog = obj.prog+1;
-			debug('start '+obj.prog);
-			debug(JSON.stringify(obj.aData.inserted));
+			console.log('start '+obj.prog);
 
 			//TODO: check if it is better to use ajaxmanager
 			//obj.am.addReq({ //
@@ -459,22 +462,27 @@ Dbmng.prototype.syncData = function() {
 
 					var error="";
 
+					
 
 					if(data.deleted){
+						//dialogAppend('record to delete: '+data.deleted.length);
 						jQuery.each(data.deleted, function(k,v){
 							if(v.ok==1){
 								delete obj.aData.records[k];
-								delete obj.aData.deleted[k];							
+								delete obj.aData.deleted[k];
+								dialogAppend('Record deleted');							
 							}
 							else{
 								obj.aData.records[k].error=v.error;
 								error++;
+								dialogAppend('Delete Record Error');	
 							}
 						});
 					}
 
 					var pk_key=obj.aForm.primary_key[0];
 			
+					
 
 					//check if exist a picture field
 					var fld_picture= new Array();
@@ -482,34 +490,40 @@ Dbmng.prototype.syncData = function() {
 					jQuery.each(obj.aForm.fields, function(k,v){
 						if(v.widget=='picture'){
 							fld_picture.push(k);
-							debug ('add picture field '+k);
+							console.log ('add picture field '+k);
 						}
 					});
 
 
 					if(data.inserted){
+						
 						jQuery.each(data.inserted, function(k,v){
 							if(v.ok==1){
 								obj.aData.records[k].state='ok';
 								obj.aData.records[k].record[pk_key] = v.inserted_id;
 								delete obj.aData.inserted[k];	
-								obj.aData.records[k].error='';						
+								obj.aData.records[k].error='';	
+								dialogAppend('Record inserted');												
 
 							}
 							else{														
 									obj.aData.records[k].error=v.error;
+									dialogAppend('Insert Record Error');	
 									error++;
 							}
 						});
 					}
 
-					if(data.updated){
+
+					
+					if(data.updated){						
 						jQuery.each(data.updated, function(k,v){
 							if(v.ok==1){
 								if(obj.aData.records[k]){
 									obj.aData.records[k].state='ok';	
 									obj.aData.records[k].error='';						
 									delete obj.aData.updated[k];	
+									dialogAppend('Record updated');		
 
 								}
 								else{
@@ -519,34 +533,55 @@ Dbmng.prototype.syncData = function() {
 							else{		
 								obj.aData.records[k].error=v.error;
 								error++;
+								dialogAppend('Update Record Error');
 							}
 						});
 					}
 
 					if(error==0){
-						showMessageBox("All the data has been uploaded correctly");
+						dialogAppend("All the data has been uploaded correctly");
 					}
 					else{
-							showMessageBox("Some error occurred during data uploading. Records affected: "+error);
+						dialogAppend("Some error occurred during data uploading. Records affected: "+error);
+
 					}
 
 
 					if(is_cordova()){
 						//if exist a picture field find some record to be uploaded
+
+						
+
 						jQuery.each(fld_picture, function(k2,fld_name){										
 							jQuery.each(obj.aData.records, function(k,rec){	
 										try{
-											var img = JSON.parse(rec.record[fld_name]);
-											if(!img.uploaded){
-													var o={'imageURI': img.imageURI, rec: obj.aData.records[k], 'fld_name':fld_name, 'gui':k};
-													img_to_upload.push(o);												
+											if(rec){		
+
+												console.log("fldpict"+rec.record[fld_name]);
+												var img = JSON.parse(rec.record[fld_name]);
+												if(img){
+													if(!img.uploaded){
+															var o={'imageURI': img.imageURI, rec: obj.aData.records[k], 'fld_name':fld_name, 'gui':k};
+															img_to_upload.push(o);												
+													}
+												}
 											}
 										}
-										catch(e){debug(e);}
+										catch(e){console.log(e);}
 								});
 						});
 
+						obj.current_image=0;
+
+						if(	img_to_upload.length>0){
+							dialogAppend("Start pictures uploading ("+img_to_upload.length+") ");
+						}
+						else{
+								dialogAppend("There are no picture to be uploaded ");
+						}		
+
 						jQuery.each(img_to_upload, function(k,v){
+							
 							obj.uploadImage(v);
 						});
 					}
@@ -564,7 +599,9 @@ Dbmng.prototype.syncData = function() {
 					//end of Success	
 				},
 				error: function (xhr, ajaxOptions, thrownError){
-			  	debug(xhr);
+			  	console.log(xhr);
+					console.log(ajaxOptions);
+					console.log(thrownError);
 					obj.running=false;
 		  	 //debug(thrownError);
 			  }   
@@ -608,35 +645,80 @@ Dbmng.prototype.uploadImage = function (v) {
 	//options.headers = headers;
 
 	var ft = new FileTransfer();
-	
+	obj.current_image++;
+	var ci=obj.current_image;
+
+	dialogAppend('Uploading image '+ci+': <span id="upload_prog_'+ci+'"></span> ');	
+
 	ft.onprogress = function(progressEvent) {
-		debug(progressEvent.loaded +" "+ progressEvent.total);
-			/*
-		  if (progressEvent.lengthComputable) {
-		    loadingStatus.setPercentage(progressEvent.loaded / progressEvent.total);
-		  } else {
-		    loadingStatus.increment();
-		  }*/
+		//console.log("AAAAAAAAAAAAAAAAAAAAAAA "+progressEvent.loaded +" "+ progressEvent.total);
+
+		jQuery("#upload_prog_"+ci).html(""+(100*(progressEvent.loaded / progressEvent.total))+"%");
+
+			
 	};
 	
-	ft.upload(fileURL, uri, dbmng_upload_win, dbmng_upload_fail, options);
+	ft.upload(fileURL, uri, 
+
+		function (r) {
+				console.log("Code = " + r.responseCode);
+				console.log("Response = " + r.response);
+				console.log("Sent = " + r.bytesSent);
+
+				try{
+					var d=eval(' ('+r.response+');');
+
+					console.log("XXX "+d.ok+"  "+d.id_table+" "+d.pk+" "+d.fld_name+" "+d.gui);
+
+					if(d.ok==1){
+						
+		
+						
+			
+						obj.uploadedImage(d.gui, d.fld_name, ci);
+						;
+
+					}
+					else if(d.ok==0){
+
+					}
+					else{
+				
+					}
+				}
+				catch (e){
+					alert(e+" "+r.response);
+				}
+		}	
+
+		, function (error) {
+				dialogAppend('Error during image uploading '+error.code);
+				//alert("An error has occurred: Code = " + error.code);
+				console.log("upload error source " + error.source);
+				console.log("upload error target " + error.target);
+		}
+		, options);
 
 }
 
 
-Dbmng.prototype.uploadedImage = function (gui, fld_name) {
+Dbmng.prototype.uploadedImage = function (gui, fld_name, ci) {
 	var obj=this;
 
-
+	
 	
 	if(obj.aData.records[gui]){
 		var img =JSON.parse(obj.aData.records[gui].record[fld_name]);
 		img.uploaded=1;
 		obj.aData.records[gui].record[fld_name]=JSON.stringify(img);
 		obj.updateStorage();
+
+		jQuery("#upload_prog_"+ci).html("100%")
+		
 	}
 	else{
 		console.log("XXX Not found "+gui+" "+fld_name+" "+obj.id);
+		dialogAppend('Image uploaded ');	
 
 		
 		
@@ -644,7 +726,7 @@ Dbmng.prototype.uploadedImage = function (gui, fld_name) {
 
 
 }
-
+/*
 function dbmng_upload_win(r) {
     console.log("Code = " + r.responseCode);
     console.log("Response = " + r.response);
@@ -669,9 +751,8 @@ function dbmng_upload_win(r) {
 		
 				var db= new Dbmng(d.id_table, param); 
 				db.start(); 
-			console.log("XXX pre");
+			
 				db.uploadedImage(d.gui, d.fld_name);
-			console.log("XXX post");
 				;
 
 			}
@@ -686,12 +767,9 @@ function dbmng_upload_win(r) {
 			alert(e+" "+r.response);
 		}
 }
+*/
 
-function dbmng_upload_fail(error) {
-    alert("An error has occurred: Code = " + error.code);
-    console.log("upload error source " + error.source);
-    console.log("upload error target " + error.target);
-}
+
 
 /////////////////////////////////////////////////////////////////////////////
 // Dbmng.prototype.attachCommand
@@ -1308,6 +1386,8 @@ Dbmng.prototype.createForm = function(id_record) {
 	jQuery.each(this.aForm.fields, function(index, field){ 			
 		//debug(index + ": " + dbmng_check_is_pk(field));
 		value = '';
+
+		form+='<fieldset data-role="controlgroup">';
 		
 		var view_field=true;
 		if(dbmng_check_is_pk(field)){
@@ -1336,6 +1416,7 @@ Dbmng.prototype.createForm = function(id_record) {
 			}
 			form += obj.layout_form_widget(index, field, id_record, value, '', act) + "<br/>";
 
+			
 			if(obj.inline==1){
 				form+='</td>';
 			}
@@ -1343,6 +1424,8 @@ Dbmng.prototype.createForm = function(id_record) {
 		else if (dbmng_check_is_pk(field))	{
 			form+="<td>&nbsp</td>";
 		}
+
+		form+="</fieldset>";
 	});
 
 	form+="</form>";
@@ -1383,6 +1466,9 @@ Dbmng.prototype.createForm = function(id_record) {
 	  jQuery.mobile.changePage("#record_edit");
 		//jQuery('#record_edit_container').html(form).trigger("create");
 		jQuery("#record_edit div:jqmData(role=content)").html(form).trigger("create");
+
+		//jQuery("#record_edit input[type='checkbox']").checkboxradio();
+
 	}
 	else{
 		if(obj.inline==1){
@@ -1629,6 +1715,66 @@ function showMessageBox (message) {
 	}
 }
 
+
+
+// Create a dialog and display it
+function dialogStart (message) {
+	
+	//console.log(message);
+	if(jQuery.mobile)	{
+
+
+		if(jQuery('#dialog_save'))
+			jQuery('#dialog_save').remove();
+
+
+		// Create it in memory
+		var dlg = $("<div />")
+			  .attr("data-role", "dialog")
+			  .attr("id", "dialog_save");
+		var content = $("<div />")
+			  .attr("data-role", "content")
+			  .append($("<span />").html("<div id=\"dialog_save_content\">"+message+"</div>"));
+		content.append("<a id=\"dialog_save_close\"  href=\"javascript:$('.ui-dialog').dialog('close'); " +
+			  "return false;\" data-role=\"button\" data-rel=\"back\">Close</a>");
+	
+		dlg.append(content);
+	
+		dlg.appendTo($.mobile.pageContainer);
+	
+		// show the dialog programmatically
+		jQuery.mobile.changePage(dlg, {role: "dialog"});
+	}
+	else{
+		alert(message);	
+	}
+}
+
+
+function dialogAppend(message){
+
+	console.log("append "+message);
+	try{
+		jQuery("#dialog_save_content").append('<br/>'+message);
+	}
+	catch(e){
+		console.log(e);
+	}
+}
+
+
+function dialogClose(){
+	jQuery("#dialog_save_close").show();
+}
+
+
+
+if (typeof String.prototype.startsWith != 'function') {
+  // see below for better implementation!
+  String.prototype.startsWith = function (str){
+    return this.indexOf(str) == 0;
+  };
+}
 
 /*
  * Return true/false indicating whether we're running under Cordova/Phonegap
