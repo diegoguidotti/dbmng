@@ -81,12 +81,12 @@ climasouth_login {
 
 
 div.agro_logo{
-	float:right;
-	padding-left: 100px;
+	float:right;	
 }
 
 div.agro_logo img{
-	width:200px;
+	/*width:255px;*/
+	padding-right:5px;
 }
 
 
