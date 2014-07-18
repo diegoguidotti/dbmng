@@ -42,8 +42,8 @@ function Dbmng(idt , p) {
 	        requests.push(opt);
         },
         removeReq:  function(opt) {
-            if( $.inArray(opt, requests) > -1 )
-	            requests.splice($.inArray(opt, requests), 1);
+            if( jQuery.inArray(opt, requests) > -1 )
+	            requests.splice(jQuery.inArray(opt, requests), 1);
         },
         run: function() {
 	        var self = this,
@@ -59,7 +59,7 @@ function Dbmng(idt , p) {
 	            };   
 							debug('manda');
 							debug(requests[0]);
-	            $.ajax(requests[0]);
+	            jQuery.ajax(requests[0]);
             } else {
               self.tid = setTimeout(function() {
 								self.run.apply(self, []);
@@ -578,12 +578,16 @@ Dbmng.prototype.syncData = function() {
 						}
 						else{
 								dialogAppend("There are no picture to be uploaded ");
+								dialogClose();
 						}		
 
 						jQuery.each(img_to_upload, function(k,v){
 							
 							obj.uploadImage(v);
 						});
+					}
+					else{
+						dialogClose();
 					}
 
 
@@ -599,6 +603,9 @@ Dbmng.prototype.syncData = function() {
 					//end of Success	
 				},
 				error: function (xhr, ajaxOptions, thrownError){
+
+					dialogAppend("The server replied with an error: "+thrownError);
+					dialogClose();
 			  	console.log(xhr);
 					console.log(ajaxOptions);
 					console.log(thrownError);
@@ -680,7 +687,7 @@ Dbmng.prototype.uploadImage = function (v) {
 
 					}
 					else if(d.ok==0){
-
+						alert(""+d.error);
 					}
 					else{
 				
@@ -693,6 +700,7 @@ Dbmng.prototype.uploadImage = function (v) {
 
 		, function (error) {
 				dialogAppend('Error during image uploading '+error.code);
+				dialogClose();
 				//alert("An error has occurred: Code = " + error.code);
 				console.log("upload error source " + error.source);
 				console.log("upload error target " + error.target);
@@ -714,6 +722,7 @@ Dbmng.prototype.uploadedImage = function (gui, fld_name, ci) {
 		obj.updateStorage();
 
 		jQuery("#upload_prog_"+ci).html("100%")
+		dialogClose();
 		
 	}
 	else{
@@ -1467,6 +1476,17 @@ Dbmng.prototype.createForm = function(id_record) {
 		//jQuery('#record_edit_container').html(form).trigger("create");
 		jQuery("#record_edit div:jqmData(role=content)").html(form).trigger("create");
 
+
+		//TODO: temporary adHoc solution: proper filter should be defined
+		if(current_mon_point){
+			
+			console.log("refresh mon point"+current_mon_point);
+			if(jQuery('select[name=id_mon_point]').val()==""){
+				console.log("DR");
+				jQuery('select[name=id_mon_point]').val(current_mon_point).selectmenu('refresh', true);
+			}
+		}
+
 		//jQuery("#record_edit input[type='checkbox']").checkboxradio();
 
 	}
@@ -1477,6 +1497,9 @@ Dbmng.prototype.createForm = function(id_record) {
 		else{
 			jQuery('#'+obj.id+"_form").html(form);
 		}
+
+		
+
 	}
 	
 	jQuery('#'+obj.id+"_"+id_record+"_insert").unbind().click(function(){			
@@ -1694,18 +1717,18 @@ function showMessageBox (message) {
 	//console.log(message);
 	if(jQuery.mobile)	{
 		// Create it in memory
-		var dlg = $("<div />")
+		var dlg = jQuery("<div />")
 			  .attr("data-role", "dialog")
 			  .attr("id", "dialog");
-		var content = $("<div />")
+		var content = jQuery("<div />")
 			  .attr("data-role", "content")
-			  .append($("<span />").html(message));
-		content.append("<a href=\"javascript:$('.ui-dialog').dialog('close'); " +
+			  .append(jQuery("<span />").html(message));
+		content.append("<a href=\"javascript:jQuery('.ui-dialog').dialog('close'); " +
 			  "return false;\" data-role=\"button\" data-rel=\"back\">Close</a>");
 	
 		dlg.append(content);
 	
-		dlg.appendTo($.mobile.pageContainer);
+		dlg.appendTo(jQuery.mobile.pageContainer);
 	
 		// show the dialog programmatically
 		jQuery.mobile.changePage(dlg, {role: "dialog"});
@@ -1729,18 +1752,19 @@ function dialogStart (message) {
 
 
 		// Create it in memory
-		var dlg = $("<div />")
+		var dlg = jQuery("<div />")
 			  .attr("data-role", "dialog")
 			  .attr("id", "dialog_save");
-		var content = $("<div />")
+		var content = jQuery("<div />")
 			  .attr("data-role", "content")
-			  .append($("<span />").html("<div id=\"dialog_save_content\">"+message+"</div>"));
-		content.append("<a id=\"dialog_save_close\"  href=\"javascript:$('.ui-dialog').dialog('close'); " +
+			  .append(jQuery("<span />").html("<div id=\"dialog_save_content\">"+message+"</div>"));
+
+		content.append("<a id=\"dialog_save_close\" style=\"display:none\"  href=\"javascript:jQuery('.ui-dialog').dialog('close'); " +
 			  "return false;\" data-role=\"button\" data-rel=\"back\">Close</a>");
 	
 		dlg.append(content);
 	
-		dlg.appendTo($.mobile.pageContainer);
+		dlg.appendTo(jQuery.mobile.pageContainer);
 	
 		// show the dialog programmatically
 		jQuery.mobile.changePage(dlg, {role: "dialog"});
@@ -1752,8 +1776,6 @@ function dialogStart (message) {
 
 
 function dialogAppend(message){
-
-	console.log("append "+message);
 	try{
 		jQuery("#dialog_save_content").append('<br/>'+message);
 	}
@@ -1774,6 +1796,12 @@ if (typeof String.prototype.startsWith != 'function') {
   String.prototype.startsWith = function (str){
     return this.indexOf(str) == 0;
   };
+}
+
+if (typeof String.prototype.endsWith != 'function') {
+	String.prototype.endsWith = function(suffix) {
+		  return this.indexOf(suffix, this.length - suffix.length) !== -1;
+	};
 }
 
 /*

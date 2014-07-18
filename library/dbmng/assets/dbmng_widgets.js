@@ -37,6 +37,8 @@ dbmng_widget_form = function(obj_id,  fld, field, id_record, value, more, act ){
 }
 
 
+
+
 /*
 * dbmng_*_html transform the record value in html fields
 */
@@ -121,6 +123,24 @@ dbmng_textarea_form = function(obj_id,  fld, field, id_record, value, more, act 
 	html += " >\n";
 	html += value;	
 	html += "</textarea>\n";
+	return html;
+}
+
+
+dbmng_gps_form = function(obj_id,  fld, field, id_record, value, more, act ){
+	
+	var html  = "<input type='hidden' name='"+fld+"' id='"+obj_id+"_"+id_record+"_"+fld+"' " + more;
+	html += " value= '"+value+"' ";	
+	html += Dbmng.layout_get_nullable(field,act);
+	html += " />\n";
+  html += "<div class='gps_label' id='"+obj_id+"_"+id_record+"_"+fld+"_label' ";
+	html += ">"+value+"</div>";	
+
+	//html += "<button onclick=\"dbmng_getPosition('"+obj_id+"_"+id_record+"_"+fld+"');\">Get Position</button>";
+
+	html += "<a data-role=\"button\" onclick=\"dbmng_getPosition('"+obj_id+"_"+id_record+"_"+fld+"');\">Get Position</a>";
+
+
 	return html;
 }
 
@@ -242,10 +262,10 @@ dbmng_picture_html = function(val, field ){
 				html= "i";
 			}
 		else
-			html = "-";
+			html = "";
 	}
 	else{
-		html="-";
+		html="";
 	}
 		
 	return html;
@@ -268,6 +288,64 @@ dbmng_getImage = function(source_type){
 		alert('Image upload available only in mobile');	
 	}
 }
+
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+function showPosition(position) {
+    
+}
+
+
+dbmng_getPosition  = function(id_element){
+
+	console.log("getPosition");
+	jQuery("#"+id_element+"_label").html('Searching...');
+	console.log(id_element);
+
+	if(is_cordova()){
+
+		var opt={ enableHighAccuracy: true };
+
+		navigator.geolocation.getCurrentPosition(
+			function(position) {
+				coord="POINT( " +position.coords.longitude+" "+ position.coords.latitude + ") ";
+
+				jQuery("#"+id_element+"_label").html('Coordinates Found :'+coord+" Accuracy: "+position.coords.accuracy);
+				jQuery("#"+id_element).val(coord);
+			},                                         
+			function(error) {
+				console.log(error);
+				alert(error.message);
+			}, 
+      opt
+		);
+
+	}
+	else{	
+	 if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position){
+						coord="POINT( " +position.coords.longitude+" "+ position.coords.latitude + ")";
+ 				    jQuery("#"+id_element+"_label").html('Coordinates Found :'+coord);
+
+						jQuery("#"+id_element).val(coord);
+
+				});
+    } 
+		else {
+       alert("Geolocation is not supported by this browser.");
+    }
+	}
+
+	
+}
+
+
  
 function uploadPhoto(imageURI) {
 
