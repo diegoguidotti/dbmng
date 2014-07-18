@@ -173,7 +173,7 @@ function _climasouth_login()
 function _climasouth_toolbar() 
 {
 	dbmng_add_drupal_libraries();
-	drupal_add_css( "sites/all/modules/climasouth/climasouth_module.css" );
+	drupal_add_css( "sites/all/modules/climasouth/climasouth_module.css",array('cache' => false) );
 	global $base_path;
 	/*
 	$reader   = $base_path."sites/default/social_icons/rss.png";
