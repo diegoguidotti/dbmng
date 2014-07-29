@@ -271,7 +271,7 @@ Dbmng.prototype.createTable = function(){
 		var id_record=k;
 
 		if( obj.mobile == 1 ){
-			var html_row = "<li ><a class='dbmng_edit_button'  ><div id='"+obj.id+"_"+k+"' class='"+state+"'>";
+			var html_row = "<li ><a href='#' class='dbmng_edit_button'  ><div id='"+obj.id+"_"+k+"' class='"+state+"'>";
 			html_row += obj.createRow(value, id_record);	//<a href = "#">record name</a>
 			html_row += "</div></a></li>\n";
 			
@@ -660,7 +660,7 @@ Dbmng.prototype.uploadImage = function (v) {
 	ft.onprogress = function(progressEvent) {
 		//console.log("AAAAAAAAAAAAAAAAAAAAAAA "+progressEvent.loaded +" "+ progressEvent.total);
 
-		jQuery("#upload_prog_"+ci).html(""+(100*(progressEvent.loaded / progressEvent.total))+"%");
+		jQuery("#upload_prog_"+ci).html(""+(Math.round(100*(progressEvent.loaded / progressEvent.total)))+"%");
 
 			
 	};
@@ -682,7 +682,7 @@ Dbmng.prototype.uploadImage = function (v) {
 		
 						
 			
-						obj.uploadedImage(d.gui, d.fld_name, ci);
+						obj.uploadedImage(d.gui, d.fld_name, ci, d.img_uri);
 						;
 
 					}
@@ -710,7 +710,7 @@ Dbmng.prototype.uploadImage = function (v) {
 }
 
 
-Dbmng.prototype.uploadedImage = function (gui, fld_name, ci) {
+Dbmng.prototype.uploadedImage = function (gui, fld_name, ci, img_uri) {
 	var obj=this;
 
 	
@@ -718,10 +718,16 @@ Dbmng.prototype.uploadedImage = function (gui, fld_name, ci) {
 	if(obj.aData.records[gui]){
 		var img =JSON.parse(obj.aData.records[gui].record[fld_name]);
 		img.uploaded=1;
+		if(img_uri){
+			if(img_uri!=''){
+				img.imageURI=img_uri;
+			}
+		}
+
 		obj.aData.records[gui].record[fld_name]=JSON.stringify(img);
 		obj.updateStorage();
 
-		jQuery("#upload_prog_"+ci).html("100%")
+		jQuery("#upload_prog_"+ci).html("completed")
 		dialogClose();
 		
 	}
@@ -821,9 +827,14 @@ Dbmng.prototype.attachCommand = function (id_record) {
 		//the click event has to be associated to the parent of the div containing the record
 		//in that way will be triggered if you click in any way of the listview item
 		
-		//jQuery('#'+obj.id+'_'+id_record).parent().unbind().click(function(e){		
+		jQuery('#'+obj.id+'_'+id_record).parent().unbind().click(function(e){		
+			obj.createForm(id_record);		
+		});
+
+
+		/*
 		var tapTime = 0;						
-		jQuery('#'+obj.id+'_'+id_record).parent().unbind().on('vmousedown vmouseup', function(e){ //.on('taphold tap', function(e){ //
+		jQuery('#'+obj.id+'_'+id_record).parent().unbind().on('vmousedown vmouseup', function(e){
 	    if( e.type == 'vmousedown' ) {
 	    	tapTime = new Date().getTime();
 	    }
@@ -861,40 +872,9 @@ Dbmng.prototype.attachCommand = function (id_record) {
 	        debug("dbmng Tap");
 					obj.createForm(id_record);			
 	    	}
-	  	}
-	  	/**
-	    if (e.type == 'taphold') {
-	      debug("dbmng Taphold show the content menu");
-	      
-	      var state = obj.aData.records[id_record].state
-				if( state == 'del' ){
-					jQuery('#tapholdmenu_res').show();
-					jQuery('#tapholdmenu_del').hide();
-				}
-				else{
-					jQuery('#tapholdmenu_res').hide();
-					jQuery('#tapholdmenu_del').show();
-				}
-	      jQuery('#tapholdmenu').popup("open");
-	
-				jQuery('#tapholdmenu_del').unbind().on('click', function (event) {
-						obj.deleteRecord(id_record);
-				    //jQuery('.androidMenu').toggle();
-				});		
-				jQuery('#tapholdmenu_dup').unbind().on('click', function (event) {
-						obj.duplicateRecord(id_record);
-				    //jQuery('.androidMenu').toggle();
-				});		
-				jQuery('#tapholdmenu_res').unbind().on('click', function (event) {
-						obj.restoreRecord(id_record);
-				    //jQuery('.androidMenu').toggle();
-				});		
-	    } else if (e.type == 'tap') {
-	        debug("dbmng Tap");
-					obj.createForm(id_record);			
-	    }
-	    */
+	  	}	  	
 		});
+		*/
 		
 	}
 }
@@ -1350,6 +1330,9 @@ Dbmng.prototype.createForm = function(id_record) {
 	if(typeof id_record!='undefined'){
 		act='upd';
 		item=obj.aData.records[id_record];
+
+
+
 	}		
 	
 	debug('create_form'+obj.inline+" "+act);
@@ -1449,9 +1432,24 @@ Dbmng.prototype.createForm = function(id_record) {
 	
 	if(act=='ins'){
 		form+="<a id='"+this.id+"_"+id_record+"_insert' "+datarole+" "+datatheme+">"+t("Insert")+"</a>";		
-	}
+	}	
 	else{
-		form+="<a id='"+this.id+"_"+id_record+"_update' "+datarole+" "+datatheme+">"+t("Update")+"</a>";		
+		var deleted=false;
+		if(item){
+			if(item.state=='del'){
+				deleted=true;
+			}
+		}
+
+		console.log("XXXXX"+item.state);
+		console.log(item);
+		if(deleted){
+			form+="<a id='"+this.id+"_"+id_record+"_restore' "+datarole+" "+datatheme+">"+t("Restore")+"</a>";
+		}
+		else{	
+			form+="<a id='"+this.id+"_"+id_record+"_update' "+datarole+" "+datatheme+">"+t("Update")+"</a>";		
+			form+="<a id='"+this.id+"_"+id_record+"_delete' "+datarole+" "+datatheme+">"+t("Delete")+"</a>";		
+		}
 	}
 	
 	if( obj.mobile == 1 ){
@@ -1513,6 +1511,19 @@ Dbmng.prototype.createForm = function(id_record) {
 		if(obj.validateForm(id_record)){
 			obj.prepareUpdate(id_record);		
 		}
+	});
+
+
+	jQuery('#'+obj.id+"_"+id_record+"_delete").unbind().click(function(){		
+			var r=confirm(t('Do you confirm?'));
+			if (r==true){
+				obj.deleteRecord(id_record); 
+			}		
+	});
+
+	jQuery('#'+obj.id+"_"+id_record+"_restore").unbind().click(function(){		
+			obj.restoreRecord(id_record); 
+			obj.goBackToTable();
 	});
 }
 

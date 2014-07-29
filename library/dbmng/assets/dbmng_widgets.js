@@ -186,12 +186,22 @@ dbmng_password_form = function(obj_id,  fld, field, id_record, value, more, act 
 //<button onclick="getImage();">Upload a Photo</button>
 dbmng_picture_form = function(obj_id,  fld, field, id_record, value, more, act ){
 	var html = '';
+	console.log(field);
+
 	if(is_cordova()){
 
 		jQuery.jStorage.set('tmp_picture',{'obj_id':obj_id, 'id_record': id_record, 'fld': fld});
 
-		html = '<button onclick="dbmng_getImage('+navigator.camera.PictureSourceType.CAMERA+');">Take a Photo</button>';
-		html += '<button onclick="dbmng_getImage('+navigator.camera.PictureSourceType.SAVEDPHOTOALBUM+');">Upload a Photo</button>';
+		var camera_only=false;
+		if(field.camera_only){
+			camera_only=field.camera_only;
+		}
+
+		html = '<div data-role="controlgroup" data-type="horizontal">';			
+		  html += '<button onclick="dbmng_getImage('+navigator.camera.PictureSourceType.CAMERA+');">Take a Photo</button>';
+			if(!camera_only)
+			  html += '<button onclick="dbmng_getImage('+navigator.camera.PictureSourceType.SAVEDPHOTOALBUM+');">Upload a Photo</button>';
+		html+='</div>';
 		html += "<input type='hidden' name='"+fld+"' id='"+obj_id+"_"+id_record+"_"+fld+"' " + more;
 		html += " value= '"+value+"' ";	
 		html += Dbmng.layout_get_nullable(field,act);
@@ -240,6 +250,8 @@ dbmng_picture_html = function(val, field ){
 		try{
 			var img = JSON.parse(val);
 			img_src=img.imageURI;
+
+			console.log(img_src);
 		}
 		catch(e){
 			debug ('Error in parsing '+val);
@@ -249,7 +261,7 @@ dbmng_picture_html = function(val, field ){
 		var exclude=false;
 
 		if(device.version.startsWith("4.4") && device.platform=='Android' ){
-			if(!img_src.startsWith('file')){
+			if(!img_src.startsWith('file') && !img_src.startsWith('http') ){
 				exclude=true;
 			}
 		}
