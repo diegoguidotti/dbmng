@@ -1476,15 +1476,16 @@ Dbmng.prototype.createForm = function(id_record) {
 
 
 		//TODO: temporary adHoc solution: proper filter should be defined
-		if(current_mon_point){
-			
-			console.log("refresh mon point"+current_mon_point);
-			if(jQuery('select[name=id_mon_point]').val()==""){
-				console.log("DR");
-				jQuery('select[name=id_mon_point]').val(current_mon_point).selectmenu('refresh', true);
+		if(typeof current_mon_point != 'undefined' ){
+			if(current_mon_point){
+				
+				console.log("refresh mon point"+current_mon_point);
+				if(jQuery('select[name=id_mon_point]').val()==""){
+					console.log("DR");
+					jQuery('select[name=id_mon_point]').val(current_mon_point).selectmenu('refresh', true);
+				}
 			}
 		}
-
 		//jQuery("#record_edit input[type='checkbox']").checkboxradio();
 
 	}
