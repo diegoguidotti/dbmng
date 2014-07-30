@@ -1207,4 +1207,50 @@ function layout_table_navigation($result, $aForm, $aParam)
 		}
 	return $paging;
 }
+
+/////////////////////////////////////////////////////////////////////////////
+// layout_array_print
+// ======================
+/// This function print on the screen the an array
+/**
+\param $aTbl associative array 
+\param $bDebug  optional parameter: default false 
+\param $aParam  	  parameter array
+\return             html
+*/
+function layout_array_print($aTbl, $bDebug=false)
+{
+	$html = "";
+	if( $_SERVER['SERVER_NAME'] == 'localhost' && $bDebug )
+		{
+			$colcnt = $aTbl['colCount'];
+			$rowcnt = $aTbl['rowCount'];
+			$html .= "<div class='dbmng_debug'>";
+			$html .= "<p style='margin-left:20px;color:magenta;font-size:11px;font-family:\"courier new\"'>rowCount: ".$aTbl['rowCount']."</p>";
+			$html .= "<p style='margin-left:20px;color:magenta;font-size:11px;font-family:\"courier new\"'>colCount: ".$aTbl['colCount']."</p>";
+			$html .= "<p style='margin-left:20px;color:magenta;font-size:11px;font-family:\"courier new\"'>Use: aTbl['data'][0][1] = ".$aTbl['data'][0][1]."</p>";
+			$html .= "<table border='1' cellspacing='0' cellpadding='0' style='margin-left:20px;color:magenta;font-size:11px;font-family:\"courier new\"'>";
+			$html .= "<thead><tr style='background-color:#F0F0F0'>";
+			$html .= "<th style='text-align:center'>[-]</th>";
+			for( $nC = 0; $nC <= $colcnt-1; $nC++ )
+				{
+					$html .= "<th style='text-align:center'>[".$nC."] ".$aTbl['header'][$nC]."</th>";
+				}
+			$html .= "</tr></thead>";
+			for( $nR = 0; $nR <= $rowcnt-1; $nR++ )
+				{
+					$html .= "<tr>";
+					$html .= "<td style='background-color:#F0F0F0;text-align:right'>[".$nR."]</td>";
+					for( $nC = 0; $nC <= $colcnt-1; $nC++ )
+						{
+							$html .= "<td align='right'>".$aTbl['data'][$nR][$nC]."</td>";
+						}
+					$html .= "</tr>";
+				}
+			$html .= "</table>";
+			$html .= "</div>";
+		}
+	
+	return $html;
+}
 ?>
