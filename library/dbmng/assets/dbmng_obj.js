@@ -1478,7 +1478,6 @@ Dbmng.prototype.createForm = function(id_record) {
 		//TODO: temporary adHoc solution: proper filter should be defined
 		if(typeof current_mon_point != 'undefined' ){
 			if(current_mon_point){
-			
 				console.log("refresh mon point"+current_mon_point);
 				if(jQuery('select[name=id_mon_point]').val()==""){
 					console.log("DR");
