@@ -1268,7 +1268,7 @@ function layout_debug($text, $bDebug=false)
 	$html = "";
 	if( $_SERVER['SERVER_NAME'] == 'localhost' && $bDebug )
 		{
-			$html .=  "<div class='dbmng_debug'>$Text</div>";
+			$html .=  "<div class='dbmng_debug'>$text</div>";
 		}
 	return $html;
 }
