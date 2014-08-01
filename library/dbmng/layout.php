@@ -1253,4 +1253,23 @@ function layout_array_print($aTbl, $bDebug=false)
 	
 	return $html;
 }
+
+/////////////////////////////////////////////////////////////////////////////
+// layout_debug
+// ======================
+/// This function print on the screen debug information
+/**
+\param $text debug text to be printed
+\param $bDebug  optional parameter: default false 
+\return             html
+*/
+function layout_debug($text, $bDebug=false)
+{
+	$html = "";
+	if( $_SERVER['SERVER_NAME'] == 'localhost' && $bDebug )
+		{
+			$html .=  "<div class='dbmng_debug'>$Text</div>";
+		}
+	return $html;
+}
 ?>
