@@ -1230,7 +1230,7 @@ function layout_array_print($aTbl, $bDebug=false)
 			$html .= "<p style='margin-left:20px;color:magenta;font-size:11px;font-family:\"courier new\"'>colCount: ".$aTbl['colCount']."</p>";
 			if( $aTbl['rowCount'] != 0 )
 				{
-					$html .= "<p style='margin-left:20px;color:magenta;font-size:11px;font-family:\"courier new\"'>Use: aTbl['data'][0][1] = ".$aTbl['data'][0][1]."</p>";
+					$html .= "<p style='margin-left:20px;color:magenta;font-size:11px;font-family:\"courier new\"'>Use: aTbl['data'][0][0] = ".$aTbl['data'][0][0]."</p>";
 					$html .= "<table border='1' cellspacing='0' cellpadding='0' style='margin-left:20px;color:magenta;font-size:11px;font-family:\"courier new\"'>";
 					$html .= "<thead><tr style='background-color:#F0F0F0'>";
 					$html .= "<th style='text-align:center'>[-]</th>";
