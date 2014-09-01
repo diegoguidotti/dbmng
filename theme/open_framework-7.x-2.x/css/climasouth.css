@@ -6,6 +6,7 @@
 	background-image:url('backround-pattern.png');
 	background-position: right top;
 background-repeat:no-repeat;
+margin: 0px;
 }
 
 #block-menu-menu-tools{
@@ -106,9 +107,8 @@ background-repeat:no-repeat;
 }
 
 
-.navbar .nav li.dropdown.active-trail{
-	color:#71b1cb;
-	/*background-color:#e5e5e5*/
+.navbar .nav li.dropdown.active-trail a{
+	color:#71b1cb !important;
 }
 
 

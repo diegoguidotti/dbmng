@@ -58,15 +58,26 @@ function climasouth_leaflet(data, aForm, aParam){
 	var base_path=aParam.base_path;
 
 	//create the map objet
-  var map = L.map(aParam.div_element,{zoomControl: false}).setView(coord, zoom);
+  var map = L.map(aParam.div_element,{zoomControl: true}).setView(coord, zoom);
+
+
+		var mapquestUrl = 'http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png',
+            subDomains = ['otile1','otile2','otile3','otile4'],
+            mapquestAttrib = 'Data, imagery and map information provided by <a href="http://open.mapquest.co.uk" target="_blank">MapQuest</a>, <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> and contributors.';
+            var mapquest = new L.TileLayer(mapquestUrl, {maxZoom: 18, attribution: mapquestAttrib, subdomains: subDomains});
+      map.addLayer(mapquest);  
+
 
 	//add a background layer	
 	var back_map = L.tileLayer.wms("http://95.240.35.64/geoserver_ae/wms", {
 	  layers: 'climasouth:countries',
 	  format: 'image/png',
 //	  'BGCOLOR': '0xcfeaf3'					  			
-	  'BGCOLOR': '0xf4f3ed'					  			
+	  'BGCOLOR': '0xf4f3ed'
+		
+					  			
 	});
+	back_map.setOpacity(0.6);
 	map.addLayer(back_map); 	
 
 
@@ -77,17 +88,18 @@ function climasouth_leaflet(data, aForm, aParam){
 */
 
 
-
+/*
 	map.dragging.disable();
 	map.touchZoom.disable();
 	map.doubleClickZoom.disable();
 	map.scrollWheelZoom.disable();
+*/
 
 
 	
 	var html = "<div class='climasouth_popup'>";
 		html +='<div class="cs_left"><h3>South Mediterranean Region</h3></div>';
-		html += '<div class="cs_right"><b>N. of countries:</b><br/>10<br/><b>Population (millions):</b><br/> 212.4<br/><b>GDP ($billions):</b><br/> 694.2*<br/><b>GDP per capita ($):</b><br/> 3665*<br/><b>* Excluding Syria</b></div></div>';
+		html += '<div class="cs_right"><b>N. of countries:</b><br/>9<br/><b>Population (millions):</b><br/> 212.4<br/><b>GDP ($billions):</b><br/> 694.2<br/><b>GDP per capita ($):</b><br/> 3665<br/></div></div>';
 		jQuery('#map_info_container').html(html);
 
 
@@ -407,6 +419,7 @@ function climasouth_no_map(){
 		jQuery('#label_container').html('<span style="vertical-align: middle;">'+src+'</span>');
 	}
 
+	var no_media=true;
 
 	var src=jQuery("div.field-name-field-image img").attr('src');
 	if( typeof src != 'undefined' ){
@@ -416,6 +429,8 @@ function climasouth_no_map(){
 		jQuery('#map_container').html(html);
 		jQuery('#map_container').css('background', "#f3f3f3");
 		jQuery('#map_blue_left').css('background', "#f3f3f3");
+
+		no_media=false;
 	}
 	else{
 		var color = "71b1cb";
@@ -429,7 +444,12 @@ function climasouth_no_map(){
 			jQuery('#map_container iframe').css('margin-left','318px');
 			jQuery('#map_container').css('background', "#f3f3f3");
 			jQuery('#map_blue_left').css('background', "#f3f3f3");
+			no_media=false;
 		}
+	}
+
+	if(no_media){
+		jQuery('#cs_top_banner').hide();
 	}
 
 }

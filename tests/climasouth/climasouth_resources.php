@@ -157,6 +157,8 @@ function  _climasouth_resource_search(){
 		}
 		
 		$html.= '<div style="clear:both; width:100%"><input placeHolder="Search across resources" id="free_search" type="input" name="free_search" value="'.$fs.'" /></div>';
+
+		$html.='<div id="linkToKB"><a href="'.base_path().'navigator">CC Knowledge Navigator</a></div>';
 		//$html.='</td><td width="500px" valign="top"><div id="tag_cloud"></div></td></table>';
 
 /*
