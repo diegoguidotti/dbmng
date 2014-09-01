@@ -64,21 +64,25 @@ function climasouth_leaflet(data, aForm, aParam){
 	var back_map = L.tileLayer.wms("http://95.240.35.64/geoserver_ae/wms", {
 	  layers: 'climasouth:countries',
 	  format: 'image/png',
-	  'BGCOLOR': '0xcfeaf3'					  			
+//	  'BGCOLOR': '0xcfeaf3'					  			
+	  'BGCOLOR': '0xf4f3ed'					  			
 	});
 	map.addLayer(back_map); 	
 
 
 //debug(map.getBounds());	
-
+/*
 	var imageUrl = 'http://www.climasouth.eu/drupal/sites/all/modules/climasouth/resources/map4.png';
   L.imageOverlay(imageUrl, map.getBounds()).addTo(map);
+*/
+
 
 
 	map.dragging.disable();
 	map.touchZoom.disable();
 	map.doubleClickZoom.disable();
 	map.scrollWheelZoom.disable();
+
 
 	
 	var html = "<div class='climasouth_popup'>";

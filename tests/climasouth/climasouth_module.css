@@ -232,14 +232,18 @@ color: #919191;
 
 div.climasouth_popup div.cs_left {
 	float:left;
-	width: 100px;
+	width: 120px;
 }
 
+div.climasouth_popup div.cs_left h3{
+margin:0px;
+padding:0px;
+}
 div.climasouth_popup div.cs_right {
 	float:right;
 	text-align: left;
 	font-size:11px;
-	width: 140px;
+	width: 130px;
   color: #dd6659;
 	line-height:150%;
 }
