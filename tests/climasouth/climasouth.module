@@ -389,7 +389,11 @@ function _climasouth_news($block)
 		$sql_limit = " limit 3";
 		}
 	else{
-		$html .='<div class="field field-name-field-image field-type-image field-label-above"><img typeof="foaf:Image" src="http://www.climasouth.eu/drupal/sites/all/modules/climasouth/resources/news.png" width="553" height="311" alt="" /></div>';
+//		$html .='<div class="field field-name-field-image field-type-image field-label-above"><img typeof="foaf:Image" src="http://www.climasouth.eu/drupal/sites/all/modules/climasouth/resources/news.png" width="553" height="311" alt="" /></div>';
+
+      $html .='<div class="field field-name-field-video field-type-text field-label-above"><div class="field-items"><div class="field-item even">player.vimeo.com/video/104943503</div></div></div>';
+
+
 	}
 
 
