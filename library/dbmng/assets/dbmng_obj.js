@@ -631,9 +631,9 @@ Dbmng.prototype.uploadImage = function (v) {
 	
 
 //  var uri = encodeURI(base_call+'ajax_mobile.php');
-
+  
 	var uri = encodeURI(this.ajax_url);
-
+debug("URI: "+uri);
 	var options = new FileUploadOptions();
 	options.fileKey="file";
 	options.fileName=fileURL.substr(fileURL.lastIndexOf('/')+1);

@@ -446,3 +446,36 @@ div.climasouth_res_des{
 img#cs_enpi {
 width: auto !important;
 }
+
+#home_activities {
+ float:left;
+ width: 1170px;
+ padding: 0px;
+ clear:both;
+ margin-bottom: 10px;
+
+
+}
+
+
+#home_activities h4.ha{
+	border: 1px solid #DD6659;
+  padding: 10px;
+  margin:0px;
+  width: 205px;
+  text-align: center;
+  margin-bottom: 5px;
+}
+
+#home_activities div.home_item{
+	width: 205px;
+  height: 130px;
+  padding: 10px;
+  margin: 0px;
+	border-left: 1px solid #DD6659;
+	float:left;
+}
+
+#home_activities div.first{
+	border-left: 0px solid #DD6659;	
+}

@@ -57,8 +57,14 @@ function climasouth_leaflet(data, aForm, aParam){
 	jQuery('#page-title').show();
 	var base_path=aParam.base_path;
 
+
+    var southWest = L.latLng(10, -40),
+    northEast = L.latLng(44, 45),
+    bounds = L.latLngBounds(southWest, northEast);
+
+
 	//create the map objet
-  var map = L.map(aParam.div_element,{zoomControl: true}).setView(coord, zoom);
+  var map = L.map(aParam.div_element,{zoomControl: true, minZoom: 4, maxZoom: 10, maxBounds: bounds}).setView(coord, zoom);
 
 
 		var mapquestUrl = 'http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png',
