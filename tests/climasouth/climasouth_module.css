@@ -136,8 +136,9 @@ div.agro_logo img{
 
 
 #climasouth_news h3 {
-	font-size: 15px;
+	font-size: 17px !important;
 	margin:0px; padding:0px;
+  font-weight: normal !important;
 }
 
 #climasouth_news_page .climasouth_news {
@@ -467,15 +468,54 @@ width: auto !important;
   margin-bottom: 5px;
 }
 
+#home_activities h4.ha a{
+color: inherit;
+}
+
 #home_activities div.home_item{
-	width: 205px;
-  height: 130px;
-  padding: 10px;
+	width: 162px;
+  height: 155px;
+  padding: 5px;
   margin: 0px;
 	border-left: 1px solid #DD6659;
 	float:left;
 }
 
+#home_activities div.home_item h4{
+height: 2em;
+}
+
+#home_activities div.home_item h4 a{
+color: inherit;
+}
+
+#home_activities div.home_item p{
+	color:#DD6659;
+  font-size: 15px;
+}
+
 #home_activities div.first{
 	border-left: 0px solid #DD6659;	
+}
+
+
+body.page-node-1 h1{
+display:none !important;
+}
+
+
+#map_countries{
+	z-index: 100 !important;
+  position: absolute;
+  top:10px;
+	left:90px;
+  background-color: #FFF;
+  border: 1px solid #DD6659;
+  padding: 3px;
+  font-size: 14px;
+text-transform: uppercase;
+}
+
+#map_countries a{
+  color: #DD6659;
 }

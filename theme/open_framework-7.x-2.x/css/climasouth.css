@@ -107,9 +107,6 @@ margin: 0px;
 }
 
 
-.navbar .nav li.dropdown.active-trail a{
-	color:#71b1cb !important;
-}
 
 
 img.rss_icon {
@@ -197,4 +194,65 @@ div.climasouth_res{
   overflow: hidden;
   margin-left: 317px;
 }
+
+
+
+#main-menu{
+	background-color: #dd6659;
+  height: 38px;
+}
+#main-menu ul.menu li{
+	border-left: 1px solid #f3f3f3;
+  height: 38px;
+}
+
+#main-menu ul.menu li.last{
+	border-right: 1px solid #f3f3f3;
+}
+
+#main-menu ul.menu li a{
+   color: #FFFFFF;
+}
+
+#main-menu ul.menu ul.dropdown-menu li a{
+   color: #000000;
+}
+
+.navbar .nav li.dropdown.active-trail{
+	background-color: #f3f3f3 !important;
+}
+.navbar .nav li.dropdown.active-trail a{
+	color: #dd6659 !important;
+}
+
+
+#main-menu .navbar .nav li.last{
+	background-color: #FFFFFF !important;
+  border-top: 1px solid #dd6659;
+  height: 36px;
+  
+}
+#main-menu .navbar .nav li.last a{
+	color:#dd6659 !important;
+}
+
+
+#main-menu ul.menu li.active a:hover{
+   background-color: inherit;
+}
+
+#main-menu ul.menu ul.dropdown-menu li a.active-trail{
+   background-color: #FFFFFF;
+}
+
+#main-menu ul.menu ul.dropdown-menu li a.active{
+   background-color: #FFFFFF;
+}
+
+
+#main-menu ul.menu ul.dropdown-menu li a:hover{
+   background-color: inherit;
+}
+
+
 
