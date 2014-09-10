@@ -107,13 +107,16 @@ function dbmng_delete($aForm, $aParam)
 	if($result['ok']){
 		foreach ( $aForm['fields'] as $fld => $fld_value )
 			{
-				if($fld_value['widget']=='select_nm')
-					{		
-						$table_nm=$fld_value['table_nm'];
-						$field_nm=$fld_value['field_nm'];
-	
-						$sql = "delete from ".$table_nm." where ".$where;
-						$res_nm = dbmng_query( $sql, $var);
+				if( isset($fld_value['widget']) )
+					{
+						if($fld_value['widget']=='select_nm')
+							{		
+								$table_nm=$fld_value['table_nm'];
+								$field_nm=$fld_value['field_nm'];
+			
+								$sql = "delete from ".$table_nm." where ".$where;
+								$res_nm = dbmng_query( $sql, $var);
+							}
 					}
 			}
 	}
