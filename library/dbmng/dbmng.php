@@ -1456,8 +1456,8 @@ function dbmng_get_table_structure($id_table)
 									 ':field_widget' => $widget, 
 									 ':field_name' => $f->COLUMN_NAME,
 									 ':nullable' => $nullable,
-									 ':field_label' => $f->COLUMN_NAME,
-									 ':field_order' => $f->ORDINAL_POSITION,
+									 ':field_label' => ucfirst(str_replace("_", " ", $f->COLUMN_NAME)),
+									 ':field_order' => $f->ORDINAL_POSITION*10,
 									 ':pk' => $pk,
 									 ':is_searchable' => 0);
 			$result = dbmng_query($sql, $var);
