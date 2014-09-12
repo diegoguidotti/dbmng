@@ -115,6 +115,7 @@ function dbmng_get_form_array($id_table)
 					 'widget' => $sWidget, 
 					 'value' => null, 
 					 'nullable' => $fld->nullable, 
+					 'readonly' => $fld->readonly,
 					 'default' => $fld->default_value,
 					 'is_searchable' => $isSearcheable,
 					 'key' => $fld->pk, //MM [26-07-13]
@@ -765,7 +766,9 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 											$aInput['value'] = $value;
 											$aInput['actiontype'] = $actiontype;
 											$aInput['aParam'] = $aParam;
-											
+											//echo "<pre>";
+											//print_r($fld_value);
+											//echo "</pre>";
 
 											if ($widget==='textarea')
 												{
@@ -820,7 +823,7 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 												}
 											else //use input by default
 												{
-				                  $more='';
+													$more='';
 													if(dbmng_is_field_type_numeric($fld_value['type']))
 														{
 															$more="onkeypress=\"dbmng_validate_numeric(event)\"";		
