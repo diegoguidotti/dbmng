@@ -213,9 +213,28 @@ div.climasouth_res{
 #main-menu ul.menu li a{
    color: #FFFFFF;
 }
+#main-menu .navbar .nav li.last{
+	background-color: #FFFFFF !important;
+  border-top: 1px solid #dd6659;
+  height: 36px;
+  
+}
+#main-menu .navbar .nav li.last a{
+	color:#dd6659;
+}
+
+
+#main-menu ul.menu ul.dropdown-menu li.last{
+	border: 0px solid #f3f3f3;
+}
+
+#main-menu ul.menu ul.dropdown-menu li.last a{
+   color: #000;
+}
+
 
 #main-menu ul.menu ul.dropdown-menu li a{
-   color: #000000;
+   color: #000000 !important;
 }
 
 .navbar .nav li.dropdown.active-trail{
@@ -226,15 +245,6 @@ div.climasouth_res{
 }
 
 
-#main-menu .navbar .nav li.last{
-	background-color: #FFFFFF !important;
-  border-top: 1px solid #dd6659;
-  height: 36px;
-  
-}
-#main-menu .navbar .nav li.last a{
-	color:#dd6659 !important;
-}
 
 
 #main-menu ul.menu li.active a:hover{
