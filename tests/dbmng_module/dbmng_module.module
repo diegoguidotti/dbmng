@@ -247,6 +247,14 @@ function dbmng_manager()
 												'widget'=>'checkbox',
 												'skip_in_tbl' => '1'
 									),
+								'readonly'     => 
+									array('label'   => t('RO'), 
+												'label_long' => t('Read-only'),
+												'key' => 0,
+												'type' => 'int', 
+												'widget'=>'checkbox',
+												'skip_in_tbl' => '1'
+									),
 								'pk'     => 
 									array('label'   => t('Pk'), 
 												'label_long' => t('Primary Key'),
