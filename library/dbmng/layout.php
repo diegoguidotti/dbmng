@@ -146,8 +146,13 @@ function layout_form_date( $aInput )
 			$datetime_str= $datetime->format('d-m-Y');
 		}
 
+	$more2 = "";
+	if( isset($fld_value['readonly']) )
+		if( $fld_value['readonly'] == 1 )
+			$more2 = "disabled";
+		
 	//add a new input field for the datapicker ui
-	$html  = "<input type='text' name='".$actiontype.$fld."_tmp' id='dbmng_".$fld."_tmp' $placeholder value='".$datetime_str."' />";
+	$html  = "<input type='text' name='".$actiontype.$fld."_tmp' id='dbmng_".$fld."_tmp' $placeholder value='".$datetime_str."' $more2 />";
 	//keep hidden the "real" input form
 	$html .= "<input type='hidden' name='$actiontype$fld' id='dbmng_".$fld."' ";
 	$html .= " value= '$value' ";	
@@ -187,8 +192,13 @@ function layout_form_input($aInput) //( $fld, $fld_value, $value, $more='' )
 	
 	if( strlen($aInput['actiontype'])!= 0 )
 		$actiontype = "search_";
-			
-	$html  = "<input type='text' name='$actiontype$fld' id='dbmng_$fld' $more";
+	
+	$more2 = "";
+	if( isset($fld_value['readonly']) )
+		if( $fld_value['readonly'] == 1 )
+			$more2 = "disabled";
+		
+	$html  = "<input type='text' name='$actiontype$fld' id='dbmng_$fld' $more $more2";
 	$html .= " value= '$value' $placeholder ";	
 	$html .= layout_get_nullable($fld_value);	
 	$html .= " />\n";
@@ -247,7 +257,12 @@ function layout_form_password( $aInput )
 	if( strlen($aInput['actiontype'])!= 0 )
 		$actiontype = "search_";
 
-	$html  = "<input type='password' name='$actiontype$fld' $placeholder id='dbmng_$fld'";
+	$more2 = "";
+	if( isset($fld_value['readonly']) )
+		if( $fld_value['readonly'] == 1 )
+			$more2 = "disabled";
+		
+	$html  = "<input type='password' name='$actiontype$fld' $placeholder id='dbmng_$fld' $more2";
 	$html .= " value= '$value' ";	
 	$html .= layout_get_nullable($fld_value);	
 	$html .= " />\n";
@@ -276,8 +291,13 @@ function layout_form_textarea( $aInput )
 	if( strlen($aInput['actiontype'])!= 0 )
 		$actiontype = "search_";
 			
+	$more2 = "";
+	if( isset($fld_value['readonly']) )
+		if( $fld_value['readonly'] == 1 )
+			$more2 = "disabled";
+		
 	$html  = "";
-	$html .= "<textarea name='$actiontype$fld' id='dbmng_$fld' ".layout_get_nullable($fld_value)." >";
+	$html .= "<textarea name='$actiontype$fld' id='dbmng_$fld' ".layout_get_nullable($fld_value)." $more2>";
 	$html .= $value;	
 	$html .= "</textarea>\n";
 	return $html;
@@ -358,10 +378,15 @@ function layout_form_html( $aInput )
 		$html.='<script src="//tinymce.cachefly.net/4.0/tinymce.min.js"></script>';
 	}
 
+	$more2 = "";
+	if( isset($fld_value['readonly']) )
+		if( $fld_value['readonly'] == 1 )
+			$more2 = "disabled";
+		
 	$html .= '<script>';
-  $html .= '	tinymce.init({selector:"textarea#dbmng_'.$fld.'"});';
+	$html .= '	tinymce.init({selector:"textarea#dbmng_'.$fld.'"});';
 	$html .= '</script>';
-	$html .= "<textarea class='html_widget' name='$actiontype$fld' id='dbmng_$fld' ".layout_get_nullable($fld_value)." >";
+	$html .= "<textarea class='html_widget' name='$actiontype$fld' id='dbmng_$fld' ".layout_get_nullable($fld_value)." $more2 >";
 	$html .= $value;	
 	$html .= "</textarea>\n";
 	return $html;
@@ -390,7 +415,12 @@ function layout_form_multi( $aInput )
 	if( strlen($aInput['actiontype'])!= 0 )
 		$actiontype = "search_";
 
-	$html  = "<select class='dbmng_multi_left'  multiple  id='dbmng_$fld' name='$actiontype$fld'  >";
+	$more2 = "";
+	if( isset($fld_value['readonly']) )
+		if( $fld_value['readonly'] == 1 )
+			$more2 = "disabled";
+		
+	$html  = "<select class='dbmng_multi_left'  multiple  id='dbmng_$fld' name='$actiontype$fld' $more2  >";
 	$html  .= '</select>';
 	// 'voc_table'=>'country', 'voc_table_pk'=>'id_country', 'voc_table_label'=>'country_label', 'rel_table'=>'test_country', 'rel_table_fk1'=>'id_test', 'rel_table_fk2'=>'id_country'  );
 	
@@ -398,7 +428,7 @@ function layout_form_multi( $aInput )
 	$res=dbmng_query($sql,array());
 	
 	
-	$html  .= "<select class='dbmng_multi_right' multiple id='dbmng_".$fld."_from' name='".$actiontype.$fld."_from'  >";
+	$html  .= "<select class='dbmng_multi_right' multiple id='dbmng_".$fld."_from' name='".$actiontype.$fld."_from' $more2 >";
 	
 	foreach ($res as $val) {
 	 	  $html.="<option value='".$val->$fld_value['voc_table_pk']."' >".$val->$fld_value['voc_table_label']."</option>";
@@ -437,12 +467,20 @@ function layout_form_file( $aInput )
 	if( strlen($aInput['actiontype'])!= 0 )
 		$actiontype = "search_";
 
-  $html  = "<span id='dbmng_".$fld."_link_container'>".dbmng_file_create_link($value, $aParam).'</span>';
+	$more2 = "";
+	if( isset($fld_value['readonly']) )
+		if( $fld_value['readonly'] == 1 )
+			$more2 = "disabled";
+		
+	$html  = "<span id='dbmng_".$fld."_link_container'>".dbmng_file_create_link($value, $aParam).'</span>';
 	$html .= "<div class='dbmng_file_hide_this'><input type='file' name='$actiontype$fld' id='dbmng_$fld' ></div>";
 
-	$html .= '<input class="dbmng_file_text" type="text" name="'.$fld.'_tmp_choosebox" id="dbmng_'.$fld.'_tmp_choosebox" value="'.$value.'" />&nbsp';
-	$html .= '<a href="#" id="dbmng_'.$fld.'_tmp_choose">'.t('Choose').'</a>&nbsp';
-	$html .= '<a href="#" id="dbmng_'.$fld.'_tmp_remove">'.t('Remove').'</a>';
+	$html .= '<input class="dbmng_file_text" type="text" name="'.$fld.'_tmp_choosebox" id="dbmng_'.$fld.'_tmp_choosebox" value="'.$value.'" '.$more2.'/>&nbsp';
+	if( strlen($more) == 0 )
+		{
+			$html .= '<a href="#" id="dbmng_'.$fld.'_tmp_choose">'.t('Choose').'</a>&nbsp';
+			$html .= '<a href="#" id="dbmng_'.$fld.'_tmp_remove">'.t('Remove').'</a>';
+		}
 
 	$html .= "<script type=\"text/javascript\">dbmng_style_fileform('dbmng_".$fld."');</script>";
 
@@ -473,12 +511,20 @@ function layout_form_picture( $aInput )
 	if( strlen($aInput['actiontype'])!= 0 )
 		$actiontype = "search_";
 
-  $html  = "<span id='dbmng_".$fld."_link_container'>".dbmng_picture_create_link($value, $aParam, "form").'</span><br/>';
+	$more2 = "";
+	if( isset($fld_value['readonly']) )
+		if( $fld_value['readonly'] == 1 )
+			$more2 = "disabled";
+		
+	$html  = "<span id='dbmng_".$fld."_link_container'>".dbmng_picture_create_link($value, $aParam, "form").'</span><br/>';
 	$html .= "<div class='dbmng_file_hide_this'><input type='file' name='$actiontype$fld' id='dbmng_$fld' accept='image/*' ></div>";
 
-	$html .= '<input class="dbmng_file_text" type="text" name="'.$fld.'_tmp_choosebox" id="dbmng_'.$fld.'_tmp_choosebox" value="'.$value.'" />';
-	$html .= '<a href="#" id="dbmng_'.$fld.'_tmp_choose">'.t('Choose').'</a>&nbsp';
-	$html .= '<a href="#" id="dbmng_'.$fld.'_tmp_remove">'.t('Remove').'</a>';
+	$html .= '<input class="dbmng_file_text" type="text" name="'.$fld.'_tmp_choosebox" id="dbmng_'.$fld.'_tmp_choosebox" value="'.$value.'" '.$more2.'/>';
+	if( strlen($more2) == 0 )
+		{
+			$html .= '<a href="#" id="dbmng_'.$fld.'_tmp_choose">'.t('Choose').'</a>&nbsp';
+			$html .= '<a href="#" id="dbmng_'.$fld.'_tmp_remove">'.t('Remove').'</a>';
+		}
 
 	$html .= "<script type=\"text/javascript\">dbmng_style_fileform('".$fld."');</script>";
 
@@ -507,7 +553,12 @@ function layout_form_checkbox( $aInput )
 	if( strlen($aInput['actiontype'])!= 0 )
 		$actiontype = "search_";
 			
-	$html = "<input class='dbmng_checkbox' type='checkbox' name='$actiontype$fld' id='dbmng_$fld' ";
+	$more2 = "";
+	if( isset($fld_value['readonly']) )
+		if( $fld_value['readonly'] == 1 )
+			$more2 = "disabled";
+		
+	$html = "<input class='dbmng_checkbox' type='checkbox' name='$actiontype$fld' id='dbmng_$fld' $more2";
 	if($value==1 || ($value<>0 &&  $fld_value['default']=="1"))
     {
 			$html .= " checked='true' ";
@@ -550,6 +601,11 @@ function layout_form_select( $aInput )
 	if( strlen($aInput['actiontype'])!= 0 )
 		$actiontype = "search_";
 			
+	$more2 = "";
+	if( isset($fld_value['readonly']) )
+		if( $fld_value['readonly'] == 1 )
+			$more2 = "disabled";
+		
 	$do_update = false;
 	if( !is_null($value) )
 		$do_update = true;
@@ -559,7 +615,7 @@ function layout_form_select( $aInput )
 			$aVoc = array();
 			$aVoc = $fld_value['voc_val'];
 		} 
-	$html = "<select name='$actiontype$fld' id='dbmng_$fld'  ".layout_get_nullable($fld_value)." >\n";
+	$html = "<select name='$actiontype$fld' id='dbmng_$fld'  ".layout_get_nullable($fld_value)." $more2>\n";
 	$html .= "<option>".$placeholder."</option> \n";	
 	$nLen  = count($aVoc);
 	
@@ -602,6 +658,11 @@ function layout_form_multiselect( $aInput )
 	if( !is_null($value) )
 		$do_update = true;
 	
+	$more2 = "";
+	if( isset($fld_value['readonly']) )
+		if( $fld_value['readonly'] == 1 )
+			$more2 = "disabled";
+		
 	$aVoc = array();
 	$aVoc = $fld_value['voc_val'];
 
@@ -620,13 +681,13 @@ function layout_form_multiselect( $aInput )
 						}
 				}
 		}
-	$html = "<select  name='$actiontype$fld' onChange='dbmng_update_multi2()' id='dbmng_".$fld."_res'  ".layout_get_nullable($fld_value)." >\n";
+	$html = "<select  name='$actiontype$fld' onChange='dbmng_update_multi2()' id='dbmng_".$fld."_res'  ".layout_get_nullable($fld_value)." $more2>\n";
 	$html .= "</select><br/>\n";
 
-	$html .= "<select  name='$actiontype$fld' onChange='dbmng_update_multi3()' id='dbmng_".$fld."_res2'  ".layout_get_nullable($fld_value)." >\n";
+	$html .= "<select  name='$actiontype$fld' onChange='dbmng_update_multi3()' id='dbmng_".$fld."_res2'  ".layout_get_nullable($fld_value)." $more2>\n";
 	$html .= "</select><br/>\n";
 
-	$html .= "<select  name='$actiontype$fld' onChange='dbmng_update_multi()' id='dbmng_".$fld."_res3'  ".layout_get_nullable($fld_value)." >\n";
+	$html .= "<select  name='$actiontype$fld' onChange='dbmng_update_multi()' id='dbmng_".$fld."_res3'  ".layout_get_nullable($fld_value)." $more2>\n";
 	$html .= "</select><br/>\n";
 
 	$html .= "\n<script type='text/javascript'>\n";
@@ -673,6 +734,11 @@ function layout_form_select_nm( $aInput )
 	if( !is_null($value) )
 		$do_update = true;
 	
+	$more2 = "";
+	if( isset($fld_value['readonly']) )
+		if( $fld_value['readonly'] == 1 )
+			$more2 = "disabled";
+		
 	$aVoc = array();
 	$aVoc = $fld_value['voc_val'];
 
@@ -680,7 +746,7 @@ function layout_form_select_nm( $aInput )
 	$outtype = 'checkbox';
 	if( $outtype == 'select' )
 		{
-			$html = "<select  multiple='multiple' name='".$actiontype.$fld."[]' id='dbmng_$fld'  ".layout_get_nullable($fld_value)." >\n";
+			$html = "<select  multiple='multiple' name='".$actiontype.$fld."[]' id='dbmng_$fld'  ".layout_get_nullable($fld_value)." $more2>\n";
 			$html .= "<option/> \n";	
 			//$nLen  = count($aVoc);
 			
@@ -709,7 +775,7 @@ function layout_form_select_nm( $aInput )
 							$s = " checked='true' ";
 						}
 				
-					$html .= "<li><input class='dbmng_checkbox' type='checkbox' name='".$fld."[]' $s value='" . $vocKey . "'/>" . $vocValue . "</li> \n";	
+					$html .= "<li><input class='dbmng_checkbox' type='checkbox' name='".$fld."[]' $s value='" . $vocKey . " $more2'/>" . $vocValue . "</li> \n";	
 				}
 			$html .= "</ul>";
 		} 
