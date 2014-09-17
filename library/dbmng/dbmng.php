@@ -835,7 +835,11 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 											$html.='</div>';
 											
 											$html.='</div>';
-											$html.='<div class="dbmng_separator">&nbsp</div>';
+											if( isset($aParam['ui']['fld_separator']) )
+												{
+													if( $aParam['ui']['fld_separator'] == 1 )
+														$html.='<div class="dbmng_separator">&nbsp</div>';
+												}
 										}
 								}
 						}
