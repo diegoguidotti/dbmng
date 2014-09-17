@@ -994,8 +994,13 @@ function layout_table_insert($aForm, $aParam)
 	
 	$html = "";
 	if( $nIns == 1)
-		$html .= "<a class='dbmng_insert_button' href='?act=ins&amp;tbln=" . $aForm['table_name'] . $hv. "'>" . t('Insert new data') . "</a><br />\n";
-	
+		{
+			$label = t('Insert new data');
+			if( isset($aParam['ui']['btn_lst_name']) )
+				$label = $aParam['ui']['btn_lst_name'];
+			
+			$html .= "<a class='dbmng_insert_button' href='?act=ins&amp;tbln=" . $aForm['table_name'] . $hv. "'>" . $label . "</a><br />\n";
+		}
 	return $html;
 }
 
