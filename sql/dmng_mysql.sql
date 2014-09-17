@@ -44,4 +44,8 @@ CREATE TABLE  dbmng_type_table (
 insert into dbmng_type_table values (1, 'Content table');
 insert into dbmng_type_table values (2, 'System table');
 
+--
+-- Table modified
+--
+ALTER TABLE dbmng_fields ADD COLUMN readonly int(11) after nullable;
 
