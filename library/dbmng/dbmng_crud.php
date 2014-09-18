@@ -23,7 +23,6 @@ function dbmng_create_form_process($aForm, $aParam, $actiontype="")
 			//if($aForm['table_name']==$_REQUEST['tbln'])
 			if(true)
 				{
-
 					// update record
 					if($_REQUEST['act']=='do_upd')
 						$ret=dbmng_update($aForm, $aParam);
@@ -516,28 +515,31 @@ function dbmng_update($aForm, $aParam)
 	
 	foreach ( $aForm['fields'] as $fld => $fld_value )
 		{
-			if($fld_value['key'] != 1)
+			if($fld_value['key'] != 1 ) 
 				{
-					if( isset($fld_value['widget']) )
+					if( $fld_value['readonly'] != 1 )
 						{
-							if($fld_value['widget']!='select_nm')
-								{		
-									$sSet .= $fld . " = :$fld, ";
-		
-									$var = array_merge($var, array(":".$fld => dbmng_value_prepare($fld_value,$fld,$_POST,$aParam)));
-									//$sSet.=dbmng_value_prepare($x_value,$x,$_POST).", ";
+							if( isset($fld_value['widget']) )
+								{
+									if($fld_value['widget']!='select_nm')
+										{		
+											$sSet .= $fld . " = :$fld, ";
+				
+											$var = array_merge($var, array(":".$fld => dbmng_value_prepare($fld_value,$fld,$_POST,$aParam)));
+											//$sSet.=dbmng_value_prepare($x_value,$x,$_POST).", ";
+										}
+									else
+										{
+											$bSelectNM = true;
+										}
 								}
 							else
 								{
-									$bSelectNM = true;
-								}
-						}
-					else
-						{
-							$sSet .= $fld . " = :$fld, ";
+									$sSet .= $fld . " = :$fld, ";
 
-							$var = array_merge($var, array(":".$fld => dbmng_value_prepare($fld_value,$fld,$_POST,$aParam)));
-							//$sSet.=dbmng_value_prepare($x_value,$x,$_POST).", ";
+									$var = array_merge($var, array(":".$fld => dbmng_value_prepare($fld_value,$fld,$_POST,$aParam)));
+									//$sSet.=dbmng_value_prepare($x_value,$x,$_POST).", ";
+								}
 						}
 				}
 		}
@@ -598,6 +600,7 @@ function dbmng_update($aForm, $aParam)
 	//TODO: add also filter fields in delete/update
 	
 	$result = dbmng_query("update " . $aForm['table_name'] . " set $sSet where $where ", $var);
+	//echo debug_sql_statement("update " . $aForm['table_name'] . " set $sSet where $where ", $var);
 	if($result['ok'] && $bSelectNM )
 		$res = dbmng_insert_nm($aForm, $aParam, null);
 
