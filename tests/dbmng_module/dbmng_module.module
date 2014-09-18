@@ -186,6 +186,7 @@ function dbmng_manager()
 												'label_long' => t('ID Field'),
 												'type' => 'bigint',
 												'key' => 1,
+												'readonly' => 0
 									), 
 								'field_name'  => 
 									array('label'   => t('Name') , 
@@ -193,7 +194,8 @@ function dbmng_manager()
 												'nullable' => false,
 												'type' => 'varchar',
 												'widget'=>'input' ,
-												'key' => 0
+												'key' => 0,
+												'readonly' => 0
 										    //'voc_val' => $varField
 									), 
 								'field_label'  => 
@@ -201,6 +203,7 @@ function dbmng_manager()
 												'label_long' => t('Field Label'),
 												'nullable' => false,
 												'key' => 0,
+												'readonly' => 0,
 												'type' => 'varchar'
 									), 
 								'id_field_type'     => 
@@ -210,6 +213,7 @@ function dbmng_manager()
 												'type' => 'varchar', 
 												'widget'=>'select' ,
 												'nullable' => false,
+												'readonly' => 0,
 												'voc_val' => array(
 													'int'=> t('Integer'),	
 													'double'=> t('Double'),	
@@ -225,6 +229,7 @@ function dbmng_manager()
 												'type' => 'varchar', 
 												'widget'=>'select' ,
 												'nullable' => false,
+												'readonly' => 0,
 												'voc_val' => array(
 														'checkbox'=> t('CheckBox'),	
 														'date'=> t('Date'),	
@@ -245,6 +250,7 @@ function dbmng_manager()
 												'key' => 0,
 												'type' => 'int', 
 												'widget'=>'checkbox',
+												'readonly' => 0,
 												'skip_in_tbl' => '1'
 									),
 								'readonly'     => 
@@ -253,6 +259,7 @@ function dbmng_manager()
 												'key' => 0,
 												'type' => 'int', 
 												'widget'=>'checkbox',
+												'readonly' => 0,
 												'skip_in_tbl' => '1'
 									),
 								'pk'     => 
@@ -261,6 +268,7 @@ function dbmng_manager()
 												'key' => 0,
 												'type' => 'int', 
 												'widget'=>'select',
+												'readonly' => 0,
 												'voc_val' => array(
 														0 => t('Normal field'),
 														1 => t('Auto-increment primary key'),
@@ -272,6 +280,7 @@ function dbmng_manager()
 												 'label_long' => t('Default value'),
 												 'key' => 0,
 												 'type'  => 'varchar',
+													'readonly' => 0,
 												 'skip_in_tbl' => '1'
 									),
 								'field_function' =>
@@ -279,6 +288,7 @@ function dbmng_manager()
 												 'label_long' => t('Field function'),
 												 'key' => 0,
 												 'type'  => 'varchar',
+												'readonly' => 0,
 												 'skip_in_tbl' => '1'
 									),
 								'field_label_long' =>
@@ -286,12 +296,14 @@ function dbmng_manager()
 												 'label_long' => t('Long Label'),
 												 'key' => 0,
 												 'type'  => 'varchar',
+												'readonly' => 0,
 												 'skip_in_tbl' => '1'
 									),
 								'field_order' =>
 									array( 'label' => t('Order'),
 												 'label_long' => t('Order'),
 												 'key' => 0,
+												'readonly' => 0,
 												 'type'  => 'int',
 									),
 								'is_searchable'     => 
@@ -300,6 +312,7 @@ function dbmng_manager()
 												'key' => 0,
 												'type' => 'int', 
 												'widget'=>'checkbox',
+												'readonly' => 0,
 												'skip_in_tbl' => '1'
 									),
 								'skip_in_tbl'     => 
@@ -308,6 +321,7 @@ function dbmng_manager()
 												'key' => 0,
 												'type' => 'int', 
 												'widget'=>'checkbox',
+												'readonly' => 0,
 												'skip_in_tbl' => '1'
 									),
 								'voc_sql' =>
@@ -316,6 +330,7 @@ function dbmng_manager()
 												 'key' => 0,
 												 'type'  => 'text',
 												 'widget' => 'textarea',
+												'readonly' => 0,
 												 'skip_in_tbl' => '1'
 									),							
 								'field_function'     => 
@@ -323,6 +338,7 @@ function dbmng_manager()
 												'label_long' => t('Field function'),
 												'key' => 0,
 												'type' => 'varchar', 
+												'readonly' => 0,
 												'skip_in_tbl' => '1'
 									),
 						)
