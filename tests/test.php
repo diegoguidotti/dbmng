@@ -65,6 +65,21 @@
 			
 		}
 
+
+	$aQueries=Array();
+
+	//$aQueries[0]=Array();
+	$aQueries[0]['sql']="insert into diego (pippo, data, id_voc_type) values ('bbb', :data, :id_voc_type)";
+	$aQueries[0]['var']=Array(':data'=>'2001-01-01', ':id_voc_type'=>2 );
+		
+	$aQueries[1]['sql']="insert into diego (pippo, data) values ('bbb', :data)";
+	$aQueries[1]['var']=Array(':data'=>'2001-01-01' );
+	
+
+	print_r(dbmng_transactions($aQueries));
+
+
+
 	echo dbmng_crud($aForm);
 /*
 	$aForm=array(  

@@ -157,6 +157,87 @@ function dbmng_query($sql, $var=null)
 }
 
 
+
+function dbmng_transactions($array){
+
+	$ret=Array();
+
+	switch(DBMNG_CMS)
+	{
+		case "none": // to be developed
+					try 
+						{
+							$sConnection = DBMNG_DB.":dbname=".DBMNG_DB_NAME.";host=".DBMNG_DB_HOST."";
+							if(DBMNG_DB=='mysql')
+								$sConnection .= ";charset=utf8";
+
+							//echo $sConnection;
+							$link = new PDO($sConnection, DBMNG_DB_USER, DBMNG_DB_PASS);
+							$link->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+							$link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+					
+							// First of all, let's begin a transaction
+							$link->beginTransaction();
+
+							foreach($array as $a)
+								{
+									$res0 = $link->prepare($a['sql']);
+									if($res0)
+										{		
+											$res0->execute($a['var']);
+										}
+									else{
+											echo "ERRORE!!!!!!!!!!"	;
+									}
+								}
+
+							// If we arrive here, it means that no exception was thrown
+							// i.e. no query has failed, and we can commit the transaction
+							$link->commit();
+							} 
+							catch (Exception $e) {
+									// An exception has been thrown
+									// We must rollback the transaction
+									$link->rollback();
+									
+									$ret['ok']=false;
+									$ret['error']=$e->getMessage( );	
+							}
+			break;
+			
+			case "drupal":
+
+					
+							try {
+									// First of all, let's begin a transaction
+									$transaction = db_transaction();
+
+									foreach($array as $a)
+										{
+											db_query($a['sql'], $a['var']);
+										}
+
+									// If we arrive here, it means that no exception was thrown
+									// i.e. no query h$link->commit();
+							} catch (Exception $e) {
+									// An exception has been thrown
+									// We must rollback the transaction
+									 $transaction->rollback();
+									
+									$ret['ok']=false;
+									$ret['error']=$Exception->getMessage( );	
+							}
+
+			break;
+	}
+	return $ret;
+	
+
+}
+
+
+
 /////////////////////////////////////////////////////////////////////////////
 // dbmng_query2array
 // ======================
