@@ -161,6 +161,7 @@ function dbmng_query($sql, $var=null)
 function dbmng_transactions($array){
 
 	$ret=Array();
+	$ret['ok']=true;
 
 	switch(DBMNG_CMS)
 	{
