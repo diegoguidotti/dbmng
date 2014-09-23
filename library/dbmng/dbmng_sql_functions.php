@@ -11,97 +11,87 @@
 */
 function dbmng_query($sql, $var=null)
 {
-
 	$ret=Array();
 
 	if(is_null($var))
 		{
 			$callers=debug_backtrace();
 			trigger_error("Warning! execute dbmng query with no array (line ".$callers[0]['line']." of ".$callers[0]['file']." )", E_USER_WARNING);
-
 		}
+
 	switch(DBMNG_CMS)
 	{
 		case "none": // to be developed
-			
+			try 
+				{
+					$sConnection = DBMNG_DB.":dbname=".DBMNG_DB_NAME.";host=".DBMNG_DB_HOST."";
+					if(DBMNG_DB=='mysql')
+						$sConnection .= ";charset=utf8";
 
-					try 
-						{
-							$sConnection = DBMNG_DB.":dbname=".DBMNG_DB_NAME.";host=".DBMNG_DB_HOST."";
-							if(DBMNG_DB=='mysql')
-								$sConnection .= ";charset=utf8";
-
-							//echo $sConnection;
-							$link = new PDO($sConnection, DBMNG_DB_USER, DBMNG_DB_PASS);
-							$link->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-							$link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+					//echo $sConnection;
+					$link = new PDO($sConnection, DBMNG_DB_USER, DBMNG_DB_PASS);
+					$link->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+					$link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 					
-								//echo $sql;
-								//print_r ($var);
+					//echo $sql;
+					//print_r ($var);
 
-							$link->beginTransaction();
-						  $res0 = $link->prepare($sql);
-							if($res0)
-								{	
-								$res0->execute($var);
-								if(startsWithL($sql,"insert"))
-									{							
-										$id = $link->lastInsertId();	
-									}
+					$link->beginTransaction();
+					$res0 = $link->prepare($sql);
+					if($res0)
+						{	
+							$res0->execute($var);
+							if(startsWithL($sql,"insert"))
+								{							
+									$id = $link->lastInsertId();	
+								}
 
-								$link->commit();
-								//echo debug_sql_statement($sql, $var)."<br/>";	
+							$link->commit();
+							//echo debug_sql_statement($sql, $var)."<br/>";	
 
-								//Temporary Fix: you can not fetch data after UPDATE INSERT and DELETE 
-								if(startsWithL($sql,"update") || startsWithL($sql,"insert") || startsWithL($sql,"delete") )
-									{
-
-										$ret=Array();
-		
-										if(startsWithL($sql,"insert"))
-											{							
-												$ret['inserted_id']=$id;	
-											}
-
-										$ret['res']=$res0;
-										$ret['ok']=true;										
-										
-
-									}
-								else
-									{
-										$ret=$res0->fetchAll(PDO::FETCH_CLASS);				
-									}
-							 }
+							//Temporary Fix: you can not fetch data after UPDATE INSERT and DELETE 
+							if(startsWithL($sql,"update") || startsWithL($sql,"insert") || startsWithL($sql,"delete") )
+								{
+									$ret=Array();
+									
+									if(startsWithL($sql,"insert"))
+										{							
+											$ret['inserted_id']=$id;	
+										}
+									$ret['res']=$res0;
+									$ret['ok']=true;
+								}
 							else
 								{
-										$ret=Array();
-										$ret['ok']=false;
-										$ret['error']=$link->errorInfo();	
-										$ret['query'] = debug_sql_statement($sql, $var);	
-
+									$ret=$res0->fetchAll(PDO::FETCH_CLASS);				
 								}
-						}	
-					catch( PDOException $Exception ) {
-						// PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
-						// String.
-						//echo $Exception->getMessage( );	
+						}
+					else
+						{
+							$ret=Array();
+							$ret['ok']=false;
+							$ret['error']=$link->errorInfo();	
+							$ret['query'] = debug_sql_statement($sql, $var);	
+						}
+				}	
+			catch( PDOException $Exception ) 
+				{
+					// PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
+					// String.
+					//echo $Exception->getMessage( );	
 
-						$ret=Array();
-						$ret['ok']=false;
-						/*$ret['error_pdo']=$link->errorInfo();	*/						
-						$ret['error']=$Exception->getMessage( );	
-						$ret['query'] = debug_sql_statement($sql, $var);	
-						
-					
-			}
+					$ret=Array();
+					$ret['ok']=false;
+					/*$ret['error_pdo']=$link->errorInfo();	*/						
+					$ret['error']=$Exception->getMessage( );	
+					$ret['query'] = debug_sql_statement($sql, $var);	
+				}
 			break;
 			
 		case "drupal":
-
 			if(isset($var))
 				{
-				try 
+					try 
 						{
 							if(startsWithL($sql,"update") || startsWithL($sql,"insert") || startsWithL($sql,"delete") ) 
 								{
@@ -119,22 +109,21 @@ function dbmng_query($sql, $var=null)
 									$ret = db_query($sql, $var);									
 								}
 						}
-					catch( Exception $Exception ) {
-						//echo ('PDO Exception: '.$Exception->getMessage( ).'<br/>');
-						//echo ('Query: '.$sql.'<br/>');
-						$ret=Array();
-						$ret['ok']=false;
-						//$ret['error_pdo']=$link->errorInfo();							
-						$ret['error']=$Exception->getMessage( );	
-						//$ret['query'] = debug_sql_statement($sql, $var);	
-						
-					}
+					catch( Exception $Exception ) 
+						{
+							//echo ('PDO Exception: '.$Exception->getMessage( ).'<br/>');
+							//echo ('Query: '.$sql.'<br/>');
+							$ret=Array();
+							$ret['ok']=false;
+							//$ret['error_pdo']=$link->errorInfo();							
+							$ret['error']=$Exception->getMessage( );	
+							//$ret['query'] = debug_sql_statement($sql, $var);	
+						}
 				}
 			else 
 				{
 					$ret = db_query($sql);
 				}
-
 			break;
 	}
 /* // per verificare cosa hai in uscita abilita questi commenti
@@ -166,75 +155,74 @@ function dbmng_transactions($array){
 	switch(DBMNG_CMS)
 	{
 		case "none": // to be developed
-					try 
+			try 
+				{
+					$sConnection = DBMNG_DB.":dbname=".DBMNG_DB_NAME.";host=".DBMNG_DB_HOST."";
+					if(DBMNG_DB=='mysql')
+						$sConnection .= ";charset=utf8";
+
+					//echo $sConnection;
+					$link = new PDO($sConnection, DBMNG_DB_USER, DBMNG_DB_PASS);
+					$link->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+					$link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+			
+					// First of all, let's begin a transaction
+					$link->beginTransaction();
+
+					foreach($array as $a)
 						{
-							$sConnection = DBMNG_DB.":dbname=".DBMNG_DB_NAME.";host=".DBMNG_DB_HOST."";
-							if(DBMNG_DB=='mysql')
-								$sConnection .= ";charset=utf8";
-
-							//echo $sConnection;
-							$link = new PDO($sConnection, DBMNG_DB_USER, DBMNG_DB_PASS);
-							$link->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-							$link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-					
-							// First of all, let's begin a transaction
-							$link->beginTransaction();
-
-							foreach($array as $a)
-								{
-									$res0 = $link->prepare($a['sql']);
-									if($res0)
-										{		
-											$res0->execute($a['var']);
-										}
-									else{
-											echo "ERRORE!!!!!!!!!!"	;
-									}
+							$res0 = $link->prepare($a['sql']);
+							if($res0)
+								{		
+									$res0->execute($a['var']);
 								}
-
-							// If we arrive here, it means that no exception was thrown
-							// i.e. no query has failed, and we can commit the transaction
-							$link->commit();
-							} 
-							catch (Exception $e) {
-									// An exception has been thrown
-									// We must rollback the transaction
-									$link->rollback();
-									
-									$ret['ok']=false;
-									$ret['error']=$e->getMessage( );	
+							else{
+									echo "ERRORE!!!!!!!!!!"	;
 							}
+						}
+
+					// If we arrive here, it means that no exception was thrown
+					// i.e. no query has failed, and we can commit the transaction
+					$link->commit();
+				} 
+					catch (Exception $e) {
+							// An exception has been thrown
+							// We must rollback the transaction
+							$link->rollback();
+							
+							$ret['ok']=false;
+							$ret['error']=$e->getMessage( );	
+					}
 			break;
 			
 			case "drupal":
+				try 
+					{
+						// First of all, let's begin a transaction
+						$transaction = db_transaction();
 
-					
-							try {
-									// First of all, let's begin a transaction
-									$transaction = db_transaction();
-
-									foreach($array as $a)
-										{
-											db_query($a['sql'], $a['var']);
-										}
-
-									// If we arrive here, it means that no exception was thrown
-									// i.e. no query h$link->commit();
-							} catch (Exception $e) {
-									// An exception has been thrown
-									// We must rollback the transaction
-									 $transaction->rollback();
-									
-									$ret['ok']=false;
-									$ret['error']=$Exception->getMessage( );	
+						foreach($array as $a)
+							{
+								db_query($a['sql'], $a['var']);
 							}
 
+						// If we arrive here, it means that no exception was thrown
+						// i.e. no query h$link->commit();
+					} 
+				catch (Exception $e) 
+					{
+						// An exception has been thrown
+						// We must rollback the transaction
+						$transaction->rollback();
+						
+						$ret['ok']=false;
+						$ret['error']=$Exception->getMessage( );	
+					}
 			break;
 	}
-	return $ret;
-	
 
+	return $ret;
 }
 
 
@@ -290,21 +278,22 @@ function dbmng_query2array($sql, $aVal)	//dbmng_query($sql, $var=null)
 function dbmng_fetch_object($res)
 {
 	switch( DBMNG_CMS )
-	{
-		case "none":  // to be developed
-			
-			if(count($res)>0){
-				$fo = $res[0];
-			}
-			else{
-				$fo=null;
-			}
-			break;
-			
-		case "drupal":
-			$fo = $res->fetchObject();
-			break;
-	}
+		{
+			case "none":  // to be developed
+				if(count($res)>0)
+					{
+						$fo = $res[0];
+					}
+				else
+					{
+						$fo=null;
+					}
+				break;
+				
+			case "drupal":
+				$fo = $res->fetchObject();
+				break;
+		}
 	return $fo;
 }
 
@@ -318,21 +307,17 @@ function dbmng_fetch_object($res)
 */
 function dbmng_num_rows($res)
 {
-
 	$nr=0;
-
 	switch( DBMNG_CMS )
-	{
-		case "none":  // to be developed
-			
-			$nr = count($res); //todo
-			break;
-			
-		case "drupal":
-			$nr = $res->rowCount();
-			break;
-	}
-	
+		{
+			case "none":  // to be developed
+				$nr = count($res); //todo
+				break;
+				
+			case "drupal":
+				$nr = $res->rowCount();
+				break;
+		}
 	return $nr;
 }
 
@@ -347,16 +332,15 @@ function dbmng_num_rows($res)
 function dbmng_num_columns($res)
 {
 	switch( DBMNG_CMS )
-	{
-		case "none":  // to be developed
-			
-			$nr = $res->columnCount(); //todo
-			break;
-			
-		case "drupal":
-			$nr = $res->columnCount();
-			break;
-	}
+		{
+			case "none":  // to be developed
+				$nr = $res->columnCount(); //todo
+				break;
+				
+			case "drupal":
+				$nr = $res->columnCount();
+				break;
+		}
 	
 	return $nr;
 }
@@ -371,7 +355,7 @@ function dbmng_num_columns($res)
 \return           boolean
 */
 function startsWithL($haystack, $needle)
-	{
-    return !strncmp(trim(strtolower($haystack)), $needle, strlen($needle));
-	}
+{
+	return !strncmp(trim(strtolower($haystack)), $needle, strlen($needle));
+}
 ?>
