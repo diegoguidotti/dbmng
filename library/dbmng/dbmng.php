@@ -525,18 +525,39 @@ function dbmng_create_table($aForm, $aParam)
 /**
 \param $aForm  		Associative array with all the characteristics of the table
 \param $aParam  	Associative array with some custom variable used by the renderer
+\param $bInit  	  initialise the table
 \return           HTML generated code
 */
-function dbmng_crud_js($aForm, $aParam)
+function dbmng_crud_js($aForm, $aParam, $bInit=false)
 {
+
+
+	drupal_add_js ( "/libs/jstorage.min.js" );
+
+	$id_table = $aForm['id_table'];
+
+
 	$html  = "";
   $html .= dbmng_create_form_process($aForm, $aParam);
-	$html .= "<div id='table_container'></div>\n";
+	$html .= "<div id='table_container_".$id_table."'></div>\n";
 
 	$html .= "\n<script type='text/javascript'>\n";
 	$html .= "var aForm=".json_encode($aForm).";\n";
 	$html .= "var aParam=".json_encode($aParam).";\n";
-	
+
+		
+	if($bInit){
+		$html .= "var db; ";
+
+		$html .= "jQuery(document).ready(function() {";
+  
+		$html.="alert('a');";
+		$html .= " db  = new Dbmng(".$id_table.", {'div_element':'table_container_".$id_table."','ajax_url':'/dbmng/tests/ajax.php','auto_sync': 0, 'inline':0,	'auto_edit':1,	'mobile':0 });";
+  
+		$html .= "db.start();";
+		$html .= "});";
+
+	}
 	$html .= "</script>\n";
 	return $html;
 }
@@ -1362,7 +1383,13 @@ function dbmng_add_drupal_libraries()
 		drupal_add_css( "sites/all/libraries/dbmng/assets/dbmng.css" );
 		drupal_add_js ( "sites/all/libraries/dbmng/assets/dbmng.js" );
 		drupal_add_js ( "sites/all/libraries/dbmng/assets/dbmng_obj.js" );
+		drupal_add_js ( "sites/all/libraries/dbmng/assets/dbmng_widgets.js" );
 		drupal_add_js ( "sites/all/libraries/dbmng/assets/jquery.tablesorter.js" );
+
+
+
+
+
 		drupal_add_library('system','ui.datepicker');
 	}
 

@@ -77,7 +77,18 @@ function dbmng_manager()
 	dbmng_add_drupal_libraries();
 	$html = "";
 
-	if( isset($_REQUEST['test']) )
+	if( isset($_REQUEST['testjs']) )
+		{
+			$html.='Test js in drupal';
+
+			$id_table= 14;
+			$aForm    = dbmng_get_form_array($id_table); 
+
+
+  		$html.= dbmng_crud_js($aForm, Array(), true );
+
+		}
+	else if( isset($_REQUEST['test']) )
 		{
 			// [MM 05/11/13] can be deleted
 			/*
