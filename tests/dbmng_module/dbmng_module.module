@@ -51,6 +51,12 @@ function dbmng_module_menu() {
         'type' => MENU_NORMAL_ITEM,
      );
 
+
+		$items['dbmng/ajax'] = array(
+        'page callback' => 'dbmng_ajax_response',
+        'access arguments' => array('dbmng manager')
+     );
+
     return $items;
 }
 
@@ -72,6 +78,14 @@ return $html;
 }
 
 
+
+function dbmng_ajax_response(){
+
+	drupal_add_http_header('Content-Type', 'application/json');
+	echo dbmng_ajax_manager();
+	
+}
+
 function dbmng_manager() 
 {
 	dbmng_add_drupal_libraries();
@@ -81,13 +95,15 @@ function dbmng_manager()
 		{
 			$html.='Test js in drupal';
 
+
+			//the param is not mandatory		
 			$id_table= 14;
-			$aForm    = dbmng_get_form_array($id_table); 
+  		$html.= dbmng_crud_js( $id_table, array('inline'=>1, 'auto_edit'=>1) );
 
+			//simplest call
+  		//$html.= dbmng_crud_js( 14);
 
-  		$html.= dbmng_crud_js($aForm, Array(), true );
-
-		}
+		}	
 	else if( isset($_REQUEST['test']) )
 		{
 			// [MM 05/11/13] can be deleted

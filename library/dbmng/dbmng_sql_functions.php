@@ -217,7 +217,7 @@ function dbmng_transactions($array){
 						$transaction->rollback();
 						
 						$ret['ok']=false;
-						$ret['error']=$Exception->getMessage( );	
+						$ret['error']= $e->getMessage( );	
 					}
 			break;
 	}
@@ -242,28 +242,42 @@ function dbmng_transactions($array){
 */
 function dbmng_query2array($sql, $aVal)	//dbmng_query($sql, $var=null)
 {
+	
 	$res = dbmng_query($sql, $aVal);
-	$colcnt = dbmng_num_columns($res);
-	$rowcnt = dbmng_num_rows($res);
 	$aTbl  = array();
-	$aTblD = array();
-	$aTblH = array();
-	foreach( $res as $rec )
-		{
-			for( $nC = 0; $nC<=$colcnt-1; $nC++ )
-				{
-					$keys=array_keys((array)$rec);
-					$aRow[$nC] = $rec->$keys[$nC];
-					$aTblH[$nC] = $keys[$nC];
-				}
-			$aTblD[] = $aRow;
-		}
-	$aTbl['data'] = $aTblD;
-	$aTbl['header'] = $aTblH;
-	$aTbl['rowCount'] = $rowcnt;
-	$aTbl['colCount'] = $colcnt;
 
-	return $aTbl;
+	//print_r($res);
+
+	if(is_array($res) &&  isset($res['error'])){
+		$aTbl['ok']=false;
+		$aTbl['error']=$res['error'];
+		echo ($res['error']);
+	}
+	else{
+		$colcnt = dbmng_num_columns($res);
+		$rowcnt = dbmng_num_rows($res);
+		$aTbl  = array();
+		$aTblD = array();
+		$aTblH = array();
+		foreach( $res as $rec )
+			{
+				for( $nC = 0; $nC<=$colcnt-1; $nC++ )
+					{
+						$keys=array_keys((array)$rec);
+						$aRow[$nC] = $rec->$keys[$nC];
+						$aTblH[$nC] = $keys[$nC];
+					}
+				$aTblD[] = $aRow;
+			}
+		$aTbl['ok']=true;
+		$aTbl['error']='';
+		$aTbl['data'] = $aTblD;
+		$aTbl['header'] = $aTblH;
+		$aTbl['rowCount'] = $rowcnt;
+		$aTbl['colCount'] = $colcnt;
+
+		return $aTbl;
+	}
 }
 
 

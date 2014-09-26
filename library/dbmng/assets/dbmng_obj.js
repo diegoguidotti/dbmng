@@ -445,7 +445,9 @@ Dbmng.prototype.syncData = function() {
 		else {
 
 
-			dialogStart("Starting to upload data & images");
+			if(obj.aParam.mobile){
+				dialogStart("Starting to upload data & images");
+			}
 
 			obj.prog = obj.prog+1;
 			console.log('start '+obj.prog);
@@ -1389,8 +1391,14 @@ Dbmng.prototype.createForm = function(id_record) {
 			if(!layout_view_field_table(field.skip_in_tbl) && obj.inline==1)
 				view_field=false;
 		}
+
+
+		console.log("add field "+view_field +" "+dbmng_check_is_pk(field)+" "+index);
 	
 		if( view_field ){
+
+
+
 		//if( !dbmng_check_is_pk(field) )
 			if(obj.inline==1){
 				form+='<td>';
