@@ -260,6 +260,8 @@ function dbmng_manager()
 												'voc_val' => array(
 														'checkbox'=> t('CheckBox'),	
 														'date'=> t('Date'),	
+														'datetime'=> t('Date time'),	
+														'time'=> t('Time'),	
 														'file'=> t('File'),
 														'html'=> t('Html'),
 														'picture'=> t('Picture'),
