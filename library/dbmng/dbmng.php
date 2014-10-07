@@ -640,8 +640,8 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 		}
 	
 	//create the $val array storing all the record data
-  if( $do_update == 1 )
-    {
+	if( $do_update == 1 )
+		{
 			$where = "";
 			$var = array();
 			foreach ( $aForm['fields'] as $fld => $fld_value )
@@ -650,33 +650,42 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 						{
 							$where .= "$fld = :$fld and ";
 							$var = array_merge($var, array(":".$fld => $_REQUEST[$fld] ));
+							$pkfld = $fld;
 						}
 				}
 			
 			$where = substr($where, 0, strlen($where)-4);			
 
 			$result = dbmng_query("select * FROM " . $aForm['table_name'] . " WHERE $where ", $var);
-			$vals   = dbmng_fetch_object($result); //$result->fetchObject();
 
-			foreach ( $aForm['fields'] as $fld => $fld_value )
+			if( is_object($result) || (is_array($result) && $result['ok']) )
 				{
-					if( isset($fld_value['widget']) )
+					$vals   = dbmng_fetch_object($result); //$result->fetchObject();
+
+					foreach ( $aForm['fields'] as $fld => $fld_value )
 						{
-							if( $fld_value['widget']=='select_nm' )
+							if( isset($fld_value['widget']) )
 								{
-									$result = dbmng_query("select ".$fld_value['field_nm']." FROM " . $fld_value['table_nm'] . " WHERE $where ", $var);
-									$tx="";
-									
-									if( $do_update == 1 )
+									if( $fld_value['widget']=='select_nm' )
 										{
-											foreach ($result as $record)
-												{							
-													$tx.=($record->$fld_value['field_nm']).'|';
+											$result = dbmng_query("select ".$fld_value['field_nm']." FROM " . $fld_value['table_nm'] . " WHERE $where ", $var);
+											$tx="";
+											
+											if( $do_update == 1 )
+												{
+													foreach ($result as $record)
+														{							
+															$tx.=($record->$fld_value['field_nm']).'|';
+														}
 												}
+											$nmvals[$fld]=$tx;
 										}
-									$nmvals[$fld]=$tx;
 								}
 						}
+				}
+			else
+				{
+					$html .= "<div class='message error'>".t('Column not found')." [$pkfld]</div>";
 				}
 		}
 
@@ -798,9 +807,6 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 											$aInput['value'] = $value;
 											$aInput['actiontype'] = $actiontype;
 											$aInput['aParam'] = $aParam;
-											//echo "<pre>";
-											//print_r($fld_value);
-											//echo "</pre>";
 
 											if ($widget==='textarea')
 												{
@@ -836,6 +842,14 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 											else if ($widget==='date')
 												{
 													$html .= layout_form_date( $aInput );
+												}
+											else if ($widget==='datetime')
+												{
+													$html .= layout_form_datetime( $aInput );
+												}
+											else if ($widget==='time')
+												{
+													$html .= layout_form_time( $aInput );
 												}
 											else if ($widget==='file')
 												{
