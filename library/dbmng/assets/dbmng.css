@@ -231,3 +231,8 @@ input.dbmng_checkbox{
 #tapholdmenu ul {
 list-style-type: none;
 }
+
+div.error{
+	background-repeat: no-repeat;
+	padding-left: 30px;
+}

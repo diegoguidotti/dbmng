@@ -109,6 +109,20 @@ function layout_get_label($fld, $fld_value)
 	}
 
 
+function layout_form_date( $aInput )
+	{
+		return layout_form_date_elab( $aInput, 'date' );
+	}
+	
+function layout_form_datetime( $aInput )
+	{
+		return layout_form_date_elab( $aInput, 'datetime' );
+	}
+
+function layout_form_time( $aInput )
+	{
+		return layout_form_date_elab( $aInput, 'time' );
+	}
 /////////////////////////////////////////////////////////////////////////////
 // layout_form_date
 // ======================
@@ -120,7 +134,7 @@ function layout_get_label($fld, $fld_value)
 \param $value				stored value
 \return             html
 */
-function layout_form_date( $aInput )
+function layout_form_date_elab( $aInput, $sType )
 {
 	$fld = $aInput['fld'];
 	$fld_value = $aInput['fld_value'];
@@ -142,8 +156,20 @@ function layout_form_date( $aInput )
 	//format the date string 
 	if(!is_null($value) && $value!='')
 		{
-			$datetime = DateTime::createFromFormat('Y-m-d', $value);
-			$datetime_str= $datetime->format('d-m-Y');
+			$ymd_format='Y-m-d';
+			$dmy_format='d-m-Y';
+			if( $sType == 'datetime' )
+				{
+					$ymd_format='Y-m-d G:i:s';
+					$dmy_format='d-m-Y G:i:s';
+				}
+			elseif( $sType == 'time' )
+				{
+					$ymd_format='G:i:s';
+					$dmy_format='G:i:s';
+				}
+			$datetime = DateTime::createFromFormat($ymd_format, $value);
+			$datetime_str= $datetime->format($dmy_format);
 		}
 
 	$more2 = "";
