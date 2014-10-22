@@ -53,15 +53,23 @@ function prepare_hidden_var_form($aParam)
 */
 function layout_get_nullable($fld_value)
 	{
-		$ht = "";
+		$exclude=false;	
 		if( isset($_REQUEST['act2']) )
 			{
 				if( !isset($_REQUEST['act2']) == "do_search" ) //!isset($_REQUEST['act2']) == "search" && 
-					{
-						if(	isset($fld_value['nullable']) && $fld_value['nullable'] == 0 )
-								$ht .= "required ";
+					{						
+						$exclude=true;	
 					}
 			}
+
+		$ht = "";
+		if(!$exclude){
+			if(	isset($fld_value['nullable']) && $fld_value['nullable'] == 0 )
+				$ht .= "required ";
+		}
+
+		
+
 		return $ht;
 	}
 
@@ -225,7 +233,8 @@ function layout_form_input($aInput) //( $fld, $fld_value, $value, $more='' )
 			$more2 = "disabled";
 		
 	$html  = "<input type='text' name='$actiontype$fld' id='dbmng_$fld' $more $more2";
-	$html .= " value= '$value' $placeholder ";	
+	$html .= " value= '$value' $placeholder ";
+	$html .= " test='test' ";	
 	$html .= layout_get_nullable($fld_value);	
 	$html .= " />\n";
 
@@ -412,7 +421,7 @@ function layout_form_html( $aInput )
 	$html .= '<script>';
 	$html .= '	tinymce.init({selector:"textarea#dbmng_'.$fld.'"});';
 	$html .= '</script>';
-	$html .= "<textarea class='html_widget' name='$actiontype$fld' id='dbmng_$fld' ".layout_get_nullable($fld_value)." $more2 >";
+	$html .= "<textarea class='html_widget' name='$actiontype$fld' id='dbmng_$fld' $more2 >";
 	$html .= $value;	
 	$html .= "</textarea>\n";
 	return $html;
@@ -502,7 +511,7 @@ function layout_form_file( $aInput )
 	$html .= "<div class='dbmng_file_hide_this'><input type='file' name='$actiontype$fld' id='dbmng_$fld' ></div>";
 
 	$html .= '<input class="dbmng_file_text" type="text" name="'.$fld.'_tmp_choosebox" id="dbmng_'.$fld.'_tmp_choosebox" value="'.$value.'" '.$more2.'/>&nbsp';
-	if( strlen($more) == 0 )
+	if( strlen($more2) == 0 )
 		{
 			$html .= '<a href="#" id="dbmng_'.$fld.'_tmp_choose">'.t('Choose').'</a>&nbsp';
 			$html .= '<a href="#" id="dbmng_'.$fld.'_tmp_remove">'.t('Remove').'</a>';

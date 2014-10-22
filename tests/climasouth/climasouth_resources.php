@@ -80,6 +80,7 @@ function _climasouth_workspace($typeres = null, $edit_id = null)
 					unset($aParam);
 					$aParam                          = array();
 					$aParam['filters']               = array();
+					$aParam['filters']['uid']        = $user->uid;
 					$aParam['hidden_vars']           = array();
 					$aParam['hidden_vars']['tbl']	   = $table_name; //save the table id
 					$aParam['user_function']['dup']	 = 0;	              // allow to enabled=1 or disabled=0 the duplication function
@@ -100,11 +101,20 @@ function _climasouth_workspace($typeres = null, $edit_id = null)
 					}
 					else{
 
-						if(!req_equal('act','do_upd') && !req_equal('act','del') ){
+						if(!req_equal('act','do_upd') && !req_equal('act','do_ins') && !req_equal('act','del') ){
 							$html .= dbmng_create_form($aForm, $aParam, 1);
 						}
 						else{
-								dbmng_create_form_process($aForm, $aParam);
+								$ret = dbmng_create_form_process($aForm, $aParam);
+								
+								if(req_equal('act','do_ins'))	{
+									if(isset($ret['inserted_id'])){
+										$rs=dbmng_query("select * from c_resource WHERE id_c_resource=:id_c_resource", array(':id_c_resource'=>$ret['inserted_id'] ));
+										$fo = dbmng_fetch_object($rs);
+										drupal_set_message('The new document has been uploaded: <a target="_NEW" href="'.base_path().'docs/'.$fo->file.'">'.$fo->res_title.'</a> ');
+									}
+
+								}	
 						}
 					}
 
@@ -120,21 +130,25 @@ function _climasouth_workspace($typeres = null, $edit_id = null)
 
 function  _climasouth_resource_search(){
 	dbmng_add_drupal_libraries();
+	global $user;
+
 	$html="";
 	$show_list=true;
 
-	if(isset($_REQUEST['id_c_resource'])){
+	if(isset($_REQUEST['id_c_resource']) || isset($_REQUEST['insert_resource']) ){
 		$show_list=false;
-		$id_c_resource=$_REQUEST['id_c_resource'];
+		$id_c_resource=null;
+		if(isset($_REQUEST['id_c_resource']))
+			$id_c_resource=$_REQUEST['id_c_resource'];
 
 		//$html.="editing ".$id_c_resource;
 		$html.=_climasouth_workspace('resource',$id_c_resource);
-		if(req_equal('act','do_upd') || req_equal('act','del')){
+		if(req_equal('act','do_upd') || req_equal('act','do_ins') || req_equal('act','del')){
 				$show_list=true;
 		}		
-
-		
 	}
+
+	
 
 
 	if($show_list){
@@ -158,7 +172,12 @@ function  _climasouth_resource_search(){
 		
 		$html.= '<div style="clear:both; width:100%"><input placeHolder="Search across resources" id="free_search" type="input" name="free_search" value="'.$fs.'" /></div>';
 
-		$html.='<div id="linkToKB"><a href="'.base_path().'navigator">CC Knowledge Navigator</a></div>';
+		$html.='<div id="linkToKB"><a href="'.base_path().'navigator">'.t('CC Knowledge Navigator').'</a></div>';
+		if(in_array('administrator', $user->roles) || in_array('experts', $user->roles)){
+			$edit=true;
+			$html.='<div id="insert_resource"><a href="'.base_path().'climasouth/resource_search?insert_resource=true&act=ins">'.t('Insert a new resource').'</a></div>';
+		}
+
 		//$html.='</td><td width="500px" valign="top"><div id="tag_cloud"></div></td></table>';
 
 /*
@@ -179,7 +198,7 @@ function  _climasouth_resource_search(){
  
 
 
-		$q = "SELECT c.id_c_resource, file, res_title, res_author, res_description, id_c_visibility, res_tags, res_date, organisation ";
+		$q = "SELECT c.id_c_resource, file, res_title, res_author, res_description, id_c_visibility, res_tags, res_date, organisation, c.uid ";
 		$q .= ", GROUP_CONCAT(DISTINCT concat(co.country_name)  SEPARATOR '|') as country   ";
 		$q .= ", GROUP_CONCAT(DISTINCT concat(s.subject)  SEPARATOR '|') as subject   ";
 		$q .= ", GROUP_CONCAT(DISTINCT concat(t.tags)  SEPARATOR '|') as tags   ";
@@ -205,23 +224,23 @@ function  _climasouth_resource_search(){
 
 		$html.="<script>jQuery(document).ready(function(){formatTileResources();});</script>";
 
-		global $user;
+		
 		if(in_array('administrator', $user->roles)){
 			//shows all
 		}
 		else if(in_array('experts', $user->roles)){
-			$q .= "AND id_c_visibility>=5 ";
+			$q .= "AND (id_c_visibility>=5 or c.uid=".($user->uid).") ";
 		}
 		else if(in_array('official', $user->roles)){
-			$q .= "AND id_c_visibility>=10 ";
+			$q .= "AND (id_c_visibility>=10 or c.uid=".($user->uid).") ";
 		}
 		else if ( $user->uid ) {
-			$q .= "AND id_c_visibility>=20 ";
+			$q .= "AND (id_c_visibility>=20 or c.uid=".($user->uid).") ";
 		}
 		else{
 			$q .= "AND id_c_visibility>=99 ";
 		}	
-		$q.=" group by c.id_c_resource, file, res_title, res_author, res_description, id_c_visibility, res_tags, res_date, organisation ";
+		$q.=" group by c.id_c_resource, file, res_title, res_author, res_description, id_c_visibility, res_tags, res_date, organisation, c.uid ";
 		$q.= "order by c.id_c_resource desc;";
 
 		//echo $q;
@@ -308,6 +327,9 @@ function _climasouth_render_res($r)
 	global $user;
 	$edit=false;
 	if(in_array('administrator', $user->roles)){
+		$edit=true;
+	}
+	else if($r->uid==$user->uid){
 		$edit=true;
 	}
 

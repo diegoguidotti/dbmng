@@ -47,7 +47,16 @@ function dbmng_create_form_process($aForm, $aParam, $actiontype="")
 					if($_REQUEST['act']=='prt_tbl')
 						dbmng_print_table($aForm, $aParam);
 
-
+					if(isset($ret))
+						{
+							if(!$ret['ok'])
+								{
+									if(DBMNG_CMS=='drupal')
+										drupal_set_message($ret['error']);
+									else
+										echo '<div class="message error">'.$ret['error'].'</div>';
+								}
+						}
 				}
 			else
 				{
@@ -98,6 +107,17 @@ function dbmng_delete($aForm, $aParam)
 					$var = array_merge($var, array(":".$fld => $_REQUEST[$fld] ));
 				}
 		}
+
+		if( isset($aParam['filters']) )
+				{
+					foreach ( $aParam['filters'] as $fld => $fld_value )
+						{
+								//drupal_set_message("Add ".$fld." ".$fld_value);
+								$where .= $fld . " = :$fld and ";
+								$var = array_merge($var, array(":".$fld => $fld_value));
+						}					
+				}
+
 
 	$where = substr($where, 0, strlen($where)-4);
 	//TODO: add also filter fields in delete/update
@@ -593,6 +613,17 @@ function dbmng_update($aForm, $aParam)
 					$aWhere = array_merge( $aWhere, array(":".$fld => $val) );
 				}
 		}
+
+		if( isset($aParam['filters']) )
+				{
+					foreach ( $aParam['filters'] as $fld => $fld_value )
+						{
+								//drupal_set_message("Add ".$fld." ".$fld_value);
+								$where .= $fld . " = :$fld and ";
+								$aWhere = array_merge($aWhere, array(":".$fld => $fld_value));
+						}					
+				}
+
 
 	$where = substr($where, 0, strlen($where)-4);		
 	$var   = array_merge($var, $aWhere);
