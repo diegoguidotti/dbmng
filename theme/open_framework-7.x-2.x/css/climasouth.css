@@ -132,6 +132,43 @@ a{color:#71b1cb;text-decoration:none}
 body {font-family: 'roboto'}
 
 
+#comments div.comment{
+	border-bottom: 1px solid #CCC;
+  margin: 5px;
+	padding: 5px;
+  font-size: 13px;
+}
+
+#comments div.comment div.user-picture{
+  float:right
+}
+
+
+#comments div.comment h3{
+  font-size: 15px;
+  float:left
+}
+
+#comments div.comment div.submitted{
+  font-size: 10px;
+  float:right
+}
+
+#comments div.comment div.content{
+	clear: both;
+  font-size: 12px;
+}
+
+#comments div.comment  ul.links{
+  font-size: 10px;
+
+}
+
+
+#comments  div.comment div.submitted a.permalink{
+  display:none;
+}
+
 /* ---------- Search result ---------- */
 
 /*
