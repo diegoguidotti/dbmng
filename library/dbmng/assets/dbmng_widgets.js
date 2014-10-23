@@ -75,6 +75,9 @@ dbmng_select_html = function(val, field ){
 
 dbmng_checkbox_prepare_val = function(obj_id, id_record, index){
 	var ret= 0;
+
+	console.log(('#'+obj_id+'_'+id_record+'_'+index));
+	
 	if( jQuery('#'+obj_id+'_'+id_record+'_'+index).prop('checked') )
 		ret = 1;
 	return ret;
@@ -99,12 +102,12 @@ dbmng_checkbox_form = function(obj_id,  fld, field, id_record, value, more, act 
 */
 	//html+='<input id=new type=checkbox name=news><label for=news>'+field.label+'</label>';
 	
-	   html='<input class="custom"  name='+fld+' id='+obj_id+"_"+id_record+"_"+fld+' type=checkbox  ';
+	   html='<input class="custom"  name="'+fld+'" id="'+obj_id+"_"+id_record+"_"+fld+'" type="checkbox"  ';
 		if( value == 1 || (value != 0 && field.default == 1) ){
-			html += " checked='true' ";
+			html += ' checked="true" ';
 		}	
 
-		 html+='><label for='+obj_id+"_"+id_record+"_"+fld+'>'+field.label+'</label>';
+		 html+=' /><label for='+obj_id+"_"+id_record+"_"+fld+'>'+field.label+'</label>';
 	return html;
 }
 

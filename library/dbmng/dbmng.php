@@ -1655,7 +1655,7 @@ function dbmng_ajax_manager(){
 								}
 								else{
 									$json['updated'][$index]['ok']=0;				
-									$json['updated'][$index]['error']=$ret['error'][2];				
+									$json['updated'][$index]['error']=$ret['error'];				
 								}
 
 							}

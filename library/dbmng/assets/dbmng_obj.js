@@ -990,7 +990,7 @@ Dbmng.prototype.createRow = function (value, id_record) {
 		else{
 
 			html_row = '<span id="'+obj.id+'_edit_'+id_record+'">' +  html_row + "</span>"; 
-			if(value.error && value.error!=''){
+			if(value.error && value.error!=''){						
 						html_row += '<span title="'+value.error+'" class="dbmng_error">'+t('Error')+': '+value.error+'</span>';
 			}
 		}
@@ -999,12 +999,12 @@ Dbmng.prototype.createRow = function (value, id_record) {
 	else{
 		html_row += "<td class='dbmng_functions'>";
 
-		var nDel=1; nUpd=1; nDup=1;
+		var nDel=1; nUpd=1; nDup=0;
 
 		if(obj.aParam['user_function']){
 			nUpd = ((obj.aParam['user_function']['upd']) ? obj.aParam['user_function']['upd'] : 1);
 			nDel = ((obj.aParam['user_function']['del']) ? obj.aParam['user_function']['del'] : 1);
-			nDup = ((obj.aParam['user_function']['dup']) ? obj.aParam['user_function']['dup'] : 1);
+			nDup = ((obj.aParam['user_function']['dup']) ? obj.aParam['user_function']['dup'] : 0);
 		}
 
 		if(state=='del'){
@@ -1025,6 +1025,7 @@ Dbmng.prototype.createRow = function (value, id_record) {
 		} 
 
 		if(value.error){
+			console.log(value);
 			html_row += '<span title="'+value.error+'" class="dbmng_error">'+t('Error!')+'</span>';
 		}
 		html_row += "</td>\n";
@@ -1381,7 +1382,8 @@ Dbmng.prototype.createForm = function(id_record) {
 		//debug(index + ": " + dbmng_check_is_pk(field));
 		value = '';
 
-		form+='<fieldset data-role="controlgroup">';
+		if(obj.mobile==1)
+			form+='<fieldset data-role="controlgroup">';
 		
 		var view_field=true;
 		if(dbmng_check_is_pk(field)){
@@ -1422,19 +1424,32 @@ Dbmng.prototype.createForm = function(id_record) {
 			}
 		}
 		else if (dbmng_check_is_pk(field))	{
-			form+="<td>&nbsp</td>";
+
+			if(obj.inline==1){
+				if(layout_view_field_table(field.skip_in_tbl)){
+					form+="<td>&nbsp"+field.skip_in_tbl+"</td>";
+				}
+			}
 		}
 
-		form+="</fieldset>";
+		if(obj.mobile==1)
+			form+="</fieldset>";
 	});
 
 	form+="</form>";
+
+
+	
 	
 	datarole = "";
 	datatheme = "";
 	if( obj.mobile == 1 ){
 		datarole  = "data-role='button'";
 		datatheme = "data-theme='b'";
+	}
+
+	if(obj.inline==1){
+		form+='<td>';
 	}
 	
 	
@@ -1455,9 +1470,14 @@ Dbmng.prototype.createForm = function(id_record) {
 			form+="<a id='"+this.id+"_"+id_record+"_restore' "+datarole+" "+datatheme+">"+t("Restore")+"</a>";
 		}
 		else{	
-			form+="<a id='"+this.id+"_"+id_record+"_update' "+datarole+" "+datatheme+">"+t("Update")+"</a>";		
-			form+="<a id='"+this.id+"_"+id_record+"_delete' "+datarole+" "+datatheme+">"+t("Delete")+"</a>";		
+			form+="<a class='dbmng_delete_button' id='"+this.id+"_"+id_record+"_delete' "+datarole+" "+datatheme+">"+t("Delete")+"</a>";		
+			form+="<a class='dbmng_update_button' id='"+this.id+"_"+id_record+"_update' "+datarole+" "+datatheme+">"+t("Update")+"</a>";		
 		}
+
+		if(obj.inline==1){
+			form+='</td>';
+		}
+
 	}
 	
 	if( obj.mobile == 1 ){
@@ -1498,6 +1518,8 @@ Dbmng.prototype.createForm = function(id_record) {
 	}
 	else{
 		if(obj.inline==1){
+			console.log(form);
+
 			jQuery('#'+obj.id+"_"+id_record).html(form)
 		}
 		else{
