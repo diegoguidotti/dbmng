@@ -626,7 +626,7 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 	$btn_name_add = t("Insert");
 	if( isset($aParam['ui']['btn_name']) )
 		{
-			$btn_name = t($aParam['ui']['btn_name']);
+			$btn_name_add = t($aParam['ui']['btn_name']);
 		}
 	
 	$btn_name_search = t("Search");
