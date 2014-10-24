@@ -63,6 +63,7 @@ functions for user and adding custom function
   //to manage the label of the library
   $aParam['ui']['btn_name'] = 'insert the right label'; //replace the insert button label in the form
   $aParam['ui']['btn_lst_name'] = 'insert the right label'; //replace the add new record label in the table view
+  $aParam['ui']['fld_separator'] = 0; //Default value 0. If 1, the library add a separater between the fields in the form.
   
   //order the table records basic on the field indicated in this variable
   $aParam['tbl_order']        = 'field_order';
