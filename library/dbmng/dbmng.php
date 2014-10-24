@@ -538,32 +538,22 @@ function dbmng_crud_js($id_table, $aParam=Array())
   
 	$html .= "<div id='table_container_".$id_table."'></div>\n";
 
-
-  //$html .= dbmng_create_form_process($aForm, $aParam);
 	$html .= "\n<script type='text/javascript'>\n";
-	//$html .= "var aForm=".json_encode($aForm).";\n";
-	//$html .= "var aParam=".json_encode($aParam).";\n";
-
 		
 	if(true){
 		$html .= "var db; ";
 		$html .= "jQuery(document).ready(function() {";
 
-		$inline=0;
-		if(isset($aParam['inline'])){
-			$inline=$aParam['inline'];
-		}
-		$auto_sync=1;
-		if(isset($aParam['auto_sync'])){
-			$auto_sync=$aParam['auto_sync'];
-		}
-		$auto_edit=0;
-		if(isset($aParam['auto_edit'])){
-			$auto_edit=$aParam['auto_edit'];
-		}
-  
-		//$html.="alert('a');";
-		$html .= " db  = new Dbmng(".$id_table.", {'div_element':'table_container_".$id_table."','ajax_url':'dbmng/ajax','auto_sync': ".$auto_sync.", 'inline':".$inline.",	'auto_edit': ".$auto_edit.",	'mobile':0 });";
+		//Default parameter
+		$aParamDefault['div_element']='table_container_'.$id_table;
+		$aParamDefault['ajax_url']='dbmng/ajax';
+		$aParamDefault['auto_sync']=1;
+		$aParamDefault['inline']=0;
+		$aParamDefault['auto_edit']=0;
+		$aParamDefault['mobile']=0;
+
+		$aParam=array_merge($aParamDefault,$aParam);  
+  	$html .= " db  = new Dbmng(".$id_table.", ".json_encode($aParam).");";
   
 		$html .= "db.start();";
 		$html .= "});";
