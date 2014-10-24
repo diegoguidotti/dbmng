@@ -61,8 +61,10 @@ functions for user and adding custom function
   $aParam['custom_function'][0]['custom_label']    = 'Show Fields';
   
   //to manage the label of the library
-  $aParam['ui']['btn_name'] = 'insert the right label'; //replace the insert button label in the form
+  $aParam['ui']['btn_name'] = 'insert the right label'; //replace the insert default button label in the form
   $aParam['ui']['btn_lst_name'] = 'insert the right label'; //replace the add new record label in the table view
+  $aParam['ui']['btn_name_search'] = 'insert the right label'; //replace the search default button label in the form
+  $aParam['ui']['btn_name_update'] = 'insert the right label'; //replace the update default button label in the form
   $aParam['ui']['fld_separator'] = 0; //Default value 0. If 1, the library add a separater between the fields in the form.
   
   //order the table records basic on the field indicated in this variable
