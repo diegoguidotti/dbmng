@@ -60,6 +60,10 @@ functions for user and adding custom function
   $aParam['custom_function'][0]['custom_variable'] = 'show_fields';
   $aParam['custom_function'][0]['custom_label']    = 'Show Fields';
   
+  //to manage the label of the library
+  $aParam['ui']['btn_name'] = 'insert the right label'; //replace the insert button label in the form
+  $aParam['ui']['btn_lst_name'] = 'insert the right label'; //replace the add new record label in the table view
+  
   //order the table records basic on the field indicated in this variable
   $aParam['tbl_order']        = 'field_order';
   
