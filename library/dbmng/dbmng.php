@@ -907,7 +907,7 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 		
 			$html .= "<input type='hidden' name='act' value='do_upd' />\n";
 			$html .= "<input type='hidden' name='tbln' value='" . $aForm['table_name'] . "' />\n";
-			$html .= "<div class='dbmng_form_button'><input  type='submit' value='". $btn_name_search ."' /></div>\n";
+			$html .= "<div class='dbmng_form_button'><input  type='submit' value='". $btn_name_update ."' /></div>\n";
 		}
 	elseif( $do_update == 0 || $do_update == 3 )
 		{
