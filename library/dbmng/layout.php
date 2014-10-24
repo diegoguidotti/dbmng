@@ -913,6 +913,23 @@ function layout_table_action( $aForm, $aParam, $id_record )
 		  $nPrt_rec = (isset($aParam['user_function']['prt_rec']) ? $aParam['user_function']['prt_rec'] : 1 );				
 		}
 	
+	$label_del = t('Delete');
+	if( isset($aParam['ui']['btn_lst_delete']) )
+		$label_del = t($aParam['ui']['btn_lst_delete']);
+	
+	$label_upd = t('Update');
+	if( isset($aParam['ui']['btn_lst_update']) )
+		$label_upd = t($aParam['ui']['btn_lst_update']);
+	
+	$label_dup = t('Duplicate');
+	if( isset($aParam['ui']['btn_lst_duplicate']) )
+		$label_dup = t($aParam['ui']['btn_lst_duplicate']);
+	
+	$label_pdf = t('PDF');
+	if( isset($aParam['ui']['btn_lst_pdf']) )
+		$label_pdf = t($aParam['ui']['btn_lst_pdf']);
+	
+	
 	$html = "";
 	$hv   = prepare_hidden_var($aParam);
 	if( true )
@@ -920,7 +937,7 @@ function layout_table_action( $aForm, $aParam, $id_record )
 			if( $nDel == 1 )
 				{
 					$jsc = "return confirm('".t('Are you sure?')."')";
-					$html .= '<a class="dbmng_delete_button" onclick="'.$jsc.'" href="?act=del&amp;tbln=' . $aForm['table_name'] . '&amp;' . $id_record .$hv.'">' . t('Delete') . '</a>' . "&nbsp;";
+					$html .= '<a class="dbmng_delete_button" onclick="'.$jsc.'" href="?act=del&amp;tbln=' . $aForm['table_name'] . '&amp;' . $id_record .$hv.'">' . $label_del . '</a>' . "&nbsp;";
 				}
 			$act2="";
 			if( isset($_REQUEST['act2']) )
@@ -931,12 +948,12 @@ function layout_table_action( $aForm, $aParam, $id_record )
 
 			if( $nUpd == 1 ) 
 				{
-					$html .= "<a class='dbmng_update_button' href='?act=upd".$act2."&amp;tbln=" . $aForm['table_name'] . "&amp;" . $id_record .$hv."'>" . t('Update') . "</a>" . "&nbsp;";
+					$html .= "<a class='dbmng_update_button' href='?act=upd".$act2."&amp;tbln=" . $aForm['table_name'] . "&amp;" . $id_record .$hv."'>" . $label_upd . "</a>" . "&nbsp;";
 				}
 			if( $nDup == 1 )
-				$html .= "<a class='dbmng_duplicate_button' href='?act=dup".$act2."&amp;tbln=" . $aForm['table_name'] . "&amp;" . $id_record .$hv."'>" . t('Duplicate') . "</a>" . "&nbsp;";
+				$html .= "<a class='dbmng_duplicate_button' href='?act=dup".$act2."&amp;tbln=" . $aForm['table_name'] . "&amp;" . $id_record .$hv."'>" . $label_dup . "</a>" . "&nbsp;";
 			if( $nPrt_rec == 1 )
-				$html .= "<a class='dbmng_print_rec_button' href='?act=prt_rec".$act2."&amp;tbln=" . $aForm['table_name'] . "&amp;" . $id_record .$hv."' target='_blank'>" . t('PDF') . "</a>" . "&nbsp;";
+				$html .= "<a class='dbmng_print_rec_button' href='?act=prt_rec".$act2."&amp;tbln=" . $aForm['table_name'] . "&amp;" . $id_record .$hv."' target='_blank'>" . $label_pdf . "</a>" . "&nbsp;";
 		}
 	else
 		{
