@@ -425,7 +425,7 @@ function dbmng_manager()
 									array('label'   => t('ID') , 
 												'label_long' => t('ID Table'),
 												'type' => 'bigint',
-												'skip_in_tbl' => '1',
+												//'skip_in_tbl' => '1',
 												'key' => 1
 									), 
 								'table_name'  => 
