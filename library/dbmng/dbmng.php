@@ -633,10 +633,22 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 	$nmvals = Array();
 	$html      = "";
 	
-	$btn_name = t("Insert");
+	$btn_name_add = t("Insert");
 	if( isset($aParam['ui']['btn_name']) )
 		{
 			$btn_name = t($aParam['ui']['btn_name']);
+		}
+	
+	$btn_name_search = t("Search");
+	if( isset($aParam['ui']['btn_name_search']) )
+		{
+			$btn_name_search = t($aParam['ui']['btn_name_search']);
+		}
+	
+	$btn_name_update = t("Update");
+	if( isset($aParam['ui']['btn_name_update']) )
+		{
+			$btn_name_update = t($aParam['ui']['btn_name_update']);
 		}
 	
 	//create the $val array storing all the record data
@@ -905,19 +917,19 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 		
 			$html .= "<input type='hidden' name='act' value='do_upd' />\n";
 			$html .= "<input type='hidden' name='tbln' value='" . $aForm['table_name'] . "' />\n";
-			$html .= "<div class='dbmng_form_button'><input  type='submit' value='". t('Update') ."' /></div>\n";
+			$html .= "<div class='dbmng_form_button'><input  type='submit' value='". $btn_name_search ."' /></div>\n";
 		}
 	elseif( $do_update == 0 || $do_update == 3 )
 		{
 			$html .= "<input type='hidden' name='act' value='do_ins' />\n";
 			$html .= "<input type='hidden' name='tbln' value='" . $aForm['table_name'] . "' />\n";
-			$html .= "<div class='dbmng_form_button'><input class='dbmng_form_button' type='submit' value='" . $btn_name . "' /></div>\n";
+			$html .= "<div class='dbmng_form_button'><input class='dbmng_form_button' type='submit' value='" . $btn_name_add . "' /></div>\n";
 		}
 	elseif( $do_update == 2 && $actiontype == "search")
 		{
 			$html .= "<input type='hidden' name='act2' value='do_search' />\n";
 			$html .= "<input type='hidden' name='tbln' value='" . $aForm['table_name'] . "' />\n";
-			$html .= "<div class='dbmng_form_button'><input class='dbmng_form_button' type='submit' value='" . t('Search') . "' /></div>\n";
+			$html .= "<div class='dbmng_form_button'><input class='dbmng_form_button' type='submit' value='" . $btn_name_search . "' /></div>\n";
 			//$html .= "<div class='dbmng_form_button'><input class='dbmng_form_button' type='reset' value='" . t('Reset') . "' /></div>\n";
 		}
 
@@ -1606,7 +1618,7 @@ function dbmng_ajax_manager(){
 								}
 								else{
 									$json['inserted'][$index]['ok']=0;				
-									$json['inserted'][$index]['error']=$ret['error'][2];				
+									$json['inserted'][$index]['error']=$ret['error'];				
 								}
 
 							}
@@ -1685,7 +1697,7 @@ function dbmng_ajax_manager(){
 								}
 								else{
 									$json['deleted'][$index]['ok']=0;				
-									$json['deleted'][$index]['error']=$ret['error'][2];				
+									$json['deleted'][$index]['error']=$ret['error'];				
 								}						
 							}
 					}
