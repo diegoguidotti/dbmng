@@ -1486,9 +1486,12 @@ Dbmng.prototype.createForm = function(id_record) {
 			form+="<a id='"+this.id+"_"+id_record+"_restore' "+datarole+" "+datatheme+">"+t("Restore")+"</a>";
 		}
 		else{	
-			if(obj.auto_sync!=1){
+			if(obj.mobile == 1 ){
 				form+="<a class='dbmng_delete_button' id='"+this.id+"_"+id_record+"_delete' "+datarole+" "+datatheme+">"+t("Delete")+"</a>";		
 				form+="<a class='dbmng_update_button' id='"+this.id+"_"+id_record+"_update' "+datarole+" "+datatheme+">"+t("Update")+"</a>";		
+			}
+			else{
+				form+="<a class='dbmng_update_button' id='"+this.id+"_"+id_record+"_update' "+datarole+" "+datatheme+">"+t("Save")+"</a>";		
 			}
 		}
 
@@ -1543,10 +1546,14 @@ Dbmng.prototype.createForm = function(id_record) {
 		else{
 			jQuery('#'+obj.id+"_form").html(form);
 		}
+  }
 
-		
+	///The form has been created. We should hide the label in checkbox needed only for mobile app
+	if( obj.mobile != 1 ){
 
+		jQuery('label.dbmng_checkbox_label').hide();
 	}
+
 	
 	jQuery('#'+obj.id+"_"+id_record+"_insert").unbind().click(function(){			
 

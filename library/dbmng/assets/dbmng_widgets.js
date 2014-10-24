@@ -107,15 +107,16 @@ dbmng_checkbox_form = function(obj_id,  fld, field, id_record, value, more, act 
 			html += ' checked="true" ';
 		}	
 
-		 html+=' /><label for='+obj_id+"_"+id_record+"_"+fld+'>'+field.label+'</label>';
+		 html+=' />';
+		 html+='<label class="dbmng_checkbox_label" for='+obj_id+"_"+id_record+"_"+fld+'>'+field.label+'</label>';
 	return html;
 }
 
 dbmng_checkbox_html = function(val, field ){
 	if(val==0)
-		ret='no';
+		ret='<input type="checkbox" disabled="true" />  ';
 	else
-		ret='yes';
+		ret='<input type="checkbox" checked="false" disabled="true"  />  ';
 	return ret;
 }
 
