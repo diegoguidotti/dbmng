@@ -778,7 +778,7 @@ function layout_form_select_nm( $aInput )
 	$aVoc = $fld_value['voc_val'];
 
 	//echo '|'.$value.'|';
-	$outtype = 'checkbox';
+	$outtype = $fld_value['out_type'];
 	if( $outtype == 'select' )
 		{
 			$html = "<select  multiple='multiple' name='".$actiontype.$fld."[]' id='dbmng_$fld'  ".layout_get_nullable($fld_value)." $more2>\n";
