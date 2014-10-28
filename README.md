@@ -12,6 +12,7 @@ $aForm=array(
   'table_name' => 'test' ,
 	'primary_key'=> array('id_test'), 
 	'fields'     => array(
+		'id_test' => array('label'   => 'ID', 'type' => 'int', key => 1 ) ,
 		'name' => array('label'   => 'Name', 'type' => 'varchar') ,
 		'age'  => array('label'   => 'Age' , 'type' => 'int'    )
 	)
