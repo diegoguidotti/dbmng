@@ -237,4 +237,9 @@ div.error{
 	padding-left: 30px;
 }
 
+tr.dbmng_subtable td.dbmng_subtable {
+ border: 1px solid #CCC;
+ padding-left: 20px;	
+ padding-bottom: 20px;	
+}
 

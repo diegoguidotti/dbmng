@@ -13,8 +13,16 @@
 </style>
 </head>
 <body>
+<!--
+<h1>Table 1</h2>
+<div id="table1"></div>
 
-<div id="table2">Table2</div>
+<h1>Table 2</h2>
+<div id="table2"></div>
+
+<h1>Table 3</h2>
+-->
+<div id="table3"></div>
 
 <?php 
   //we need to define some global variable to use dbmg independently by Drupal
@@ -33,20 +41,57 @@
 	else if( $_SERVER["HTTP_HOST"] == "www.climasouth.eu" )
 		$id_table = 20;
 	else
-		$id_table = 14;
+		$id_table = 11;
+	
+	//first example: load aForm using the dbmng parameter
+  //echo dbmng_crud_js( $id_table, array('div_element'=>'table1', 'inline'=>1, 'auto_edit'=>1) );
 
-	$aForm    = dbmng_get_form_array($id_table); 
 
+		$aForm=array(  
+			'table_name' => 'a_padre' ,
+				'primary_key'=> array('id_padre'), 
+				'fields'     => array(
+				    'id_padre'  => array('label'   => 'ID Padre', 'type' => 'int', 'key' => 1 )		,		    
+				    'name'  => array('label'   => 'Name', 'type' => 'varchar')				    
+				),
+				'sub_table' => array(
+					array ('label'   => 'Figli', 'id_table'=>'101', 'fk'=>'id_padre') 
+				)
+		);
+
+		$aFormFigli=array(  
+			'table_name' => 'a_figlio' ,
+				'primary_key'=> array('id_figlio'), 
+				'fields'     => array(
+				    'id_figlio'  => array('label'   => 'ID Figlio', 'type' => 'int', 'key' => 1 )		,		    
+				    'nome_figlio'  => array('label'   => 'Name', 'type' => 'varchar') 
+				)
+		);
+
+
+		session_start();
+		$_SESSION["dbmng_form_99"] = json_encode($aForm);
+		$_SESSION["dbmng_form_101"] = json_encode($aFormFigli);
+
+		$aParamFigli['filters']['id_padre'] = "*"; 
+		$_SESSION["dbmng_param_101"] = json_encode($aParamFigli);
+
+	  echo dbmng_crud_js( "99", array('div_element'=>'table3', 'inline'=>1, 'auto_edit'=>0) );
+
+		
+	
 
 	//print_r($aForm);
 	//echo "<br/>" . DBMNG_LIB_PATH;
 	//echo dbmng_crud($aForm);
-  echo  dbmng_crud_js($aForm, Array() );
+  //echo  dbmng_crud_js($aForm, Array() );
 ?>  
 
 	
 <!-- <div id="paste_here" >Paste Here from Excell</div> -->
 <script type="text/javascript">
+
+/*
 	var db;
   jQuery(document).ready(function() {
 		db  = new Dbmng(<?php echo $id_table ?>, {
@@ -58,6 +103,7 @@
 			'mobile':0								//Enable jQuery-mobile css style
 		});  
 		db.start();
+*/
 		
 		/**
 		jQuery('#paste_here').bind('paste', function (e) {
@@ -80,8 +126,8 @@
           
           jQuery("#paste_here").html(html);
 		});
-		*/
 	});
+		*/
 </script>
 </body>
 </html>

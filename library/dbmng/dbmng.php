@@ -71,6 +71,9 @@ function getVersion()
 */
 function dbmng_get_form_array($id_table)
 	{
+
+		$exist_id=false;
+
 		$aForm = array();
 		if( gettype($id_table) != "integer" && gettype($id_table) != "double" )
 			{
@@ -90,6 +93,7 @@ function dbmng_get_form_array($id_table)
 			$fo                = dbmng_fetch_object($table);
 			$aForm['table_name']  = $fo->table_name;
 			$aForm['table_label'] = $fo->table_label;
+			$exist_id=true;
 		}
 		
 
@@ -209,8 +213,10 @@ function dbmng_get_form_array($id_table)
 		
 		$aForm['fields']=$aFields;
 		//print_r($aForm);
-		
-		return $aForm;
+		if($exist_id)				
+			return $aForm;
+		else
+			return null;
 	}
 
 
@@ -531,8 +537,15 @@ function dbmng_create_table($aForm, $aParam)
 function dbmng_crud_js($id_table, $aParam=Array())
 {
 
+	$ajax_url="ajax.php";
 	#TODO: add jstorage
-	drupal_add_js ( "/libs/jstorage.min.js" );
+  if(DBMNG_CMS=='drupal'){
+			drupal_add_js ( "/libs/jstorage.min.js" );
+			$ajax_url='dbmng/ajax';
+	}
+	else{
+			$ajax_url='ajax.php';
+	}
 
 	$html  = "";
   
@@ -541,21 +554,21 @@ function dbmng_crud_js($id_table, $aParam=Array())
 	$html .= "\n<script type='text/javascript'>\n";
 		
 	if(true){
-		$html .= "var db; ";
+		$html .= "var db_".$id_table."; ";
 		$html .= "jQuery(document).ready(function() {";
 
 		//Default parameter
 		$aParamDefault['div_element']='table_container_'.$id_table;
-		$aParamDefault['ajax_url']='dbmng/ajax';
+		$aParamDefault['ajax_url']=$ajax_url;
 		$aParamDefault['auto_sync']=1;
 		$aParamDefault['inline']=0;
 		$aParamDefault['auto_edit']=0;
 		$aParamDefault['mobile']=0;
 
 		$aParam=array_merge($aParamDefault,$aParam);  
-  	$html .= " db  = new Dbmng(".$id_table.", ".json_encode($aParam).");";
+  	$html .= " db".$id_table."  = new Dbmng(".$id_table.", ".json_encode($aParam).");";
   
-		$html .= "db.start();";
+		$html .= "db".$id_table.".start();";
 		$html .= "});";
 
 	}
@@ -578,33 +591,35 @@ function dbmng_get_js_array($aForm, $aParam)
 {
 		
 	$html = "";
-
-	$result = dbmng_get_data($aForm, $aParam);			
-	$html .= '{"records":[';
+  if($aForm!=null){
+		$result = dbmng_get_data($aForm, $aParam);			
+		$html .= '{"records":[';
 		
-	$sObj  = "";
-	foreach( $result as $record )
-		{
-			$sObj .= "{";
-			//get the query results for each field
-			foreach ( $aForm['fields'] as $fld => $fld_value )
-				{					
-					$value=$record->$fld;
+		$sObj  = "";
+		foreach( $result as $record )
+			{
+				$sObj .= "{";
+				//get the query results for each field
+				foreach ( $aForm['fields'] as $fld => $fld_value )
+					{					
+						if(isset($record->$fld)){
+							$value=$record->$fld;
 
-					//important! use json_encode to escape special characters
-					$sObj .= '"' . $fld . '": ' . json_encode($value) . ", ";
-						
-				}
-			$sObj = substr($sObj, 0, strlen($sObj)-2);
-			$sObj .= "}, ";
-		}
-	$sObj = substr($sObj, 0, strlen($sObj)-2);
+							//important! use json_encode to escape special characters
+							$sObj .= '"' . $fld . '": ' . json_encode($value) . ", ";
+						}						
+					}
+				$sObj = substr($sObj, 0, strlen($sObj)-2);
+				$sObj .= "}, ";
+			}
+		$sObj = substr($sObj, 0, strlen($sObj)-2);
 	
-	$html .= $sObj . "] ";
+		$html .= $sObj . "] ";
 
-	$html .= ', "aForm":'.json_encode($aForm);
+		$html .= ', "aForm":'.json_encode($aForm);
 
-	$html .= "}";
+		$html .= "}";
+	}
 	return $html;
 }
 
@@ -1535,21 +1550,62 @@ function dbmng_ajax_manager(){
 	$json="";
 
 	$login=true;
+	$aParam = Array();
 	//TODO check login
 	//TODO check that the uid can access the given id_table
 	
 
 	if($login){
 		if(isset($_REQUEST['id_table'])) {
-			$aForm = dbmng_get_form_array($_REQUEST['id_table']); 
 
-			$table = $aForm['table_name'];
-			$ok=true;
+			session_start();	
+
+		
+			if(isset($_SESSION["dbmng_param_".$_REQUEST['id_table']])){
+		 		$aParam =  dbmng_objectToArray(json_decode(($_SESSION["dbmng_param_".$_REQUEST['id_table']])));
+			}
+
+
+			if(isset($_SESSION["dbmng_form_".$_REQUEST['id_table']])){
+		 		$aForm =  dbmng_objectToArray(json_decode(($_SESSION["dbmng_form_".$_REQUEST['id_table']])));
+			}
+			else
+				$aForm = dbmng_get_form_array($_REQUEST['id_table']); 
+
+			if($aForm==null){
+				$ajax.='{"ok":false, "msg": "The requested id ('.$_REQUEST['id_table'].') does not exist"}';
+			}
+			else{				
+				$table = $aForm['table_name'];
+				$ok=true;
+			}
 		}
 
 		if(isset($_POST['get_records'])){		
 			//$json['records']=Array();
-			$ajax.=dbmng_get_js_array($aForm, Array());
+
+			if(isset($_POST['id_parent'])){
+				
+				if(isset($_POST['fk'])){
+					
+					if(isset($_SESSION["dbmng_param_".$_REQUEST['id_table']])){
+				 		$aParam =  dbmng_objectToArray(json_decode(($_SESSION["dbmng_param_".$_REQUEST['id_table']])));
+						if(isset($aParam['filters'])){
+							if(isset($aParam['filters'][$_POST['fk']])){
+								$aParam['filters'][$_POST['fk']]=intval($_POST['id_parent']);
+								$_SESSION["dbmng_param_".$_REQUEST['id_table']]=json_encode($aParam);
+							}
+						}
+					}
+
+				}
+			//$aParamFigli['filters']['id_padre'] = 2; 
+
+			}
+
+
+
+			$ajax.=dbmng_get_js_array($aForm, $aParam);
 			//echo "{'records':[]}";
 		}
 		else {
@@ -1598,6 +1654,19 @@ function dbmng_ajax_manager(){
 												}
 											}
 									}
+
+								if( isset($aParam['filters']) )
+									{
+										foreach ( $aParam['filters'] as $fld => $fld_value )
+											{				
+												$sFld.=$fld.", ";
+												$sVal.=":$fld, ";
+
+												$aVal = array_merge($aVal, array(":".$fld =>  $fld_value ));
+											}					
+									}
+
+
 								$sVal = substr( $sVal, 0, strlen($sVal)-2 );
 								$sFld = substr( $sFld, 0, strlen($sFld)-2 );
 								$sql = $sql_ins . "(" . $sFld . ") VALUES (" . $sVal . ");";						
@@ -1657,7 +1726,7 @@ function dbmng_ajax_manager(){
 								}
 								else{
 									$json['updated'][$index]['ok']=0;				
-									$json['updated'][$index]['error']=$ret['error'];				
+									$json['updated'][$index]['error']=$ret['error'].' '. $sql;				
 								}
 
 							}
@@ -1729,4 +1798,27 @@ function req_equal($type_var, $val){
 	//echo $ret;
 	return $ret;
 }
+
+function dbmng_objectToArray($d) {
+		if (is_object($d)) {
+			// Gets the properties of the given object
+			// with get_object_vars function
+			$d = get_object_vars($d);
+		}
+ 
+		if (is_array($d)) {
+			/*
+			* Return array converted to object
+			* Using __FUNCTION__ (Magic constant)
+			* for recursive call
+			*/
+			return array_map(__FUNCTION__, $d);
+		}
+		else {
+			// Return array
+			return $d;
+		}
+	}
+ 
+
 ?>
