@@ -163,13 +163,13 @@ Dbmng.prototype.start = function()
 
 
 	if(saved_form && saved_data){
-		debug("load from jstore");
+		debug("LOAD FROM JSTORAGE");
 		obj.aData =saved_data;
 		obj.aForm =saved_form;
 		obj.createTable();
 	}
 	else {
-		debug("load from ajax");
+		debug("LOAD FROM AJAX");
 		debug(saved_form);
 		debug(saved_data);
 
@@ -1273,7 +1273,7 @@ Dbmng.prototype.goBackToTable = function() {
 Dbmng.prototype.updateStorage = function() {
 	var obj=this;
 
-	debug('upd storage on '+obj.id);
+	debug('upd storage on '+obj.id+' records: '+obj.aData.records.length);
 	debug(obj.aData);
 
 	jQuery.jStorage.set(obj.id+"_data", obj.aData);
