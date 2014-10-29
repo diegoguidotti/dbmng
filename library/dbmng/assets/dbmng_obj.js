@@ -444,8 +444,10 @@ Dbmng.prototype.createTable = function(){
 */
 Dbmng.prototype.clearJStorage = function() {
 	var obj=this;
-	jQuery.jStorage.deleteKey(obj.id+"_data");
-	jQuery.jStorage.deleteKey(obj.id+"_form");
+	if(!obj.auto_sync){
+		jQuery.jStorage.deleteKey(obj.id+"_data");
+		jQuery.jStorage.deleteKey(obj.id+"_form");
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////
