@@ -391,6 +391,12 @@ function dbmng_manager()
 			$aParam['user_function']['prt_tbl']    = 0;
 			$aParam['user_function']['prt_rec']    = 0;
 			
+			$sql = "select * from dbmng_tables where id_table = :id_table";
+			$var = array(':id_table' => $_REQUEST['id_table'] );
+			$ret = dbmng_query($sql, $var);
+			$res = dbmng_fetch_object($ret);
+			
+			$html .= "Table Name: <b>" . $res->table_name . "</b> [id = ".$_REQUEST['id_table']."]";
 			$html .= dbmng_crud($aForm, $aParam);
 		}
 	else
