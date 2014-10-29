@@ -99,6 +99,8 @@ function Dbmng(idt , p) {
 		this.auto_sync=p.auto_sync;
 	}	
 
+	this.child=Array();
+
 	this.auto_edit=0;
 	//auto edit is available only for auto_sync
 	if(p.auto_edit && this.auto_sync==1){
@@ -157,12 +159,16 @@ Dbmng.prototype.start = function()
 {
 	var obj=this;
 
-	var saved_form=jQuery.jStorage.get(this.id+"_form");
-	var saved_data=jQuery.jStorage.get(this.id+"_data");
+	var saved_form=null;
+	var saved_data=null;
+	if(!obj.auto_sync){
+		saved_form=jQuery.jStorage.get(this.id+"_form");
+		saved_data=jQuery.jStorage.get(this.id+"_data");
+	}
 
 
 
-	if(saved_form && saved_data){
+	if(!obj.auto_sync && saved_form && saved_data){
 		debug("LOAD FROM JSTORAGE");
 		obj.aData =saved_data;
 		obj.aForm =saved_form;
@@ -170,9 +176,6 @@ Dbmng.prototype.start = function()
 	}
 	else {
 		debug("LOAD FROM AJAX");
-		debug(saved_form);
-		debug(saved_data);
-
 		
 		var form=obj.aForm;
 		//form={"id_table":20,"table_name":"mm_test","table_label":"Questa tabella si chiama pippo","fields":{"nome":{}}};
@@ -207,9 +210,11 @@ Dbmng.prototype.start = function()
 					obj.aData = {'records': newRecords};
 					obj.aForm = data.aForm;
 
-					//save record and aForm in jStorage
-					jQuery.jStorage.set(obj.id+"_form", obj.aForm );
-					jQuery.jStorage.set(obj.id+"_data", obj.aData);
+					if(!obj.auto_sync){
+						//save record and aForm in jStorage
+						jQuery.jStorage.set(obj.id+"_form", obj.aForm );
+						jQuery.jStorage.set(obj.id+"_data", obj.aData);
+					}
 					
 					obj.createTable();
 				}
@@ -472,7 +477,7 @@ Dbmng.prototype.syncData = function() {
 	var q=jQuery(document).queue('myAjaxQueue'+obj.id, function() {
 		obj.running=true;
 
-
+		console.log("SYNCDATASTART "+obj.id);
 
 		if(obj.mobile && obj.isSaved()){
 			debug('NO DATA TO SAVE '+obj.id);
@@ -485,13 +490,14 @@ Dbmng.prototype.syncData = function() {
 		}
 		else {
 
+			console.log('start '+obj.prog);
 
 			if(obj.aParam.mobile){
 				dialogStart("Starting to upload data & images");
 			}
 
 			obj.prog = obj.prog+1;
-			console.log('start '+obj.prog);
+			
 
 			//TODO: check if it is better to use ajaxmanager
 			//obj.am.addReq({ //
@@ -502,6 +508,8 @@ Dbmng.prototype.syncData = function() {
 				dataType: "json",
 				success: function (data) {
 
+
+					console.log("AJAXSTART "+obj.id);
 
 					var error="";
 
@@ -636,12 +644,15 @@ Dbmng.prototype.syncData = function() {
 
 
 					obj.createTable();
-					
-					obj.updateStorage();
+					if(!obj.auto_sync){	
+						obj.updateStorage();
+					}
 					
 
 					//debug('end '+obj.prog);
 					obj.running=false;
+
+					console.log("AJAXEND "+obj.id);
 
 					//end of Success	
 				},
@@ -656,6 +667,9 @@ Dbmng.prototype.syncData = function() {
 		  	 //debug(thrownError);
 			  }   
 			});	//end of Ajax
+
+					console.log("SYNCDATAEND "+obj.id);
+
 		}
 	}); //end of queue
 
@@ -1273,14 +1287,12 @@ Dbmng.prototype.goBackToTable = function() {
 Dbmng.prototype.updateStorage = function() {
 	var obj=this;
 
-	debug('upd storage on '+obj.id+' records: '+obj.aData.records.length);
-	debug(obj.aData);
-
-	jQuery.jStorage.set(obj.id+"_data", obj.aData);
-
-	if(obj.auto_sync){
-		debug('start_sync '+obj.id);
+	if(obj.auto_sync){		
 		obj.syncData();
+	}
+	else{
+		debug('upd storage on '+obj.id+' records: '+obj.aData.records.length);
+		jQuery.jStorage.set(obj.id+"_data", obj.aData);
 	}
 	//After update show the main table in not inline
 }
@@ -1530,7 +1542,7 @@ Dbmng.prototype.createForm = function(id_record) {
 	}
 	else{
 		if(obj.inline==1){
-			console.log(form);
+			//console.log(form);
 
 			jQuery('#'+obj.id+"_"+id_record).html(form)
 		}
@@ -1540,7 +1552,7 @@ Dbmng.prototype.createForm = function(id_record) {
   }
 
 
-	jQuery("#"+obj.id+"_subtable").remove();
+	jQuery("#"+obj.id+"_subtable_"+id_record).remove();
 	
 	if(act=='upd' && obj.aForm.sub_table){
 		if(obj.aForm.sub_table.length>0){
@@ -1548,19 +1560,19 @@ Dbmng.prototype.createForm = function(id_record) {
 
 			var sub_html="";
 			sub_html+="<h3>"+sub.label+"</h3>";
-			sub_html+="<div id='"+obj.id+"_subtable_"+sub.id_table+"'></div>";
+			sub_html+="<div id='"+obj.id+"_subtable_"+id_record+"_"+sub.id_table+"'></div>";
 
 
 			if(obj.inline==1){
 				jQuery('#'+obj.id+"_"+id_record).after("<tr class='dbmng_subtable' id='#"+obj.id+"_subtable' ><td class='dbmng_subtable' colspan='"+jQuery('#'+obj.id+"_"+id_record).children('td').length+"'>"+sub_html+"</td></tr>");
 			}
 			else{
-				jQuery('#'+obj.id+"_form").append("<div id='#"+obj.id+"_subtable'>"+sub_html+"</div>");
+				jQuery('#'+obj.id+"_form").append("<div id='#"+obj.id+"_subtable_"+id_record+"'>"+sub_html+"</div>");
 			}
 
 			
-			if(obj.child){
-				obj.child.clearJStorage();
+			if(obj.child[id_record]){
+				obj.child[id_record].clearJStorage();
 			}
 
 
@@ -1568,9 +1580,9 @@ Dbmng.prototype.createForm = function(id_record) {
 			var id_parent=(item.record[obj.aForm.primary_key[0]]);
 			console.log("ITEM: "+id_parent);
 
-			obj.child  = new Dbmng(sub.id_table, {
+			obj.child[id_record]  = new Dbmng(sub.id_table, {
 				"ajax_url": obj.aParam.ajax_url,
-				"div_element": obj.id+"_subtable_"+sub.id_table,
+				"div_element": obj.id+"_subtable_"+id_record+"_"+sub.id_table,
 				"auto_sync": obj.aParam.auto_sync,
 				"inline": 1,
 				"auto_edit":obj.aParam.auto_edit,
@@ -1579,7 +1591,7 @@ Dbmng.prototype.createForm = function(id_record) {
 				"fk": sub.fk
 			});
 
-			obj.child.start();	
+			obj.child[id_record].start();	
 
 
 		}
@@ -1884,7 +1896,9 @@ function dialogStart (message) {
 
 function dialogAppend(message){
 	try{
-		jQuery("#dialog_save_content").append('<br/>'+message);
+		console.log(message);
+		if(obj.aParam.mobile)
+			jQuery("#dialog_save_content").append('<br/>'+message);
 	}
 	catch(e){
 		console.log(e);

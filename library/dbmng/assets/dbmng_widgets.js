@@ -53,23 +53,26 @@ dbmng_select_form = function(obj_id,  fld, field, id_record, value, more, act ){
 	html += Dbmng.layout_get_nullable(field,act);
 	html += " >\n";
 	html += "<option/> \n";	
-
-	jQuery.each(field.voc_val, function(k, v){
-		s = "";
-		debug(k+" "+value+ " " + (k==value));
-		if(k == value){
-			s = " selected='true' ";
-		}
-		html += "<option "+s+" value='" + k + "'>" + v + "</option> \n";	
-	});
+	if(field.voc_val){
+		jQuery.each(field.voc_val, function(k, v){
+			s = "";
+			debug(k+" "+value+ " " + (k==value));
+			if(k == value){
+				s = " selected='true' ";
+			}
+			html += "<option "+s+" value='" + k + "'>" + v + "</option> \n";	
+		});
+	}
 	html += "</select>\n";
 	return html;
 }
 
 dbmng_select_html = function(val, field ){
 	var ret="-";
-	if(field.voc_val[val])
-		ret  = field.voc_val[val];
+	if(field.voc_val){
+		if(field.voc_val[val])
+			ret  = field.voc_val[val];
+	}
 	return ret;
 }
 

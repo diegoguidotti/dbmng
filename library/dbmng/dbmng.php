@@ -1819,6 +1819,20 @@ function dbmng_objectToArray($d) {
 			return $d;
 		}
 	}
+
+
+function dbmng_generate_array($sql, $var){
+
+		$rVoc  = dbmng_query( $sql, $var );
+		$aFVoc = array();		
+		$v       = 0;
+		foreach($rVoc as $val)
+			{
+				$keys=array_keys((array)$val);
+				$aFVoc[$val->$keys[0]] = $val->$keys[1];
+			}		
+		return $aFVoc;
+}
  
 
 ?>
