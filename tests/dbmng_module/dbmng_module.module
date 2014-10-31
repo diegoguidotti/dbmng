@@ -31,7 +31,8 @@ return $block;
 }
 
 function dbmng_module_permission() {
-	return array('dbmng manager' => array('title'=>t('Manage all meta tables')));
+	return array('dbmng manager' => array('title'=>t('Manage all meta tables')),
+					 'dbmng ajax'    => array('title'=>t('Manage ajax')));
 }
 
 function dbmng_module_menu() {
@@ -54,7 +55,7 @@ function dbmng_module_menu() {
 
 		$items['dbmng/ajax'] = array(
         'page callback' => 'dbmng_ajax_response',
-        'access arguments' => array('dbmng manager')
+        'access arguments' => array('dbmng ajax')
      );
 
     return $items;
