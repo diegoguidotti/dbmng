@@ -82,6 +82,9 @@ function cs_video_contest_page()
 				<link href="../sites/all/modules/climasouth_video/css/scrolling-nav.css" rel="stylesheet">
 				<link href="../sites/all/modules/climasouth_video/climasouth_video.css" rel="stylesheet">
 
+
+
+
 				<!--[if lt IE 9]>
 					<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 					<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
@@ -103,7 +106,8 @@ function cs_video_contest_page()
 									<span class="icon-bar"></span>
 									<span class="icon-bar"></span>
 								</button>
-								<a class="navbar-brand page-scroll" href="#page-top">Climasouth video</a>
+								<!--<img id="logo" src="../sites/all/modules/climasouth_video/logo_cs.png"/>-->
+								<a class="navbar-brand page-scroll" href="#page-top"> Climasouth video</a>
 							</div>
 
 							<!-- Collect the nav links, forms, and other content for toggling -->
@@ -117,7 +121,10 @@ function cs_video_contest_page()
 											<a class="page-scroll" href="#about">About</a>
 									</li>
 									<li>
-											<a class="page-scroll" href="#services">Services</a>
+											<a class="page-scroll" href="#categories">Categories</a>
+									</li>
+									<li>
+											<a class="page-scroll" href="#rules">Rules</a>
 									</li>
 									<li>
 											<a class="page-scroll" href="#contact">Contact</a>
@@ -131,10 +138,13 @@ function cs_video_contest_page()
 
 				<!-- Intro Section -->
 				<section id="intro" class="intro-section">
+					<h1>Join the Action,  make a short film  on Climate Change  & win a Prize !</h1> 
 					<div class="container">
+								
 								<video id="cs_short" autoplay="" loop="">
-									<!--<source src="http://www.climasouth.eu/drupal/video/cs_short.mp4" type="video/mp4">-->
+									<source src="http://www.climasouth.eu/drupal/video/cs_short.mp4" type="video/mp4">
 									<source src="http://www.climasouth.eu/drupal/video/cs_short.ogv" type="video/ogg">
+									
 								</video>
 					</div>
 				</section>
@@ -147,17 +157,78 @@ function cs_video_contest_page()
 							<div class="row">
 								<div class="col-lg-12">
 									<h1>About Section</h1>
+<h3>Join the Action & make a short film on Climate Change.</h3>  
+
+Climate change is the most pressing environmental issue of   our time. We believe that together we have the power to   address it and make a difference. Create a short film on   Climate Change and win a prize. The best films will achieve   global exposure and winners will be awarded their prize at a   high-profile international event. In addition, winners will be   invited to join the ClimaSouth video initiative. Under the   tutelage of well-known video journalists and video artists,   the winners will contribute to the initiative in each of the   ClimaSouth partner countries : Algeria, Egypt, Israel,   Jordan, Lebanon, Libya, Morocco, Palestine and Tunisia.  
+
+<h3>THE ASSIGNMENT</h3>  
+Create a 120–180 second video on the theme of Climate   Change by choosing one of the following two categories:    
+<ol>
+<li>Information & news videos;</li>
+<li>Art videos.</li>
+</ol>
+ Upload your   video to Vimeo or YouTube, then submit its URL here by   15th January. There will be four awards: two public choice   awards (one for each category) and two jury awards. The   four winners and those who have won the most votes in   each of the ClimaSouth partner countries (18 finalists), will   be invited to participate to the second phase of the initiative.   This will be launched with a series of dedicated master-  Outline web pages for launch of ClimaSouth Video competition (version 2.1). Page 3  classes focussing on the conception, production and editing   of climate change inspired art and information videos.
+
 								</div>
 							</div>
 					</div>
 				</section>
 
-				<!-- Services Section -->
-				<section id="services" class="services-section">
+				<!-- Categories Section -->
+				<section id="categories" class="categories-section">
 					<div class="container">
 							<div class="row">
 								<div class="col-lg-12">
-									<h1>Services Section</h1>
+									<h1>Categories</h1>
+
+For jury prizes, videos entered for the competition will be judged according to the following criteria:
+<ul>
+<li>CATEGORY 1 : information & news videos  -  including infographics:
+<ul> 
+<li>Video clearly depicts Climate Change in the South Mediterranean region, 
+be it in terms of causes, risks, impact and opportunities for adaptation and mitigation actions</li>
+<li>Accuracy and completeness </li>
+<li>Enterprise and ingenuity </li>
+<li>Adherence to high journalistic standards</li>
+<li>Significance and effectiveness </li>
+<li>Clarity, insight and respect for the audience.</li>
+<li>Creative use of the medium’s capabilities</li>
+</ul>
+</li>
+<li>
+CATEGORY 2:  Art videos
+<ul>
+<li>Relevance to the theme of Climate Change in the South Mediterranean region.</li>
+<li>Creativity</li>
+<li>Originality</li>
+<li>Aesthetic  qualities</li>
+<li>Innovation and experimentation</li>
+</ul>
+</li>
+</ol>
+								</div>
+							</div>
+					</div>
+				</section>
+
+				<!-- Rules Section -->
+				<section id="rules" class="rules-section">
+					<div class="container">
+							<div class="row">
+								<div class="col-lg-12">
+									<h1>Rules for ClimaSouth video competition on Climate Change</h1>
+
+<h3>I. Background</h3>
+
+The ClimaSouth project was initiated in February 2013 and will be implemented over a period of 48 months with funding from the European Union (EU). 
+
+The project supports climate change mitigation and adaptation in 9 South Mediterranean countries: Algeria, Egypt, Israel, Jordan, Lebanon, Libya, Morocco, Palestine and Tunisia (Syria not included under current EU legal restrictions).
+
+The overall objective is to assist with the transition of partner countries towards low carbon economies and enhanced climate resilience.  
+
+The project also promotes south-south cooperation and information sharing on climate change issues within the region as well as closer dialogue and partnership with the EU.
+
+Further information on the project is available at <a href="http://www.climasouth.eu">www.climasouth.eu</a>.
 								</div>
 							</div>
 					</div>
@@ -175,7 +246,7 @@ function cs_video_contest_page()
 				</section>
 
 				<!-- jQuery Version 1.11.0 -->
-				<script src="../sites/all/modules/climasouth_video/js/jquery-1.11.0.js"></script>
+				<script src="../sites/all/modules/climasouth_video/js/jquery.js"></script>
 
 				<!-- Bootstrap Core JavaScript -->
 				<script src="../sites/all/modules/climasouth_video/js/bootstrap.min.js"></script>
@@ -184,9 +255,154 @@ function cs_video_contest_page()
 				<script src="../sites/all/modules/climasouth_video/js/jquery.easing.min.js"></script>
 				<script src="../sites/all/modules/climasouth_video/js/scrolling-nav.js"></script>
 
+
+				<script src="../sites/all/modules/climasouth_video/climasouth_video.js"></script>
+
+
 			</body>
 
 			</html>';
+
+
+	$html='<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Scrolling Nav - Start Bootstrap Template</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../sites/all/modules/climasouth_video/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../sites/all/modules/climasouth_video/css/scrolling-nav.css" rel="stylesheet">
+    <link href="../sites/all/modules/climasouth_video/climasouth_video.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<!-- The #page-top ID is part of the scrolling feature - the data-spy and data-target are part of the built-in Bootstrap scrollspy function -->
+
+<body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand page-scroll" href="#page-top">Start Bootstrap</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav">
+                    <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
+                    <li class="hidden">
+                        <a class="page-scroll" href="#page-top"></a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#about">About</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#categories">Categories</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#rules">Rules</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+	<!-- Intro Section -->
+				<section id="intro" class="intro-section">
+					<h1>Join the Action,  make a short film  on Climate Change  & win a Prize !</h1> 
+					<div class="container">
+								
+								<video id="cs_short" autoplay="" loop="">
+									<source src="http://www.climasouth.eu/drupal/video/cs_short.mp4" type="video/mp4">
+									<source src="http://www.climasouth.eu/drupal/video/cs_short.ogv" type="video/ogg">
+									
+								</video>
+					</div>
+				</section>
+
+
+    
+				<!-- About Section -->
+				<section id="about" class="about-section">
+					<div class="container">
+							<div class="row">
+								<div class="col-lg-12">
+									<h1>About Section</h1>
+
+Climate change is the most pressing environmental issue of   our time. We believe that together we have the power to   address it and make a difference. Create a short film on   Climate Change and win a prize. The best films will achieve   global exposure and winners will be awarded their prize at a   high-profile international event. In addition, winners will be   invited to join the ClimaSouth video initiative. Under the   tutelage of well-known video journalists and video artists,   the winners will contribute to the initiative in each of the   ClimaSouth partner countries : Algeria, Egypt, Israel,   Jordan, Lebanon, Libya, Morocco, Palestine and Tunisia.  
+
+<h3>THE ASSIGNMENT</h3>  
+Create a 120–180 second video on the theme of Climate   Change by choosing one of the following two categories:    
+<ol>
+<li>Information & news videos;</li>
+<li>Art videos.</li>
+</ol>
+ Upload your   video to Vimeo or YouTube, then submit its URL here by   15th January. There will be four awards: two public choice   awards (one for each category) and two jury awards. The   four winners and those who have won the most votes in   each of the ClimaSouth partner countries (18 finalists), will   be invited to participate to the second phase of the initiative.   This will be launched with a series of dedicated master-  Outline web pages for launch of ClimaSouth Video competition (version 2.1). Page 3  classes focussing on the conception, production and editing   of climate change inspired art and information videos.
+
+
+								</div>
+							</div>
+					</div>
+				</section>
+
+		
+
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1>Contact Section</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- jQuery -->
+    <script src="../sites/all/modules/climasouth_video/js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../sites/all/modules/climasouth_video/js/bootstrap.min.js"></script>
+
+    <!-- Scrolling Nav JavaScript -->
+    <script src="../sites/all/modules/climasouth_video/js/jquery.easing.min.js"></script>
+    <script src="../sites/all/modules/climasouth_video/js/scrolling-nav.js"></script>
+
+		<script src="../sites/all/modules/climasouth_video/climasouth_video.js"></script>
+
+</body>
+
+</html>';
 
 
 	echo $html;

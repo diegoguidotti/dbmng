@@ -38,84 +38,23 @@ of those sections to manage the look and feel of the site. */
     background: #fff;
 }
 
-.lavoro-section {
+.about-section {
     height: 100%;
     padding-top: 150px;
     text-align: center;
     background: #eee;
 }
 
-.cmsweb-section {
-    height: 100%;
-    padding-top: 150px;
-    text-align: center;
-    background: #eee;
-}
-
-.computer-section {
+.services-section {
     height: 100%;
     padding-top: 150px;
     text-align: center;
     background: #fff;
 }
 
-.banca-section {
+.contact-section {
     height: 100%;
     padding-top: 150px;
     text-align: center;
     background: #eee;
-}
-
-.pisa-section {
-    height: 100%;
-    padding-top: 150px;
-    text-align: center;
-    background: #eee;
-}
-
-.multimedia-section {
-    height: 100%;
-    padding-top: 150px;
-    text-align: center;
-    background: #eee;
-}
-
-.sport-section {
-    height: 100%;
-    padding-top: 150px;
-    text-align: center;
-    background: #eee;
-}
-
-.varie-section {
-    height: 100%;
-    padding-top: 150px;
-    text-align: center;
-    background: #eee;
-}
-
-.lista_ul {
-	text-align: left;
-}
-
-.lista_li {
-	list-style: none;
-	float: left;
-	margin: 10px;
-	/* border: 1px solid red;*/
-	padding: 10px;
-	width: 500px;
-}
-
-.lista_note {
-	margin: 10px;
-}
-
-.lista_type {
-	width: 400px;
-	text-align: left;
-}
-
-.btn-width {
-	width: 200px;
 }
