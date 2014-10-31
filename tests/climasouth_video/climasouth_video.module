@@ -31,7 +31,7 @@ function climasouth_video_menu()
 {
   $items = array();
 
-  $items['climasouth_video/video'] = array(
+  $items['climasouth/video'] = array(
       'title' => 'Video Contest',
       'page callback' => 'cs_video_contest_page',
       'access arguments' => array('video content'),
