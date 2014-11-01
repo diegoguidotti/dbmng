@@ -73,7 +73,7 @@ function cs_video_contest_page()
 				<meta name="description" content="">
 				<meta name="author" content="">
 				
-				<link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+				<link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto" media="all" />
 				
 				<title>Climasouth Video Contest</title>
 
@@ -97,7 +97,6 @@ function cs_video_contest_page()
 			<!-- The #page-top ID is part of the scrolling feature - the data-spy and data-target are part of the built-in Bootstrap scrollspy function -->
 
 			<body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
-
 				<!-- Navigation -->
 				<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 					<div class="container">
@@ -129,6 +128,9 @@ function cs_video_contest_page()
 											<a class="page-scroll" href="#rules">Rules</a>
 									</li>
 									<li>
+											<a class="page-scroll" href="#upload">Upload</a>
+									</li>
+									<li>
 											<a class="page-scroll" href="#contact">Contact</a>
 									</li>
 								</ul>
@@ -158,16 +160,16 @@ function cs_video_contest_page()
 					<div class="container">
 							<div class="row">
 								<div class="col-lg-12">
-									<h1>About Section</h1>
+									<h1>About</h1>
 										<div class="climasouth_text_container">
 											<h3>Join the Action & make a short film on Climate Change.</h3>  
 
 											Climate change is the most pressing environmental issue of   our time. We believe that together we have the power to   address it and make a difference. Create a short film on   Climate Change and win a prize. The best films will achieve   global exposure and winners will be awarded their prize at a   high-profile international event. In addition, winners will be   invited to join the ClimaSouth video initiative. Under the   tutelage of well-known video journalists and video artists,   the winners will contribute to the initiative in each of the   ClimaSouth partner countries : Algeria, Egypt, Israel,   Jordan, Lebanon, Libya, Morocco, Palestine and Tunisia.  
 
 											<h3>THE ASSIGNMENT</h3>  
-											Create a 120–180 second video on the theme of Climate   Change by choosing one of the following two categories:    
+											Create a 120–180 second video on the theme of Climate   Change by choosing one of the following two categories: <br/><br/>   
 											<ol>
-											<li>Information & news videos;</li>
+											<li>Information & news videos - including infographics</li>
 											<li>Art videos.</li>
 											</ol>
 											Upload your   video to Vimeo or YouTube, then submit its URL here by   15th January. There will be four awards: two public choice   awards (one for each category) and two jury awards. The   four winners and those who have won the most votes in   each of the ClimaSouth partner countries (18 finalists), will   be invited to participate to the second phase of the initiative.   This will be launched with a series of dedicated master-  Outline web pages for launch of ClimaSouth Video competition (version 2.1). Page 3  classes focussing on the conception, production and editing   of climate change inspired art and information videos.
@@ -184,7 +186,7 @@ function cs_video_contest_page()
 								<div class="col-lg-12">
 									<h1>Categories</h1>
 										<div class="climasouth_text_container">
-											For jury prizes, videos entered for the competition will be judged according to the following criteria:
+											For jury prizes, videos entered for the competition will be judged according to the following criteria:<br/><br/>
 											<ol>
 												<li><b>CATEGORY 1 : information & news videos  -  including infographics</b>:
 													<ul> 
@@ -198,6 +200,7 @@ function cs_video_contest_page()
 													<li>Creative use of the medium’s capabilities</li>
 													</ul>
 												</li>
+												<br/>
 												<li><b>CATEGORY 2:  Art videos</b>
 													<ul>
 													<li>Relevance to the theme of Climate Change in the South Mediterranean region.</li>
@@ -219,7 +222,7 @@ function cs_video_contest_page()
 					<div class="container">
 							<div class="row">
 								<div class="col-lg-12">
-									<h1>Rules for ClimaSouth video competition on Climate Change</h1>
+									<h1>Rules</h1>
 										<div class="climasouth_text_container">
 											<h3>I. Background</h3>
 
@@ -319,12 +322,56 @@ function cs_video_contest_page()
 					</div>
 				</section>
 
+				<!-- Upload Section -->
+				<section id="upload" class="upload-section">
+					<div class="container">
+							<div class="row">
+								<div class="col-lg-12">
+									<h1>Upload</h1>
+								</div>
+							</div>
+					</div>
+				</section>
+
 				<!-- Contact Section -->
 				<section id="contact" class="contact-section">
 					<div class="container">
 							<div class="row">
 								<div class="col-lg-12">
-									<h1>Contact Section</h1>
+									<h1>Contact</h1>
+									<div id="contact_table">
+										<span style="color:#1f497d;">
+										<table width="800px">
+											<tr>
+												<td>
+													<p align="left">
+													<img width="63" height="41" src="../sites/all/modules/climasouth_video/resources/ue_flag.jpg" />
+													<img width="133" height="40" src="../sites/all/modules/climasouth_video/resources/climasouth_logo.png" />
+													<i>EU funded project</i>
+													</p>
+												</td>
+												<td>
+												<p align="right">
+												<b>G.H. Mattravers Messana</b>
+												<br/>Information & Communication
+												<br/>Email : <a href="mailto:comecaprojects@runbox.com">comecaprojects@runbox.com</a> 
+												<br/>Skype: <a href="skype:comeca2?call" alt="aaa">comeca2</a>
+												</p>
+												</td>
+											</tr>
+											<tr>
+												<td colspan="2">
+													<p align="left"><b>Belgium</b>: c/o Agriconsulting Europe - Av de Tervuren 36, 1040 Brussels - Tel +32 2 736 22 77</p>
+													<p align="left"><b>Egypt</b> c/o d’Appolonia Egypt Branch - Fouad Thabet Street, 8 - Sheraton Buildings, Heliopolis, Cairo</p>
+													<p align="left">
+														<img width="24" height="23" src="../sites/all/modules/climasouth_video/resources/agriconsulting_logo.png" />
+														<span style="color:gray;">AGRICONSULTING Consortium with ‐ Agrer‐ Typsa ‐ CMCC ‐ Pescares ‐ IAM.B ‐ D’Appollonia  ‐ Sviluppo Globale</span>
+													</p>
+												</td>
+											</tr>
+										</table>
+										</span>
+									</div>
 								</div>
 							</div>
 					</div>
