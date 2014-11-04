@@ -269,13 +269,21 @@ function dbmng_crud($aForm, $aParam=null)
 				if(!$ret_form_process['ok'])
 					{
 						$html.='<div class="message error">'.$ret_form_process['error'].'</div>';
-						if($_REQUEST["act"]=='do_ins' || $_REQUEST["act"]=='do_upd')
+						if($_REQUEST["act"]=='do_ins' )
 							{
 								$view_table=false;
 								$do_update = 3;
 								//if($_REQUEST["act"]=='upd' || $_REQUEST["act"]=='ins')
 								//	$do_update = 3; //true;
 							}
+						else if($_REQUEST["act"]=='do_upd')
+							{
+								$view_table=false;
+								$do_update = 1;
+								//if($_REQUEST["act"]=='upd' || $_REQUEST["act"]=='ins')
+								//	$do_update = 3; //true;
+							}
+
 					}
 		}
 
@@ -631,6 +639,7 @@ function dbmng_get_js_array($aForm, $aParam)
 /**
 \param $aForm  		Associative array with all the characteristics
 \param $aParam  		Associative array with some custom variable used by the renderer
+\param $do_update  		0 Insert 1 Update 2 Search 3 Insert
 \return           HTML generated code
 */
 function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="") 
@@ -671,6 +680,17 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 						}
 				}
 			
+			
+			if( isset($aParam['filters']) )
+				{
+					foreach ( $aParam['filters'] as $fld => $fld_value )
+						{
+								//drupal_set_message("Add ".$fld." ".$fld_value);
+								$where .= $fld . " = :$fld and ";
+								$var = array_merge($var, array(":".$fld => $fld_value));
+						}					
+				}
+
 			$where = substr($where, 0, strlen($where)-4);			
 
 			$result = dbmng_query("select * FROM " . $aForm['table_name'] . " WHERE $where ", $var);
