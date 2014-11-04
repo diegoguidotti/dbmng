@@ -726,6 +726,9 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 				}
 		}
 
+
+	if(dbmng_num_rows($result)>0){
+
 	//if exists at least 1 file widget add enctype to form
 	$more = "";
 	foreach ( $aForm['fields'] as $fld => $fld_value )
@@ -961,6 +964,12 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 	$html .= $hv;
   $html .= "</form>\n";
   $html .= "</div>\n";
+	}
+	else
+		{
+			$html .= "<div class='message error'>".t('Record not found')."</div>";
+		}
+	
 
 	return $html;
 }
