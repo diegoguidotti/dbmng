@@ -681,20 +681,22 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 						}
 				}
 			
-			
+			$where_filter = "";
+			$var_filter   = array();
 			if( isset($aParam['filters']) )
 				{
 					foreach ( $aParam['filters'] as $fld => $fld_value )
 						{
-								//drupal_set_message("Add ".$fld." ".$fld_value);
-								$where .= $fld . " = :$fld and ";
-								$var = array_merge($var, array(":".$fld => $fld_value));
-						}					
+							//drupal_set_message("Add ".$fld." ".$fld_value);
+							$where_filter .= " and " . $fld . " = :$fld ";
+							$var_filter = array_merge($var_filter, array(":".$fld => $fld_value));
+						}
 				}
 
 			$where = substr($where, 0, strlen($where)-4);			
-
-			$result = dbmng_query("select * FROM " . $aForm['table_name'] . " WHERE $where ", $var);
+			$var_all = array_merge($var, $var_filter);
+			
+			$result = dbmng_query("select * FROM " . $aForm['table_name'] . " WHERE $where $where_filter ", $var_all);
 
 			if( is_object($result) || (is_array($result) && $result['ok']) )
 				{
