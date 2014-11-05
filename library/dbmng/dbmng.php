@@ -665,6 +665,7 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 			$btn_name_update = t($aParam['ui']['btn_name_update']);
 		}
 	
+	$bOk = true;
 	//create the $val array storing all the record data
 	if( $do_update == 1 )
 		{
@@ -697,6 +698,10 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 
 			if( is_object($result) || (is_array($result) && $result['ok']) )
 				{
+					if( dbmng_num_rows($result) == 0 )
+						{
+							$bOk = false;
+						}
 					$vals   = dbmng_fetch_object($result); //$result->fetchObject();
 
 					foreach ( $aForm['fields'] as $fld => $fld_value )
@@ -727,244 +732,244 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 		}
 
 
-	if(dbmng_num_rows($result)>0){
-
-	//if exists at least 1 file widget add enctype to form
-	$more = "";
-	foreach ( $aForm['fields'] as $fld => $fld_value )
+	if( $bOk ) // dbmng_num_rows($result)>0 )
 		{
-			if( isset($fld_value['widget']) )
+			//if exists at least 1 file widget add enctype to form
+			$more = "";
+			foreach ( $aForm['fields'] as $fld => $fld_value )
 				{
-					if( $fld_value['widget'] == 'file' || $fld_value['widget'] == 'picture' )
+					if( isset($fld_value['widget']) )
 						{
-							$more = "enctype='multipart/form-data'";
-						}
-				}
-		}
-
-	//add the hidden fields to the form
-	$hv =  prepare_hidden_var_form($aParam);
-
-	//render the form
-	$class = "dbmng_form";
-	if( $do_update == 2 && $actiontype=="search")
-		$class .= "_search";
-
-	$html .= "<div class='$class' id='dbmng_form_".$aForm['table_name']."' >\n<form method='POST' $more action='?' >\n".$hv."";
-	
-	foreach ( $aForm['fields'] as $fld => $fld_value )
-		{
-			//render the form field
-			$custom_function_exists=false;
-			if( isset($fld_value['field_function']) )
-				{
-					if( function_exists($fld_value['field_function']) ) 
-						{
-							$html .= call_user_func($fld_value['field_function']);
-							$custom_function_exists=true;
+							if( $fld_value['widget'] == 'file' || $fld_value['widget'] == 'picture' )
+								{
+									$more = "enctype='multipart/form-data'";
+								}
 						}
 				}
 
-			if(!$custom_function_exists)
+			//add the hidden fields to the form
+			$hv =  prepare_hidden_var_form($aParam);
+
+			//render the form
+			$class = "dbmng_form";
+			if( $do_update == 2 && $actiontype=="search")
+				$class .= "_search";
+
+			$html .= "<div class='$class' id='dbmng_form_".$aForm['table_name']."' >\n<form method='POST' $more action='?' >\n".$hv."";
+			
+			foreach ( $aForm['fields'] as $fld => $fld_value )
 				{
-					$value= null;
-					if($do_update == 1)
+					//render the form field
+					$custom_function_exists=false;
+					if( isset($fld_value['field_function']) )
 						{
-							if(isset($vals->$fld))
-								$value = $vals->$fld;
-						}
-					elseif( $do_update == 2 && $actiontype=="search")
-						{
-							if(isset($_REQUEST["search_".$fld]))
+							if( function_exists($fld_value['field_function']) ) 
 								{
-									$value = $_REQUEST["search_".$fld];
+									$html .= call_user_func($fld_value['field_function']);
+									$custom_function_exists=true;
 								}
-							//print_r($_REQUEST);
-					 		//$value = 
 						}
-					elseif($do_update == 3)
+
+					if(!$custom_function_exists)
 						{
-							if(isset($_POST[$fld]))
+							$value= null;
+							if($do_update == 1)
 								{
-									$value = $_POST[$fld];
-									
-									if( isset($fld_value['widget']) ) 
-										if( $fld_value['widget'] == 'select_nm' )
-											{
-												$tx = "";
-												foreach( $_POST[$fld] as $v )
-													$tx.=$v."|";
-	
-												$nmvals[$fld]=$tx;
-											}
-							}
-						}
-					elseif( isset($fld_value['default']) && !is_null($fld_value['default'])  )
-						{
-							$value = $fld_value['default'];
-						}
-					// if( $aForm['primary_key'][0] != $fld ) // $aForm['primary_key'][0][0] != 1 && $aForm['primary_key'][0][1] != $fld
-					if( !dbmng_check_is_autopk($fld_value) ) // 1 means: Auto-increment primary key (must be removed from the form.
-						{										
-							$widget='input';
-							if(isset($fld_value['widget']))
-								$widget=$fld_value['widget'];
-
-							//$is_searchable = true;
-
-							$is_searchable = false;
-							if(isset($fld_value['is_searchable']))
-								{
-									if( $fld_value['is_searchable']==1 )
-										$is_searchable = true;
+									if(isset($vals->$fld))
+										$value = $vals->$fld;
 								}
-															
-							// Do not show input or seletc field for PK
-							if($do_update == 1 && dbmng_check_is_pk($fld_value))
+							elseif( $do_update == 2 && $actiontype=="search")
 								{
-									$html .= dbmng_value_prepare_html( $fld_value, $value, $aParam, "form" );
-									$html .= layout_form_hidden( $fld, $value );
-								}
-							else
-								{
-									$bViewFld = true;
-									//if( isset($_REQUEST['act2']) && $_REQUEST['act2'] == "do_search" && !isset($_REQUEST['act']) && !$is_searchable )
-									if( $actiontype == "search" && !$is_searchable )
-										$bViewFld = false;
-
-									if( $bViewFld ) //$_REQUEST['act'] == 'ins' || $_REQUEST['act'] == 'upd' || $is_searchable )
+									if(isset($_REQUEST["search_".$fld]))
 										{
-											$html.='<div class="dbmng_form_row dbmng_form_field_'.$fld.'">&nbsp;';
-											if( !isset($aParam['hide_label']) )
-												{
-													$html .= layout_get_label($fld, $fld_value);
-												}
-											$html.='<div class="dbmbg_form_element">&nbsp;';
-
-											$aInput = Array();
-											$aInput['fld'] = $fld;
-											$aInput['fld_value'] = $fld_value;
-											$aInput['value'] = $value;
-											$aInput['actiontype'] = $actiontype;
-											$aInput['aParam'] = $aParam;
-
-											if ($widget==='textarea')
-												{
-													$html .= layout_form_textarea( $aInput );
-												}
-											else if ($widget==='html')
-												{
-													$html .= layout_form_html( $aInput );
-												}
-											else if ($widget==='checkbox')
-												{
-													$html .= layout_form_checkbox( $aInput );
-												}
-											else if ($widget==='select')
-												{
-													$html .= layout_form_select( $aInput );
-												}
-											else if ($widget==='multiselect')
-												{
-													$html .= layout_form_multiselect( $aInput );
-												}
-											else if ($widget==='select_nm')
-												{
-													//during insert there are no record associated; nmvalue is not created we added an empty array
-													if(isset($nmvals[$fld]))
-														$aInput['value'] = $nmvals[$fld];
-													else{
-														$aInput['value'] = "";
-													}
-										
-													$html .= layout_form_select_nm( $aInput ); //$fld, $fld_value, $nmvals[$fld] );
-												}
-											else if ($widget==='date')
-												{
-													$html .= layout_form_date( $aInput );
-												}
-											else if ($widget==='datetime')
-												{
-													$html .= layout_form_datetime( $aInput );
-												}
-											else if ($widget==='time')
-												{
-													$html .= layout_form_time( $aInput );
-												}
-											else if ($widget==='file')
-												{
-													$html .= layout_form_file( $aInput );
-												}
-											else if ($widget==='picture')
-												{
-													$html .= layout_form_picture( $aInput );
-												}
-											else if ($widget==='password')
-												{
-													$html .= layout_form_password( $aInput );
-												}
-											else if ($widget==='multi')
-												{
-													$html .= layout_form_multi( $aInput );
-												}
-											else //use input by default
-												{
-													$more='';
-													if(dbmng_is_field_type_numeric($fld_value['type']))
-														{
-															$more="onkeypress=\"dbmng_validate_numeric(event)\"";		
-														}  
-													$aInput['more'] = $more;
-														
-													$html .= layout_form_input($aInput);// ( $fld, $fld_value, $value, $more );		
-												}
-											$html.='</div>';
+											$value = $_REQUEST["search_".$fld];
+										}
+									//print_r($_REQUEST);
+									//$value = 
+								}
+							elseif($do_update == 3)
+								{
+									if(isset($_POST[$fld]))
+										{
+											$value = $_POST[$fld];
 											
-											$html.='</div>';
-											if( isset($aParam['ui']['fld_separator']) )
+											if( isset($fld_value['widget']) ) 
+												if( $fld_value['widget'] == 'select_nm' )
+													{
+														$tx = "";
+														foreach( $_POST[$fld] as $v )
+															$tx.=$v."|";
+			
+														$nmvals[$fld]=$tx;
+													}
+									}
+								}
+							elseif( isset($fld_value['default']) && !is_null($fld_value['default'])  )
+								{
+									$value = $fld_value['default'];
+								}
+							// if( $aForm['primary_key'][0] != $fld ) // $aForm['primary_key'][0][0] != 1 && $aForm['primary_key'][0][1] != $fld
+							if( !dbmng_check_is_autopk($fld_value) ) // 1 means: Auto-increment primary key (must be removed from the form.
+								{										
+									$widget='input';
+									if(isset($fld_value['widget']))
+										$widget=$fld_value['widget'];
+
+									//$is_searchable = true;
+
+									$is_searchable = false;
+									if(isset($fld_value['is_searchable']))
+										{
+											if( $fld_value['is_searchable']==1 )
+												$is_searchable = true;
+										}
+																	
+									// Do not show input or seletc field for PK
+									if($do_update == 1 && dbmng_check_is_pk($fld_value))
+										{
+											$html .= dbmng_value_prepare_html( $fld_value, $value, $aParam, "form" );
+											$html .= layout_form_hidden( $fld, $value );
+										}
+									else
+										{
+											$bViewFld = true;
+											//if( isset($_REQUEST['act2']) && $_REQUEST['act2'] == "do_search" && !isset($_REQUEST['act']) && !$is_searchable )
+											if( $actiontype == "search" && !$is_searchable )
+												$bViewFld = false;
+
+											if( $bViewFld ) //$_REQUEST['act'] == 'ins' || $_REQUEST['act'] == 'upd' || $is_searchable )
 												{
-													if( $aParam['ui']['fld_separator'] == 1 )
-														$html.='<div class="dbmng_separator">&nbsp</div>';
+													$html.='<div class="dbmng_form_row dbmng_form_field_'.$fld.'">&nbsp;';
+													if( !isset($aParam['hide_label']) )
+														{
+															$html .= layout_get_label($fld, $fld_value);
+														}
+													$html.='<div class="dbmbg_form_element">&nbsp;';
+
+													$aInput = Array();
+													$aInput['fld'] = $fld;
+													$aInput['fld_value'] = $fld_value;
+													$aInput['value'] = $value;
+													$aInput['actiontype'] = $actiontype;
+													$aInput['aParam'] = $aParam;
+
+													if ($widget==='textarea')
+														{
+															$html .= layout_form_textarea( $aInput );
+														}
+													else if ($widget==='html')
+														{
+															$html .= layout_form_html( $aInput );
+														}
+													else if ($widget==='checkbox')
+														{
+															$html .= layout_form_checkbox( $aInput );
+														}
+													else if ($widget==='select')
+														{
+															$html .= layout_form_select( $aInput );
+														}
+													else if ($widget==='multiselect')
+														{
+															$html .= layout_form_multiselect( $aInput );
+														}
+													else if ($widget==='select_nm')
+														{
+															//during insert there are no record associated; nmvalue is not created we added an empty array
+															if(isset($nmvals[$fld]))
+																$aInput['value'] = $nmvals[$fld];
+															else{
+																$aInput['value'] = "";
+															}
+												
+															$html .= layout_form_select_nm( $aInput ); //$fld, $fld_value, $nmvals[$fld] );
+														}
+													else if ($widget==='date')
+														{
+															$html .= layout_form_date( $aInput );
+														}
+													else if ($widget==='datetime')
+														{
+															$html .= layout_form_datetime( $aInput );
+														}
+													else if ($widget==='time')
+														{
+															$html .= layout_form_time( $aInput );
+														}
+													else if ($widget==='file')
+														{
+															$html .= layout_form_file( $aInput );
+														}
+													else if ($widget==='picture')
+														{
+															$html .= layout_form_picture( $aInput );
+														}
+													else if ($widget==='password')
+														{
+															$html .= layout_form_password( $aInput );
+														}
+													else if ($widget==='multi')
+														{
+															$html .= layout_form_multi( $aInput );
+														}
+													else //use input by default
+														{
+															$more='';
+															if(dbmng_is_field_type_numeric($fld_value['type']))
+																{
+																	$more="onkeypress=\"dbmng_validate_numeric(event)\"";		
+																}  
+															$aInput['more'] = $more;
+																
+															$html .= layout_form_input($aInput);// ( $fld, $fld_value, $value, $more );		
+														}
+													$html.='</div>';
+													
+													$html.='</div>';
+													if( isset($aParam['ui']['fld_separator']) )
+														{
+															if( $aParam['ui']['fld_separator'] == 1 )
+																$html.='<div class="dbmng_separator">&nbsp</div>';
+														}
 												}
 										}
 								}
-						}
-					else
-						{
-							$html .= "<input type='hidden' name='$fld' id='$fld' value='$value' />\n";
-						}
-				} //End of fields
-		} //End of form
-	
-	$hv = '';//dbmng_search_add_hidden($aForm, $aParam, "POST");
-	if( isset($aParam['captcha']) )
-		$html .= layout_form_captcha();
-	
-	if( $do_update == 1 )
-		{
-		
-			$html .= "<input type='hidden' name='act' value='do_upd' />\n";
-			$html .= "<input type='hidden' name='tbln' value='" . $aForm['table_name'] . "' />\n";
-			$html .= "<div class='dbmng_form_button'><input  type='submit' value='". $btn_name_update ."' /></div>\n";
-		}
-	elseif( $do_update == 0 || $do_update == 3 )
-		{
-			$html .= "<input type='hidden' name='act' value='do_ins' />\n";
-			$html .= "<input type='hidden' name='tbln' value='" . $aForm['table_name'] . "' />\n";
-			$html .= "<div class='dbmng_form_button'><input class='dbmng_form_button' type='submit' value='" . $btn_name_add . "' /></div>\n";
-		}
-	elseif( $do_update == 2 && $actiontype == "search")
-		{
-			$html .= "<input type='hidden' name='act2' value='do_search' />\n";
-			$html .= "<input type='hidden' name='tbln' value='" . $aForm['table_name'] . "' />\n";
-			$html .= "<div class='dbmng_form_button'><input class='dbmng_form_button' type='submit' value='" . $btn_name_search . "' /></div>\n";
-			//$html .= "<div class='dbmng_form_button'><input class='dbmng_form_button' type='reset' value='" . t('Reset') . "' /></div>\n";
-		}
+							else
+								{
+									$html .= "<input type='hidden' name='$fld' id='$fld' value='$value' />\n";
+								}
+						} //End of fields
+				} //End of form
+			
+			$hv = '';//dbmng_search_add_hidden($aForm, $aParam, "POST");
+			if( isset($aParam['captcha']) )
+				$html .= layout_form_captcha();
+			
+			if( $do_update == 1 )
+				{
+				
+					$html .= "<input type='hidden' name='act' value='do_upd' />\n";
+					$html .= "<input type='hidden' name='tbln' value='" . $aForm['table_name'] . "' />\n";
+					$html .= "<div class='dbmng_form_button'><input  type='submit' value='". $btn_name_update ."' /></div>\n";
+				}
+			elseif( $do_update == 0 || $do_update == 3 )
+				{
+					$html .= "<input type='hidden' name='act' value='do_ins' />\n";
+					$html .= "<input type='hidden' name='tbln' value='" . $aForm['table_name'] . "' />\n";
+					$html .= "<div class='dbmng_form_button'><input class='dbmng_form_button' type='submit' value='" . $btn_name_add . "' /></div>\n";
+				}
+			elseif( $do_update == 2 && $actiontype == "search")
+				{
+					$html .= "<input type='hidden' name='act2' value='do_search' />\n";
+					$html .= "<input type='hidden' name='tbln' value='" . $aForm['table_name'] . "' />\n";
+					$html .= "<div class='dbmng_form_button'><input class='dbmng_form_button' type='submit' value='" . $btn_name_search . "' /></div>\n";
+					//$html .= "<div class='dbmng_form_button'><input class='dbmng_form_button' type='reset' value='" . t('Reset') . "' /></div>\n";
+				}
 
-	$html .= $hv;
-  $html .= "</form>\n";
-  $html .= "</div>\n";
-	}
+			$html .= $hv;
+			$html .= "</form>\n";
+			$html .= "</div>\n";
+		}
 	else
 		{
 			$html .= "<div class='message error'>".t('Record not found')."</div>";
