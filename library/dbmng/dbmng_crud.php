@@ -537,7 +537,7 @@ function dbmng_update($aForm, $aParam)
 		{
 			if($fld_value['key'] != 1 ) 
 				{
-					if( $fld_value['readonly'] != 1 )
+					if( !req_equal('readonly', 1) ) //$fld_value['readonly'] != 1 )
 						{
 							if( isset($fld_value['widget']) )
 								{
