@@ -459,7 +459,7 @@ function dbmng_manager()
 												'label_long' => t('Table Label'),
 												'type' => 'varchar',
 												'key' => 0,
-												'skip_in_tbl' => '1'
+												//'skip_in_tbl' => '1'
 									), 
 								'table_desc'  => 
 									array('label'   => t('Desc') , 
