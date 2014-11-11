@@ -6,6 +6,10 @@ padding:0px;
 margin:0px;
 }
 
+#cs_logo{
+	float:right;
+}
+
 #intro video{
 width: 100%;
 margin-top: -550px;
@@ -16,3 +20,143 @@ margin-top: -550px;
 	font-family: roboto;
 }
 
+ div.navbar-header span.cs_top{
+ color: #777 ;
+ font-size: 20pt;	
+ font-weight: bold; 
+}
+
+/*
+span.cs_top span.cs_clima{
+ color: #DD6659 ;
+ font-size: 30pt;	
+}
+
+span.cs_top span.cs_south{
+ color: #fecc00 ;
+ font-size: 30pt;	
+}
+*/
+
+ div.navbar-header span.cs_sub{
+ color: #DD6659 ;
+ font-size: 12pt;	
+ font-weight: bold; 
+}
+
+
+section h3{
+	color: #DD6659 ;
+}
+
+#contact_table{
+	padding-top:100px;
+}
+
+#intro #cs_video_title{
+ /*color: #DD6659 !important;*/
+ color: #444;
+ position: absolute;
+ font-weight: bold; 
+ top: 200px;
+ left: 300px;
+ text-align: left;
+ text-shadow: 0 0 1px #fff, 0 0 2px #fff, 0 0 3px #fff, 0 0 4px #fff, 0 0 5px #fff, 0 0 6px #fff;
+
+
+}
+
+/* Demo Sections - You can use these as guides or delete them - the scroller will work with any sort of height, fixed, undefined, or percentage based.
+The padding is very important to make sure the scrollspy picks up the right area when scrolled to. Adjust the margin and padding of sections and children 
+of those sections to manage the look and feel of the site. */
+
+.intro-section {
+    height: 100%;
+    padding-top: 150px;
+    text-align: center;
+    background: #fff;
+}
+
+.about-section {
+    height: 100%;
+    padding-top: 150px;
+    text-align: center;
+    background: #eee;
+}
+
+
+.categories-section {
+    height: 100%;
+    padding-top: 150px;
+    text-align: center;
+    background: #fff;
+}
+
+.rules-section {
+    height: 450%;
+    padding-top: 150px;
+    text-align: center;
+    background: #eee;
+}
+
+.upload-section {
+    height: 100%;
+    padding-top: 150px;
+    text-align: center;
+    background: #fff;
+}
+
+.view-section {
+    height: 100%;
+    padding-top: 150px;
+    text-align: center;
+    background: #eee;
+}
+
+.production-section {
+    height: 100%;
+    padding-top: 150px;
+    text-align: center;
+    background: #fff;
+}
+
+
+.contact-section {
+    height: 100%;
+    padding-top: 150px;
+    text-align: center;
+    background: #eee;
+}
+
+
+
+#hybridauth-widget-wrapper h3{
+	display:none;	
+}
+#upload #user-login-form div.item-list{
+	display:none;
+}
+
+#upload div.item-list ul {
+	list-style-type: none;
+}
+#cs_login_hybridauth a {
+   margin: 10px;
+}
+
+#cs_video_title{
+ font-size: large;
+ font-weight: bold;
+}
+
+cs_video_description {
+ font-style: italic;
+}
+
+.diego_editable textarea:focus, .diego_editable input:focus{
+    outline: 0;
+}
+
+.diego_editable textarea, .diego_editable input{
+    border: 0px;
+}

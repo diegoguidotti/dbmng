@@ -59,47 +59,34 @@ function cl_video_block()
 
 function cs_video_contest_page()
 {
+ global $user;
 
   //drupal_add_http_header('Content-Type', 'application/json');
 
-	$html='<!DOCTYPE html>
-			<html lang="en">
+	if(isset($_REQUEST['cs_logout'])){  
 
-			<head>
-
-				<meta charset="utf-8">
-				<meta http-equiv="X-UA-Compatible" content="IE=edge">
-				<meta name="viewport" content="width=device-width, initial-scale=1">
-				<meta name="description" content="">
-				<meta name="author" content="">
-				
-				<link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto" media="all" />
-				
-				<title>Climasouth Video Contest</title>
-
-				<!-- Bootstrap Core CSS -->
-				<link href="../sites/all/modules/climasouth_video/css/bootstrap.min.css" rel="stylesheet">
-
-				<!-- Custom CSS -->
-				<link href="../sites/all/modules/climasouth_video/css/scrolling-nav.css" rel="stylesheet">
-				<link href="../sites/all/modules/climasouth_video/climasouth_video.css" rel="stylesheet">
+		//do not logout if try to login
+		  if(isset($_SESSION)){
+				module_invoke_all('user_logout', $user);
+		
+				// Destroy the current session, and reset $user to the anonymous user.
+				session_destroy();
+			}
+	}
 
 
+	$html=cs_get_header();
 
-
-				<!--[if lt IE 9]>
-					<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-					<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-				<![endif]-->
-
-			</head>
+	$html.='
 
 			<!-- The #page-top ID is part of the scrolling feature - the data-spy and data-target are part of the built-in Bootstrap scrollspy function -->
-
 			<body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
 				<!-- Navigation -->
 				<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+					
 					<div class="container">
+					<div id="cs_logo"><a href="/"><img  src="../sites/all/modules/climasouth_video/logo_cs.png"/></a></div>
+
 							<div class="navbar-header page-scroll">
 								<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
 									<span class="sr-only">Toggle navigation</span>
@@ -107,8 +94,8 @@ function cs_video_contest_page()
 									<span class="icon-bar"></span>
 									<span class="icon-bar"></span>
 								</button>
-								<!--<img id="logo" src="../sites/all/modules/climasouth_video/logo_cs.png"/>-->
-								<a class="navbar-brand page-scroll" href="#page-top"> Climasouth video</a>
+								
+								<div class="cs_head"><a class="navbar-brand page-scroll" href="#page-top"><span class="cs_top"><span  class="cs_clima">Clima</span><span class="cs_south">South</span> Video Competition - </span><span class="cs_sub">From Climate Change to Climate Action</span></a></div>
 							</div>
 
 							<!-- Collect the nav links, forms, and other content for toggling -->
@@ -131,9 +118,16 @@ function cs_video_contest_page()
 											<a class="page-scroll" href="#upload">Upload</a>
 									</li>
 									<li>
+											<a class="page-scroll" href="#view">View & Vote</a>
+									</li>
+									<li>
+											<a class="page-scroll" href="#production">Production Team</a>
+									</li>
+									<li>
 											<a class="page-scroll" href="#contact">Contact</a>
 									</li>
 								</ul>
+
 							</div>
 							<!-- /.navbar-collapse -->
 					</div>
@@ -142,13 +136,13 @@ function cs_video_contest_page()
 
 				<!-- Intro Section -->
 				<section id="intro" class="intro-section">
-					<h1>Join the Action,  make a short film  on Climate Change  & win a Prize !</h1> 
+					<div id="cs_video_title"><h1>Join the Action</h1><h2>make a short film  on Climate Change  & win a Prize !</h2> </div>
 					<div class="container">
 								
 								<video id="cs_short" autoplay="" loop="">
 									<source src="http://www.climasouth.eu/drupal/video/cs_short.mp4" type="video/mp4">
 									<source src="http://www.climasouth.eu/drupal/video/cs_short.ogv" type="video/ogg">
-									
+									<img src="http://www.climasouth.eu/drupal/video/cs_short.jpg" title="No Flash found" />
 								</video>
 					</div>
 				</section>
@@ -166,7 +160,7 @@ function cs_video_contest_page()
 
 											Climate change is the most pressing environmental issue of   our time. We believe that together we have the power to   address it and make a difference. Create a short film on   Climate Change and win a prize. The best films will achieve   global exposure and winners will be awarded their prize at a   high-profile international event. In addition, winners will be   invited to join the ClimaSouth video initiative. Under the   tutelage of well-known video journalists and video artists,   the winners will contribute to the initiative in each of the   ClimaSouth partner countries : Algeria, Egypt, Israel,   Jordan, Lebanon, Libya, Morocco, Palestine and Tunisia.  
 
-											<h3>THE ASSIGNMENT</h3>  
+											<h3>The Assignment</h3>  
 											Create a 120–180 second video on the theme of Climate   Change by choosing one of the following two categories: <br/><br/>   
 											<ol>
 											<li>Information & news videos - including infographics</li>
@@ -187,8 +181,7 @@ function cs_video_contest_page()
 									<h1>Categories</h1>
 										<div class="climasouth_text_container">
 											For jury prizes, videos entered for the competition will be judged according to the following criteria:<br/><br/>
-											<ol>
-												<li><b>CATEGORY 1 : information & news videos  -  including infographics</b>:
+											<h3>Category 1 : information & news videos  -  including infographic</h3>
 													<ul> 
 													<li>Video clearly depicts Climate Change in the South Mediterranean region, 
 													be it in terms of causes, risks, impact and opportunities for adaptation and mitigation actions</li>
@@ -199,9 +192,8 @@ function cs_video_contest_page()
 													<li>Clarity, insight and respect for the audience.</li>
 													<li>Creative use of the medium’s capabilities</li>
 													</ul>
-												</li>
-												<br/>
-												<li><b>CATEGORY 2:  Art videos</b>
+
+												<h3>Category 2:  Art videos</h3>
 													<ul>
 													<li>Relevance to the theme of Climate Change in the South Mediterranean region.</li>
 													<li>Creativity</li>
@@ -209,8 +201,7 @@ function cs_video_contest_page()
 													<li>Aesthetic  qualities</li>
 													<li>Innovation and experimentation</li>
 													</ul>
-												</li>
-											</ol>
+												
 										</div>
 								</div>
 							</div>
@@ -320,34 +311,97 @@ function cs_video_contest_page()
 								</div>
 							</div>
 					</div>
-				</section>
+				</section>';
 
-				<!-- Upload Section -->
-				<section id="upload" class="upload-section">
+
+				$html.=cs_get_upload_section();
+				$html.=cs_get_view_section();
+
+				$html.='
+
+
+				<!-- Production Team Section -->
+				<section id="production" class="production-section">
 					<div class="container">
 							<div class="row">
 								<div class="col-lg-12">
-									<h1>Upload</h1>
+									<h1>Production Team</h1>
+
+<h3>Information & Communication</h3>
+
+Information design & editor: GH Mattravers Messana<br/>
+
+Webmaster & IT services: Diego Guidotti & Michele Mammini (Aedit srl)<br/>
+
+Social Media & promotion :  # EU Infocentre<br/>
+
+Images courtesy of : Alessandro Chiodo, NASA Johnson Space Centre, Bennet Pimpinella, ESAV - Marrakech<br/>
+
+<h3>Climate Change Team</h3>
+
+Team Leader : Annie Bonnin Roncerel<br/>
+
+Mitigation Expert : El Sayed Sabry Nasr Mansour<br/>
+
+Adaptation Expert : Neil Ward</br>
+
+<h3>Agriconsulting Consortium</h3>
+
+Project Director : Ottavio Novelli<br/>
+
+Coordination & Administration  : Barbara Giannuzzi Savelli<br/>
+
+<h3>European Commission</h3>
+
+Directorate General for Development and Cooperation – EuropAid<br/>
+
+Project Manager : Stéphane Halgand <br/>
+
+Directorate-General for Climate Action ("DG CLIMA") <br/>
+
+Policy Officer Maghreb, Mashreq and Gulf region: Lucie Berger</br>
+
+</p>
+
+<b>Disclaimer</b>: The information and views set out in this video competition are those of the authors and do not necessarily reflect the official opinion of the European Union. Neither the European  Union institutions and bodies nor any person acting on their behalf may be held responsible for the use which may be made of the information contained therein. 
+<br/>
+
+Project funded by the European Union<br/>
+© European Commission, 2014.
+									
 								</div>
 							</div>
 					</div>
 				</section>
 
-				<!-- Contact Section -->
+
+			<!-- Contact Section -->
 				<section id="contact" class="contact-section">
 					<div class="container">
 							<div class="row">
 								<div class="col-lg-12">
 									<h1>Contact</h1>
-									<div id="contact_table">
-										<span style="color:#1f497d;">
-										<table width="800px">
+
+<img width="400" src="../sites/all/modules/climasouth_video/logo_cs.png" /><br/>
+
+G.H. Mattravers Messana <br/>
+ClimaSouth Project - Information & Communication</br>
+Email : <a href="mailto:comecaprojects@runbox.com">comecaprojects@runbox.com</a></br>
+<hr/>
+<img width="400" src="../sites/all/modules/climasouth_video/resources/agriconsulting_logo_long.png" /><br/>
+Belgium :  c/o Agriconsulting Europe, Av de Tervuren 36, 1040 Brussels, Tel +32 2 7362277.<br/>
+Egypt : c/o d’Appolonia Egypt Branch, Fouad Thabet treet, 8, Sheraton Buildings,Heliopolis,  Cairo. </br>
+
+<!--
+									<div id="contact_table">										
+										<table width="100%">
 											<tr>
 												<td>
 													<p align="left">
-													<img width="63" height="41" src="../sites/all/modules/climasouth_video/resources/ue_flag.jpg" />
-													<img width="133" height="40" src="../sites/all/modules/climasouth_video/resources/climasouth_logo.png" />
-													<i>EU funded project</i>
+													<img width="63" height="41" src="../sites/all/modules/climasouth_video/resources/ue_flag.jpg" /> <i>EU funded project</i> <br/>
+													<img width="200" src="../sites/all/modules/climasouth_video/resources/climasouth_logo.png" /><br/>
+													<img width="200" src="../sites/all/modules/climasouth_video/resources/agriconsulting_logo_long.png" />
+													
 													</p>
 												</td>
 												<td>
@@ -355,23 +409,24 @@ function cs_video_contest_page()
 												<b>G.H. Mattravers Messana</b>
 												<br/>Information & Communication
 												<br/>Email : <a href="mailto:comecaprojects@runbox.com">comecaprojects@runbox.com</a> 
-												<br/>Skype: <a href="skype:comeca2?call" alt="aaa">comeca2</a>
+												<br/>Skype: <a href="skype:comeca2?call" alt="comeca2">comeca2</a>
 												</p>
 												</td>
 											</tr>
 											<tr>
 												<td colspan="2">
+													<p/>
 													<p align="left"><b>Belgium</b>: c/o Agriconsulting Europe - Av de Tervuren 36, 1040 Brussels - Tel +32 2 736 22 77</p>
 													<p align="left"><b>Egypt</b> c/o d’Appolonia Egypt Branch - Fouad Thabet Street, 8 - Sheraton Buildings, Heliopolis, Cairo</p>
 													<p align="left">
-														<img width="24" height="23" src="../sites/all/modules/climasouth_video/resources/agriconsulting_logo.png" />
+														
 														<span style="color:gray;">AGRICONSULTING Consortium with ‐ Agrer‐ Typsa ‐ CMCC ‐ Pescares ‐ IAM.B ‐ D’Appollonia  ‐ Sviluppo Globale</span>
 													</p>
 												</td>
 											</tr>
-										</table>
-										</span>
+										</table>										
 									</div>
+-->
 								</div>
 							</div>
 					</div>
@@ -399,4 +454,154 @@ function cs_video_contest_page()
 
 
 	echo $html;
+}
+
+function cs_get_upload_section(){
+
+	global $user;
+
+	$html='				<!-- Upload Section -->
+				<section id="upload" class="upload-section">
+					<div class="container">
+							<div class="row">
+								<div class="col-lg-12">
+									<h1>Upload</h1>';
+
+			if (module_exists('hybridauth')){
+					
+				if( user_is_logged_in()) {
+					$html.=cs_video_upload();
+
+				}
+				else{
+
+					$html.=t('You need to register the website to upload a video.');
+					$html.='<div id="cs_login_hybridauth">';
+					$html.='<a href="'.base_path().'hybridauth/window/Facebook?destination=climasouth/video%23upload&amp;destination_error=climasouth/video%23upload" title="Facebook" rel="nofollow" data-hybridauth-provider="Facebook" data-ajax="false" data-hybridauth-width="800" data-hybridauth-height="500"><span title="Facebook"><img src="'.base_path().'sites/all/modules/hybridauth/plugins/icon_pack/hybridauth_48/icons/facebook.png" /></span></a>';
+					$html.='<a href="'.base_path().'hybridauth/window/Google?destination=climasouth/video%23upload&amp;destination_error=climasouth/video%23upload" title="Google" rel="nofollow" data-hybridauth-provider="Google" data-ajax="false" data-hybridauth-width="800" data-hybridauth-height="500"><span title="Google"><img src="'.base_path().'sites/all/modules/hybridauth/plugins/icon_pack/hybridauth_48/icons/google.png" /></span></a>';
+					$html.='<a href="'.base_path().'hybridauth/window/Vimeo?destination=climasouth/video%23upload&amp;destination_error=climasouth/video%23upload" title="Vimeo" rel="nofollow" data-hybridauth-provider="Vimeo" data-ajax="false" data-hybridauth-width="800" data-hybridauth-height="500"><span title="Vimeo"><img src="'.base_path().'sites/all/modules/hybridauth/plugins/icon_pack/hybridauth_48/icons/vimeo.png" /></span></a>';
+					$html.='</div>';
+
+					//$element['#type'] = 'hybridauth_widget';
+					//$html .= drupal_render($element);
+
+				}
+			}	
+			else{
+
+				if(($user->uid)){
+
+					$html.=cs_video_upload();
+				}
+				else{				
+    
+
+					$form = drupal_get_form('user_login_block');	
+					$form['#action']=base_path().'climasouth/video?destination=climasouth/video#upload';
+					$html .=  render($form);
+				}
+			}
+
+
+	$html.='
+								</div>
+							</div>
+					</div>
+				</section>';
+
+	return $html;
+
+}
+
+
+
+function cs_get_view_section(){
+
+	global $user;
+
+	$html='				<!-- View Section -->
+				<section id="view" class="view-section">
+					<div class="container">
+							<div class="row">
+								<div class="col-lg-12">
+									<h1>View & Vote</h1>Videos not yet available.';
+
+
+
+				if(($user->uid)){
+
+				}
+				else{				
+
+				}
+
+
+	$html.='
+								</div>
+							</div>
+					</div>
+				</section>';
+
+	return $html;
+
+}
+
+
+function cs_video_upload(){
+	global $user;
+	$html='';
+	$html .=  t('Welcome').' '.$user->name.' - <a href="?cs_logout=true#upload">'.t("Logout").'</a>';
+
+	$html.= '<form action="?">';
+	$html.= '<br/><span id="cs_video_title" class="diego_editable">Video title</span><br/>';
+	$html.= '<input onBlur="uploadVideo()" type="input" name="cs_video_link" id="cs_video_link" placeHolder="Insert a video link"/>';
+	$html.= '<div id="cs_video_container"></div>';
+	$html.= '<br/><span id="cs_video_description" class="diego_editable">Video description</span><br/>';
+	$html.= '</form>';
+	/*
+	$html.= '<form action="?">';
+	$html.= '<input type="input" name="cs_title" id="cs_title" />';
+	$html.= '<textarea name="cs_desc" id="cs_desc" ></textarea>';
+	$html.= '<input type="input" name="cs_link" id="cs_link" />';
+	$html.= '<input type="submit" name="cs_sub" id="cs_sub" value="'.t("Send").'" />';
+	$html.= '</form>';
+  */
+
+	return $html;
+
+}
+
+function cs_get_header(){
+	$html='<!DOCTYPE html>
+			<html lang="en">
+			<head>
+
+				<meta charset="utf-8">
+				<meta http-equiv="X-UA-Compatible" content="IE=edge">
+				<meta name="viewport" content="width=device-width, initial-scale=1">
+				<meta name="description" content="">
+				<meta name="author" content="">
+				<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+				
+				<link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto" media="all" />
+				
+				<title>Climasouth Video Contest</title>
+
+				<!-- Bootstrap Core CSS -->
+				<link href="../sites/all/modules/climasouth_video/css/bootstrap.min.css" rel="stylesheet">
+
+				<!-- Custom CSS -->
+				<link href="../sites/all/modules/climasouth_video/css/scrolling-nav.css" rel="stylesheet">
+				<link href="../sites/all/modules/climasouth_video/climasouth_video.css" rel="stylesheet">
+
+
+
+
+				<!--[if lt IE 9]>
+					<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+					<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+				<![endif]-->
+
+			</head>';
+	return $html;
 }
