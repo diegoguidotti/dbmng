@@ -12,7 +12,6 @@ margin:0px;
 
 #intro video{
 width: 100%;
-margin-top: -550px;
 }
 
 .climasouth_text_container {
@@ -49,8 +48,12 @@ section h3{
 	color: #DD6659 ;
 }
 
-#contact_table{
-	padding-top:100px;
+div#contact_page{
+	text-align: left;
+}
+
+div#contact_page b{
+	/*color: #DD6659 ;*/
 }
 
 #intro #cs_video_title{
@@ -61,9 +64,13 @@ section h3{
  top: 200px;
  left: 300px;
  text-align: left;
- text-shadow: 0 0 1px #fff, 0 0 2px #fff, 0 0 3px #fff, 0 0 4px #fff, 0 0 5px #fff, 0 0 6px #fff;
+ text-shadow: 0 0 1px #fff, 0 0 2px #fff, 0 0 3px #fff, 0 0 4px #fff, 0 0 5px #fff, 0 0 6px #fff, 0 0 7px #ccc, 0 0 8px #ccc;
 
 
+}
+
+#intro div.logo_agri{
+	padding-top:20px;
 }
 
 /* Demo Sections - You can use these as guides or delete them - the scroller will work with any sort of height, fixed, undefined, or percentage based.

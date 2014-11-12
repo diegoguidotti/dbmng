@@ -330,13 +330,17 @@ function dbmng_insert($aForm, $aParam)
 	$bSelectNM = false;
 	foreach ( $aForm['fields'] as $fld => $fld_value )
 		{
+			$readonly=false;
+			if(isset($fld_value['readonly'])){
+				$readonly=$fld_value['readonly'];
+			}
 			
 			//if($fld !== $aForm['primary_key'][0])
 			if($fld_value['key'] != 1)
 				{
 					if( isset($fld_value['widget']) ) 
 						{
-							if($fld_value['widget']!='select_nm')
+							if($fld_value['widget']!='select_nm' && !$readonly )
 								{		
 									$sWhat .= $fld . ", ";
 									$sVal.=":$fld ,";	
@@ -535,9 +539,15 @@ function dbmng_update($aForm, $aParam)
 	
 	foreach ( $aForm['fields'] as $fld => $fld_value )
 		{
+
+			$readonly=false;
+			if(isset($fld_value['readonly'])){
+				$readonly=$fld_value['readonly'];
+			}
+
 			if($fld_value['key'] != 1 ) 
 				{
-					if( !req_equal('readonly', 1) ) //$fld_value['readonly'] != 1 )
+					if( !$readonly ) //$fld_value['readonly'] != 1 )
 						{
 							if( isset($fld_value['widget']) )
 								{

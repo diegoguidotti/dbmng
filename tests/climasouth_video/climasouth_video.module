@@ -136,15 +136,18 @@ function cs_video_contest_page()
 
 				<!-- Intro Section -->
 				<section id="intro" class="intro-section">
-					<div id="cs_video_title"><h1>Join the Action</h1><h2>make a short film  on Climate Change  & win a Prize !</h2> </div>
+					<div id="cs_video_title"><h1>Join the Action !</h1><h2>Make a short Video on Climate Change and Win a trip to Europe & more...</h2><h4>Submission open until 
+15 January 2015</h3></div>
 					<div class="container">
 								
 								<video id="cs_short" autoplay="" loop="">
-									<source src="http://www.climasouth.eu/drupal/video/cs_short.mp4" type="video/mp4">
+									<source src="http://www.climasouth.eu/drupal/video/cs_short.mp4">
 									<source src="http://www.climasouth.eu/drupal/video/cs_short.ogv" type="video/ogg">
 									<img src="http://www.climasouth.eu/drupal/video/cs_short.jpg" title="No Flash found" />
 								</video>
+							<div class="logo_agri"><img width="200" src="../sites/all/modules/climasouth_video/resources/agriconsulting_logo_long.png" /></div>
 					</div>
+
 				</section>
 
 		
@@ -156,9 +159,9 @@ function cs_video_contest_page()
 								<div class="col-lg-12">
 									<h1>About</h1>
 										<div class="climasouth_text_container">
-											<h3>Join the Action & make a short film on Climate Change.</h3>  
+											<h3>Join the Action & make a short video on Climate Change.</h3>  
 
-											Climate change is the most pressing environmental issue of   our time. We believe that together we have the power to   address it and make a difference. Create a short film on   Climate Change and win a prize. The best films will achieve   global exposure and winners will be awarded their prize at a   high-profile international event. In addition, winners will be   invited to join the ClimaSouth video initiative. Under the   tutelage of well-known video journalists and video artists,   the winners will contribute to the initiative in each of the   ClimaSouth partner countries : Algeria, Egypt, Israel,   Jordan, Lebanon, Libya, Morocco, Palestine and Tunisia.  
+											Climate change is the most pressing environmental issue of   our time. We believe that together we have the power to   address it and make a difference. Create a short video on   Climate Change and win a prize. The best videos will achieve   global exposure and winners will be awarded their prize at a   high-profile international event. In addition, winners will be   invited to join the ClimaSouth video initiative. Under the   tutelage of well-known video journalists and video artists,   the winners will contribute to the initiative in each of the   ClimaSouth partner countries : Algeria, Egypt, Israel,   Jordan, Lebanon, Libya, Morocco, Palestine and Tunisia.  
 
 											<h3>The Assignment</h3>  
 											Create a 120–180 second video on the theme of Climate   Change by choosing one of the following two categories: <br/><br/>   
@@ -181,7 +184,7 @@ function cs_video_contest_page()
 									<h1>Categories</h1>
 										<div class="climasouth_text_container">
 											For jury prizes, videos entered for the competition will be judged according to the following criteria:<br/><br/>
-											<h3>Category 1 : information & news videos  -  including infographic</h3>
+											<h3>Category 1 : information & news videos</h3>
 													<ul> 
 													<li>Video clearly depicts Climate Change in the South Mediterranean region, 
 													be it in terms of causes, risks, impact and opportunities for adaptation and mitigation actions</li>
@@ -190,7 +193,7 @@ function cs_video_contest_page()
 													<li>Adherence to high journalistic standards</li>
 													<li>Significance and effectiveness </li>
 													<li>Clarity, insight and respect for the audience.</li>
-													<li>Creative use of the medium’s capabilities</li>
+													<li>Creative use of the medium’s capabilities, such as infographics</li>
 													</ul>
 
 												<h3>Category 2:  Art videos</h3>
@@ -232,11 +235,11 @@ function cs_video_contest_page()
 
 											<p>The overall objective of the video competition is to stimulate the interest in the theme of climate change among young and creative people from the South Mediterranean region and foster their engagement in Climate Action. </p>
 
-											<p>The theme for the video competition is ‘climate change’. The films should be produced by video-artists and video-journalists who are nationals and residents in one of the ClimaSouth partner countries. Each film should not exceed the maximum length of 3 minutes.</p>
+											<p>The theme for the video competition is ‘climate change’. The videos should be produced by video-artists and video-journalists who are nationals and residents in one of the ClimaSouth partner countries. Each video should not exceed the maximum length of 3 minutes.</p>
 
 											<p>There are two categories of videos: 
 											<ul>
-											<li>Category 1: information & news videos, including infographics </li>
+											<li>Category 1: information & news videos</li>
 											<li>Category 2: art videos.</li>
 											</ul>
 
@@ -254,7 +257,7 @@ function cs_video_contest_page()
 											<h3>IV. Evaluation criteria (only for jury prizes)</h3>
 
 											<ul>
-											<li><b>CATEGORY 1 : information & news videos, including infographics </b>
+											<li><b>CATEGORY 1 : information & news videos</b>
 												<ol>
 													<li>Video clearly depicts Climate Change in the South Mediterranean region, be it in terms of causes, risks, impact and opportunities for adaptation and mitigation actions</li>
 													<li>Accuracy and completeness </li>
@@ -333,7 +336,7 @@ Information design & editor: GH Mattravers Messana<br/>
 
 Webmaster & IT services: Diego Guidotti & Michele Mammini (Aedit srl)<br/>
 
-Social Media & promotion :  # EU Infocentre<br/>
+Social media and promotion : Giovanni de Paola – EU Infocentre<br/>
 
 Images courtesy of : Alessandro Chiodo, NASA Johnson Space Centre, Bennet Pimpinella, ESAV - Marrakech<br/>
 
@@ -382,51 +385,19 @@ Project funded by the European Union<br/>
 								<div class="col-lg-12">
 									<h1>Contact</h1>
 
-<img width="400" src="../sites/all/modules/climasouth_video/logo_cs.png" /><br/>
+<div id="contact_page">
+<img width="200" src="../sites/all/modules/climasouth_video/resources/climasouth_logo.png" /><br/>
 
-G.H. Mattravers Messana <br/>
-ClimaSouth Project - Information & Communication</br>
-Email : <a href="mailto:comecaprojects@runbox.com">comecaprojects@runbox.com</a></br>
+<b>G.H. Mattravers Messana</b><br/>
+ClimaSouth Project<br/>Information & Communication</br>
+Email : <a href="mailto:ghmm@climasouth.eu">ghmm@climasouth.eu</a></br>
 <hr/>
-<img width="400" src="../sites/all/modules/climasouth_video/resources/agriconsulting_logo_long.png" /><br/>
-Belgium :  c/o Agriconsulting Europe, Av de Tervuren 36, 1040 Brussels, Tel +32 2 7362277.<br/>
-Egypt : c/o d’Appolonia Egypt Branch, Fouad Thabet treet, 8, Sheraton Buildings,Heliopolis,  Cairo. </br>
+<img width="200" src="../sites/all/modules/climasouth_video/resources/agriconsulting_logo_long.png" /><br/>
+<b>Belgium</b>:  c/o Agriconsulting Europe, Av de Tervuren 36, 1040 Brussels, Tel +32 2 7362277.<br/>
+<b>Egypt</b>: c/o d’Appolonia Egypt Branch, Fouad Thabet treet, 8, Sheraton Buildings,Heliopolis,  Cairo. </br/>
+<img  src="../sites/all/modules/climasouth_video/resources/ue_flag.png" />EU funded project<br/>
+</div>
 
-<!--
-									<div id="contact_table">										
-										<table width="100%">
-											<tr>
-												<td>
-													<p align="left">
-													<img width="63" height="41" src="../sites/all/modules/climasouth_video/resources/ue_flag.jpg" /> <i>EU funded project</i> <br/>
-													<img width="200" src="../sites/all/modules/climasouth_video/resources/climasouth_logo.png" /><br/>
-													<img width="200" src="../sites/all/modules/climasouth_video/resources/agriconsulting_logo_long.png" />
-													
-													</p>
-												</td>
-												<td>
-												<p align="right">
-												<b>G.H. Mattravers Messana</b>
-												<br/>Information & Communication
-												<br/>Email : <a href="mailto:comecaprojects@runbox.com">comecaprojects@runbox.com</a> 
-												<br/>Skype: <a href="skype:comeca2?call" alt="comeca2">comeca2</a>
-												</p>
-												</td>
-											</tr>
-											<tr>
-												<td colspan="2">
-													<p/>
-													<p align="left"><b>Belgium</b>: c/o Agriconsulting Europe - Av de Tervuren 36, 1040 Brussels - Tel +32 2 736 22 77</p>
-													<p align="left"><b>Egypt</b> c/o d’Appolonia Egypt Branch - Fouad Thabet Street, 8 - Sheraton Buildings, Heliopolis, Cairo</p>
-													<p align="left">
-														
-														<span style="color:gray;">AGRICONSULTING Consortium with ‐ Agrer‐ Typsa ‐ CMCC ‐ Pescares ‐ IAM.B ‐ D’Appollonia  ‐ Sviluppo Globale</span>
-													</p>
-												</td>
-											</tr>
-										</table>										
-									</div>
--->
 								</div>
 							</div>
 					</div>

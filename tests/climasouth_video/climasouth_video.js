@@ -1,6 +1,26 @@
 
 jQuery(function(){
+
+		
 		jQuery("#cs_short").prop('muted', true);
+		video=jQuery("#cs_short").get(0);
+
+		video.addEventListener('click',function(){
+			video.play();			
+			jQuery("#cs_short").prop('muted', true);
+		});
+
+			/*
+		video.addEventListener('canplay', function() {
+			video.play();
+			jQuery("#cs_short").prop('muted', true);
+		});
+
+		video.load();
+		video.play();
+    jQuery("#cs_short").prop('muted', true);
+*/
+
 
 		resize();
 
@@ -78,16 +98,50 @@ function resize(){
 		
 		var vh=jQuery('#intro video').height();
 
-		//var tm=((vh)/2);
+		var tm=((vh)/2);
 
-			var tm	=((vh-400));
-
-		console.log('Video alto:'+vh+" margine: -"+tm);
+		if(vh<600)
+			tm=0;
+		console.log('Video alto:'+vh+" metto margine: -"+tm);
 		jQuery('#intro video').css('margin-top','-'+tm+'px');
-
 
 		var left=jQuery('#about div.row').offset().left;
 		jQuery('#intro #cs_video_title').css('left', left+'px');
+
+
+		min_height=jQuery(window).height();
+		win_width=jQuery(window).width();
+		if(min_height<400)
+			min_height=400;
+
+		
+		jQuery.each(jQuery('section'), function(){
+			var s=jQuery(this);
+
+			
+			s.css('height','auto');
+			auto_height=s.height();
+
+			
+			var h=Math.max(min_height,auto_height)+200;
+			s.css('height',h+'px');
+
+			//console.log(s.attr('id')+" "+h);
+		});
+
+
+		//use the boootstrap menu
+		if(jQuery('ul.nav').width()==0){
+			jQuery('#cs_logo').hide();
+			jQuery('.cs_head a.navbar-brand').width(win_width-100);
+			jQuery('.cs_head a.navbar-brand').css('height','auto');
+		}
+		else{
+			jQuery('#cs_logo').show();
+			jQuery('.cs_head a.navbar-brand').css('width','100%');
+			jQuery('.cs_head a.navbar-brand').css('height','auto');
+
+		}
 }
 
 
