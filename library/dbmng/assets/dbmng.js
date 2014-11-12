@@ -428,3 +428,29 @@ function dbmng_table_getaction ( idtable, actiontype )
   jQuery('#'+idtable +' #actiontype').val(actiontype);
   jQuery('#'+idtable).submit();
 }
+
+
+function dbmng_reduce_fields ( field_selector, lun )
+{
+	console.log('start');
+	jQuery(function(){
+		jQuery(field_selector).each(function(k,v){
+			var v=jQuery(v);
+			var content=v.html();
+			console.log(content.length);
+			
+			if(content.length>lun){
+				var html='<span class="reduced">'+content.substring(0,lun)+'...</span><span style="display:none" class="complete">'+content+'</span>';	
+				v.html(html);
+
+				v.click(function(){
+						v.children('span').toggle();				
+				});
+			}
+
+			
+		});
+	});
+}
+
+
