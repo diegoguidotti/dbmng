@@ -19,7 +19,7 @@ width: 100%;
 	font-family: roboto;
 }
 
- div.navbar-header span.cs_top{
+ div.navbar-header div.cs_top{
  color: #777 ;
  font-size: 20pt;	
  font-weight: bold; 
@@ -37,7 +37,7 @@ span.cs_top span.cs_south{
 }
 */
 
- div.navbar-header span.cs_sub{
+ div.navbar-header div.cs_sub{
  color: #DD6659 ;
  font-size: 12pt;	
  font-weight: bold; 

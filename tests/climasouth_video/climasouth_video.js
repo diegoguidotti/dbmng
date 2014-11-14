@@ -3,6 +3,7 @@ jQuery(function(){
 
 		
 		jQuery("#cs_short").prop('muted', true);
+			/*
 		video=jQuery("#cs_short").get(0);
 
 		video.addEventListener('click',function(){
@@ -10,7 +11,6 @@ jQuery(function(){
 			jQuery("#cs_short").prop('muted', true);
 		});
 
-			/*
 		video.addEventListener('canplay', function() {
 			video.play();
 			jQuery("#cs_short").prop('muted', true);
@@ -138,7 +138,7 @@ function resize(){
 		}
 		else{
 			jQuery('#cs_logo').show();
-			jQuery('.cs_head a.navbar-brand').css('width','100%');
+			//jQuery('.cs_head a.navbar-brand').css('width','100%');
 			jQuery('.cs_head a.navbar-brand').css('height','auto');
 
 		}

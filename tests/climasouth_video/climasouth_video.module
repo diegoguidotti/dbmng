@@ -57,6 +57,7 @@ function cl_video_block()
 }
 
 
+
 function cs_video_contest_page()
 {
  global $user;
@@ -74,6 +75,14 @@ function cs_video_contest_page()
 			}
 	}
 
+
+	global $language;	
+	global $csv_lang;
+
+	$csv_lang=$language->language;
+	if(isset($_REQUEST['lang'])){
+		$csv_lang=$_REQUEST['lang'];
+	}
 
 	$html=cs_get_header();
 
@@ -95,7 +104,7 @@ function cs_video_contest_page()
 									<span class="icon-bar"></span>
 								</button>
 								
-								<div class="cs_head"><a class="navbar-brand page-scroll" href="#page-top"><span class="cs_top"><span  class="cs_clima">Clima</span><span class="cs_south">South</span> Video Competition - </span><span class="cs_sub">From Climate Change to Climate Action</span></a></div>
+								<div class="cs_head"><a class="navbar-brand page-scroll" href="#page-top"><div class="cs_top">'.tt('ClimaSouth Video Competition').'</div><div class="cs_sub">'.tt('From Climate Change to Climate Action').'</div></a></div>
 							</div>
 
 							<!-- Collect the nav links, forms, and other content for toggling -->
@@ -106,25 +115,25 @@ function cs_video_contest_page()
 											<a class="page-scroll" href="#page-top"></a>
 									</li>
 									<li>
-											<a class="page-scroll" href="#about">About</a>
+											<a class="page-scroll" href="#about">'.tt('About').'</a>
 									</li>
 									<li>
-											<a class="page-scroll" href="#categories">Categories</a>
+											<a class="page-scroll" href="#categories">'.tt('Categories').'</a>
 									</li>
 									<li>
-											<a class="page-scroll" href="#rules">Rules</a>
+											<a class="page-scroll" href="#rules">'.tt('Rules').'</a>
 									</li>
 									<li>
-											<a class="page-scroll" href="#upload">Upload</a>
+											<a class="page-scroll" href="#upload">'.tt('Upload').'</a>
 									</li>
 									<li>
-											<a class="page-scroll" href="#view">View & Vote</a>
+											<a class="page-scroll" href="#view">'.tt('View & Vote').'</a>
 									</li>
 									<li>
-											<a class="page-scroll" href="#production">Production Team</a>
+											<a class="page-scroll" href="#production">'.tt('Production Team').'</a>
 									</li>
 									<li>
-											<a class="page-scroll" href="#contact">Contact</a>
+											<a class="page-scroll" href="#contact">'.tt('Contact').'</a>
 									</li>
 								</ul>
 
@@ -136,14 +145,13 @@ function cs_video_contest_page()
 
 				<!-- Intro Section -->
 				<section id="intro" class="intro-section">
-					<div id="cs_video_title"><h1>Join the Action !</h1><h2>Make a short Video on Climate Change and Win a trip to Europe & more...</h2><h4>Submission open until 
-15 January 2015</h3></div>
+					<div id="cs_video_title"><h1>'.tt('Join the Action !').'</h1><h2>'.tt('Make a short Video on Climate Change and Win a trip to Europe & more...').'</h2><h4>'.tt('Submission open until 15 January 2015').'</h3></div>
 					<div class="container">
 								
 								<video id="cs_short" autoplay="" loop="">
 									<source src="http://www.climasouth.eu/drupal/video/cs_short.mp4">
 									<source src="http://www.climasouth.eu/drupal/video/cs_short.ogv" type="video/ogg">
-									<img src="http://www.climasouth.eu/drupal/video/cs_short.jpg" title="No Flash found" />
+									<img src="http://www.climasouth.eu/drupal/video/cs_short.gif" title="No Flash found" />
 								</video>
 							<div class="logo_agri"><img width="200" src="../sites/all/modules/climasouth_video/resources/agriconsulting_logo_long.png" /></div>
 					</div>
@@ -157,19 +165,9 @@ function cs_video_contest_page()
 					<div class="container">
 							<div class="row">
 								<div class="col-lg-12">
-									<h1>About</h1>
+									<h1>'.tt('About').'</h1>
 										<div class="climasouth_text_container">
-											<h3>Join the Action & make a short video on Climate Change.</h3>  
-
-											Climate change is the most pressing environmental issue of   our time. We believe that together we have the power to   address it and make a difference. Create a short video on   Climate Change and win a prize. The best videos will achieve   global exposure and winners will be awarded their prize at a   high-profile international event. In addition, winners will be   invited to join the ClimaSouth video initiative. Under the   tutelage of well-known video journalists and video artists,   the winners will contribute to the initiative in each of the   ClimaSouth partner countries : Algeria, Egypt, Israel,   Jordan, Lebanon, Libya, Morocco, Palestine and Tunisia.  
-
-											<h3>The Assignment</h3>  
-											Create a 120–180 second video on the theme of Climate   Change by choosing one of the following two categories: <br/><br/>   
-											<ol>
-											<li>Information & news videos - including infographics</li>
-											<li>Art videos.</li>
-											</ol>
-											Upload your   video to Vimeo or YouTube, then submit its URL here by   15th January. There will be four awards: two public choice   awards (one for each category) and two jury awards. The   four winners and those who have won the most votes in   each of the ClimaSouth partner countries (18 finalists), will   be invited to participate to the second phase of the initiative.   This will be launched with a series of dedicated master-  Outline web pages for launch of ClimaSouth Video competition (version 2.1). Page 3  classes focussing on the conception, production and editing   of climate change inspired art and information videos.
+											'.tt('page_about').'
 										</div>
 								</div>
 							</div>
@@ -495,7 +493,7 @@ function cs_get_view_section(){
 					<div class="container">
 							<div class="row">
 								<div class="col-lg-12">
-									<h1>View & Vote</h1>Videos not yet available.';
+									<h1>View & Vote</h1>Videos will be available for public viewing and voting at the end of the submission period ending 15th January 2015.';
 
 
 
@@ -543,8 +541,21 @@ function cs_video_upload(){
 }
 
 function cs_get_header(){
+
+	global $csv_lang;
+	$rtl='';
+	$css_rtl='';
+	if($csv_lang=='ar')
+		{
+			$rtl='dir="rtl"';
+			$css_rtl='<link href="../sites/all/modules/climasouth_video/climasouth_video_rtl.css" rel="stylesheet">';
+		}
+
+
+	
+
 	$html='<!DOCTYPE html>
-			<html lang="en">
+			<html lang="'.$csv_lang.'" '.$rtl.' >
 			<head>
 
 				<meta charset="utf-8">
@@ -563,7 +574,7 @@ function cs_get_header(){
 
 				<!-- Custom CSS -->
 				<link href="../sites/all/modules/climasouth_video/css/scrolling-nav.css" rel="stylesheet">
-				<link href="../sites/all/modules/climasouth_video/climasouth_video.css" rel="stylesheet">
+				<link href="../sites/all/modules/climasouth_video/climasouth_video.css" rel="stylesheet">'.$css_rtl.'
 
 
 
@@ -575,4 +586,52 @@ function cs_get_header(){
 
 			</head>';
 	return $html;
+}
+
+
+function tt($txt){
+
+	global $csv_lang;
+
+	$tras=Array();
+	$tras['ClimaSouth Video Competition']['ar']='كليماساوث – مسابقة الفيديو';
+	$tras['From Climate Change to Climate Action']['ar']='من تغير المناخ إلى العمل المناخي';
+	$tras["Join the Action !"]['ar']='انضم إلى العمل';
+	$tras["Make a short Video on Climate Change and Win a trip to Europe & more..."]['ar']='قم بإعداد فيديو قصير عن تغير المناخ وأربح رحلة لأوروبا والمزيد.... ';
+	//$tras["Submission open until 15 January 2015"]['ar']='انضم إلى العمل';
+
+  $tras['page_about']['en']='<h3>Join the Action & make a short video on Climate Change.</h3>  
+
+											Climate change is the most pressing environmental issue of   our time. We believe that together we have the power to   address it and make a difference. Create a short video on   Climate Change and win a prize. The best videos will achieve   global exposure and winners will be awarded their prize at a   high-profile international event. In addition, winners will be   invited to join the ClimaSouth video initiative. Under the   tutelage of well-known video journalists and video artists,   the winners will contribute to the initiative in each of the   ClimaSouth partner countries : Algeria, Egypt, Israel,   Jordan, Lebanon, Libya, Morocco, Palestine and Tunisia.  
+
+											<h3>The Assignment</h3>  
+											Create a 120–180 second video on the theme of Climate   Change by choosing one of the following two categories: <br/><br/>   
+											<ol>
+											<li>Information & news videos - including infographics</li>
+											<li>Art videos.</li>
+											</ol>
+											Upload your   video to Vimeo or YouTube, then submit its URL here by   15th January. There will be four awards: two public choice   awards (one for each category) and two jury awards. The   four winners and those who have won the most votes in   each of the ClimaSouth partner countries (18 finalists), will   be invited to participate to the second phase of the initiative.   This will be launched with a series of dedicated master-  Outline web pages for launch of ClimaSouth Video competition (version 2.1). Page 3  classes focussing on the conception, production and editing   of climate change inspired art and information videos.';
+
+  $tras['page_about']['ar']='<h3>انضم إلى العمل وقم بإعداد فيديو قصير عن تغير المناخ.</h3> 
+
+يمثل تغير المناخ أحد أشد قضايا البيئة إلحاحًا في وقتنا الحالي، ونعتقد أننا لدينا القدرة معا للتصدي له وإحداث تغيير إلى الأفضل. اصنع فيديو عن تغير المناخ واربح إحدى الجوائز. وسوف تحقق أفضل الفيديوهات انتشارًا على الصعيد العالمي كما سُيمنح الفائزون جائزتهم خلال احتفال عالمي رفيع المستوى. وعلاوة على ذلك، سيُدعى الفائزون للانضمام إلى مبادرة فيديو كليماساوث. وسيساهم الفائزون برعاية من صحافي الفيديو وفناني الفيديو المعروفين في المبادرة بكل بلد من البلدان الشريكة بكليماساوث وهي: الجزائر، ومصر، وإسرائيل، والأردن، ولبنان، وليبيا، والمغرب، وفلسطين، وتونس. 
+
+
+<h3>المهمة</h3>اصنع فيديو مدته من 120-180 ثانية عن موضوع تغير المناخ من خلال اختيار إحدى الفئتين التاليتين
+<br/>
+
+<ol><li>المعلومات والفيديوهات الجديدة
+</li><li>
+ الفيديوهات الفنية. قم بتحميل الفيديو الخاص بك على فيمو أو يوتيوب، ثم أرسل رابط عنوان URL الخاص به إلينا قبل الخامس عشر من يناير. سيكون هناك أربع جوائز: جائزتان لاختيار
+
+</li></ol>
+ الجمهور (جائزة عن كل فئة) وجائزتان من هيئة التحكيم. وسيُدعى الفائزون وهؤلاء الذين فازوا بأغلبية الأصوات في كل بلد من البلدان الشريكة بكليماساوث (وهم 18 فائزًا وصلوا للمرحلة النهائية) إلى المشاركة في المرحلة الثانية من المبادرة. وستُطلق المبادرة مع مجموعة من دورات تدريبية مُخصصة تركز على تصور الفن وأشرطة فيديو المعلومات المستوحاة من تغير المناخ وإنتاجها وتعديلها.
+
+';
+
+	if(isset($tras[$txt][$csv_lang])){
+		return $tras[$txt][$csv_lang];
+	}
+	else
+		return $txt;
 }
