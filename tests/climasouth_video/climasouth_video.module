@@ -554,7 +554,7 @@ function tt($txt){
 	$tras['URL where the downloadable submission is located']['ar']='عنوان رابط URL الموجود عليه المساهمة القابلة للتحميل';
 	$tras['Size (in MB)']['ar']='الحجم (بالميغابايت)';
 	$tras['I have read and accept the terms and conditions of the competition']['ar']='أؤكد أنني قد قرأت وأقبل شروط وأحكام المسابقة';
-	$tras['Register & upload a video']['ar']='تحتاج إلى التسجيل لتحميل الفيديو';
+	$tras['Register & upload a video']['ar']='قم بالتسجيل وحمل الفيديو';
 	$tras['Videos will be available for public viewing and voting at the end of the submission period ending 15th January 2015']['ar']='ستكون الفيديوهات متاحة للجمهور والتصويت بنهاية فترة التقديم التي تنتهي في 15 يناير 2015 ';
 	
 	//$tras["Submission open until 15 January 2015"]['ar']='انضم إلى العمل';
