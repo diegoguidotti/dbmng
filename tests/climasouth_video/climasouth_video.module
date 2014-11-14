@@ -179,9 +179,426 @@ function cs_video_contest_page()
 					<div class="container">
 							<div class="row">
 								<div class="col-lg-12">
-									<h1>Categories</h1>
+									<h1>'.tt('Categories').'</h1>
 										<div class="climasouth_text_container">
-											For jury prizes, videos entered for the competition will be judged according to the following criteria:<br/><br/>
+											'.tt('page_categories').'
+										</div>
+								</div>
+							</div>
+					</div>
+				</section>
+
+				<!-- Rules Section -->
+				<section id="rules" class="rules-section">
+					<div class="container">
+							<div class="row">
+								<div class="col-lg-12">
+									<h1>'.tt('Rules').'</h1>
+										<div class="climasouth_text_container">
+											'.tt('page_rules').'
+										</div>
+								</div>
+							</div>
+					</div>
+				</section>';
+
+
+				$html.=cs_get_upload_section();
+				$html.=cs_get_view_section();
+
+				$html.='
+
+
+				<!-- Production Team Section -->
+				<section id="production" class="production-section">
+					<div class="container">
+							<div class="row">
+								<div style="direction: ltr">
+								<div class="col-lg-12">
+									<h1>'.tt('Production Team').'</h1>
+
+									<h3>Information & Communication</h3>
+
+									Information design & editor: GH Mattravers Messana<br/>
+
+									Webmaster & IT services: Diego Guidotti & Michele Mammini (Aedit srl)<br/>
+
+									Social media and promotion : Giovanni de Paola – EU Infocentre<br/>
+
+									Images courtesy of : Alessandro Chiodo, NASA Johnson Space Centre, Bennet Pimpinella, ESAV - Marrakech<br/>
+
+									<h3>Climate Change Team</h3>
+
+									Team Leader : Annie Bonnin Roncerel<br/>
+
+									Mitigation Expert : El Sayed Sabry Nasr Mansour<br/>
+
+									Adaptation Expert : Neil Ward</br>
+
+									<h3>Agriconsulting Consortium</h3>
+
+									Project Director : Ottavio Novelli<br/>
+
+									Coordination & Administration  : Barbara Giannuzzi Savelli<br/>
+
+									<h3>European Commission</h3>
+
+									Directorate General for Development and Cooperation – EuropAid<br/>
+
+									Project Manager : Stéphane Halgand <br/>
+
+									Directorate-General for Climate Action ("DG CLIMA") <br/>
+
+									Policy Officer Maghreb, Mashreq and Gulf region: Lucie Berger</br>
+
+									</p>
+
+									<b>Disclaimer</b>: The information and views set out in this video competition are those of the authors and do not necessarily reflect the official opinion of the European Union. Neither the European  Union institutions and bodies nor any person acting on their behalf may be held responsible for the use which may be made of the information contained therein. 
+									<br/>
+
+									Project funded by the European Union<br/>
+									© European Commission, 2014.
+										
+								</div>
+								</div>
+							</div>
+					</div>
+				</section>
+
+
+			<!-- Contact Section -->
+				<section id="contact" class="contact-section">
+					<div class="container">
+							<div class="row">
+								<div class="col-lg-12">
+									<h1>'.tt('Contact').'</h1>
+
+<div id="contact_page">
+<img width="200" src="../sites/all/modules/climasouth_video/resources/climasouth_logo.png" /><br/>
+
+<b>G.H. Mattravers Messana</b><br/>
+ClimaSouth Project<br/>Information & Communication</br>
+Email : <a href="mailto:ghmm@climasouth.eu">ghmm@climasouth.eu</a></br>
+<hr/>
+<img width="200" src="../sites/all/modules/climasouth_video/resources/agriconsulting_logo_long.png" /><br/>
+<b>Belgium</b>:  c/o Agriconsulting Europe, Av de Tervuren 36, 1040 Brussels, Tel +32 2 7362277.<br/>
+<b>Egypt</b>: c/o d’Appolonia Egypt Branch, Fouad Thabet treet, 8, Sheraton Buildings,Heliopolis,  Cairo. </br/>
+<img  src="../sites/all/modules/climasouth_video/resources/ue_flag.png" />EU funded project<br/>
+</div>
+
+								</div>
+							</div>
+					</div>
+				</section>
+
+				<!-- jQuery Version 1.11.0 -->
+				<script src="../sites/all/modules/climasouth_video/js/jquery.js"></script>
+
+				<!-- Bootstrap Core JavaScript -->
+				<script src="../sites/all/modules/climasouth_video/js/bootstrap.min.js"></script>
+
+				<!-- Scrolling Nav JavaScript -->
+				<script src="../sites/all/modules/climasouth_video/js/jquery.easing.min.js"></script>
+				<script src="../sites/all/modules/climasouth_video/js/scrolling-nav.js"></script>
+
+
+				<script src="../sites/all/modules/climasouth_video/climasouth_video.js"></script>
+
+
+			</body>
+
+			</html>';
+
+
+
+
+	echo $html;
+}
+
+function cs_get_upload_section(){
+
+	global $user;
+
+	$html='				<!-- Upload Section -->
+				<section id="upload" class="upload-section">
+					<div class="container">
+							<div class="row">
+								<div class="col-lg-12">
+									<h1>'.tt('Upload').'</h1>';
+
+			if (module_exists('hybridauth')){
+					
+				if( user_is_logged_in()) {
+					$html.=cs_video_upload();
+
+				}
+				else{
+
+					$html.=tt('Register & upload a video'); //tt('You need to register the website to upload a video.');
+					$html.='<div id="cs_login_hybridauth">';
+					$html.='<a href="'.base_path().'hybridauth/window/Facebook?destination=climasouth/video%23upload&amp;destination_error=climasouth/video%23upload" title="Facebook" rel="nofollow" data-hybridauth-provider="Facebook" data-ajax="false" data-hybridauth-width="800" data-hybridauth-height="500"><span title="Facebook"><img src="'.base_path().'sites/all/modules/hybridauth/plugins/icon_pack/hybridauth_48/icons/facebook.png" /></span></a>';
+					$html.='<a href="'.base_path().'hybridauth/window/Google?destination=climasouth/video%23upload&amp;destination_error=climasouth/video%23upload" title="Google" rel="nofollow" data-hybridauth-provider="Google" data-ajax="false" data-hybridauth-width="800" data-hybridauth-height="500"><span title="Google"><img src="'.base_path().'sites/all/modules/hybridauth/plugins/icon_pack/hybridauth_48/icons/google.png" /></span></a>';
+					$html.='<a href="'.base_path().'hybridauth/window/Vimeo?destination=climasouth/video%23upload&amp;destination_error=climasouth/video%23upload" title="Vimeo" rel="nofollow" data-hybridauth-provider="Vimeo" data-ajax="false" data-hybridauth-width="800" data-hybridauth-height="500"><span title="Vimeo"><img src="'.base_path().'sites/all/modules/hybridauth/plugins/icon_pack/hybridauth_48/icons/vimeo.png" /></span></a>';
+					$html.='</div>';
+
+					//$element['#type'] = 'hybridauth_widget';
+					//$html .= drupal_render($element);
+
+				}
+			}	
+			else{
+
+				if(($user->uid)){
+
+					$html.=cs_video_upload();
+				}
+				else{				
+    
+
+					$form = drupal_get_form('user_login_block');	
+					$form['#action']=base_path().'climasouth/video?destination=climasouth/video#upload';
+					$html .=  render($form);
+				}
+			}
+
+
+	$html.='
+								</div>
+							</div>
+					</div>
+				</section>';
+
+	return $html;
+
+}
+
+
+
+function cs_get_view_section(){
+
+	global $user;
+
+	$html='				<!-- View Section -->
+				<section id="view" class="view-section">
+					<div class="container">
+							<div class="row">
+								<div class="col-lg-12">
+									<h1>'.tt('View & Vote').'</h1>'.tt('Videos will be available for public viewing and voting at the end of the submission period ending 15th January 2015');
+
+
+
+				if(($user->uid)){
+
+				}
+				else{				
+
+				}
+
+
+	$html.='
+								</div>
+							</div>
+					</div>
+				</section>';
+
+	return $html;
+
+}
+
+
+function cs_video_upload(){
+	global $user;
+	$html='';
+	$html .=  tt('Welcome').' '.$user->name.' - <a href="?cs_logout=true#upload">'.t("Logout").'</a>';
+
+	$html.= '<form action="?">';
+	$html.= '<br/><span id="cs_video_title" class="diego_editable">Video title</span><br/>';
+	$html.= '<input onBlur="uploadVideo()" type="input" name="cs_video_link" id="cs_video_link" placeHolder="Insert a video link"/>';
+	$html.= '<div id="cs_video_container"></div>';
+	$html.= '<br/><span id="cs_video_description" class="diego_editable">Video description</span><br/>';
+	$html.= '</form>';
+	/*
+	$html.= '<form action="?">';
+	$html.= '<input type="input" name="cs_title" id="cs_title" />';
+	$html.= '<textarea name="cs_desc" id="cs_desc" ></textarea>';
+	$html.= '<input type="input" name="cs_link" id="cs_link" />';
+	$html.= '<input type="submit" name="cs_sub" id="cs_sub" value="'.t("Send").'" />';
+	$html.= '</form>';
+  */
+
+	return $html;
+
+}
+
+function cs_get_header(){
+
+	global $csv_lang;
+	$rtl='';
+	$css_rtl='';
+	if($csv_lang=='ar')
+		{
+			$rtl='dir="rtl"';
+			$css_rtl='<link href="../sites/all/modules/climasouth_video/climasouth_video_rtl.css" rel="stylesheet">';
+		}
+
+
+	
+
+	$html='<!DOCTYPE html>
+			<html lang="'.$csv_lang.'" '.$rtl.' >
+			<head>
+
+				<meta charset="utf-8">
+				<meta http-equiv="X-UA-Compatible" content="IE=edge">
+				<meta name="viewport" content="width=device-width, initial-scale=1">
+				<meta name="description" content="">
+				<meta name="author" content="">
+				<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+				
+				<link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto" media="all" />
+				
+				<title>Climasouth Video Contest</title>
+
+				<!-- Bootstrap Core CSS -->
+				<link href="../sites/all/modules/climasouth_video/css/bootstrap.min.css" rel="stylesheet">
+
+				<!-- Custom CSS -->
+				<link href="../sites/all/modules/climasouth_video/css/scrolling-nav.css" rel="stylesheet">
+				<link href="../sites/all/modules/climasouth_video/climasouth_video.css" rel="stylesheet">'.$css_rtl.'
+
+
+
+
+				<!--[if lt IE 9]>
+					<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+					<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+				<![endif]-->
+
+			</head>';
+	return $html;
+}
+
+
+function tt($txt){
+
+	global $csv_lang;
+
+	$tras=Array();
+	$tras['ClimaSouth Video competition']['fr']='CLIMASOUTH   -   Concours vidéo';
+	$tras['from Climate Change to Climate Action']['fr']='Des changements climatiques à l\'action climatique';
+	$tras['Join the Action !']['fr']='Participez à l\'Action !';
+	$tras['Make a short Video on Climate Change and Win a trip to Europe & more...']['fr']='Créez une courte vidéo sur les changements climatiques et gagnez un voyage en Europe et d’autres prix…';
+	$tras['Submission open until 15 January 2015']['fr']='Soumissions acceptées jusqu\'au 15 janvier 2015';
+	$tras['About']['fr']='À propos du concours';
+	$tras['Categories']['fr']='Catégories';
+	$tras['Rules']['fr']='Règles';
+	$tras['Upload']['fr']='Télécharger';
+	$tras['View & Vote']['fr']='Visionnez et votez';
+	$tras['Production Team']['fr']='Equipe de production';
+	$tras['Contact']['fr']='Contact';
+	$tras['Videos not yet available. (o la frase da inserire)']['fr']='Vidéos pas encore disponibles';
+	$tras['ClimaSouth Project Information & Communication']['fr']='Projet ClimaSouth Information & Communication';
+	$tras['Email']['fr']='Courriel';
+	$tras['EU funded project']['fr']='Projet financé par l\'UE';
+	$tras['ClimaSouth video competition  -  Submission Form']['fr']='Concours vidéo ClimaSouth - Formulaire d\'inscription';
+	$tras['Author(s)']['fr']='Auteur(s)';
+	$tras['Citizenship']['fr']='Nationalité';
+	$tras['Mailing address']['fr']='Adresse postale';
+	$tras['Email for correspondence']['fr']='Courriel pour correspondance';
+	$tras['Category of submission']['fr']='Catégorie de la soumission';
+	$tras['Category 1 : information & news videos']['fr']='Catégorie 1 : vidéos d\'information et d\'actualité';
+	$tras['Category 2:  art videos.']['fr']='Catégorie 2 : vidéos artistiques';
+	$tras['Title of submission']['fr']='Titre de la soumission';
+	$tras['Extended title']['fr']='Titre prolongé';
+	$tras['Short version [less than 25 characters, including spaces]']['fr']='Version courte [moins de 25 caractères, espaces inclus]';
+	$tras['Description of submission (1 paragraph)']['fr']='Description de la soumission (1 paragraphe)';
+	$tras['Video format used (e.g., MP4, AVI)']['fr']='Format vidéo utilisé (par ex. MP4, AVI)';
+	$tras['Length (seconds)']['fr']='Durée (secondes)';
+	$tras['URL where the downloadable submission is located']['fr']='URL de la soumission téléchargeable';
+	$tras['Size (in MB)']['fr']='Taille (en MO)';
+	$tras['I have read and accept the terms and conditions of the competition']['fr']='J\'ai lu et j\'accepte les conditions générales du concours';
+	$tras['Videos will be available for public viewing and voting at the end of the submission period ending 15th January 2015']['fr']='Les vidéos seront visonnables publiquement et soumises au vote à la fin de la période de soumission se terminant le 15 janvier 2015.';
+	$tras['Register & upload a video']['fr']='Enregistrez-vous & téléchargez une vidéo';
+	
+	
+	$tras['ClimaSouth Video Competition']['ar']='كليماساوث – مسابقة الفيديو';
+	$tras['From Climate Change to Climate Action']['ar']='من تغير المناخ إلى العمل المناخي';
+	$tras["Join the Action !"]['ar']='انضم إلى العمل';
+	$tras["Make a short Video on Climate Change and Win a trip to Europe & more..."]['ar']='قم بإعداد فيديو قصير عن تغير المناخ وأربح رحلة لأوروبا والمزيد.... ';
+	$tras['Submission open until 15 January 2015']['ar']='تقديم الطلبات مفتوح حتى 15 يناير 2015';
+	$tras['About']['ar']='الموضوع';
+	$tras['Categories']['ar']='الفئات';
+	$tras['Rules']['ar']='القواعد';
+	$tras['Upload']['ar']='التحميل';
+	$tras['View & Vote']['ar']='شاهد وقم بالتصويت';
+	$tras['Production Team']['ar']='فريق الإنتاج';
+	$tras['Contact']['ar']='جهة الاتصال';
+	$tras['Videos not yet available. (o la frase da inserire)']['ar']='الفيديوهات لم تتوفر بعد.  (o la frase da inserire)';
+	$tras['ClimaSouth Project Information & Communication']['ar']='معلومات واتصالات مشروع كليماساوث';
+	$tras['Email']['ar']='البريد الإلكتروني';
+	$tras['EU funded project']['ar']='مشروع ممول من الاتحاد الأوروبي';
+	$tras['ClimaSouth video competition  -  Submission Form']['ar']='مسابقة فيديو كليماساوث  - نموذج التقديم';
+	$tras['Author(s)']['ar']='المؤلف (المؤلفون):';
+	$tras['Citizenship']['ar']='الجنسية:';
+	$tras['Mailing address']['ar']='العنوان البريدي:';
+	$tras['Email for correspondence']['ar']='البريد الإلكتروني للمراسلات:';
+	$tras['Category of submission']['ar']='فئة المساهمة:';
+	$tras['Category 1 : information & news videos']['ar']='الفئة 1 : المعلومات والفيديوهات الجديدة';
+	$tras['Category 2:  art videos.']['ar']='الفئة 2:  الفيديوهات الفنية.';
+	$tras['Title of submission']['ar']='عنوان المساهمة:';
+	$tras['Extended title']['ar']='تكملة العنوان:';
+	$tras['Short version [less than 25 characters, including spaces]']['ar']='النسخة القصيرة [أقل من 25 حرفًا، بما في ذلك المسافات]:';
+	$tras['Description of submission (1 paragraph)']['ar']='وصف المساهمة (الفقرة 1):';
+	$tras['Video format used (e.g., MP4, AVI)']['ar']='صيغة الفيديو المستخدم (مثال، MP4، AVI):';
+	$tras['Length (seconds)']['ar']='المدة (بالثواني)';
+	$tras['URL where the downloadable submission is located']['ar']='عنوان رابط URL الموجود عليه المساهمة القابلة للتحميل';
+	$tras['Size (in MB)']['ar']='الحجم (بالميغابايت)';
+	$tras['I have read and accept the terms and conditions of the competition']['ar']='أؤكد أنني قد قرأت وأقبل شروط وأحكام المسابقة';
+	$tras['Register & upload a video']['ar']='تحتاج إلى التسجيل لتحميل الفيديو';
+	$tras['Videos will be available for public viewing and voting at the end of the submission period ending 15th January 2015']['ar']='ستكون الفيديوهات متاحة للجمهور والتصويت بنهاية فترة التقديم التي تنتهي في 15 يناير 2015 ';
+	
+	//$tras["Submission open until 15 January 2015"]['ar']='انضم إلى العمل';
+
+  $tras['page_about']['en']='<h3>Join the Action & make a short video on Climate Change.</h3>  
+
+											Climate change is the most pressing environmental issue of   our time. We believe that together we have the power to   address it and make a difference. Create a short video on   Climate Change and win a prize. The best videos will achieve   global exposure and winners will be awarded their prize at a   high-profile international event. In addition, winners will be   invited to join the ClimaSouth video initiative. Under the   tutelage of well-known video journalists and video artists,   the winners will contribute to the initiative in each of the   ClimaSouth partner countries : Algeria, Egypt, Israel,   Jordan, Lebanon, Libya, Morocco, Palestine and Tunisia.  
+
+											<h3>The Assignment</h3>  
+											Create a 120–180 second video on the theme of Climate   Change by choosing one of the following two categories: <br/><br/>   
+											<ol>
+											<li>Information & news videos - including infographics</li>
+											<li>Art videos.</li>
+											</ol>
+											Upload your   video to Vimeo or YouTube, then submit its URL here by   15th January. There will be four awards: two public choice   awards (one for each category) and two jury awards. The   four winners and those who have won the most votes in   each of the ClimaSouth partner countries (18 finalists), will   be invited to participate to the second phase of the initiative.   This will be launched with a series of dedicated master-  Outline web pages for launch of ClimaSouth Video competition (version 2.1). Page 3  classes focussing on the conception, production and editing   of climate change inspired art and information videos.';
+
+  $tras['page_about']['fr']='<h3>Participez à l\'action et créez une courte vidéo sur les changements climatiques. </h3>  
+											Les changements climatiques sont le problème environnemental le plus urgent de notre ère. Nous pensons qu\'ensemble nous avons les moyens de s\'y attaquer et de changer la donne. Créez une vidéo sur les changements climatiques et gagnez un prix. Les meilleures vidéos profiteront d\'une visibilité mondiale et les gagnants recevront leur prix à un événement international prestigieux. De plus, les gagnants seront invités à participer à l\'initiative vidéo ClimaSouth. Sous la tutelle de journalistes et d\'artistes vidéo reconnus, les gagnants contribueront à l\'initiative dans chacun des pays partenaires ClimaSouth : Algérie, Égypte, Israël, Jordanie, Liban, Libye, Maroc, Palestine et Tunisie.
+
+											<h3>La mission</h3>  
+											Créez une vidéo de 120 à 180 secondes sur le thème des changements climatiques en choisissant une des deux catégories suivantes:<br/><br/>
+											<ol>
+											<li>Vidéos d\'information et d\'actualité;</li>
+											<li>Vidéos artistiques.</li>
+											</ol>
+											Téléversez votre vidéo sur Vimeo ou YouTube, puis soumettez son URL ici avant le 15 janvier. Il y aura quatre prix : deux prix du public (un pour chaque catégorie) et deux prix du jury. Les quatre gagnants et ceux ayant gagné le plus de votes dans chacun des pays partenaires ClimaSouth (18 finalistes), seront invités à participer à la deuxième phase de l\'initiative. Elle sera lancée avec une série de master classes dédiées se concentrant sur la conception, la production et le montage de vidéos artistiques et d\'information inspirées par les changements climatiques.';
+
+  $tras['page_about']['ar']='<h3>انضم إلى العمل وقم بإعداد فيديو قصير عن تغير المناخ.</h3> 
+
+يمثل تغير المناخ أحد أشد قضايا البيئة إلحاحًا في وقتنا الحالي، ونعتقد أننا لدينا القدرة معا للتصدي له وإحداث تغيير إلى الأفضل. اصنع فيديو عن تغير المناخ واربح إحدى الجوائز. وسوف تحقق أفضل الفيديوهات انتشارًا على الصعيد العالمي كما سُيمنح الفائزون جائزتهم خلال احتفال عالمي رفيع المستوى. وعلاوة على ذلك، سيُدعى الفائزون للانضمام إلى مبادرة فيديو كليماساوث. وسيساهم الفائزون برعاية من صحافي الفيديو وفناني الفيديو المعروفين في المبادرة بكل بلد من البلدان الشريكة بكليماساوث وهي: الجزائر، ومصر، وإسرائيل، والأردن، ولبنان، وليبيا، والمغرب، وفلسطين، وتونس. 
+
+
+<h3>المهمة</h3>اصنع فيديو مدته من 120-180 ثانية عن موضوع تغير المناخ من خلال اختيار إحدى الفئتين التاليتين
+<br/>
+
+<ol><li>المعلومات والفيديوهات الجديدة
+</li><li>
+ الفيديوهات الفنية. قم بتحميل الفيديو الخاص بك على فيمو أو يوتيوب، ثم أرسل رابط عنوان URL الخاص به إلينا قبل الخامس عشر من يناير. سيكون هناك أربع جوائز: جائزتان لاختيار
+
+</li></ol>
+ الجمهور (جائزة عن كل فئة) وجائزتان من هيئة التحكيم. وسيُدعى الفائزون وهؤلاء الذين فازوا بأغلبية الأصوات في كل بلد من البلدان الشريكة بكليماساوث (وهم 18 فائزًا وصلوا للمرحلة النهائية) إلى المشاركة في المرحلة الثانية من المبادرة. وستُطلق المبادرة مع مجموعة من دورات تدريبية مُخصصة تركز على تصور الفن وأشرطة فيديو المعلومات المستوحاة من تغير المناخ وإنتاجها وتعديلها.
+';
+
+	$tras['page_categories']['en'] ='For jury prizes, videos entered for the competition will be judged according to the following criteria:<br/><br/>
 											<h3>Category 1 : information & news videos</h3>
 													<ul> 
 													<li>Video clearly depicts Climate Change in the South Mediterranean region, 
@@ -201,22 +618,50 @@ function cs_video_contest_page()
 													<li>Originality</li>
 													<li>Aesthetic  qualities</li>
 													<li>Innovation and experimentation</li>
-													</ul>
-												
-										</div>
-								</div>
-							</div>
-					</div>
-				</section>
-
-				<!-- Rules Section -->
-				<section id="rules" class="rules-section">
-					<div class="container">
-							<div class="row">
-								<div class="col-lg-12">
-									<h1>Rules</h1>
-										<div class="climasouth_text_container">
-											<h3>I. Background</h3>
+													</ul>';
+	
+	$tras['page_categories']['fr'] ='Pour les prix du jury, les vidéos inscrites au concours seront jugées selon les critères suivants :
+											<h3>Catégorie 1 : vidéos d\'information et d\'actualité </h3>
+											<ul>
+												<li>La vidéo décrit de façon claire les changements climatiques dans le Sud de la Méditerranée, que ce soit en termes de causes, risques, impact, et opportunités d\'actions en matière d\'adaptation et d\'atténuation</li>
+												<li>Exactitude et exhaustivité </li>
+												<li>Initiative et ingéniosité </li>
+												<li>Respect de normes journalistiques rigoureuses</li>
+												<li>Importance et efficacité </li>
+												<li>Accessibilité, discernement et respect du public.</li>
+												<li>Usage inventif des capacités du support, comme l\'infographie</li>
+											</ul>
+											<h3>Catégorie 2: Vidéos artistiques</h3>
+											<ul>
+												<li>Pertinence par rapport au thème des changements climatiques dans le Sud de la Méditerranée.</li>
+												<li>Inventivité</li>
+												<li>Originalité</li>
+												<li>Qualités esthétiques</li>
+												<li>Innovation et expérimentation</li>
+											</ul>';
+	
+	$tras['page_categories']['ar'] ='بالنسبة لجوائز هيئة التحكيم، ستُقيم الفيديوهات التي قُدمت بالمسابقة وفقًا للمعايير التالية:
+												<h3>الفئة 1: المعلومات والفيديوهات الجديدة </h3>
+												<ul>
+												<li>يصور الفيديو بوضو ح ظاهرة تغير المناخ في منطقة جنوب البحر الأبيض المتوسط، </li>
+												<li>سواء من حيث أسبابها، ومخاطرها، وأثارها، وفرص أعمال التكيف معها والتخفيف من حدتها</li>
+												<li>الدقة والاكتمال </li>
+												<li>المبادرة والتجديد </li>
+												<li>الالتزام بالمعايير الصحفية الرفيعة </li>
+												<li>الأهمية والفاعلية </li>
+												<li>الوضوح، والتبصر، واحترام الجمهور.</li>
+												<li>الاستخدام المبتكر لقدرات الوسائط، مثل الرسوم البيانية
+												</li></ul>
+												<h3>الفئة 2: الفيديوهات الفنية</h3>
+												<ul>
+												<li>وجود صلة بموضوع تغير المناخ بمنطقة جنوب البحر المتوسط.</li>
+												<li>الإبداع
+												</li><li>الأصالة
+												</li><li>الصفات الجمالية
+												</li><li>الابتكار والتجريب
+												</li></ul>';
+	
+	$tras['page_rules']['en'] = '<h3>I. Background</h3>
 
 											<p>The ClimaSouth project was initiated in February 2013 and will be implemented over a period of 48 months with funding from the European Union (EU). </p>
 
@@ -305,330 +750,188 @@ function cs_video_contest_page()
 													<li>Contest winners who require a visa to travel to the final award ceremony are responsible for securing their own visas and should begin with this process immediately after having been notified that they have won. The ClimaSouth project will assist by providing the necessary documents for the visa application.</li> 
 													<li>Participation in the contest, including selection to receive a prize, in no manner constitutes an endorsement or support by the ClimaSouth project or the EU institutions of the views, aims, or of any products or services of the participants to the competition.</li> 
 													<li>By registering for the ClmaSouth video competition, the participants accept in their entirety the present official rules of the video competition. </li> 
-												</ol>
-											
-											
-										</div>
-								</div>
-							</div>
-					</div>
-				</section>';
-
-
-				$html.=cs_get_upload_section();
-				$html.=cs_get_view_section();
-
-				$html.='
-
-
-				<!-- Production Team Section -->
-				<section id="production" class="production-section">
-					<div class="container">
-							<div class="row">
-								<div class="col-lg-12">
-									<h1>Production Team</h1>
-
-<h3>Information & Communication</h3>
-
-Information design & editor: GH Mattravers Messana<br/>
-
-Webmaster & IT services: Diego Guidotti & Michele Mammini (Aedit srl)<br/>
-
-Social media and promotion : Giovanni de Paola – EU Infocentre<br/>
-
-Images courtesy of : Alessandro Chiodo, NASA Johnson Space Centre, Bennet Pimpinella, ESAV - Marrakech<br/>
-
-<h3>Climate Change Team</h3>
-
-Team Leader : Annie Bonnin Roncerel<br/>
-
-Mitigation Expert : El Sayed Sabry Nasr Mansour<br/>
-
-Adaptation Expert : Neil Ward</br>
-
-<h3>Agriconsulting Consortium</h3>
-
-Project Director : Ottavio Novelli<br/>
-
-Coordination & Administration  : Barbara Giannuzzi Savelli<br/>
-
-<h3>European Commission</h3>
-
-Directorate General for Development and Cooperation – EuropAid<br/>
-
-Project Manager : Stéphane Halgand <br/>
-
-Directorate-General for Climate Action ("DG CLIMA") <br/>
-
-Policy Officer Maghreb, Mashreq and Gulf region: Lucie Berger</br>
-
-</p>
-
-<b>Disclaimer</b>: The information and views set out in this video competition are those of the authors and do not necessarily reflect the official opinion of the European Union. Neither the European  Union institutions and bodies nor any person acting on their behalf may be held responsible for the use which may be made of the information contained therein. 
-<br/>
-
-Project funded by the European Union<br/>
-© European Commission, 2014.
-									
-								</div>
-							</div>
-					</div>
-				</section>
-
-
-			<!-- Contact Section -->
-				<section id="contact" class="contact-section">
-					<div class="container">
-							<div class="row">
-								<div class="col-lg-12">
-									<h1>Contact</h1>
-
-<div id="contact_page">
-<img width="200" src="../sites/all/modules/climasouth_video/resources/climasouth_logo.png" /><br/>
-
-<b>G.H. Mattravers Messana</b><br/>
-ClimaSouth Project<br/>Information & Communication</br>
-Email : <a href="mailto:ghmm@climasouth.eu">ghmm@climasouth.eu</a></br>
-<hr/>
-<img width="200" src="../sites/all/modules/climasouth_video/resources/agriconsulting_logo_long.png" /><br/>
-<b>Belgium</b>:  c/o Agriconsulting Europe, Av de Tervuren 36, 1040 Brussels, Tel +32 2 7362277.<br/>
-<b>Egypt</b>: c/o d’Appolonia Egypt Branch, Fouad Thabet treet, 8, Sheraton Buildings,Heliopolis,  Cairo. </br/>
-<img  src="../sites/all/modules/climasouth_video/resources/ue_flag.png" />EU funded project<br/>
-</div>
-
-								</div>
-							</div>
-					</div>
-				</section>
-
-				<!-- jQuery Version 1.11.0 -->
-				<script src="../sites/all/modules/climasouth_video/js/jquery.js"></script>
-
-				<!-- Bootstrap Core JavaScript -->
-				<script src="../sites/all/modules/climasouth_video/js/bootstrap.min.js"></script>
-
-				<!-- Scrolling Nav JavaScript -->
-				<script src="../sites/all/modules/climasouth_video/js/jquery.easing.min.js"></script>
-				<script src="../sites/all/modules/climasouth_video/js/scrolling-nav.js"></script>
-
-
-				<script src="../sites/all/modules/climasouth_video/climasouth_video.js"></script>
-
-
-			</body>
-
-			</html>';
-
-
-
-
-	echo $html;
-}
-
-function cs_get_upload_section(){
-
-	global $user;
-
-	$html='				<!-- Upload Section -->
-				<section id="upload" class="upload-section">
-					<div class="container">
-							<div class="row">
-								<div class="col-lg-12">
-									<h1>Upload</h1>';
-
-			if (module_exists('hybridauth')){
-					
-				if( user_is_logged_in()) {
-					$html.=cs_video_upload();
-
-				}
-				else{
-
-					$html.=t('You need to register the website to upload a video.');
-					$html.='<div id="cs_login_hybridauth">';
-					$html.='<a href="'.base_path().'hybridauth/window/Facebook?destination=climasouth/video%23upload&amp;destination_error=climasouth/video%23upload" title="Facebook" rel="nofollow" data-hybridauth-provider="Facebook" data-ajax="false" data-hybridauth-width="800" data-hybridauth-height="500"><span title="Facebook"><img src="'.base_path().'sites/all/modules/hybridauth/plugins/icon_pack/hybridauth_48/icons/facebook.png" /></span></a>';
-					$html.='<a href="'.base_path().'hybridauth/window/Google?destination=climasouth/video%23upload&amp;destination_error=climasouth/video%23upload" title="Google" rel="nofollow" data-hybridauth-provider="Google" data-ajax="false" data-hybridauth-width="800" data-hybridauth-height="500"><span title="Google"><img src="'.base_path().'sites/all/modules/hybridauth/plugins/icon_pack/hybridauth_48/icons/google.png" /></span></a>';
-					$html.='<a href="'.base_path().'hybridauth/window/Vimeo?destination=climasouth/video%23upload&amp;destination_error=climasouth/video%23upload" title="Vimeo" rel="nofollow" data-hybridauth-provider="Vimeo" data-ajax="false" data-hybridauth-width="800" data-hybridauth-height="500"><span title="Vimeo"><img src="'.base_path().'sites/all/modules/hybridauth/plugins/icon_pack/hybridauth_48/icons/vimeo.png" /></span></a>';
-					$html.='</div>';
-
-					//$element['#type'] = 'hybridauth_widget';
-					//$html .= drupal_render($element);
-
-				}
-			}	
-			else{
-
-				if(($user->uid)){
-
-					$html.=cs_video_upload();
-				}
-				else{				
-    
-
-					$form = drupal_get_form('user_login_block');	
-					$form['#action']=base_path().'climasouth/video?destination=climasouth/video#upload';
-					$html .=  render($form);
-				}
-			}
-
-
-	$html.='
-								</div>
-							</div>
-					</div>
-				</section>';
-
-	return $html;
-
-}
-
-
-
-function cs_get_view_section(){
-
-	global $user;
-
-	$html='				<!-- View Section -->
-				<section id="view" class="view-section">
-					<div class="container">
-							<div class="row">
-								<div class="col-lg-12">
-									<h1>View & Vote</h1>Videos will be available for public viewing and voting at the end of the submission period ending 15th January 2015.';
-
-
-
-				if(($user->uid)){
-
-				}
-				else{				
-
-				}
-
-
-	$html.='
-								</div>
-							</div>
-					</div>
-				</section>';
-
-	return $html;
-
-}
-
-
-function cs_video_upload(){
-	global $user;
-	$html='';
-	$html .=  t('Welcome').' '.$user->name.' - <a href="?cs_logout=true#upload">'.t("Logout").'</a>';
-
-	$html.= '<form action="?">';
-	$html.= '<br/><span id="cs_video_title" class="diego_editable">Video title</span><br/>';
-	$html.= '<input onBlur="uploadVideo()" type="input" name="cs_video_link" id="cs_video_link" placeHolder="Insert a video link"/>';
-	$html.= '<div id="cs_video_container"></div>';
-	$html.= '<br/><span id="cs_video_description" class="diego_editable">Video description</span><br/>';
-	$html.= '</form>';
-	/*
-	$html.= '<form action="?">';
-	$html.= '<input type="input" name="cs_title" id="cs_title" />';
-	$html.= '<textarea name="cs_desc" id="cs_desc" ></textarea>';
-	$html.= '<input type="input" name="cs_link" id="cs_link" />';
-	$html.= '<input type="submit" name="cs_sub" id="cs_sub" value="'.t("Send").'" />';
-	$html.= '</form>';
-  */
-
-	return $html;
-
-}
-
-function cs_get_header(){
-
-	global $csv_lang;
-	$rtl='';
-	$css_rtl='';
-	if($csv_lang=='ar')
-		{
-			$rtl='dir="rtl"';
-			$css_rtl='<link href="../sites/all/modules/climasouth_video/climasouth_video_rtl.css" rel="stylesheet">';
-		}
-
-
+												</ol>';
 	
+	
+	$tras['page_rules']['fr'] = '<h3>I. Historique</h3>
+											<p>Le projet ClimaSouth a été initié en février 2013 et sera mis en œuvre au cours d\'une période de 48 mois à l\'aide de financements de l\'Union européenne (UE). </p>
 
-	$html='<!DOCTYPE html>
-			<html lang="'.$csv_lang.'" '.$rtl.' >
-			<head>
+											<p>Le projet appuie l\'adaptation aux changements climatiques et l\'atténuation de ses effets dans 9 pays du Sud de la Méditerranée : Algérie, Égypte, Israël, Jordanie, Liban, Libye, Maroc, Palestine et Tunisie (la Syrie n\'est pas incluse dû aux restrictions légales actuelles de l\'UE).</p>
 
-				<meta charset="utf-8">
-				<meta http-equiv="X-UA-Compatible" content="IE=edge">
-				<meta name="viewport" content="width=device-width, initial-scale=1">
-				<meta name="description" content="">
-				<meta name="author" content="">
-				<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-				
-				<link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto" media="all" />
-				
-				<title>Climasouth Video Contest</title>
+											<p>L\'objectif global est d\'accompagner la transition de pays partenaires vers des économies sobres en carbone et une résilience accrue aux changements climatiques.  </p>
 
-				<!-- Bootstrap Core CSS -->
-				<link href="../sites/all/modules/climasouth_video/css/bootstrap.min.css" rel="stylesheet">
+											<p>Ce projet entend également promouvoir la coopération Sud-Sud et le partage d’informations sur les questions liées aux changements climatiques dans la région, ainsi qu\'un dialogue et partenariat plus étroits avec l’UE.</p>
 
-				<!-- Custom CSS -->
-				<link href="../sites/all/modules/climasouth_video/css/scrolling-nav.css" rel="stylesheet">
-				<link href="../sites/all/modules/climasouth_video/climasouth_video.css" rel="stylesheet">'.$css_rtl.'
+											<p>Plus d\'informations sur le projet à trouver sur <a href="http://www.climasouth.eu">www.climasouth.eu</a>.</p>
+											
+											<h3>II. Objectif et contexte du concours vidéo</h3>
 
+											<p>L\'objectif global du concours vidéo est de susciter l\'intérêt pour la thématique des changements climatiques chez les jeunes créatifs du Sud de la Méditerranée et favoriser leur participation aux actions climatiques. </p>
 
+											<p>Le thème du concours vidéo est « les changements climatiques ». Les vidéos devraient être réalisées par des  vidéastes et vidéojournalistes de nationalité et résidant dans un des pays partenaires ClimaSouth. Chaque vidéo ne devrait pas dépasser la durée maximum de 3 minutes.</p>
 
+											<p>Il y a deux catégories de vidéos : </p>
+											<ul>
+											<li>Catégorie 1 : vidéos d\'information & d\'actualité </li>
+											<li>Catégorie 2 : vidéos artistiques.</li>
+											</ul>
 
-				<!--[if lt IE 9]>
-					<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-					<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-				<![endif]-->
-
-			</head>';
-	return $html;
-}
-
-
-function tt($txt){
-
-	global $csv_lang;
-
-	$tras=Array();
-	$tras['ClimaSouth Video Competition']['ar']='كليماساوث – مسابقة الفيديو';
-	$tras['From Climate Change to Climate Action']['ar']='من تغير المناخ إلى العمل المناخي';
-	$tras["Join the Action !"]['ar']='انضم إلى العمل';
-	$tras["Make a short Video on Climate Change and Win a trip to Europe & more..."]['ar']='قم بإعداد فيديو قصير عن تغير المناخ وأربح رحلة لأوروبا والمزيد.... ';
-	//$tras["Submission open until 15 January 2015"]['ar']='انضم إلى العمل';
-
-  $tras['page_about']['en']='<h3>Join the Action & make a short video on Climate Change.</h3>  
-
-											Climate change is the most pressing environmental issue of   our time. We believe that together we have the power to   address it and make a difference. Create a short video on   Climate Change and win a prize. The best videos will achieve   global exposure and winners will be awarded their prize at a   high-profile international event. In addition, winners will be   invited to join the ClimaSouth video initiative. Under the   tutelage of well-known video journalists and video artists,   the winners will contribute to the initiative in each of the   ClimaSouth partner countries : Algeria, Egypt, Israel,   Jordan, Lebanon, Libya, Morocco, Palestine and Tunisia.  
-
-											<h3>The Assignment</h3>  
-											Create a 120–180 second video on the theme of Climate   Change by choosing one of the following two categories: <br/><br/>   
+											<h3>III. Procédures et Prix</h3>
 											<ol>
-											<li>Information & news videos - including infographics</li>
-											<li>Art videos.</li>
+											<li>Le concours vidéo débute le 15 novembre 2014. Les participants doivent s\'inscrire sur le site web ClimaSouth (www.climasouth.eu.), remplir le formulaire en ligne et donner l\'URL de leur vidéo (la vidéo doit être visionnable sur Vimeo ou Youtube et l\'URL de la vidéo Vimeo ou Youtube doit être fourni pour l\'afficher sur le site web ClimaSouth ). Le formulaire permettra également aux participants de téléverser la vidéo originale (exigé pour une inscription valide). Les inscriptions seront ouvertes du 15 novembre 2014 jusqu\'au 15 janvier 2015. Les vidéos ne seront affichées sur le site web ClimaSouth et soumises au vote qu\'après la fermeture des inscriptions.</li>
+											<li>Par la suite, entre le 15 janvier et le 15 février 2015, un vote public aura lieu sur le site web ClimaSouth : on pourra voter pour sa vidéo préférée en cliquant sur un bouton « voter ». La vidéo ayant reçu le plus grand nombre de votes du public dans chaque catégorie gagnera le prix du public.</li>
+											<li>Au même moment, un jury, constitué de membres du projet ClimaSouth, de la Commission européenne et des points focaux ClimaSouth nationaux, sélectionneront leur vidéo préférée dans chaque catégorie. Ces vidéos recevront le prix du jury. </li>
+											<li>Les meilleures vidéos dans chaque catégorie, ainsi que les productions ayant reçu le plus de votes de chacun des pays partenaires ClimaSouth, recevront une visibilité accrue à travers un événement parallèle dédié qui sera organisé au cours du deuxième trimestre 2015 à l\'occasion d\'un événement prestigieux lié aux CC et /ou à la Coopération européenne. </li>
+											<li>Il y aura quatre prix : deux prix du public (un pour chaque catégorie) et deux prix du jury. Les gagnants seront contactés entre le 15 février et le 15 mars 2015 et seront invités à une cérémonie de remise des prix organisée dans le cadre d\'un événement prestigieux lié aux CC et /ou à la Coopération européenne. Les frais de voyage et d\'hébergement seront couverts par le projet ClimaSouth pour une personne représentant chaque vidéo recevant un prix.</li>
+											<li>De plus, les gagnants du concours ainsi que ceux ayant reçu le plus de votes dans chacun des pays partenaires ClimaSouth seront invités à participer à des master classes dédiées se concentrant sur la conception, la production et le montage de vidéos artistiques et d\'information inspirées par les changements climatiques. Les master classes seront conçues pour stimuler un processus d\'apprentissage collaboratif examinant le thème des changements climatiques, sous la tutelle d\'artistes / journalistes de premier plan et d\'experts des CC liés au projet ClimaSouth. Elles seront organisées au cours des premier / deuxième trimestres 2015 durant une période de 3-6 jours dans des lieux appropriés, choisis sur une base sous-régionale, pour faciliter la convocation de participants des pays partenaires ClimaSouth. Les coûts de voyage et d\'hébergement seront couverts par le projet ClimaSouth pour tous les participants des master classes.</li> 
 											</ol>
-											Upload your   video to Vimeo or YouTube, then submit its URL here by   15th January. There will be four awards: two public choice   awards (one for each category) and two jury awards. The   four winners and those who have won the most votes in   each of the ClimaSouth partner countries (18 finalists), will   be invited to participate to the second phase of the initiative.   This will be launched with a series of dedicated master-  Outline web pages for launch of ClimaSouth Video competition (version 2.1). Page 3  classes focussing on the conception, production and editing   of climate change inspired art and information videos.';
 
-  $tras['page_about']['ar']='<h3>انضم إلى العمل وقم بإعداد فيديو قصير عن تغير المناخ.</h3> 
+											<h3>IV. Critères d\'évaluation (prix du jury seulement)</h3
+											<ul>
+											<li><b>CATÉGORIE 1 : vidéos d\'information et d\'actualité </b>
+												<ol>
+													<li>La vidéo décrit de façon claire les changements climatiques dans le Sud de la Méditerranée, que ce soit en termes de causes, risques, impact et opportunités d\'actions en matière d\'adaptation et d\'atténuation</li>
+													<li>Exactitude et exhaustivité </li>
+													<li>Initiative et ingéniosité </li>
+													<li>Respect de normes journalistiques élevées</li>
+													<li>Importance et efficacité </li>
+													<li>Accessibilité, discernement et respect du public.</li>
+													<li>Usage inventif des capacités du support, comme l\'infographie</li>
+												</ol>
+											</li>
+											<li><b>CATÉGORIE 2 : vidéos artistiques.</b>
+												<ol>
+													<li>Pertinence par rapport au thème des changements climatiques dans le Sud de la Méditerranée.</li>
+													<li>Inventivité</li>
+													<li>Originalité</li>
+													<li>Qualités esthétiques</li>
+													<li>Innovation et expérimentation</li>
+												</ol>
+											</li>
+											</ul>
+											
+											<h3>V. Spécifications techniques</h3>
+												<ul>
+													<li>Format : AVI, WMV ou MPEG (y compris MPEG-4)</li>
+													<li>Durée : max. 3 minutes</li>
+													<li>Résolution : résolution minimum 1280x720 (720p) à 25 images par seconde. </li>
+												</ul>
 
-يمثل تغير المناخ أحد أشد قضايا البيئة إلحاحًا في وقتنا الحالي، ونعتقد أننا لدينا القدرة معا للتصدي له وإحداث تغيير إلى الأفضل. اصنع فيديو عن تغير المناخ واربح إحدى الجوائز. وسوف تحقق أفضل الفيديوهات انتشارًا على الصعيد العالمي كما سُيمنح الفائزون جائزتهم خلال احتفال عالمي رفيع المستوى. وعلاوة على ذلك، سيُدعى الفائزون للانضمام إلى مبادرة فيديو كليماساوث. وسيساهم الفائزون برعاية من صحافي الفيديو وفناني الفيديو المعروفين في المبادرة بكل بلد من البلدان الشريكة بكليماساوث وهي: الجزائر، ومصر، وإسرائيل، والأردن، ولبنان، وليبيا، والمغرب، وفلسطين، وتونس. 
+											<h3>VI. Conditions générales</h3>
+												<ol>
+													<li>Le concours est ouvert aux citoyens des pays partenaires ClimaSouth de plus de 18 ans, à l\'exception des employés des institutions européennes, de leurs établissements d\'accueil et de leur familles.</li>
+													<li>Toutes les vidéos inscrites doivent d\'abord être téléversées sur YouTube ou Vimeo puis incorporées au site web ClimaSouth en inscrivant leur URL. Veuillez noter que les vidéos téléversées ne sont pas immédiatement visionnables sur le site web – elles ne le seront qu\'après le 31 décembre.</li>
+													<li>Les vidéos doivent être l\'œuvre originale et exclusive de leur auteur et doivent ne pas avoir été publiées précédemment ou avoir reçu un prix dans un quelconque autre concours. Toute preuve de plagiat résultera en la disqualification du concours de l\'auteur.</li>
+													<li>Tous les participants sont responsables des coûts ou dépenses encourus du fait de leur participation au concours.</li>
+													<li>Les participants et gagnants acceptent que la vidéo qu\'ils ont soumise pour le concours vidéo soit utilisée dans la publicité ou autres activités promotionnelles sans accord ou paiement supplémentaires telles que décidées ultérieurement par le projet ClimaSouth. Ces publicités peuvent inclure leurs noms, vidéos, ainsi que toutes autres contributions au concours en ligne. Les droits d\'auteur d\'une vidéo soumise pour ce concours demeurent ceux des candidats respectifs. Cependant, dû à leur participation volontaire au concours, chaque candidat accorde au projet ClimaSouth et aux institutions de l\'UE par la présente les droits nécessaires à la distribution et la diffusion publique de n\'importe quel texte, image ou autre propriété intellectuelle susceptible de provenir de la participation à cette opération, des prix ou de la publicité apparentée. De plus, chaque candidat accorde au projet ClimaSouth et aux institutions de l\'UE par la présente le droit perpétuel et exempt de redevances à un usage illimité, pour monter, reproduire, distribuer, traduire, et diffuser publiquement toutes ces propriétés intellectuelles, à quelque fin que ce soit et sous quelque forme que ce soit, sur ce site web ou ailleurs, pour des activités promotionnelles ou des événements organisés par le projet ClimaSouth ou les institutions de l\'UE, localement ou internationalement.</li>
+													<li>Toute information personnelle, y compris le nom du participant, son âge, adresse (code postal compris) et adresse de courriel ne sera utilisée qu\'en lien avec ce concours et ne sera pas communiquée à des tiers sauf aux fins de ce concours (y compris des activités promotionnelles ultérieures tel qu\'indiqué dans ces conditions générales).</li>
+													<li>En soumettant leur vidéo au site web vidéo ClimaSouth, il est de la responsabilité de chaque candidat de s\'assurer que toute vidéo soumise ait été produite avec la permission du / des sujet(s) [ou, lorsque la vidéo montre une personne de moins de 18 ans, l\'accord de leur parent / représentant légal] et / ou du site / lieu et n\'enfreint pas le droit d\'auteur d\'un tiers. Le candidat certifie que le droit d\'auteur de la vidéo et les droits d\'utilisation nécessaires pour le concours lui appartiennent, que sa participation n\'enfreint de droits à la vie privée, de droits d\'auteur, ou tout autre droit de quelque personne que ce soit, et que le candidat indemnisera, dégagera de toute responsabilité et défendra à ses frais le projet ClimaSouth et les institutions de l\'UE, ses responsables et prestataires, contre toute réclamation, poursuite, responsabilité ou demande de tout tiers à l\'égard d\'une telle infraction ou autre risque que pourrait subir le candidat du fait de sa participation à ce concours vidéo.</li>
+													<li>Le projet ClimaSouth ne sera tenu responsable des candidatures tardives ou perdues.</li>
+													<li>Les participants doivent fournir tous les détails demandés dans le formulaire d\'inscription et se conformer à toutes les règles pour être admissibles au(x) prix. Aucune responsabilité n\'est engagée pour les candidatures non admissibles.</li>
+													<li>Au fur et à mesure que les soumissions sont reçues, le projet ClimaSouth contrôlera la convenance du contenu thématique. Les vidéos ne devraient contenir aucun langage ou contenu choquant ou inapproprié.</li>
+													<li>Les candidatures vidéo doivent être soumises soit en anglais, soit en français ou en arabe avec sous-titrage anglais.</li>
+													<li>Seule une vidéo par participant est permise.</li>
+													<li>Les prix sont tels qu\'indiqués et ne sont pas transférables ou échangeables. Aucune compensation alternative en liquide ou en crédit ne sera offerte.</li>
+													<li>Si de la musique est utilisée, veuillez utiliser de la musique libre de droits ou originale pour laquelle vous avez obtenu les droits.</li>
+													<li>Si un candidat gagnant ne peut être contacté après que des tentatives adéquates aient été faites, le projet ClimaSouth se réserve le droit d\'attribuer le prix à la candidature suivante.</li> 
+													<li>Les gagnants du concours nécessitant un visa pour voyager à la cérémonie finale sont responsables de l\'acquisition de leurs propres visas et devraient débuter la démarche immédiatement après avoir été informés d\'avoir gagné. Le projet ClimaSouth les aidera en fournissant les documents nécessaires pour la demande de visa.</li>
+													<li>La participation au concours, y compris la sélection pour la remise d\'un prix, ne constitue en aucune façon un soutien ou un appui de la part du projet ClimaSouth ou des institutions de l\'UE des opinions, objectifs, ou tous produits ou services des participants au concours.</li>
+													<li>En s\'inscrivant au concours vidéo ClimaSouth, les participants acceptent dans leur intégralité les règles officielles en vigueur du concours vidéo.</li> 
+												</ol>';
+	
+	$tras['page_rules']['ar'] = '<h3>أولا: خلفية</h3><p>
+											بدأ مشروع كليماساوث في فبراير 2013 وسيجري تنفيذه خلال فترة تمتد 48 شهرًا بتمويل من الاتحاد الأوروبي. 
+											</p><p>
+											يدعم المشروع التخفيف والتكيف مع ظاهرة تغير المناخ في 9 دول تقع جنوب البحر المتوسط: الجزائر، ومصر، وإسرائيل، والأردن، ولبنان، وليبيا، والمغرب، وفلسطين، وتونس (مع عدم إدراج سوريا وفقًا لقيود الاتحاد الأوروبي القانونية).
+											</p><p>
+											ويتمثل الهدف العام في مساعدة تحول البلدان الشريكة نحو اقتصادات منخفضة الكربون ومرونة معززة مع ظاهرة تغير المناخ.  
+											</p><p>
+											ويدعم المشروع أيضا التعاون فيما بين بلدان الجنوب، وتقاسم المعلومات بشأن قضايا تغير المناخ في المنطقة إضافة إلى إقامة حوار أوثق وشراكة مع الاتحاد الأوروبي.
+											</p><p>
+											مزيد من المعلومات متاحة على موقع  <a href="http://www.climasouth.eu">www.climasouth.eu</a>.
+											</p>
+											<h3>
+											ثانيًا. هدف وسياق مسابقة الفيديو
+											</h3><p>
+											ينطوي الهدف العام لمسابقة الفيديو على تحفيز الاهتمام بموضوع تغير المناخ بين الشباب والأشخاص المبدعين بمنطقة جنوب البحر الأبيض المتوسط مع تشجيع مشاركتهم بالعمل المناخي. 
+											</p><p>
+											موضوع مسابقة الفيديو هو "تغير المناخ". ينبغي أن ينتج الأفلام فنانو وصحافيو الفيديو من مواطني إحدى البلدان الشريكة في كليماساوث أو المقيمين بها، ويجب ألا يتجاوز الحد الأقصى لمدة الفيلم عن 3 دقائق.
+											</p><p>
+											هناك فئتان من الفيديوهات: 
+											</p>
+											<ul>
+											<li>الفئة 1: المعلومات والفيديوهات الجديدة.</li>
+											<li>الفئة 2: الفيديوهات الفنية.</li>
+											</ul>
+											<h3>
+											ثالثا. الإجراءات والجوائز
+											</h3>
+											<ul>
+											<li>تبدأ مسابقة الفيديو في 15 نوفمبر 2014. يجب أن يسجل المشاركون على موقع كليماساوث  (www.climasouth.eu.)، مع ملء النموذج على الإنترنت وارسال رابط عنوان URL للفيديو الخاص بهم (يجب أن يكون الفيديو متاحًا على فيمو أو يوتيوب، وينبغي تقديم رابط عنوان URL الخاص بالفيديو على فيمو أو يوتيوب لعرضه على موقع كليماساوث). وسيمكن النموذج أيضا المشاركين من تحميل الفيديو الأصلي (المطلوب للتسجيل بشكل صحيح). سيفتح باب التسجيل اعتبارًا من 15 نوفمبر 2014 وحتى 15 يناير 2015. وستُعرض الفيديوهات فقط للتصويت عليها.بعد غلق باب التسجيل على موقع كليماساوث. </li>
+											<li>وبعد ذلك، سيجري التصويت العام، في الفترة بين 15 يناير و15 فبراير، على موقع كليماساوث: سيقوم الزائرون بالنقر على زر "التصويت" للتصويت على الفيديو المفضل لهم. الفيديو الذي يحصل على أغلبية أصوات الجمهور في كل فئة سيربح جائزة اختيار الجمهور. </li>
+											<li>وفي نفس الوقت، ستقوم هيئة تحكيم مكونة من أعضاء من مشروع كليماساوث، والمفوضية الأوروبية، وجهات الاتصال الوطنية التابعة لكليماساوث باختيار الفيديو المفضل لديهم لكل فئة.  وستُمنح هذه الفيديوهات جائزة هيئة التحكيم. </li>
+											<li>أفضل الفيديوهات لكل فئة وكذلك المنتجات التي حصلت على أغلبية الأصوات من كل بلد من البلدان الشريكة بكليماساوث سيجري تسليط الضوء عليها بشكل أكبر خلال نشاط مواز يجري الترتيب له خلال الربع الثاني من عام 2015 في إطار مناسبة احتفال ملائم ورفيع المستوى يرتبط بتغير المناخ أو التعاون الأوروبي أو كلاهما.</li>
+											<li>سيكون هناك أربع جوائز: جائزتان لاختيار الجمهور (جائزة عن كل فئة) وجائزتان من هيئة التحكيم. وسيجري الاتصال بالفائزين بالجوائز في الفترة بين 15 فبراير و15 مارس 2015، وسيدعون إلى حضور حفل توزيع جوائز سيُعقد كجزء من احتفال ملائم ورفيع المستوى يرتبط بتغير المناخ أو التعاون الأوروبي أو كلاهما. وسوف يتحمل مشروع كليماساوث تكاليف السفر والإقامة لشخص واحد يمثل كل فيديو يحصل على جائزة.</li>
+											<li>وعلاوة على ذلك، سيُدعا كل من الفائزين في المسابقة إضافة إلى هؤلاء الذين حصلوا على أغلبية الأصوات لكل بلد من البلدان الشريكة بكليماساوث، إلى المشاركة في دورات تدريبية مُخصصة تركز على تصور الفن وأشرطة فيديو المعلومات المستوحاة من تغير المناخ وإنتاجها وتعديلها. سوف تهدف الدورات التدريبية إلى تحفيز عملية التعلم القائم على التعاون التي تبحث موضوع تغير المناخ، برعاية كبار الفنانين/الصحفيين والخبراء في مجال تغير المناخ والمرتبطين بمشروع كليماساوث. وستُعقد هذه الدورات في الربعين الأول/الثاني من عام 2015 خلال فترة تمتد من 3-6 أيام في مواقع مناسبة، والتى اختيرت على أساس دون إقليمي، لتسهيل اجتماع المشاركين من البلدان الشريكة بكليماساوث. وسوف يتحمل مشروع كليماساوث تكاليف السفر والإقامة لجميع المشاركين بالدورات التدريبية.</li> 
+											</ul>
+											<h3>
+											رابعًا. معايير التقييم (لجوائز لجنة التحكيم فقط)
+											</h3><ul>
+											<li><b>
+											الفئة 1: المعلومات والفيديوهات الجديدة، بما في ذلك الرسوم البيانية
+											</b><ol>
+												<li>يصور الفيديو بوضوح ظاهرة تغير المناخ في منطقة جنوب البحر الأبيض المتوسط، سواء من حيث أسبابها، ومخاطرها، وأثارها، وفرص أعمال التكيف معها والتخفيف من حدتها
+												</li><li>الدقة والاكتمال 
+												</li><li>المبادرة والتجديد 
+												</li><li>الالتزام بالمعايير الصحفية الرفيعة
+												</li><li>الأهمية والفاعلية 
+												</li><li>الوضوح، والتبصر، واحترام الجمهور.
+												</li><li>الاستخدام المبتكر لقدرات الوسائط مثل الرسوم البيانية
+											</li></ol></li><li><b>
+												الفئة 2: الفيديوهات الفنية.
+											</b>
+											<ol>
+												<li>وجود صلة بموضوع تغير المناخ بمنطقة جنوب البحر المتوسط.
+												</li><li>الإبداع
+												</li><li>الأصالة
+												</li><li>الصفات الجمالية
+												</li><li>الابتكار والتجريب
+											</li></ol></li></ul>
 
+											<h3>
+												خامسًا. المواصفات الفنية
+											</h3>
+											<ul>
+											<li>الصيغة: AVI، أو WMV، أو MPEG (بما في ذلك MPEG-4)</li>
+											<li>المدة: الحد الأقصى 3 دقائق </li>
+											<li>دقة العرض: الحد الأدنى لدقة العرض 720x1280 بكسل (720p) بمعدل 25 لقطة في الثانية الواحدة. </li>
+											</ul>
 
-<h3>المهمة</h3>اصنع فيديو مدته من 120-180 ثانية عن موضوع تغير المناخ من خلال اختيار إحدى الفئتين التاليتين
-<br/>
-
-<ol><li>المعلومات والفيديوهات الجديدة
-</li><li>
- الفيديوهات الفنية. قم بتحميل الفيديو الخاص بك على فيمو أو يوتيوب، ثم أرسل رابط عنوان URL الخاص به إلينا قبل الخامس عشر من يناير. سيكون هناك أربع جوائز: جائزتان لاختيار
-
-</li></ol>
- الجمهور (جائزة عن كل فئة) وجائزتان من هيئة التحكيم. وسيُدعى الفائزون وهؤلاء الذين فازوا بأغلبية الأصوات في كل بلد من البلدان الشريكة بكليماساوث (وهم 18 فائزًا وصلوا للمرحلة النهائية) إلى المشاركة في المرحلة الثانية من المبادرة. وستُطلق المبادرة مع مجموعة من دورات تدريبية مُخصصة تركز على تصور الفن وأشرطة فيديو المعلومات المستوحاة من تغير المناخ وإنتاجها وتعديلها.
-
-';
-
+											<h3>
+											سادسًا. الشروط والأحكام
+											</h3>
+											<ol>
+												<li>المسابقة مفتوحة لمواطني البلدان الشريكة بكليماساوث، والذين تزيد أعمارهم عن 18 عاما، باستثناء العاملين في المؤسسات الأوروبية والمؤسسات التي تستضيفهم، وأقاربهم.
+												</li><li>يجب تحميل جميع مساهمات الفيديو أولًا على يوتيوب أو فيمو ثم نشرها على موقع كليماساوث الإلكتروني من خلال إرسال رابط عنوان URL للفيديو.  يرجى ملاحظة أن الفيديوهات المُحملة لا تكون مرئية على الموقع الإلكتروني على الفور -إلا بعد 31 ديسمبر حيث ستكون الفيديوهات متاحة للمشاهدة.
+												</li><li>ينبغي أن تمثل الفيديوهات العمل الأصلي والوحيد للمؤلف، ويجب ألا يكون قد سبق نشرها في أي مكان آخر أو قد فازت بجائزة في أي مسابقة فيديو أخرى. أي دليل على انتحال الملكية الأدبية سوف يؤدي إلى الاستبعاد من المشاركة بالمسابقة.
+												</li><li>يتحمل كافة المشاركون أي تكاليف أو نفقات متكبدة نتيجة المشاركة في المسابقة.
+												</li><li>يوافق المشاركون والفائزون على أن الفيديو الذي يقومون بإرساله لمسابقة الفيديو يجوز استخدامه في الدعاية والأنشطة الترويجية الأخرى دون موافقة أو مدفوعات أخرى كما هو محدد في وقت لاحق من مشروع كليما ساوث. ويجوز أن تشمل هذه الدعاية استخدام الأسماء، والفيديوهات، وكذلك أي مساهمات أخرى خاصة بهم في المسابقة عبر الإنترنت. يظل حق النشر والتأليف لأي فيديو يُقدم لهذه المسابقة للمشاركين المعنيين. ومع ذلك، ومع مراعاة المشاركة الطوعية بالمسابقة، يمنح كل متقدم بالمسابقة بموجبه كلا من مشروع كليماساوث ومؤسسات الاتحاد الأوروبي الحقوق اللازمة لنشر وعرض أي نص أو صورة تم إرسالها، أو غيرها من حقوق الملكية الفكرية على الجمهور والتي قد تنشأ عن المشاركة بهذه المسابقة، أو الجوائز، أو الدعاية ذات الصلة.  وبالإضافة إلى ذلك، يمنح كل متقدم بالمسابقة بموجبه كلا من مشروع كليماساوث ومؤسسات الاتحاد الأوروبي الحق الدائم للاستخدام غير المحدود ودون مقابل، وتعديل، وإعادة إنتاج، وتوزيع، وترجمة، ونشر أي من هذه الملكية الفكرية أو عرضها علنًا، لأي غرض كان، وفي أي صورة أو وسيلة، سواء على هذا الموقع الإلكتروني أو في أي مكان أخر، للأنشطة الترويجية أو الفعاليات التي ينظمها مشروع كليماساوث أو مؤسسات الاتحاد الأوروبي، سواء على الصعيد المحلي أو العالمي. 
+												</li><li>لن تُستخدم أي معلومات شخصية، بما في ذلك اسم المشارك، وعمره، وعنوانه (متضمنًا الرمز البريدي)، وعنوان بريده الالكتروني إلا فيما يتعلق بهذه المسابقة، ولن يتم الإفصاح عنها لأي طرف ثالث إلا لغرض هذه المسابقة (بما في ذلك الترقيات اللاحقة على النحو المذكور في هذه الشروط والأحكام).
+												</li><li>تقع على عاتق كل مشارك عقب إرسال الفيديو الخاص به إلى موقع كليماساوث مسؤولية التأكد من أن أي فيديو يقوم بإرساله للمسابقة قد جرى تقديمه وفقًا لتصريح من الشخص (الأشخاص) المشاركين بالفيديو [أو، حيثما يظهر الفيديو موافقة ولي أمر/وصي أي أشخاص دون عمر الثامنة عشر] أو تصريح من المكان أو الموقع أو كلاهما، وأن الفيديو لا يشكل تعديًا على حقوق التأليف والنشر لأي طرف ثالث.  يتعهد المشارك بأنه يمتلك حق التأليف والنشر الخاص بالفيديو، وأن مساهمته لغرض حقوق الاستخدام التى تقتضيها المسابقة لا تشكل تعديًا على حقوق الخصوصية، أو حق التأليف والنشر، أو أي حقوق أخرى لأي شخص، وأن المشارك سيقوم على نفقته الخاصة بتعويض، وعدم مطالبة، والدفاع عن مشروع كليماساوث ومؤسسات الاتحاد الأوروبي، وموظفيها والأشخاص الذين يقدمون خدمات لها، عن أي مطالب، أو دعاوي، أو خسارة، أو طلبات تقدمها أطراف ثالثة فيما يتعلق بهذا التعدي أو المخاطر الأخرى التي قد يتضرر منها المشترك نتيجة لمشاركته في مسابقة الفيديو هذه.
+												</li><li>لا يضطلع مشروع كليماساوث بأي مسؤولية عن المساهمات المتأخرة أو المفقودة.
+												</li><li>يتعين أن يقدم المشاركون تفاصيل كاملة على النحو الذي يقتضيه نموذج التسجيل مع الامتثال لكافة القواعد للتأهل للحصول على الجائزة (الجوائز). لا تقبل أي مسؤولية عن المساهمات غير اللائقة. 
+												</li><li>سيقوم مشروع كليماساوث بمجرد تلقي الفيديوهات بفحص مدى ملائمة كافة المساهمات من حيث المحتوى. لا يجب أن تحتوي الفيديوهات على أي عبارات أو محتوى سيء أو غير ملائم. 
+												</li><li>ينبغى إرسال مساهمات الفيديو سواء باللغة الإنجليزية، أو الفرنسية، أو العربية أو مع ترجمة باللغة الإنجليزية.
+												</li><li>يُسمح فقط بفيديو واحد لكل مشارك.
+												</li><li>تكون الجوائز وفقًا لما سبق ذكره وهي غير قابلة للنقل ولا يمكن تغييرها. لا تُقدم مبالغ نقدية أو بدائل ائتمانية.
+												</li><li>في حالة استخدام الموسيقى، يرجى استخدام الموسيقى المجانية أو الموسيقى الأصلية التي حصلت على الحق في استخدامها.
+												</li><li>في حالة تعذر الاتصال بأحد المنافسين الفائزين بعد إجراء محاولات معقولة في هذا الصدد، يحتفظ مشروع كليماساوث بالحق في تقديم الجائزة إلى أفضل مساهمة تالية. 
+												</li><li>يكون الفائزون المتنافسون الذين يحتاجون لتأشيرة للسفر إلى الحفل النهائي لتوزيع الجوائز مسؤولين عن توفير التأشيرات الخاصة بهم، ويجب عليهم الشروع في هذه العملية بعد إخطارهم بفوزهم. سيقدم مشروع كليماساوث المساعدة عن طريق توفير المستندات اللازمة لطلب التأشيرة. 
+												</li><li>لا تُشكل، بأي حال من الأحوال، المشاركة في المسابقة، بما في ذلك عملية الاختيار للحصول على الجائزة، إقرارًا أو دعمًا من مشروع كليماساوث أو مؤسسات الاتحاد الأوروبي بوجهات النظر، أو الأهداف، أو أي منتجات أو خدمات خاصة بالمشاركين في المسابقة.
+												</li><li>من خلال التسجيل في مسابقة فيديو كليماساوث، يقبل المشاركون القواعد الرسمية الحالية لمسابقة الفيديو بكل ما تنطوي عليه من أحكام.</li>
+											</ol>
+											';
+	
 	if(isset($tras[$txt][$csv_lang])){
 		return $tras[$txt][$csv_lang];
 	}
