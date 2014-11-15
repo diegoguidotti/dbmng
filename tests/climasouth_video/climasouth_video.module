@@ -207,8 +207,6 @@ function cs_video_contest_page()
 				$html.=cs_get_view_section();
 
 				$html.='
-
-
 				<!-- Production Team Section -->
 				<section id="production" class="production-section">
 					<div class="container">
@@ -217,47 +215,48 @@ function cs_video_contest_page()
 								<div class="col-lg-12">
 									<h1>'.tt('Production Team').'</h1>
 
-									<h3>Information & Communication</h3>
+									<h3>'.tt('Information & Communication').'</h3>
 
-									Information design & editor: GH Mattravers Messana<br/>
+									'.tt('Information design & editor').' : GH Mattravers Messana<br/>
 
-									Webmaster & IT services: Diego Guidotti & Michele Mammini (Aedit srl)<br/>
+									'.tt('Webmaster & IT services').' : Diego Guidotti & Michele Mammini (Aedit srl)<br/>
 
-									Social media and promotion : Giovanni de Paola – EU Infocentre<br/>
+									'.tt('Social media and promotion').' : Giovanni de Paola – EU Infocentre<br/>
 
-									Images courtesy of : Alessandro Chiodo, NASA Johnson Space Centre, Bennet Pimpinella, ESAV - Marrakech<br/>
+									'.tt('Images courtesy of').' : Alessandro Chiodo, NASA Johnson Space Centre, Bennet Pimpinella, ESAV - Marrakech<br/>
+									'.tt('Traduction services').' : CoDe translations & services Ltd<br/>
 
-									<h3>Climate Change Team</h3>
+									<h3>'.tt('Climate Change Team').'</h3>
 
-									Team Leader : Annie Bonnin Roncerel<br/>
+									'.tt('Team Leader').' : Annie Bonnin Roncerel<br/>
 
-									Mitigation Expert : El Sayed Sabry Nasr Mansour<br/>
+									'.tt('Mitigation Expert').' : El Sayed Sabry Nasr Mansour<br/>
 
-									Adaptation Expert : Neil Ward</br>
+									'.tt('Adaptation Expert').' : Neil Ward</br>
 
-									<h3>Agriconsulting Consortium</h3>
+									<h3>'.tt('Agriconsulting Consortium').'</h3>
 
-									Project Director : Ottavio Novelli<br/>
+									'.tt('Project Director').' : Ottavio Novelli<br/>
 
-									Coordination & Administration  : Barbara Giannuzzi Savelli<br/>
+									'.tt('Coordination & Administration').' : Barbara Giannuzzi Savelli<br/>
 
-									<h3>European Commission</h3>
+									<h3>'.tt('European Commission').'</h3>
 
-									Directorate General for Development and Cooperation – EuropAid<br/>
+									'.tt('Directorate General for Development and Cooperation').' – EuropAid<br/>
 
-									Project Manager : Stéphane Halgand <br/>
+									'.tt('Project Manager').' : Stéphane Halgand <br/>
 
-									Directorate-General for Climate Action ("DG CLIMA") <br/>
+									'.tt('Directorate-General for Climate Action').' ("DG CLIMA") <br/>
 
-									Policy Officer Maghreb, Mashreq and Gulf region: Lucie Berger</br>
+									'.tt('Policy Officer Maghreb, Mashreq and Gulf region').' : Lucie Berger</br>
 
 									</p>
 
-									<b>Disclaimer</b>: The information and views set out in this video competition are those of the authors and do not necessarily reflect the official opinion of the European Union. Neither the European  Union institutions and bodies nor any person acting on their behalf may be held responsible for the use which may be made of the information contained therein. 
+									<b>'.tt('Disclaimer').'</b>: '.tt('disclaimer_text').' 
 									<br/>
 
-									Project funded by the European Union<br/>
-									© European Commission, 2014.
+									'.tt('Project funded by the European Union').'<br/>
+									'.tt('© European Commission, 2014').'.
 										
 								</div>
 								</div>
@@ -273,18 +272,18 @@ function cs_video_contest_page()
 								<div class="col-lg-12">
 									<h1>'.tt('Contact').'</h1>
 
-<div id="contact_page">
-<img width="200" src="../sites/all/modules/climasouth_video/resources/climasouth_logo.png" /><br/>
+									<div id="contact_page">
+									<img width="200" src="../sites/all/modules/climasouth_video/resources/climasouth_logo.png" /><br/>
 
-<b>G.H. Mattravers Messana</b><br/>
-ClimaSouth Project<br/>Information & Communication</br>
-Email : <a href="mailto:ghmm@climasouth.eu">ghmm@climasouth.eu</a></br>
-<hr/>
-<img width="200" src="../sites/all/modules/climasouth_video/resources/agriconsulting_logo_long.png" /><br/>
-<b>Belgium</b>:  c/o Agriconsulting Europe, Av de Tervuren 36, 1040 Brussels, Tel +32 2 7362277.<br/>
-<b>Egypt</b>: c/o d’Appolonia Egypt Branch, Fouad Thabet treet, 8, Sheraton Buildings,Heliopolis,  Cairo. </br/>
-<img  src="../sites/all/modules/climasouth_video/resources/ue_flag.png" />EU funded project<br/>
-</div>
+									<b>G.H. Mattravers Messana</b><br/>
+									'.tt('ClimaSouth Project').'<br/>'.tt('Information & Communication').'</br>
+									'.tt('Email').' : <a href="mailto:ghmm@climasouth.eu">ghmm@climasouth.eu</a></br>
+									<hr/>
+									<img width="200" src="../sites/all/modules/climasouth_video/resources/agriconsulting_logo_long.png" /><br/>
+									<b>'.tt('Belgium').'</b>:  c/o Agriconsulting Europe, Av de Tervuren 36, 1040 Brussels, Tel +32 2 7362277.<br/>
+									<b>'.tt('Egypt').'</b>: c/o d’Appolonia Egypt Branch, Fouad Thabet treet, 8, Sheraton Buildings,Heliopolis,  Cairo. </br/>
+									<img  src="../sites/all/modules/climasouth_video/resources/ue_flag.png" />'.tt('EU funded project').'<br/>
+									</div>
 
 								</div>
 							</div>
@@ -494,7 +493,6 @@ function tt($txt){
 	$tras['Rules']['fr']='Règles';
 	$tras['Upload']['fr']='Télécharger';
 	$tras['View & Vote']['fr']='Visionnez et votez';
-	$tras['Production Team']['fr']='Equipe de production';
 	$tras['Contact']['fr']='Contact';
 	$tras['Videos not yet available. (o la frase da inserire)']['fr']='Vidéos pas encore disponibles';
 	$tras['ClimaSouth Project Information & Communication']['fr']='Projet ClimaSouth Information & Communication';
@@ -519,7 +517,45 @@ function tt($txt){
 	$tras['I have read and accept the terms and conditions of the competition']['fr']='J\'ai lu et j\'accepte les conditions générales du concours';
 	$tras['Videos will be available for public viewing and voting at the end of the submission period ending 15th January 2015']['fr']='Les vidéos seront visonnables publiquement et soumises au vote à la fin de la période de soumission se terminant le 15 janvier 2015.';
 	$tras['Register & upload a video']['fr']='Enregistrez-vous & téléchargez une vidéo';
+
+	$tras['Production Team']['fr']='Équipe de production';
+	$tras['Information & Communication']['fr']='Information et communication';
 	
+	// ------------------------------
+	$tras['Information design & editor']['fr']='Conception de l\'information & éditeur';
+	$tras['Webmaster & IT services']['fr']='Webmestre & services informatiques';
+	$tras['Social media and promotion']['fr']='Médias sociaux et promotion';
+	$tras['Images courtesy of']['fr']='Images de';
+	$tras['Traduction services']['fr']='Services de traduction';
+	
+	$tras['Climate Change Team']['fr']='Équipe changements climatiques';
+	$tras['Team Leader']['fr']='Chef d\'équipe';
+	$tras['Mitigation Expert']['fr']='Expert en atténuation';
+	$tras['Adaptation Expert']['fr']='Expert en adaptation';
+	
+	$tras['Agriconsulting Consortium']['fr']='Consortium d\'agriconsulting';
+	$tras['Project Director']['fr']='Directeur de projet';
+	$tras['Coordination & Administration']['fr']='Coordination et administration';
+	
+	$tras['European Commission']['fr']='Commission européenne';
+	$tras['Directorate General for Development and Cooperation']['fr']='Direction générale pour la coopération et le développement';
+	$tras['Project Manager']['fr']='Chargé de projet';
+	$tras['Directorate-General for Climate Action']['fr']='Direction générale de l\'action pour le climat';
+	$tras['Policy Officer Maghreb, Mashreq and Gulf region']['fr']='Chargée politique Maghreb, Mashreq et région du Golfe';
+	$tras['Disclaimer']['fr']='Avis de non-résponsabilité';
+	$tras['disclaimer_text']['fr'] ='Les informations et opinions énoncées dans ce concours vidéo sont celles des auteurs et ne reflètent pas nécessairement l\'opinion officielle de l\'Union européenne. Ni les institutions et organismes de l\'Union européenne ni quiconque les représentant ne peuvent être tenus responsables de l\'usage fait des informations qu\'elles contiennent.';
+	$tras['Project funded by the European Union']['fr'] ='Project financé par l\'Union européenne';
+	$tras['© European Commission, 2014']['fr'] ='© Commission européenne, 2014';
+	
+	$tras['ClimaSouth Project']['fr'] ='Projet ClimaSouth';
+	$tras['Information & Communication']['fr'] ='Information et Communication';
+	$tras['Email']['fr'] ='Courriel';
+	
+	$tras['Belgium']['fr'] ='Belgique';
+	$tras['Egypt']['fr'] ='Egypte';
+	$tras['EU funded project']['fr'] ='Projet financé par l\'UE';
+	
+	// ------------------------------
 	
 	$tras['ClimaSouth Video Competition']['ar']='كليماساوث – مسابقة الفيديو';
 	$tras['From Climate Change to Climate Action']['ar']='من تغير المناخ إلى العمل المناخي';
@@ -559,7 +595,9 @@ function tt($txt){
 	
 	//$tras["Submission open until 15 January 2015"]['ar']='انضم إلى العمل';
 
-  $tras['page_about']['en']='<h3>Join the Action & make a short video on Climate Change.</h3>  
+	$tras['disclaimer_text']['en'] ='The information and views set out in this video competition are those of the authors and do not necessarily reflect the official opinion of the European Union. Neither the European  Union institutions and bodies nor any person acting on their behalf may be held responsible for the use which may be made of the information contained therein.';
+	
+	$tras['page_about']['en']='<h3>Join the Action & make a short video on Climate Change.</h3>  
 
 											Climate change is the most pressing environmental issue of   our time. We believe that together we have the power to   address it and make a difference. Create a short video on   Climate Change and win a prize. The best videos will achieve   global exposure and winners will be awarded their prize at a   high-profile international event. In addition, winners will be   invited to join the ClimaSouth video initiative. Under the   tutelage of well-known video journalists and video artists,   the winners will contribute to the initiative in each of the   ClimaSouth partner countries : Algeria, Egypt, Israel,   Jordan, Lebanon, Libya, Morocco, Palestine and Tunisia.  
 
