@@ -224,7 +224,7 @@ function cs_video_contest_page()
 									'.tt('Social media and promotion').' : Giovanni de Paola – EU Infocentre<br/>
 
 									'.tt('Images courtesy of').' : Alessandro Chiodo, NASA Johnson Space Centre, Bennet Pimpinella, ESAV - Marrakech<br/>
-									'.tt('Traduction services').' : CoDe translations & services Ltd<br/>
+									'.tt('Translating Services').' : CoDe translations & services Ltd<br/>
 
 									<h3>'.tt('Climate Change Team').'</h3>
 
@@ -526,7 +526,7 @@ function tt($txt){
 	$tras['Webmaster & IT services']['fr']='Webmestre & services informatiques';
 	$tras['Social media and promotion']['fr']='Médias sociaux et promotion';
 	$tras['Images courtesy of']['fr']='Images de';
-	$tras['Traduction services']['fr']='Services de traduction';
+	$tras['Translating Services']['fr']='Services de traduction';
 	
 	$tras['Climate Change Team']['fr']='Équipe changements climatiques';
 	$tras['Team Leader']['fr']='Chef d\'équipe';
