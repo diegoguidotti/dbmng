@@ -485,7 +485,7 @@ function tt($txt){
 
 	$tras=Array();
 	$tras['ClimaSouth Video competition']['fr']='CLIMASOUTH   -   Concours vidéo';
-	$tras['from Climate Change to Climate Action']['fr']='Des changements climatiques à l\'action climatique';
+	$tras['From Climate Change to Climate Action']['fr']='Des changements climatiques à l\'action climatique';
 	$tras['Join the Action !']['fr']='Participez à l\'Action !';
 	$tras['Make a short Video on Climate Change and Win a trip to Europe & more...']['fr']='Créez une courte vidéo sur les changements climatiques et gagnez un voyage en Europe et d’autres prix…';
 	$tras['Submission open until 15 January 2015']['fr']='Soumissions acceptées jusqu\'au 15 janvier 2015';
