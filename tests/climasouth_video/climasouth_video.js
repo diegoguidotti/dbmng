@@ -28,6 +28,12 @@ jQuery(function(){
 			resize();
 		});		
 
+		if(typeof fill_the_form != 'undefined' ){
+			if(fill_the_form){
+				fillTheForm();
+			}
+		}
+
 		
 
 		jQuery('.diego_editable').click(function(){
@@ -94,7 +100,7 @@ jQuery(function(){
 
 
 function resize(){
-   console.log('a');
+   
 		
 		var vh=jQuery('#intro video').height();
 
@@ -102,7 +108,7 @@ function resize(){
 
 		if(vh<600)
 			tm=0;
-		console.log('Video alto:'+vh+" metto margine: -"+tm);
+		//console.log('Video alto:'+vh+" metto margine: -"+tm);
 		jQuery('#intro video').css('margin-top','-'+tm+'px');
 
 		var left=jQuery('#about div.row').offset().left;
@@ -138,12 +144,81 @@ function resize(){
 		}
 		else{
 			jQuery('#cs_logo').show();
-			//jQuery('.cs_head a.navbar-brand').css('width','100%');
+			jQuery('.cs_head a.navbar-brand').width(jQuery('#upload h1').width()-350);
 			jQuery('.cs_head a.navbar-brand').css('height','auto');
+			//jQuery('.cs_head a.navbar-brand').css('border','1px solid red');
 
 		}
 }
 
+
+function saveVideo(){
+
+	var obj={'ajax':true};
+	
+	jQuery.each(jQuery('#videoForm :input'), function(k,v){
+		v=jQuery(v);
+		obj[v.attr('id')]=v.val();		
+	});
+
+	if(jQuery('#inputAccept').is(':checked')){
+
+		jQuery.ajax({
+		      type: "POST",
+		      url: 'video',
+					DataType: 'json',
+		      data: obj,                
+		      success: function(data){
+		          jQuery('#update_modal .csv_ok').show();
+		          jQuery('#update_modal .csv_err1').hide();
+		          jQuery('#update_modal .csv_err2').hide();
+
+							jQuery('#update_modal').modal('show');
+					},
+		      error: function(errMsg) {
+		          jQuery('#update_modal .csv_ok').hide();
+		          jQuery('#update_modal .csv_err1').hide();
+		          jQuery('#update_modal .csv_err2').show();
+							jQuery('#update_modal').modal('show');        
+					}
+		});
+	}
+	else{
+		          jQuery('#update_modal .csv_ok').hide();
+		          jQuery('#update_modal .csv_err1').show();
+		          jQuery('#update_modal .csv_err2').hide();
+							jQuery('#update_modal').modal('show');        
+	}
+
+	return false;
+}
+
+
+function fillTheForm(){
+
+	jQuery(function(){
+
+		var obj={'ajax':true, 'get_video':true};
+
+		jQuery.ajax({
+			    type: "POST",
+			    url: 'video',
+					DataType: 'json',
+			    data: obj,                
+			    success: function(data){
+						
+						console.log(data);
+						jQuery.map(data.ret, function(element,index) {
+							if(index.substring(0,5)=='input'){
+								console.log(index);
+								jQuery('#'+index).val(data.ret[index]);
+							}	
+						});
+						
+					}
+		});
+	});
+}
 
 function uploadVideo(){
 	var input=jQuery('#cs_video_link').val();

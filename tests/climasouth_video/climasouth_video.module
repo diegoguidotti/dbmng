@@ -78,14 +78,57 @@ function cs_video_contest_page()
 
 	global $language;	
 	global $csv_lang;
+	
+
+	$csv_lang='en';
 
 	$csv_lang=$language->language;
 	if(isset($_REQUEST['lang'])){
 		$csv_lang=$_REQUEST['lang'];
+		$_SESSION['csv_lang']=$csv_lang;
+	}
+	else{
+		if(isset($_SESSION['csv_lang'])){
+			$csv_lang = $_SESSION['csv_lang'];
+		}			
 	}
 
-	$html=cs_get_header();
+	if(isset($_REQUEST['ajax'])){
+			header('Content-type: application/json');
 
+		 $return = $_REQUEST;  
+  	 $json = json_encode($return);
+
+
+
+			if ($user->uid) {
+				if(isset($_REQUEST['get_video'])){
+						$ob = dbmng_fetch_object(dbmng_query("select json from c_video WHERE uid=:uid", array(':uid'=>$user->uid)));
+						echo('{"ret":'.($ob->json).'}');				
+						
+
+				}
+				else{
+					
+					dbmng_query("INSERT INTO c_video (uid, json) VALUES (:uid, :json) on duplicate key update json=:json ", array(':uid'=>$user->uid, ':json'=> $json));
+					echo('{"ok":true}');				
+				}
+			}
+			else{
+				echo('{"ok":false}');				
+			}
+	}
+	else{
+		cs_video_page();
+	}
+}
+
+function cs_video_page()
+ {
+	
+	global $csv_lang;
+
+	$html=cs_get_header();
 	$html.='
 
 			<!-- The #page-top ID is part of the scrolling feature - the data-spy and data-target are part of the built-in Bootstrap scrollspy function -->
@@ -94,7 +137,6 @@ function cs_video_contest_page()
 				<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 					
 					<div class="container">
-					<div id="cs_logo"><a href="/"><img  src="../sites/all/modules/climasouth_video/logo_cs.png"/></a></div>
 
 							<div class="navbar-header page-scroll">
 								<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
@@ -106,6 +148,9 @@ function cs_video_contest_page()
 								
 								<div class="cs_head"><a class="navbar-brand page-scroll" href="#page-top"><div class="cs_top">'.tt('ClimaSouth Video Competition').'</div><div class="cs_sub">'.tt('From Climate Change to Climate Action').'</div></a></div>
 							</div>
+
+
+					<div id="cs_logo"><a href="/"><img  src="'.base_path().'/sites/all/modules/climasouth_video/logo_cs.png"/></a></div>
 
 							<!-- Collect the nav links, forms, and other content for toggling -->
 							<div class="collapse navbar-collapse navbar-ex1-collapse">
@@ -136,10 +181,21 @@ function cs_video_contest_page()
 											<a class="page-scroll" href="#contact">'.tt('Contact').'</a>
 									</li>
 								</ul>
+							<div id=cs_lang>
+								<a class="'.($csv_lang=='en'?'langsel':'base').'" href="?lang=en">en</a>
+								<a class="'.($csv_lang=='fr'?'langsel':'base').'" href="?lang=fr">fr</a>
+								<a class="'.($csv_lang=='ar'?'langsel':'base').'" href="?lang=ar">ar</a>
+							</div>	
+
 
 							</div>
 							<!-- /.navbar-collapse -->
+
+							
+
+
 					</div>
+
 					<!-- /.container -->
 				</nav>
 
@@ -153,7 +209,7 @@ function cs_video_contest_page()
 									<source src="http://www.climasouth.eu/drupal/video/cs_short.ogv" type="video/ogg">
 									<img src="http://www.climasouth.eu/drupal/video/cs_short.gif" title="No Flash found" />
 								</video>
-							<div class="logo_agri"><img width="200" src="../sites/all/modules/climasouth_video/resources/agriconsulting_logo_long.png" /></div>
+							<div class="logo_agri"><img width="200" src="'.base_path().'/sites/all/modules/climasouth_video/resources/agriconsulting_logo_long.png" /></div>
 					</div>
 
 				</section>
@@ -213,7 +269,11 @@ function cs_video_contest_page()
 							<div class="row">
 								<div style="direction: ltr">
 								<div class="col-lg-12">
-									<h1>'.tt('Production Team').'</h1>
+									<h1>'.tt('Production Team').'</h1>';
+
+
+				if($csv_lang=='' || $csv_lang=='en' || $csv_lang=='fr'){
+				$html.='
 
 									<h3>'.tt('Information & Communication').'</h3>
 
@@ -256,8 +316,77 @@ function cs_video_contest_page()
 									<br/>
 
 									'.tt('Project funded by the European Union').'<br/>
-									'.tt('© European Commission, 2014').'.
-										
+									'.tt('© European Commission, 2014').'.';
+						}
+						else{
+							$html.='
+
+								
+
+									<h3>المعلومات والاتصالات</h3>
+
+						تصميم المعلومات والمحرر: جي إتش ماترافيرس ميسانا
+																							<br>
+
+									مدير الموقع وخدمات تكنولوجيا المعلومات: ديغو جيدوتي و ميشيل ماميني (إيدت سرل)
+</br>
+
+وسائط التواصل الاجتماعي والدعاية: جيوفاني دي باولا – مركز معلومات الاتحاد الأوروبي
+<br/>
+
+									التقطت الصور بمعرفة: اليساندرو تشودو، وكالة ناسا الفضائية 
+مركز جونسون للفضاء، بينيت بيمبنيلا، 
+ المدرسة العليا للفنون البصرية - مراكش
+
+<br/>
+خدمات الترجمة: شركة CoDe translations & services المحدودة" 
+<br/>
+
+									<h3>فريق التغير المناخي</h3>
+
+قائد الفريق: أني بونين رونسيريل
+<br/>
+									خبير التخفيف: السيد صبري نصر منصور
+<br/>
+
+خبير التكيف: بيل وارد
+<br/>
+
+									<h3>
+أجروكونسلتنغ كونسورتيوم
+</h3>
+
+									مدير المشروع: أوتافو نوفيلي
+<br/>
+
+									مسؤول التنسيق والإدارة: باربرا غيانوزي سافيلي
+<br/>
+
+									<h3>الاتحاد الأوروبي</h3>
+
+									المديرية العامة للتنمية والتعاون - يوروايد
+<br/>
+
+									مدير المشروع: ستيفان هاغلاند
+ <br/>
+
+									المديرية العامة للعمل المناخي  ("DG CLIMA") 
+ <br/>
+
+									مسؤول السياسات لمنطقة المغرب، والمشرق، ومنطقة الخليج: لوسي بيرغر
+<br/>
+
+									<p></p>
+
+									إخلاء مسؤولية: المعلومات والآراء الواردة بهذه الوثيقة هي أراء المؤلفين ولا تعكس بالضرورة الرأي النهائي للاتحاد الأوروبي. لا تضطلع مؤسسات وهيئات الاتحاد الأوروبي أو أي شخص يتصرف نيابة عنها بمسؤولية الاستخدام، والتي قد تنشأ عن المعلومات المحتواة فيها.<br/> 
+مشروع ممول من الاتحاد الأوروبي
+  <br/>© European Commission, 2014.<br/>								
+								
+
+							';
+						}
+
+							$html.='										
 								</div>
 								</div>
 							</div>
@@ -273,16 +402,16 @@ function cs_video_contest_page()
 									<h1>'.tt('Contact').'</h1>
 
 									<div id="contact_page">
-									<img width="200" src="../sites/all/modules/climasouth_video/resources/climasouth_logo.png" /><br/>
+									<img width="200" src="'.base_path().'/sites/all/modules/climasouth_video/resources/climasouth_logo.png" /><br/>
 
 									<b>G.H. Mattravers Messana</b><br/>
 									'.tt('ClimaSouth Project').'<br/>'.tt('Information & Communication').'</br>
 									'.tt('Email').' : <a href="mailto:ghmm@climasouth.eu">ghmm@climasouth.eu</a></br>
 									<hr/>
-									<img width="200" src="../sites/all/modules/climasouth_video/resources/agriconsulting_logo_long.png" /><br/>
+									<img width="200" src="'.base_path().'/sites/all/modules/climasouth_video/resources/agriconsulting_logo_long.png" /><br/>
 									<b>'.tt('Belgium').'</b>:  c/o Agriconsulting Europe, Av de Tervuren 36, 1040 Brussels, Tel +32 2 7362277.<br/>
 									<b>'.tt('Egypt').'</b>: c/o d’Appolonia Egypt Branch, Fouad Thabet treet, 8, Sheraton Buildings,Heliopolis,  Cairo. </br/>
-									<img  src="../sites/all/modules/climasouth_video/resources/ue_flag.png" />'.tt('EU funded project').'<br/>
+									<img  src="'.base_path().'/sites/all/modules/climasouth_video/resources/ue_flag.png" />'.tt('EU funded project').'<br/>
 									</div>
 
 								</div>
@@ -291,19 +420,19 @@ function cs_video_contest_page()
 				</section>
 
 				<!-- jQuery Version 1.11.0 -->
-				<script src="../sites/all/modules/climasouth_video/js/jquery.js"></script>
+				<script src="'.base_path().'/sites/all/modules/climasouth_video/js/jquery.js"></script>
 
 				<!-- Bootstrap Core JavaScript -->
-				<script src="../sites/all/modules/climasouth_video/js/bootstrap.min.js"></script>
+				<script src="'.base_path().'/sites/all/modules/climasouth_video/js/bootstrap.min.js"></script>
 
 				<!-- Scrolling Nav JavaScript -->
-				<script src="../sites/all/modules/climasouth_video/js/jquery.easing.min.js"></script>
-				<script src="../sites/all/modules/climasouth_video/js/scrolling-nav.js"></script>
+				<script src="'.base_path().'/sites/all/modules/climasouth_video/js/jquery.easing.min.js"></script>
+				<script src="'.base_path().'/sites/all/modules/climasouth_video/js/scrolling-nav.js"></script>
 
 
-				<script src="../sites/all/modules/climasouth_video/climasouth_video.js"></script>
+				<script src="'.base_path().'/sites/all/modules/climasouth_video/climasouth_video.js"></script>
 
-
+				'.get_analytics().'
 			</body>
 
 			</html>';
@@ -312,6 +441,19 @@ function cs_video_contest_page()
 
 
 	echo $html;
+}
+
+
+function get_analytics(){
+	return "<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-55980280-1', 'auto');
+		ga('send', 'pageview');
+	</script>";
 }
 
 function cs_get_upload_section(){
@@ -408,22 +550,112 @@ function cs_get_view_section(){
 function cs_video_upload(){
 	global $user;
 	$html='';
-	$html .=  tt('Welcome').' '.$user->name.' - <a href="?cs_logout=true#upload">'.t("Logout").'</a>';
+	$html .=  ''.$user->name.' - <a href="?cs_logout=true#upload">'.t("Logout").'</a>';
 
-	$html.= '<form action="?">';
-	$html.= '<br/><span id="cs_video_title" class="diego_editable">Video title</span><br/>';
-	$html.= '<input onBlur="uploadVideo()" type="input" name="cs_video_link" id="cs_video_link" placeHolder="Insert a video link"/>';
-	$html.= '<div id="cs_video_container"></div>';
-	$html.= '<br/><span id="cs_video_description" class="diego_editable">Video description</span><br/>';
-	$html.= '</form>';
-	/*
+
+
+	$html.= '<form id="videoForm"  class="form-horizontal" role="form">
+  <div class="form-group">
+    <label for="inputAuthor" class="col-sm-2 control-label">'.tt('Author(s)').':</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="inputAuthor">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputCitizenship" class="col-sm-2 control-label">'.tt('Citizenship').':</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="inputCitizenship">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputAddress" class="col-sm-2 control-label">'.tt('Mailing address').':</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="inputAddress">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputEmail" class="col-sm-2 control-label">'.tt('Email for correspondence').':</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="inputEmail">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputTitle" class="col-sm-2 control-label">'.tt('Title of submission').':</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="inputTitle">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputTitleExtended" class="col-sm-2 control-label">'.tt('Extended title').':</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="inputTitleExtended">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputTitleShort" class="col-sm-2 control-label">'.tt('Short version [less than 25 characters, including spaces]').':</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="inputTitleShort">
+			<!--<p class="help-block"></p>-->
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputDescription" class="col-sm-2 control-label">'.tt('Description of submission (1 paragraph)').':</label>
+    <div class="col-sm-10">
+      <textarea class="form-control" id="inputDescription"></textarea>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="inputURL" class="col-sm-2 control-label">'.tt('URL where the downloadable submission is located').':</label>
+    <div class="col-sm-10">
+      <textarea class="form-control" id="inputURL"></textarea>
+    </div>
+  </div>
+
+<div class="checkbox">
+     <label>
+     <input id="inputAccept" type="checkbox"> '.tt('I have read and accept the terms and conditions of the competition').'
+     </label>
+   </div>
+
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button onClick="return saveVideo();" class="btn btn-default">'.tt('Upload').'</button>
+    </div>
+  </div>
+</form>
+
+<script>var fill_the_form=true;</script>	
+
+<div id="update_modal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">'.tt('Upload').'</h4>
+      </div>
+      <div class="modal-body">
+        <div class="csv_ok">'.tt('The video has been updated').'</div>
+        <div style="display:none" class="csv_err1">'.tt('You need to read and accept the terms and conditions of the competition').'</div>
+        <div style="display:none" class="csv_ree2">'.tt('An error occurred during video uploading').'</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">'.tt('Close').'</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+';
+/*
 	$html.= '<form action="?">';
 	$html.= '<input type="input" name="cs_title" id="cs_title" />';
 	$html.= '<textarea name="cs_desc" id="cs_desc" ></textarea>';
 	$html.= '<input type="input" name="cs_link" id="cs_link" />';
 	$html.= '<input type="submit" name="cs_sub" id="cs_sub" value="'.t("Send").'" />';
 	$html.= '</form>';
-  */
+*/
 
 	return $html;
 
@@ -437,7 +669,7 @@ function cs_get_header(){
 	if($csv_lang=='ar')
 		{
 			$rtl='dir="rtl"';
-			$css_rtl='<link href="../sites/all/modules/climasouth_video/climasouth_video_rtl.css" rel="stylesheet">';
+			$css_rtl='<link href="'.base_path().'/sites/all/modules/climasouth_video/climasouth_video_rtl.css" rel="stylesheet">';
 		}
 
 
@@ -459,11 +691,11 @@ function cs_get_header(){
 				<title>Climasouth Video Contest</title>
 
 				<!-- Bootstrap Core CSS -->
-				<link href="../sites/all/modules/climasouth_video/css/bootstrap.min.css" rel="stylesheet">
+				<link href="'.base_path().'/sites/all/modules/climasouth_video/css/bootstrap.min.css" rel="stylesheet">
 
 				<!-- Custom CSS -->
-				<link href="../sites/all/modules/climasouth_video/css/scrolling-nav.css" rel="stylesheet">
-				<link href="../sites/all/modules/climasouth_video/climasouth_video.css" rel="stylesheet">'.$css_rtl.'
+				<link href="'.base_path().'/sites/all/modules/climasouth_video/css/scrolling-nav.css" rel="stylesheet">
+				<link href="'.base_path().'/sites/all/modules/climasouth_video/climasouth_video.css" rel="stylesheet">'.$css_rtl.'
 
 
 
@@ -592,6 +824,10 @@ function tt($txt){
 	$tras['I have read and accept the terms and conditions of the competition']['ar']='أؤكد أنني قد قرأت وأقبل شروط وأحكام المسابقة';
 	$tras['Register & upload a video']['ar']='قم بالتسجيل وحمل الفيديو';
 	$tras['Videos will be available for public viewing and voting at the end of the submission period ending 15th January 2015']['ar']='ستكون الفيديوهات متاحة للجمهور والتصويت بنهاية فترة التقديم التي تنتهي في 15 يناير 2015 ';
+
+	$tras['Update']['ar']='تحديث';
+	$tras['Update']['fr']='Mettre à jour';
+
 	
 	//$tras["Submission open until 15 January 2015"]['ar']='انضم إلى العمل';
 

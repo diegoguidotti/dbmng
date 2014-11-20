@@ -265,7 +265,7 @@ function _climasouth_country_flag()
 	$html .= "<td><a href='".$base_path."node/137' class='country_link'>".t('Egypt')."</a></td>";
 	$html .= "<td><a href='".$base_path."node/139' class='country_link'>".t('Lebanon')."</a></td>";
 	$html .= "<td><a href='".$base_path."node/143' class='country_link'>".t('Palestine')."</a></td>";
-	$html .= "<td><a class='climasouth_link_blu ".($lang_name=='en'?'activel':'')."' href='".$base_path."' >".t('English', array(), array('langcode'=>'en'))."</a></td>";
+	$html .= "<td><a class='climasouth_link_blu ".($lang_name=='en'?'activel':'')."' href='".$base_path."en' >".t('English', array(), array('langcode'=>'en'))."</a></td>";
 	$html .= "</tr><tr>";
 	$html .= "<td><a href='".$base_path."node/154' class='country_link'>".t('Israel')."</a></td>";
 	$html .= "<td><a href='".$base_path."node/164' class='country_link'>".t('Libya')."</a></td>";
@@ -767,7 +767,7 @@ function _climasouth_maps($block)
 
 		$news_block='';
 
-		if(request_path()=='' || request_path()=='climasouth/news_events')
+		if(request_path()=='' || request_path()=='en' || request_path()=='ar' || request_path()=='fr' ||request_path()=='climasouth/news_events')
 			$news_block=_climasouth_news(true);
 		else{
 			$html.='<style>#map_new_container {background-image: none !important;}</style>';
