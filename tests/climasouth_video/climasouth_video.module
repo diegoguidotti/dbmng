@@ -5,8 +5,8 @@ include_once "sites/all/libraries/dbmng/dbmng.php";
 function climasouth_video_block_info() 
 {
 	$blocks = array();
-	$blocks['cs_video'] = array(
-		'info' => t('Climasouth video contest block'),
+	$blocks['cs_menu_plus'] = array(
+		'info' => t('Climasouth Menu i18n Block'),
 		);
 	return $blocks;
 }
@@ -18,8 +18,8 @@ function climasouth_video_block_view($delta='')
 	
 	switch($delta) 
 		{
-			case 'cs_video' :
-				$block['content'] = cl_video_block();
+			case 'cs_menu_plus' :
+				$block['content'] = cs_menu_plus();
 				break;
 		}
 	
@@ -49,10 +49,36 @@ function climasouth_video_permission() {
 }
 
 
-function cl_video_block()
+function cs_menu_plus()
 {
 	$html = "";
-	
+	$node = menu_get_object();
+	global $language;	
+	$lang="en";
+	if($language->language){
+		$lang=$language->language;
+	}
+
+	if ($node && $node->nid) {
+				
+		//$q=" SELECT c.link_path, c.link_title, c.has_children FROM clima_menu_links o , clima_menu_links p , clima_menu_links c ";
+		//$q.=" WHERE o.menu_name='main-menu' AND o.link_path='node/".$node->nid."' AND o.plid=p.mlid AND c.plid=p.mlid AND o.language='".$lang."' order by c.weight ";
+
+		$q="  select c.link_path, c.link_title, c.has_children from clima_menu_links p , clima_menu_links c WHERE p.mlid in ( ";
+		$q.= "select max(plid) from clima_menu_links WHERE menu_name='main-menu' AND link_path='node/".$node->nid."' AND language='".$lang."' )  AND  c.plid=p.mlid order by c.weight";
+
+		$res = dbmng_query($q, array());
+
+		//$html.=$q;
+		$html.="<ul id='cs_menu_plus'>";
+		foreach( $res as $rec )
+			{
+				$html.="<li>".l($rec->link_title, $rec->link_path).'</li>';
+			}
+		$html.='</ul>';
+		
+			
+	}
 	return $html;
 }
 

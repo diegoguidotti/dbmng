@@ -7,7 +7,7 @@ jQuery(document).ready(function() {
 	for(n=0; n<acronyms.length; n++){
 
 		var a=acronyms[n];
-		console.log(a);
+		//console.log(a);
 
 		
 		if( jQuery('#content div.field-name-body').html() )
@@ -42,9 +42,9 @@ jQuery(document).ready(function() {
 
 //draw a leaflet maps containing data
 function climasouth_leaflet(data, aForm, aParam){
-
-	jQuery('#label_container').hide();
 	cs_mapResize();
+	jQuery('#label_container').hide();
+
 
 	var coord=[27.9, 9];
 	//if(aParam.coord)
@@ -415,7 +415,7 @@ function addToSearchItem(txt){
 function climasouth_no_map(){
 
 	
-	cs_mapResize();
+
 	if(jQuery('#main-nav ul.menu>li.last').hasClass('active-trail')){
 		jQuery('#main-top').hide();
 		jQuery('#sidebar-first').hide();
@@ -461,9 +461,13 @@ function climasouth_no_map(){
 		}
 	}
 
+
+
 	if(no_media){
 		jQuery('#cs_top_banner').hide();
 	}
+
+	cs_mapResize();
 
 }
 
@@ -505,6 +509,29 @@ function cs_mapResize(){
 
 
 	debug(jQuery('#main-menu div.navbar').width());
+
+	//JS fix for arabic
+	if(jQuery('body').css('direction')=='rtl'){
+		jQuery('#map_container').css('left','-300px');
+		jQuery('#climasouth_news').css('padding-right','240px');
+		jQuery('#map_container iframe').css('position', 'absolute');
+		jQuery('#map_container iframe').css('left', '0px');
+	  jQuery('#map_container .cs_image_cropper').css('position', 'absolute');
+		jQuery('#map_container .cs_image_cropper').css('left', '0px')
+    jQuery('#home_activities h4.ha').css('margin-right','300px');
+		
+	}
+
+
+	if((jQuery('h1#page-title').html()).trim()=='لمحة عامة والبيانات الرئيسية'){
+		if(jQuery('html').attr('lang')=='en'){
+			jQuery('h1#page-title').html('Overview & key data');
+		}
+		else if(jQuery('html').attr('lang')=='fr'){
+			jQuery('h1#page-title').html('Données de base');
+		}
+	}
+
 
 	//if(mw<700){
 	//		jQuery('#logo img').width(400);
