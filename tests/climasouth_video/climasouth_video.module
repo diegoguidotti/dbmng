@@ -293,7 +293,7 @@ function cs_video_page()
 				<section id="production" class="production-section">
 					<div class="container">
 							<div class="row">
-								<div style="direction: ltr">
+								<div style="direction: ltr;">
 								<div class="col-lg-12">
 									<h1>'.tt('Production Team').'</h1>';
 
@@ -348,7 +348,7 @@ function cs_video_page()
 							$html.='
 
 								
-
+									<div style="direction: rtl; unicode-bidi: embed">
 									<h3>المعلومات والاتصالات</h3>
 
 						تصميم المعلومات والمحرر: جي إتش ماترافيرس ميسانا
@@ -406,7 +406,7 @@ function cs_video_page()
   <br/>© European Commission, 2014.<br/>								
 								
 
-							';
+							</div>';
 						}
 
 							$html.='										

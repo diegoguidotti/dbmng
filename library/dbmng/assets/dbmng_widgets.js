@@ -49,14 +49,20 @@ dbmng_widget_html = function(val, field ){
 
 dbmng_select_form = function(obj_id,  fld, field, id_record, value, more, act ){
 	var html='';
+
+	console.log(field.voc_val);
+
 	html = "<select  name='"+fld+"' id='"+obj_id+"_"+id_record+"_"+fld+"' ";
 	html += Dbmng.layout_get_nullable(field,act);
 	html += " >\n";
 	html += "<option/> \n";	
 	if(field.voc_val){
-		jQuery.each(field.voc_val, function(k, v){
+		jQuery.each(field.voc_val, function(order, val){
 			s = "";
-			debug(k+" "+value+ " " + (k==value));
+			k=val.k;
+			v=val.val;
+
+			//debug(k+" "+value+ " " + (k==value));
 			if(k == value){
 				s = " selected='true' ";
 			}
@@ -67,11 +73,16 @@ dbmng_select_form = function(obj_id,  fld, field, id_record, value, more, act ){
 	return html;
 }
 
-dbmng_select_html = function(val, field ){
+dbmng_select_html = function(key, field ){
 	var ret="-";
 	if(field.voc_val){
-		if(field.voc_val[val])
-			ret  = field.voc_val[val];
+		for(n=0; n<field.voc_val.length; n++){
+			if(field.voc_val[n].k==key){
+				ret=field.voc_val[n].val;
+			}
+		}
+		//if(field.voc_val[key])
+		//	ret  = field.voc_val[key];
 	}
 	return ret;
 }

@@ -601,7 +601,7 @@ function dbmng_get_js_array($aForm, $aParam)
 	$html = "";
   if($aForm!=null){
 		$result = dbmng_get_data($aForm, $aParam);			
-		$html .= '{"records":[';
+		$html .= '{"aa":true, "records":[';
 		
 		$sObj  = "";
 		foreach( $result as $record )
@@ -623,6 +623,24 @@ function dbmng_get_js_array($aForm, $aParam)
 		$sObj = substr($sObj, 0, strlen($sObj)-2);
 	
 		$html .= $sObj . "] ";
+
+		foreach ( $aForm['fields'] as $fld => $fld_value ){
+			
+			if(isset($fld_value['voc_val'])){
+				$old_var=$fld_value['voc_val'];
+				$new_var=Array();
+				foreach ( $old_var as $k => $v )
+					{
+						$o=Array();
+						$o['k']=$k;
+						$o['val']=$v;
+						array_push($new_var, $o);	
+					}
+				
+				
+				$aForm['fields'][$fld]['voc_val']=$new_var;
+			}
+		}
 
 		$html .= ', "aForm":'.json_encode($aForm);
 
@@ -1604,6 +1622,11 @@ function dbmng_ajax_manager(){
 
 			if(isset($_SESSION["dbmng_form_".$_REQUEST['id_table']])){
 		 		$aForm =  dbmng_objectToArray(json_decode(($_SESSION["dbmng_form_".$_REQUEST['id_table']])));
+
+
+				//print_r($aForm);
+
+				//echo json_encode($aForm);
 			}
 			else
 				$aForm = dbmng_get_form_array($_REQUEST['id_table']); 
