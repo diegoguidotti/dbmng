@@ -309,7 +309,7 @@ function cs_video_page()
 
 									'.tt('Social media and promotion').' : Giovanni de Paola – EU Infocentre<br/>
 
-									'.tt('Images courtesy of').' : Alessandro Chiodo, NASA Johnson Space Centre, Bennet Pimpinella, ESAV - Marrakech<br/>
+									'.tt('Images courtesy of').' : '.tt('Alessandro Chiodo, Bennet Pimpinella, ESAV – Marrakech, NASA Johnson Space Centre/ Lorenzo Antico from "Somewhere Out There" (space images)').'<br/>
 									'.tt('Translating Services').' : CoDe translations & services Ltd<br/>
 
 									<h3>'.tt('Climate Change Team').'</h3>
@@ -359,11 +359,8 @@ function cs_video_page()
 
 وسائط التواصل الاجتماعي والدعاية: جيوفاني دي باولا – مركز معلومات الاتحاد الأوروبي
 <br/>
-
-									التقطت الصور بمعرفة: اليساندرو تشودو، وكالة ناسا الفضائية 
-مركز جونسون للفضاء، بينيت بيمبنيلا، 
- المدرسة العليا للفنون البصرية - مراكش
-
+التقطت الصور بمعرفة: اليساندرو تشودو، بينيت بيمبنيلا، المدرسة العليا للفنون البصرية – مراكش، وكالة ناسا الفضائية
+مركز جونسون للفضاء/ لورينزو أنتيكو من "مكان ما في الخارج" (صور فضائية).
 <br/>
 خدمات الترجمة: شركة CoDe translations & services المحدودة" 
 <br/>
@@ -783,7 +780,8 @@ function tt($txt){
 	$tras['Information design & editor']['fr']='Conception de l\'information & éditeur';
 	$tras['Webmaster & IT services']['fr']='Webmestre & services informatiques';
 	$tras['Social media and promotion']['fr']='Médias sociaux et promotion';
-	$tras['Images courtesy of']['fr']='Images de';
+	$tras['Images courtesy of']['fr']='Images gracieusement offertes par';
+	$tras['Alessandro Chiodo, Bennet Pimpinella, ESAV – Marrakech, NASA Johnson Space Centre/ Lorenzo Antico from "Somewhere Out There" (space images)']['fr'] = 'Alessandro Chiodo, Bennet Pimpinella, ESAV – Marrakech, NASA Johnson Space Centre/ Lorenzo Antico extrait de "Somewhere Out There" (images de l’espace)';
 	$tras['Translating Services']['fr']='Services de traduction';
 	
 	$tras['Climate Change Team']['fr']='Équipe changements climatiques';
