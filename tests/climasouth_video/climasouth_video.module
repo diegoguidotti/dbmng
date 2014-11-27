@@ -309,7 +309,7 @@ function cs_video_page()
 
 									'.tt('Social media and promotion').' : Giovanni de Paola – EU Infocentre<br/>
 
-									'.tt('Images courtesy of').' : '.tt('Alessandro Chiodo, Bennet Pimpinella, ESAV – Marrakech, NASA Johnson Space Centre/ Lorenzo Antico from "Somewhere Out There" (space images)').'<br/>
+									'.tt('Images courtesy of').' : '.tt('Alessandro Chiodo, Bennet Pimpinella, ESAV – Marrakech,<br/>NASA Johnson Space Centre/ Lorenzo Antico from "Somewhere Out There" (space images)').'<br/>
 									'.tt('Translating Services').' : CoDe translations & services Ltd<br/>
 
 									<h3>'.tt('Climate Change Team').'</h3>
@@ -781,7 +781,7 @@ function tt($txt){
 	$tras['Webmaster & IT services']['fr']='Webmestre & services informatiques';
 	$tras['Social media and promotion']['fr']='Médias sociaux et promotion';
 	$tras['Images courtesy of']['fr']='Images gracieusement offertes par';
-	$tras['Alessandro Chiodo, Bennet Pimpinella, ESAV – Marrakech, NASA Johnson Space Centre/ Lorenzo Antico from "Somewhere Out There" (space images)']['fr'] = 'Alessandro Chiodo, Bennet Pimpinella, ESAV – Marrakech, NASA Johnson Space Centre/ Lorenzo Antico extrait de "Somewhere Out There" (images de l’espace)';
+	$tras['Alessandro Chiodo, Bennet Pimpinella, ESAV – Marrakech,<br/>NASA Johnson Space Centre/ Lorenzo Antico from "Somewhere Out There" (space images)']['fr'] = 'Alessandro Chiodo, Bennet Pimpinella, ESAV – Marrakech,<br/>NASA Johnson Space Centre/ Lorenzo Antico extrait de "Somewhere Out There" (images de l’espace)';
 	$tras['Translating Services']['fr']='Services de traduction';
 	
 	$tras['Climate Change Team']['fr']='Équipe changements climatiques';
