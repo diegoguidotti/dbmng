@@ -285,6 +285,45 @@ function dbmng_query2array($sql, $aVal)	//dbmng_query($sql, $var=null)
 
 
 /////////////////////////////////////////////////////////////////////////////
+// layout_array2html
+// ======================
+/// This function print on the shtml and array query results
+/**
+\param $aTbl associative array 
+\return             html
+*/
+function dbmng_array2html($aTbl)
+{
+	$html = "";
+	$colcnt = $aTbl['colCount'];
+	$rowcnt = $aTbl['rowCount'];
+	if( $aTbl['rowCount'] != 0 )
+		{
+			$html .= "<table class='dbmng_array2html' >";
+			$html .= "<thead><tr>";
+			//$html .= "<th>[-]</th>";
+			for( $nC = 0; $nC <= $colcnt-1; $nC++ )
+				{
+					$html .= "<th style='text-align:center'>".$aTbl['header'][$nC]."</th>";
+				}
+			$html .= "</tr></thead>";
+			for( $nR = 0; $nR <= $rowcnt-1; $nR++ )
+				{
+					$html .= "<tr>";
+					for( $nC = 0; $nC <= $colcnt-1; $nC++ )
+						{
+							$html .= "<td align='right'>".$aTbl['data'][$nR][$nC]."</td>";
+						}
+					$html .= "</tr>";
+				}
+			$html .= "</table>";
+		}
+
+	
+	return $html;
+}
+
+/////////////////////////////////////////////////////////////////////////////
 // dbmng_fetch_object
 // ======================
 /// Returns the current row of a result set as an object
