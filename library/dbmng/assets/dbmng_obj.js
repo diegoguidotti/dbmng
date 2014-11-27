@@ -1914,6 +1914,47 @@ function dialogClose(){
 
 
 
+function dbmng_export_table(id)
+{
+	var csv='';
+	jQuery.each( jQuery(id+' tr'), function(k,v){
+			v = jQuery(v);
+			
+			if(v.css('display')!='none'){
+							
+				jQuery.each( v.children('td') , function(k2,v2){
+					csv+=jQuery(v2).text()+"\t";
+				}); //end of col
+
+				csv+='\n';
+			}
+		} ); //end of row
+	console.log(csv);
+
+	//var encodedUri = encodeURI(csv);
+	//window.open(encodedUri);
+
+	var pom = document.createElement('a');
+  pom.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv));
+  pom.setAttribute('download', 'export.csv');
+  pom.click();
+
+
+	
+/*
+	var link = document.createElement("a");
+	link.setAttribute("href", encodedUri);
+	link.setAttribute("download", "my_data.csv");
+
+	link.click(); // This will download the data file named "my_data.csv".
+*/
+
+}
+
+
+
+
+
 if (typeof String.prototype.startsWith != 'function') {
   // see below for better implementation!
   String.prototype.startsWith = function (str){
