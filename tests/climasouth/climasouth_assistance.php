@@ -1,14 +1,19 @@
 <?php
 function _climasouth_assistance()
 {
+	global $user;
+	$user = user_load($user->uid);
+	
 	dbmng_add_drupal_libraries();
 	$aForm = _climasouth_create_aForm_assistance();
 	
-	unset($aForm['fields']['req_name']);
-	unset($aForm['fields']['req_email']);
+	if( $user->uid >0 )
+		{
+			unset($aForm['fields']['req_name']);
+			unset($aForm['fields']['req_email']);
+		}
+
 		
-	global $user;
-	$user = user_load($user->uid);
 //	drupal_set_message("<pre>".print_r($user,true)."</pre>");
 
 
@@ -35,9 +40,12 @@ function _climasouth_assistance()
 	$aParam['captcha'] = 1;
 	$aParam['auto_field']['uid']['I'] = $user->uid;
 
-	$aParam['auto_field']['req_name']['I'] = $firstname." ".$lastname;
-	$aParam['auto_field']['req_email']['I'] = $user->mail;
-	
+	if( $user->uid >0 )
+		{
+			$aParam['auto_field']['req_name']['I'] = $firstname." ".$lastname;
+			$aParam['auto_field']['req_email']['I'] = $user->mail;
+		}
+		
 	$html = "";
 	if( !isset($_POST['id_c_voc_topic']) )
 		{
@@ -262,6 +270,7 @@ function _climasouth_mng_request_assistance()
 
 function _climasouth_create_aForm_assistance()
 {
+	global $user;
 	$sql = "select id_c_voc_topic, topic from c_voc_topic";
 	$fields = dbmng_query($sql, array());
 	$varField= array();
