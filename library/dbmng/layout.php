@@ -1351,6 +1351,7 @@ function layout_array_print($aTbl, $bDebug=false)
 			$colcnt = $aTbl['colCount'];
 			$rowcnt = $aTbl['rowCount'];
 			$html .= "<div class='dbmng_debug'>";
+			$html .= "<p style='margin-left:20px;color:magenta;font-size:11px;font-family:\"courier new\"'>SQL: ".$aTbl['sql']."</p>";
 			$html .= "<p style='margin-left:20px;color:magenta;font-size:11px;font-family:\"courier new\"'>rowCount: ".$aTbl['rowCount']."</p>";
 			$html .= "<p style='margin-left:20px;color:magenta;font-size:11px;font-family:\"courier new\"'>colCount: ".$aTbl['colCount']."</p>";
 			if( $aTbl['rowCount'] != 0 )
