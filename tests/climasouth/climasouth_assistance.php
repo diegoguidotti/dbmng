@@ -57,8 +57,11 @@ function _climasouth_assistance()
 				{
 					if( intval($_POST['captcha']) == intval($_POST['dbmng_x'])+intval($_POST['dbmng_y']) )
 						{
-							$_POST['req_name']  = $firstname." ".$lastname;
-							$_POST['req_email'] = $user->mail;
+							if( $user->uid >0 )
+								{
+									$_POST['req_name']  = $firstname." ".$lastname;
+									$_POST['req_email'] = $user->mail;
+								}
 							
 							$sql = "select * from c_voc_topic where id_c_voc_topic = :id_c_voc_topic";
 							$var = array(':id_c_voc_topic'=> $_POST['id_c_voc_topic']);
@@ -73,8 +76,8 @@ function _climasouth_assistance()
 							// To send HTML mail, the Content-type header must be set
 							$headers  = 'MIME-Version: 1.0' . "\r\n";
 							$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-							$headers .= 'From: '.$_POST['req_email'].'' . "\r\n" .
-											    'Reply-To: '.$_POST['req_email']."\r\n" .
+							$headers .= 'From: '.$email.'' . "\r\n" .
+											    'Reply-To: '.$email."\r\n" .
 											    'X-Mailer: PHP/' . phpversion();
 
 							$aInput['to'] = $email;
@@ -129,11 +132,12 @@ function _climasouth_assistance()
 
 function climasouth_mailto($aInput)
 {
-	$htmlbody = "Organisation: ".$aInput['req_organisation']."<br/>"; //" Your Mail Contant Here.... You can use html tags here...";
+	$htmlbody = "From: <a href='mailto:".$aInput['email']."'>".$aInput['email']."</a><br/>";
+	$htmlbody .= "Organisation: ".$aInput['req_organisation']."<br/>"; //" Your Mail Contant Here.... You can use html tags here...";
 	$htmlbody .= $aInput['message']; //" Your Mail Contant Here.... You can use html tags here...";
 	$to = $aInput['to']; //Recipient Email Address
 	$subject = $aInput['subject']; //"Test email with attachment"; //Email Subject
-	$email = $aInput['email'];
+	$email = $aInput['to'];
 	
 	$headers = "From: ".$email."\r\nReply-To: ".$email;
 	$random_hash = md5(date('r', time()));
