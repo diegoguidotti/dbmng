@@ -205,7 +205,7 @@ function _climasouth_toolbar()
 	$html .= "<ul id='climasouth_toolbar_ul'>";
 	$html .= "<li class='climasouth_toolbar'><a href='http://capacity4dev.ec.europa.eu/'>Capacity4dev.eu</a></li>";
 	$html .= "<li class='climasouth_toolbar'>|</li>";
-	$html .= "<li class='climasouth_toolbar'><a href='http://www.enpi-info.eu/'>EU Neighbourhood InfoCenter</a></li>";
+	$html .= "<li class='climasouth_toolbar'><a href='http://www.enpi-info.eu/'>".t('EU Neighbourhood InfoCenter')."</a></li>";
 	$html .= "<li class='climasouth_toolbar'>|</li>";
 	$html .= "<li class='climasouth_toolbar'>".l(t('CC Knowledge navigator'),'navigator')."</li>";
 	$html .= "<li class='climasouth_toolbar'>|</li>";
