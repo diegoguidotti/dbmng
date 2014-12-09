@@ -232,7 +232,7 @@ function _climasouth_mng_request_assistance()
 						{
 							foreach( $sres as $r)
 								{
-									$html .= "<br/>num. " . $nrecs . " reply";
+									$html .= "<br/>".t('num').". " . $nrecs . " reply";
 								}
 						}
 					else	

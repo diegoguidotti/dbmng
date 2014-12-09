@@ -111,8 +111,8 @@ function climasouth_leaflet(data, aForm, aParam){
 
 	
 	var html = "<div class='climasouth_popup'>";
-		html +='<div class="cs_left"><h3>South Mediterranean Region</h3></div>';
-		html += '<div class="cs_right"><b>N. of countries:</b><br/>9<br/><b>Population (millions):</b><br/> 212.4<br/><b>GDP ($billions):</b><br/> 694.2<br/><b>GDP per capita ($):</b><br/> 3665<br/></div></div>';
+		html +='<div class="cs_left"><h3>'+Drupal.t('South Mediterranean Region')+'</h3></div>';
+		html += '<div class="cs_right"><b>'+Drupal.t('N. of countries')+':</b><br/>9<br/><b>'+Drupal.t('Population (millions)')+':</b><br/> 212.4<br/><b>'+Drupal.t('GDP ($ billions)')+':</b><br/> 694.2<br/><b>'+Drupal.t('GDP per capita')+' ($):</b><br/> 3665<br/></div></div>';
 		jQuery('#map_info_container').html(html);
 
 
@@ -161,7 +161,7 @@ function climasouth_leaflet(data, aForm, aParam){
 			html+=v.country_name;
 			//html+='</a>';
 			html+='</h3></div>';
-			html += '<div class="cs_right"><b>Population (millions):</b><br/>'+population+'<br/><b>GDP ($ billions):</b><br/>'+gdp+'<br/><b>GNI per capita ($):</b><br/>'+gdp_pc+'<b><br/>Human Development Index:</b><br/>'+hdi+'</div></div>';
+			html += '<div class="cs_right"><b>'+Drupal.t('Population (millions)')+':</b><br/>'+population+'<br/><b>'+Drupal.t('GDP ($ billions)')+':</b><br/>'+gdp+'<br/><b>'+Drupal.t('GNI per capita')+' ($):</b><br/>'+gdp_pc+'<b><br/>'+Drupal.t('Human Development Index')+':</b><br/>'+hdi+'</div></div>';
 
 			//html += '<a hrgef="'+base_path+'climasouth/country?id_c_country='+v.id_c_country+'">'+Drupal.t('go to page')+'</a></div>';
 			//feature.bindPopup(html);
@@ -328,12 +328,12 @@ function searchTile(val){
 		var html='';
 		var sel='';
 
-		sel+='<select id="tag_sel_country"><option>Choose a country</option></select>';
-		sel+='<select id="tag_sel_tags"><option>Choose a Tag</option></select>';
-		sel+='<select id="tag_sel_subject"><option>Choose a Subject</option></select>';
-		sel+='<select id="tag_sel_language"><option>Choose a Language</option></select>';
-		sel+='<select id="tag_sel_year"><option>Choose a Year</option></select>';
-		sel+='<select id="tag_sel_file_format"><option>Choose a file format</option></select>';
+		sel+='<select id="tag_sel_country"><option>'+Drupal.t('Choose a country')+'</option></select>';
+		sel+='<select id="tag_sel_tags"><option>'+Drupal.t('Choose a Tag')+'</option></select>';
+		sel+='<select id="tag_sel_subject"><option>'+Drupal.t('Choose a Subject')+'</option></select>';
+		sel+='<select id="tag_sel_language"><option>'+Drupal.t('Choose a Language')+'</option></select>';
+		sel+='<select id="tag_sel_year"><option>'+Drupal.t('Choose a Year')+'</option></select>';
+		sel+='<select id="tag_sel_file_format"><option>'+Drupal.t('Choose a file format')+'</option></select>';
 
 		jQuery("#tag_sel_container").html(sel);
 
@@ -372,7 +372,7 @@ function searchTile(val){
 
 		var searched='<div id="searched_tags">';
 		if(search_tag.length>0){
-			searched+='<div  class="searched_label">Resources has been filtered by: </div>'
+			searched+='<div  class="searched_label">'+Drupal.t('Resources has been filtered by')+': </div>'
 			for(n=0; n<search_tag.length; n++){
 				searched+='<div class="searched">'+search_tag[n]+'<span ><sup>X</sup></span></div>';
 			}

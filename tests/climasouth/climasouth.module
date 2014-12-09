@@ -314,9 +314,9 @@ function _climasouth_news_rss()
 	$rss = '<?xml version="1.0" encoding="utf-8"?>';
 	$rss .= '<rss version="2.0">';
 	$rss .= '<channel>';
-	$rss .= '<title>ClimaSouth feed</title>';
+	$rss .= '<title>'.t('ClimaSouth feed').'</title>';
 	$rss .= '<link>http://www.climasouth.eu/</link>';
-	$rss .= '<description>News from the ClimaSouth News and Events web site.</description>';
+	$rss .= '<description>'.t('News from the ClimaSouth News and Events web site').'.</description>';
 	
 	$res = dbmng_query("select * from c_news order by date_from desc ", array());
 
@@ -411,25 +411,49 @@ function _climasouth_news($block)
 		$node = $rec->linked_page;
 		if(isset($date_to))
 			$date_to = new DateTime($rec->date_to);
-
-		$days = $date_from->format("d");
-		$months = $date_from->format("F");
-		$year = $date_from->format("Y");
 		
-		if( isset($date_to) )
+		global $language;
+		if( $language->language != 'ar' )
 			{
-				$date_to = new DateTime($rec->date_to);
-				$days .= "-".$date_to->format("d");
+				$days = $date_from->format("d");
+				$months = $date_from->format("F");
+				$year = $date_from->format("Y");
 				
-				if( $months != $date_to->format("F") )
-					$months .= " ".$date_to->format("F");
+				if( isset($date_to) )
+					{
+						$date_to = new DateTime($rec->date_to);
+						$days .= "-".$date_to->format("d");
+						
+						if( $months != $date_to->format("F") )
+							$months .= " ".$date_to->format("F");
 
-				if( $year != $date_to->format("Y") )
-					$months .= " ".$date_to->format("Y");
+						if( $year != $date_to->format("Y") )
+							$months .= " ".$date_to->format("Y");
+					}
+				$date = $days." ".$months." ".$year;
 			}
-		$date = $days." ".$months." ".$year;
-		
-		$html.="<li class='climasouth_news'><h3>".l($title,$node).'</h3>'.strtoupper($place) . " - " . $date . "<br/></li>";
+		else
+			{
+				$days = $date_from->format("d");
+				$months = $date_from->format("m");
+				$year = $date_from->format("y");
+				
+				if( isset($date_to) )
+					{
+						$date_to_ar = new DateTime($rec->date_to);
+						$days .= "-".$date_to_ar->format("d");
+						
+						if( $months != $date_to_ar->format("m") )
+							$months .= " ".$date_to_ar->format("m");
+
+						if( $year != $date_to_ar->format("y") )
+							$months .= " ".$date_to_ar->format("y");
+					}
+					
+				$your_date = $year."-".$months . "-" . $days; //date('y-m-d'); // The Current Date
+				$date = date_convert2arabic($your_date);
+			}
+		$html.="<li class='climasouth_news'><h3>".l(t($title),$node).'</h3>'.strtoupper(t($place)) . " - " . $date . "<br/></li>";
 	}
 	
 	$html .= "</ul>";
@@ -973,4 +997,68 @@ function _climasouth_video_contest(){
 
 
 	echo $html;
+}
+
+function date_convert2arabic($your_date)
+{
+	$months = array(
+		"Jan" => "يناير",
+		"Feb" => "فبراير",
+		"Mar" => "مارس",
+		"Apr" => "أبريل",
+		"May" => "مايو",
+		"Jun" => "يونيو",
+		"Jul" => "يوليو",
+		"Aug" => "أغسطس",
+		"Sep" => "سبتمبر",
+		"Oct" => "أكتوبر",
+		"Nov" => "نوفمبر",
+		"Dec" => "ديسمبر"
+	);
+
+	$en_month = date("M", strtotime($your_date));
+
+	foreach ($months as $en => $ar) {
+		if ($en == $en_month) {
+			$ar_month = $ar;
+		}
+	}
+
+	$find = array (
+
+		"Sat",
+		"Sun",
+		"Mon",
+		"Tue",
+		"Wed" ,
+		"Thu",
+		"Fri"
+
+	);
+
+	$replace = array (
+		
+		"السبت",
+		"الأحد",
+		"الإثنين",
+		"الثلاثاء",
+		"الأربعاء",
+		"الخميس",
+		"الجمعة"
+
+	);
+
+	$ar_day_format = date('D'); // The Current Day
+
+	$ar_day = str_replace($find, $replace, $ar_day_format);
+
+
+	header('Content-Type: text/html; charset=utf-8');
+	$standard = array("0","1","2","3","4","5","6","7","8","9");
+	$eastern_arabic_symbols = array("٠","١","٢","٣","٤","٥","٦","٧","٨","٩");
+	$current_date = $ar_day.' '.date('d').' / '.$ar_month.' / '.date('Y');
+	$arabic_date = str_replace($standard , $eastern_arabic_symbols , $current_date);
+
+	// Echo Out the Date
+	return $arabic_date;
 }

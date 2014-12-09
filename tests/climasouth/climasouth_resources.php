@@ -255,10 +255,10 @@ function  _climasouth_resource_search(){
 	
 		if($n==0){
 			if ( !($user->uid)){
-				$html.='There are no documents available to non-registered users. Please login.';
+				$html.=t('There are no documents available to non-registered users. Please login.');
 			}
 			else{
-				$html.='There are no documents available.';
+				$html.=t('There are no documents available.');
 			}
 		}
 
@@ -279,7 +279,7 @@ function _add_filter($filter_label, $field_name, $q){
 
 	if($rc->rowCount()>0){	
 
-		$html=$filter_label.'<br/><select name="'.$field_name.'"><option value="*">All</option>';
+		$html=$filter_label.'<br/><select name="'.$field_name.'"><option value="*">'.t('All').'</option>';
 		foreach($rc as $r)
 			{
 				$r=array_values((array) $r);
