@@ -363,6 +363,15 @@ function dbmng_manager()
 												'readonly' => 0,
 												 'skip_in_tbl' => '1'
 									),							
+								'param' =>
+									array( 'label' => t('Param [json]'),
+												 'label_long' => t('Param [json]'),
+												 'key' => 0,
+												 'type'  => 'text',
+												 'widget' => 'textarea',
+												'readonly' => 0,
+												 'skip_in_tbl' => '1'
+									),							
 								'field_function'     => 
 									array('label'   => t('Fnc'), 
 												'label_long' => t('Field function'),
