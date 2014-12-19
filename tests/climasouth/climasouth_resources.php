@@ -40,6 +40,8 @@ function _climasouth_workspace($typeres = null, $edit_id = null)
 					//get the form!!!
 					$id_table = $table_name;
 					$aForm    = dbmng_get_form_array(($id_table));
+
+					
 					
 					if( $id_table == "c_resource" )
 						{
@@ -131,8 +133,17 @@ function _climasouth_workspace($typeres = null, $edit_id = null)
 function  _climasouth_resource_search(){
 	dbmng_add_drupal_libraries();
 	global $user;
+	global $language ;
+	$lang = $language->language ;
+
 
 	$html="";
+
+		$tit=t('Resources');
+		$html.="<script>jQuery(function(){jQuery('#page-title').html('".$tit."'); jQuery(document).prop('title', '".$tit."'); }); </script>";
+
+
+	
 	$show_list=true;
 
 	if(isset($_REQUEST['id_c_resource']) || isset($_REQUEST['insert_resource']) ){
@@ -153,7 +164,7 @@ function  _climasouth_resource_search(){
 
 	if($show_list){
 		
-		$html ='<div id="tag_container">&nbsp;</div>';
+		$html .='<div id="tag_container">&nbsp;</div>';
 		$html .='<div id="tag_sel_container">&nbsp;</div>';
 
 		$html .='<div id="resource_search">';
@@ -170,12 +181,12 @@ function  _climasouth_resource_search(){
 			$fs=strtolower($_REQUEST['free_search']);
 		}
 		
-		$html.= '<div style="clear:both; width:100%"><input placeHolder="Search across resources" id="free_search" type="input" name="free_search" value="'.$fs.'" /></div>';
+		$html.= '<div style="clear:both; width:100%"><input placeHolder="'.t('Search across resources').'" id="free_search" type="input" name="free_search" value="'.$fs.'" /></div>';
 
 		$html.='<div id="linkToKB"><a href="'.base_path().'navigator">'.t('CC Knowledge Navigator').'</a></div>';
 		if(in_array('administrator', $user->roles) || in_array('experts', $user->roles)){
 			$edit=true;
-			$html.='<div id="insert_resource"><a href="'.base_path().'climasouth/resource_search?insert_resource=true&act=ins">'.t('Insert a new resource').'</a></div>';
+			$html.='<div id="insert_resource"><a href="'.base_path().$lang.'/climasouth/resource_search?insert_resource=true&act=ins">'.t('Insert a new resource').'</a></div>';
 		}
 
 		//$html.='</td><td width="500px" valign="top"><div id="tag_cloud"></div></td></table>';

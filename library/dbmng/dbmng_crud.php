@@ -28,8 +28,15 @@ function dbmng_create_form_process($aForm, $aParam, $actiontype="")
 						$ret=dbmng_update($aForm, $aParam);
 					
 					// insert record
-					if($_REQUEST['act']=='do_ins')
+					if($_REQUEST['act']=='do_ins'){
 						$ret=dbmng_insert($aForm, $aParam);		
+
+						if(isset($aParam['redirect'])){
+							header("Location: " . $aParam['redirect']);
+							exit();
+						}
+
+					}
 					
 					// delete record
 					if($_REQUEST['act']=='del')
@@ -55,6 +62,11 @@ function dbmng_create_form_process($aForm, $aParam, $actiontype="")
 										drupal_set_message($ret['error']);
 									else
 										echo '<div class="message error">'.$ret['error'].'</div>';
+								}
+								else{
+
+									
+
 								}
 						}
 				}

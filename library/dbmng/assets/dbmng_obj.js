@@ -687,16 +687,22 @@ Dbmng.prototype.uploadImage = function (v) {
 
 	fileURL=v.imageURI;
 
-	
+
 
 //  var uri = encodeURI(base_call+'ajax_mobile.php');
   
 	var uri = encodeURI(this.ajax_url);
 debug("URI: "+uri);
+
 	var options = new FileUploadOptions();
 	options.fileKey="file";
 	options.fileName=fileURL.substr(fileURL.lastIndexOf('/')+1);
 	options.mimeType="text/plain";
+	options.chunkedMode = false;
+	options.headers = {
+		  Connection: "close"
+	};
+
 
 		var params = new Object();
     params.upload_picture = "ok";
@@ -708,7 +714,7 @@ debug("URI: "+uri);
     options.params = params;
 	//var headers={'upload_picture':'ok'};
 
-	//options.headers = headers;
+	
 
 	var ft = new FileTransfer();
 	obj.current_image++;

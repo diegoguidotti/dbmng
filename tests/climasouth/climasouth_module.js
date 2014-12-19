@@ -82,7 +82,7 @@ function climasouth_leaflet(data, aForm, aParam){
 
 
 	//add a background layer	
-	var back_map = L.tileLayer.wms("http://95.240.35.64/geoserver_ae/wms", {
+	var back_map = L.tileLayer.wms("http://95.225.174.45/geoserver_ae/wms", {
 	  layers: 'climasouth:countries',
 	  format: 'image/png',
 //	  'BGCOLOR': '0xcfeaf3'					  			
@@ -539,7 +539,105 @@ function cs_mapResize(){
 	//else {
 	//}
 
+	var mobile=false;
+		if(mobile){
+			jQuery('#main-nav ul').hide();
+
+
+			html='';
+
+				  html+='<div class="navbar"><div class="navbar-inner"><div class="container">';
+
+						html+='<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">        <span class="icon-bar"></span>        <span class="icon-bar"></span>        <span class="icon-bar"></span> </a>'
+
+						html+='    ';
+						html+='<div class="nav-collapse collapse">'
+							html+=' <ul class="nav" >';
+						
+							jQuery.each(jQuery('#main-nav > ul > li'), function(k,v){
+
+								//console.log(v);
+								v=jQuery(v);
+
+								a=v.children('a');
+
+								sub=v.children('ul');
+
+								var cl='';
+								var at=''
+								if(sub.length>0){
+									cl+='dropdown'
+									at+=' class="dropdown-toggle" data-toggle="dropdown"';
+								}
+								
+								html+='<li class="'+cl+'"><a '+at+' href="'+a.attr('href')+'">'+a.text()+'</a>';
+								//console.log(sub);
+
+								if(sub.length>0){
+									html+='<ul class="dropdown-menu">';
+
+									jQuery.each(jQuery(sub).children('li'), function(k,sa){
+										sa=jQuery(jQuery(sa).children('a'));	
+										html+='<li><a href="'+sa.attr('href')+'">'+sa.text()+'</a></li>';
+									});
+									html+='</ul>';
+								}
+				
+								html+='</li>';
+
+							});
+							//Start menu
+
+								html+='      <li class="active"><a href="#">Home</a></li>';
+
+								html+='<li class="dropdown"><a   href="#">Link</a>';
+
+									html+='                        <ul class="dropdown-menu"><li><a href="#">Action</a></li><li><a href="#">Another action</a></li>                        </ul>';
+								html+='</li>';
+
+								html+='<li><a href="#">Link</a></li>';
+
+							//End menu
+
+							html+='</ul>';
+					html+='</div></div></div></div>';
+ 
+   
+
+
+
+/*
+			html='<nav class="navbar navbar-default" role="navigation"><div class="container-fluid">';
+    		html+='<div class="navbar-header">';
+      		html+='<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>';
+
+      	html+='<a class="navbar-brand" href="#">Brand</a>    </div>';
+
+			html+='</div></div>'
+*/
+
+			jQuery('#main-nav').html(html);
+			jQuery('#cs_top_banner').hide();
+
+			jQuery('#main-menu ul').css('background-color', '#DD6659');
+
+			jQuery('#main-menu li').css('background-color', '#DD6659');
+
+
+		}
+		else{
+
+			jQuery('#cs_top_banner').show();
+
+	}
+
 
 }
+
+
+String.prototype.endsWith = function(suffix) {
+    return this.indexOf(suffix, this.length - suffix.length) !== -1;
+};
+
 
 

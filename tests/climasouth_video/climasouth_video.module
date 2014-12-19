@@ -19,7 +19,17 @@ function climasouth_video_block_view($delta='')
 	switch($delta) 
 		{
 			case 'cs_menu_plus' :
-				$block['content'] = cs_menu_plus();
+
+				$node = menu_get_object();
+				global $language;	
+				$lang="en";
+				if($language->language){
+					$lang=$language->language;
+				}
+
+				if($node)
+					$block['content'] = cs_menu_plus($node->nid, $lang, false);
+
 				break;
 		}
 	
@@ -49,33 +59,97 @@ function climasouth_video_permission() {
 }
 
 
-function cs_menu_plus()
+function cs_menu_plus($nid, $lang, $showFigli)
 {
 	$html = "";
-	$node = menu_get_object();
-	global $language;	
-	$lang="en";
-	if($language->language){
-		$lang=$language->language;
-	}
-
-	if ($node && $node->nid) {
+	
+	if ($nid) {
 				
 		//$q=" SELECT c.link_path, c.link_title, c.has_children FROM clima_menu_links o , clima_menu_links p , clima_menu_links c ";
 		//$q.=" WHERE o.menu_name='main-menu' AND o.link_path='node/".$node->nid."' AND o.plid=p.mlid AND c.plid=p.mlid AND o.language='".$lang."' order by c.weight ";
 
-		$q="  select c.link_path, c.link_title, c.has_children from clima_menu_links p , clima_menu_links c WHERE p.mlid in ( ";
-		$q.= "select max(plid) from clima_menu_links WHERE menu_name='main-menu' AND link_path='node/".$node->nid."' AND language='".$lang."' )  AND  c.plid=p.mlid order by c.weight";
+		$q="  select c.link_path, c.link_title, c.has_children, p.p1 from clima_menu_links p , clima_menu_links c WHERE p.mlid in ( ";
+		if($showFigli){
+			$q.= "select max(mlid) from clima_menu_links WHERE menu_name='main-menu' AND link_path='node/".$nid."' AND language='".$lang."' "; 			
+		}
+		else{
+			$q.= "select max(plid) from clima_menu_links WHERE menu_name='main-menu' AND link_path='node/".$nid."' AND language='".$lang."' "; 
+		}
+
+    $q.=" ) AND  c.plid=p.mlid order by c.weight";
+
+
+		//$html.=$q;
 
 		$res = dbmng_query($q, array());
 
 		//$html.=$q;
-		$html.="<ul id='cs_menu_plus'>";
+		$html.="<div id='cs_menu_plus'>";
+
+		$parent_menu;
+
 		foreach( $res as $rec )
 			{
-				$html.="<li>".l($rec->link_title, $rec->link_path).'</li>';
+				$cl='';
+				if($rec->link_path == 'node/'.$nid )
+					$cl=' active ';
+
+
+				$parent_menu=$rec->p1;
+
+				$html.="<div class='cs_menu_plus2 ".$cl."'>".l($rec->link_title, $rec->link_path);
+				if($rec->has_children=='1'){
+					$path=$rec->link_path;
+					//$html.=' - '.substr($path,0,4).' - ';
+					if(substr($path,0,5)=='node/'){
+							$smn=substr($path,5, strlen($path));
+							//$html.= 'sm!!'.$smn ;
+
+						  $html.=cs_menu_plus($smn, $lang, true);
+					}
+				}
+
+				$html.='</div>';
 			}
-		$html.='</ul>';
+		$html.='</div>';
+
+
+		if(!$showFigli && isset($parent_menu)){
+			
+
+
+			
+			
+			$q2= "SELECT  link_path FROM clima_menu_links c WHERE mlid=".$parent_menu;
+			
+			$res = dbmng_query($q2, Array());
+
+			if($res ) {
+				$lp = dbmng_fetch_object($res)->link_path;
+
+				$html.='<script> jQuery(function(){';
+
+				$html.="
+					var parent='".$lp."';
+
+					jQuery.each(jQuery('#main-nav ul.menu > li > a'), function(k,v){ 
+						var m=jQuery(v);	
+						console.log(m.prop('href')+' '+parent);
+
+						if(m.prop('href').endsWith(parent)){
+							console.log('ok');
+							m.addClass('active-trail');
+
+							m.parent().addClass('active-trail');
+						}
+
+				});
+	";
+
+				$html.='}); </script>';
+			}
+
+		}
 		
 			
 	}

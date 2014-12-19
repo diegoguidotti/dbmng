@@ -516,6 +516,21 @@ display:none !important;
   text-transform: uppercase;
 }
 
+
+#cs_menu_plus .cs_menu_plus2{
+	margin:5px;
+	padding-left: 15px;
+  padding-bottom:12px;
+}
+
+#cs_menu_plus .cs_menu_plus2 a.active{
+	color: #000;
+}
+
 #map_countries a{
   color: #DD6659;
+}
+
+#flag_container{
+width:500px;
 }
