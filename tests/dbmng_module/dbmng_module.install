@@ -3,7 +3,7 @@ include_once "sites/all/libraries/dbmng/dbmng.php";
 
 /* 
 =====================================
-	Writing .install files
+	Writing .install files 
 	https://drupal.org/node/323314
 =====================================
 */
