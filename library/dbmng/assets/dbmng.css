@@ -243,3 +243,7 @@ tr.dbmng_subtable td.dbmng_subtable {
  padding-bottom: 20px;	
 }
 
+fieldset.dbmng_fieldset {
+	width: 700px;
+	padding-top: 20px;
+}
