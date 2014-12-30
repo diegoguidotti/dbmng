@@ -859,6 +859,13 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 
 											if( $bViewFld ) //$_REQUEST['act'] == 'ins' || $_REQUEST['act'] == 'upd' || $is_searchable )
 												{
+													if( isset($fld_value['fieldset']) )
+														if( $fld_value['fieldset'] == 'start' )
+															{
+																$html .= "<fieldset class='dbmng_fieldset'>";
+																$html .= "<legend>".$fld_value['fieldset_name']."</legend>";
+															}
+															
 													$html.='<div class="dbmng_form_row dbmng_form_field_'.$fld.'">&nbsp;';
 													if( !isset($aParam['hide_label']) )
 														{
@@ -943,9 +950,17 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 																
 															$html .= layout_form_input($aInput);// ( $fld, $fld_value, $value, $more );		
 														}
+													
 													$html.='</div>';
 													
 													$html.='</div>';
+													
+													if( isset($fld_value['fieldset']) )
+														if( $fld_value['fieldset'] == 'end' )
+															{
+																$html .= "</fieldset>";
+															}
+													
 													if( isset($aParam['ui']['fld_separator']) )
 														{
 															if( $aParam['ui']['fld_separator'] == 1 )
