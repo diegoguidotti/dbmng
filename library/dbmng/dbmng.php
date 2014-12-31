@@ -859,11 +859,13 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 
 											if( $bViewFld ) //$_REQUEST['act'] == 'ins' || $_REQUEST['act'] == 'upd' || $is_searchable )
 												{
-													if( isset($fld_value['fieldset']) )
-														if( $fld_value['fieldset'] == 'start' )
+													if( isset($fld_value['fieldset_start']) )
+														if( $fld_value['fieldset_start'] == 'start' )
 															{
+																$show = '<a onClick="javascript:jQuery(\'#'.$fld_value['fieldset_id'].'\').toggle()">'.t('Show').'</a>';
 																$html .= "<fieldset class='dbmng_fieldset'>";
-																$html .= "<legend>".$fld_value['fieldset_name']."</legend>";
+																$html .= "<legend>".$show." ".$fld_value['fieldset_name']."</legend>";
+																$html .= "<div id='".$fld_value['fieldset_id']."' style='display:none'>";
 															}
 															
 													$html.='<div class="dbmng_form_row dbmng_form_field_'.$fld.'">&nbsp;';
@@ -955,9 +957,10 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 													
 													$html.='</div>';
 													
-													if( isset($fld_value['fieldset']) )
-														if( $fld_value['fieldset'] == 'end' )
+													if( isset($fld_value['fieldset_end']) )
+														if( $fld_value['fieldset_end'] == 'end' )
 															{
+																$html .= "</div>";
 																$html .= "</fieldset>";
 															}
 													
