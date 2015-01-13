@@ -523,12 +523,12 @@ Dbmng.prototype.syncData = function() {
 							if(v.ok==1){
 								delete obj.aData.records[k];
 								delete obj.aData.deleted[k];
-								dialogAppend('Record deleted');							
+								dialogAppend('Record deleted', obj.aParam.mobile);							
 							}
 							else{
 								obj.aData.records[k].error=v.error;
 								error++;
-								dialogAppend('Delete Record Error');	
+								dialogAppend('Delete Record Error', obj.aParam.mobile);	
 							}
 						});
 					}
@@ -556,12 +556,12 @@ Dbmng.prototype.syncData = function() {
 								obj.aData.records[k].record[pk_key] = v.inserted_id;
 								delete obj.aData.inserted[k];	
 								obj.aData.records[k].error='';	
-								dialogAppend('Record inserted');												
+								dialogAppend('Record inserted',obj.aParam.mobile);												
 
 							}
 							else{														
 									obj.aData.records[k].error=v.error;
-									dialogAppend('Insert Record Error');	
+									dialogAppend('Insert Record Error',obj.aParam.mobile);	
 									error++;
 							}
 						});
@@ -576,7 +576,7 @@ Dbmng.prototype.syncData = function() {
 									obj.aData.records[k].state='ok';	
 									obj.aData.records[k].error='';						
 									delete obj.aData.updated[k];	
-									dialogAppend('Record updated');		
+									dialogAppend('Record updated',obj.aParam.mobile);		
 
 								}
 								else{
@@ -586,16 +586,16 @@ Dbmng.prototype.syncData = function() {
 							else{		
 								obj.aData.records[k].error=v.error;
 								error++;
-								dialogAppend('Update Record Error');
+								dialogAppend('Update Record Error',obj.aParam.mobile);
 							}
 						});
 					}
 
 					if(error==0){
-						dialogAppend("All the data has been uploaded correctly");
+						dialogAppend("All the data has been uploaded correctly",obj.aParam.mobile);
 					}
 					else{
-						dialogAppend("Some error occurred during data uploading. Records affected: "+error);
+						dialogAppend("Some error occurred during data uploading. Records affected: "+error,obj.aParam.mobile);
 
 					}
 
@@ -627,10 +627,10 @@ Dbmng.prototype.syncData = function() {
 						obj.current_image=0;
 
 						if(	img_to_upload.length>0){
-							dialogAppend("Start pictures uploading ("+img_to_upload.length+") ");
+							dialogAppend("Start pictures uploading ("+img_to_upload.length+") ",obj.aParam.mobile);
 						}
 						else{
-								dialogAppend("There are no picture to be uploaded ");
+								dialogAppend("There are no picture to be uploaded ",obj.aParam.mobile);
 								dialogClose();
 						}		
 
@@ -660,7 +660,7 @@ Dbmng.prototype.syncData = function() {
 				},
 				error: function (xhr, ajaxOptions, thrownError){
 
-					dialogAppend("The server replied with an error: "+thrownError);
+					dialogAppend("The server replied with an error: "+thrownError,obj.aParam.mobile);
 					dialogClose();
 			  	console.log(xhr);
 					console.log(ajaxOptions);
@@ -720,7 +720,7 @@ debug("URI: "+uri);
 	obj.current_image++;
 	var ci=obj.current_image;
 
-	dialogAppend('Uploading image '+ci+': <span id="upload_prog_'+ci+'"></span> ');	
+	dialogAppend('Uploading image '+ci+': <span id="upload_prog_'+ci+'"></span> ',obj.aParam.mobile);	
 
 	ft.onprogress = function(progressEvent) {
 		//console.log("AAAAAAAAAAAAAAAAAAAAAAA "+progressEvent.loaded +" "+ progressEvent.total);
@@ -764,7 +764,7 @@ debug("URI: "+uri);
 		}	
 
 		, function (error) {
-				dialogAppend('Error during image uploading '+error.code);
+				dialogAppend('Error during image uploading '+error.code,obj.aParam.mobile);
 				dialogClose();
 				//alert("An error has occurred: Code = " + error.code);
 				console.log("upload error source " + error.source);
@@ -798,7 +798,7 @@ Dbmng.prototype.uploadedImage = function (gui, fld_name, ci, img_uri) {
 	}
 	else{
 		console.log("XXX Not found "+gui+" "+fld_name+" "+obj.id);
-		dialogAppend('Image uploaded ');	
+		dialogAppend('Image uploaded ',obj.aParam.mobile);	
 
 		
 		
@@ -990,6 +990,8 @@ Dbmng.prototype.createRow = function (value, id_record) {
 								}
 							}	
 							else{
+								if(html_value=='')
+									html_value='&nbsp;';
 								html_row += "<td>" + html_value + "</td>";
 							}
 						}
@@ -1902,12 +1904,12 @@ function dialogStart (message) {
 }
 
 
-function dialogAppend(message){
+function dialogAppend(message, is_mobile){
 	try{
 		console.log(message);
-		if(obj.aParam.mobile)
+		if(is_mobile)
 			jQuery("#dialog_save_content").append('<br/>'+message);
-	}
+		}
 	catch(e){
 		console.log(e);
 	}

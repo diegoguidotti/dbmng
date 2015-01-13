@@ -43,7 +43,7 @@ dbmng_widget_form = function(obj_id,  fld, field, id_record, value, more, act ){
 * dbmng_*_html transform the record value in html fields
 */
 dbmng_widget_html = function(val, field ){
-	var ret  = val;
+	var ret  = val;	
 	return ret;
 }
 
@@ -59,8 +59,14 @@ dbmng_select_form = function(obj_id,  fld, field, id_record, value, more, act ){
 	if(field.voc_val){
 		jQuery.each(field.voc_val, function(order, val){
 			s = "";
-			k=val.k;
-			v=val.val;
+			if(typeof val.k !== 'undefined'){
+				k=val.k;
+				v=val.val;
+			}
+			else{
+				k=order;
+				v=val;
+			}
 
 			//debug(k+" "+value+ " " + (k==value));
 			if(k == value){

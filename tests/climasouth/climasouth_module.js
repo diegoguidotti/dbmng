@@ -627,7 +627,7 @@ function cs_mapResize(){
 		}
 		else{
 
-			jQuery('#cs_top_banner').show();
+			//jQuery('#cs_top_banner').show();
 
 	}
 
