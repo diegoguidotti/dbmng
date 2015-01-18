@@ -65,7 +65,7 @@
 			
 		}
 
-
+/*
 	$aQueries=Array();
 
 	//$aQueries[0]=Array();
@@ -77,6 +77,7 @@
 	
 
 	print_r(dbmng_transactions($aQueries));
+*/
 
 
 

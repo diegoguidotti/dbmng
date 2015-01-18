@@ -600,29 +600,60 @@ function dbmng_get_js_array($aForm, $aParam)
 		
 	$html = "";
   if($aForm!=null){
-		$result = dbmng_get_data($aForm, $aParam);			
-		$html .= '{"aa":true, "records":[';
-		
-		$sObj  = "";
-		foreach( $result as $record )
-			{
-				$sObj .= "{";
-				//get the query results for each field
-				foreach ( $aForm['fields'] as $fld => $fld_value )
-					{					
-						if(isset($record->$fld)){
-							$value=$record->$fld;
+		$result = dbmng_get_data($aForm, $aParam);	
 
-							//important! use json_encode to escape special characters
-							$sObj .= '"' . $fld . '": ' . json_encode($value) . ", ";
-						}						
+		
+		
+		$html .= '{ ';
+
+		
+
+		if(is_array($result) && isset($result['error'])){
+			$html.='"error": '.json_encode($result['error']);
+		}
+		else{
+			$html.='"records":[';
+		
+			$sObj  = "";
+
+
+			$first_record=true;
+			foreach( $result as $record )
+				{
+
+					if($first_record){
+						$first_record=false;
 					}
-				$sObj = substr($sObj, 0, strlen($sObj)-2);
-				$sObj .= "}, ";
-			}
-		$sObj = substr($sObj, 0, strlen($sObj)-2);
+					else{
+						$sObj .=", ";
+					}
+
+					$sObj .= "{";
+					$first_field=true;
+
+				
+
+					//get the query results for each field
+					foreach ( $aForm['fields'] as $fld => $fld_value )
+						{					
+							if(isset($record->$fld)){
+								$value=$record->$fld;
+
+								if($first_field){
+									$first_field=false;
+								}
+								else{
+									$sObj .=", ";
+								}
+								//important! use json_encode to escape special characters
+								$sObj .= '"' . $fld . '": ' . json_encode($value);
+							}						
+						}				
+					$sObj .= "} ";
+				}		
 	
-		$html .= $sObj . "] ";
+			$html .= $sObj . "] ";
+		}
 
 		foreach ( $aForm['fields'] as $fld => $fld_value ){
 			
@@ -664,6 +695,8 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 {
 	$nmvals = Array();
 	$html      = "";
+
+
 	
 	$btn_name_add = t("Insert");
 	if( isset($aParam['ui']['btn_name']) )
@@ -683,10 +716,14 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 			$btn_name_update = t($aParam['ui']['btn_name_update']);
 		}
 	
+
+
 	$bOk = true;
 	//create the $val array storing all the record data
 	if( $do_update == 1 )
 		{
+			
+
 			$where = "";
 			$var = array();
 			foreach ( $aForm['fields'] as $fld => $fld_value )
@@ -715,8 +752,9 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 			$var_all = array_merge($var, $var_filter);
 			
 			$result = dbmng_query("select * FROM " . $aForm['table_name'] . " WHERE $where $where_filter ", $var_all);
+			
 
-			if( is_object($result) || (is_array($result) && $result['ok']) )
+			if( dbmng_is_valid($result) )
 				{
 					if( dbmng_num_rows($result) == 0 )
 						{
@@ -809,15 +847,15 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 								}
 							elseif($do_update == 3)
 								{
-									if(isset($_POST[$fld]))
+									if(isset($_REQUEST[$fld]))
 										{
-											$value = $_POST[$fld];
+											$value = $_REQUEST[$fld];
 											
 											if( isset($fld_value['widget']) ) 
 												if( $fld_value['widget'] == 'select_nm' )
 													{
 														$tx = "";
-														foreach( $_POST[$fld] as $v )
+														foreach( $_REQUEST[$fld] as $v )
 															$tx.=$v."|";
 			
 														$nmvals[$fld]=$tx;
@@ -1658,18 +1696,18 @@ function dbmng_ajax_manager(){
 			}
 		}
 
-		if(isset($_POST['get_records'])){		
+		if(isset($_REQUEST['get_records'])){		
 			//$json['records']=Array();
 
-			if(isset($_POST['id_parent'])){
+			if(isset($_REQUEST['id_parent'])){
 				
-				if(isset($_POST['fk'])){
+				if(isset($_REQUEST['fk'])){
 					
 					if(isset($_SESSION["dbmng_param_".$_REQUEST['id_table']])){
 				 		$aParam =  dbmng_objectToArray(json_decode(($_SESSION["dbmng_param_".$_REQUEST['id_table']])));
 						if(isset($aParam['filters'])){
-							if(isset($aParam['filters'][$_POST['fk']])){
-								$aParam['filters'][$_POST['fk']]=intval($_POST['id_parent']);
+							if(isset($aParam['filters'][$_REQUEST['fk']])){
+								$aParam['filters'][$_REQUEST['fk']]=intval($_REQUEST['id_parent']);
 								$_SESSION["dbmng_param_".$_REQUEST['id_table']]=json_encode($aParam);
 							}
 						}
@@ -1687,14 +1725,14 @@ function dbmng_ajax_manager(){
 		}
 		else {
 
-			if(isset($_POST['inserted']))
-				$aIns = json_decode($_POST['inserted'], true);
+			if(isset($_REQUEST['inserted']))
+				$aIns = json_decode($_REQUEST['inserted'], true);
 
-			if(isset($_POST['deleted']))
-				$aDel = json_decode($_POST['deleted'], true);
+			if(isset($_REQUEST['deleted']))
+				$aDel = json_decode($_REQUEST['deleted'], true);
 
-			if(isset($_POST['updated']))
-				$aUpd = json_decode($_POST['updated'], true);
+			if(isset($_REQUEST['updated']))
+				$aUpd = json_decode($_REQUEST['updated'], true);
 	
 	
 			if($ok) {	
@@ -1869,6 +1907,21 @@ function req_equal($type_var, $val){
 	if(isset($_REQUEST[$type_var])){
 		//echo $_REQUEST[$type_var];
 		if($_REQUEST[$type_var]==$val){
+			$ret=true;
+		}
+	}
+	//echo $ret;
+	return $ret;
+}
+
+//Check if the key exist in array and check the value
+function var_equal($array, $key, $val){
+	$ret=false;
+	//echo $type_var;
+	if(@isset($array[$key])){
+
+		//echo $_REQUEST[$type_var];
+		if($array[$key]==$val){
 			$ret=true;
 		}
 	}

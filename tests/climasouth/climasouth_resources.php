@@ -82,7 +82,16 @@ function _climasouth_workspace($typeres = null, $edit_id = null)
 					unset($aParam);
 					$aParam                          = array();
 					$aParam['filters']               = array();
-					$aParam['filters']['uid']        = $user->uid;
+
+					//filter by uid only for non-administrator
+					if(in_array('administrator', $user->roles)){
+						
+					}
+					else {
+						$aParam['filters']['uid']        = $user->uid;
+					}
+
+
 					$aParam['hidden_vars']           = array();
 					$aParam['hidden_vars']['tbl']	   = $table_name; //save the table id
 					$aParam['user_function']['dup']	 = 0;	              // allow to enabled=1 or disabled=0 the duplication function
@@ -97,14 +106,23 @@ function _climasouth_workspace($typeres = null, $edit_id = null)
 						}
 					// update record
 
+
+
+
 					if(!isset($edit_id)){
 
 						$html .= dbmng_crud($aForm, $aParam);
+
+
 					}
 					else{
 
+
+
 						if(!req_equal('act','do_upd') && !req_equal('act','do_ins') && !req_equal('act','del') ){
 							$html .= dbmng_create_form($aForm, $aParam, 1);
+
+
 						}
 						else{
 								$ret = dbmng_create_form_process($aForm, $aParam);

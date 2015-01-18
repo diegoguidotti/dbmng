@@ -83,6 +83,11 @@ function Dbmng(idt , p) {
 		this.aParam.ui = Array();
 	}
 
+
+	if(!this.aParam.loading_message){
+		this.aParam.loading_message = 'The table is being loaded...';
+	}
+
 	this.inline=0;
 	if(p.inline){
 		this.inline=p.inline;
@@ -127,7 +132,7 @@ function Dbmng(idt , p) {
 
 	var html="";
   html += "<div id='"+this.id+"_form'></div>\n";
-  html += "<div id='"+this.id+"_view'>\n";
+  html += "<div id='"+this.id+"_view'>"+this.aParam.loading_message+"</div>\n";
 
 	if(obj.mobile){
 		jQuery('#'+this.aParam.div_element+" div:jqmData(role=content)").html(html);
@@ -222,6 +227,10 @@ Dbmng.prototype.start = function()
 					html='no records returned';
 					if(data.msg)
 						html=data.msg;
+
+					if(data.error){
+						html='An error occurred: '+data.error;
+					}
 						
 					jQuery('#'+obj.aParam.div_element).append('<div class="dbmng_err">'+html+'</div>');
 					debug(data);

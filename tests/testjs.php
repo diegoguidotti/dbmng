@@ -22,7 +22,9 @@
 
 <h1>Table 3</h2>
 -->
-<div id="table3"></div>
+
+pippo
+<div id="table3">asasasa</div>
 
 <?php 
   //we need to define some global variable to use dbmg independently by Drupal

@@ -350,19 +350,16 @@ function dbmng_insert($aForm, $aParam)
 			//if($fld !== $aForm['primary_key'][0])
 			if($fld_value['key'] != 1)
 				{
-					if( isset($fld_value['widget']) ) 
-						{
-							if($fld_value['widget']!='select_nm' && !$readonly )
-								{		
-									$sWhat .= $fld . ", ";
-									$sVal.=":$fld ,";	
-									$var = array_merge($var, array(":".$fld => dbmng_value_prepare($fld_value,$fld,$_POST,$aParam)));
-								}
-							else
-								{
-									$bSelectNM = true;
-								}
-						}
+						if(!var_equal($fld_value, 'widget','select_nm') && !$readonly )
+							{		
+								$sWhat .= $fld . ", ";
+								$sVal.=":$fld ,";	
+								$var = array_merge($var, array(":".$fld => dbmng_value_prepare($fld_value,$fld,$_POST,$aParam)));
+							}
+						else
+							{
+								$bSelectNM = true;
+							}
 				}
 		}
 
@@ -409,6 +406,7 @@ function dbmng_insert($aForm, $aParam)
 
 	$sql    = "insert into " . $aForm['table_name'] . " (" . $sWhat . ") values (" . $sVal . ")";
 
+	echo debug_sql_statement($sql, $var);
 	$result = dbmng_query($sql, $var);
 
 
@@ -544,6 +542,9 @@ function dbmng_create_form_upload_file($aForm, $aParam)
 */
 function dbmng_update($aForm, $aParam) 
 {
+
+
+
 	$sSet = "";
 	$var = array();
 

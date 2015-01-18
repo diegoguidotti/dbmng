@@ -905,14 +905,14 @@ function layout_view_field_table($fld_value){
 */
 function layout_table_action( $aForm, $aParam, $id_record )
 {
-	$nDel = 1;	$nUpd=1; 	$nDup=1; $nPrt_rec=1;
+	$nDel = 1;	$nUpd=1; 	$nDup=0; $nPrt_rec=0;
 	// get user function parameters
 	if( isset($aParam['user_function']) )
 		{
-		  $nUpd = (isset($aParam['user_function']['upd']) ? $aParam['user_function']['upd'] : 1 );
-		  $nDel = (isset($aParam['user_function']['del']) ? $aParam['user_function']['del'] : 1 );
-		  $nDup = (isset($aParam['user_function']['dup']) ? $aParam['user_function']['dup'] : 1 );				
-		  $nPrt_rec = (isset($aParam['user_function']['prt_rec']) ? $aParam['user_function']['prt_rec'] : 1 );				
+		  $nUpd = (isset($aParam['user_function']['upd']) ? $aParam['user_function']['upd'] : $nUpd );
+		  $nDel = (isset($aParam['user_function']['del']) ? $aParam['user_function']['del'] : $nDel );
+		  $nDup = (isset($aParam['user_function']['dup']) ? $aParam['user_function']['dup'] : $nDup );				
+		  $nPrt_rec = (isset($aParam['user_function']['prt_rec']) ? $aParam['user_function']['prt_rec'] : $nPrt_rec );				
 		}
 	
 	$label_del = t('Delete');
@@ -1071,9 +1071,9 @@ function layout_table_insert($aForm, $aParam)
 function layout_table_export($aForm, $aParam)
 {
   // Initialization of user function variable
-  $nPrt_tbl=1;
+  $nPrt_tbl=0;
 	if( isset($aParam['user_function']) )
-	  $nPrt_tbl = (isset($aParam['user_function']['prt_tbl']) ? $aParam['user_function']['prt_tbl'] : 1 );				
+	  $nPrt_tbl = (isset($aParam['user_function']['prt_tbl']) ? $aParam['user_function']['prt_tbl'] : $nPrt_tbl );				
 
 	$hv = prepare_hidden_var($aParam);
 	

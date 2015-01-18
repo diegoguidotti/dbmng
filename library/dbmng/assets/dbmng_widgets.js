@@ -333,7 +333,7 @@ dbmng_getImage = function(source_type){
 	  navigator.camera.getPicture(uploadPhoto, function(message) {
 			alert('get picture failed');
 			},{
-			quality: 50, 
+			quality: 10, 
 			destinationType: navigator.camera.DestinationType.FILE_URI,
 			sourceType: source_type
 		});

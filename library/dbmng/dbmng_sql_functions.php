@@ -62,8 +62,8 @@ function dbmng_query($sql, $var=null)
 									$ret['ok']=true;
 								}
 							else
-								{
-									$ret=$res0->fetchAll(PDO::FETCH_CLASS);				
+								{									
+									$ret=$res0->fetchAll(PDO::FETCH_CLASS);										
 								}
 						}
 					else
@@ -142,9 +142,27 @@ function dbmng_query($sql, $var=null)
 		}
 	echo "<br>$tsql</br>";
 	*/
+
 	return $ret;
 }
 
+
+function dbmng_is_valid($result){
+
+	if(DBMNG_CMS=='none'){
+		$valid=true;
+		if(isset($result['ok'])){
+			if($result['ok']==false){
+				$vaalid=false;
+			}
+		}
+		return $valid;
+	}
+	else{
+		return (is_object($result) || (is_array($result) && $result['ok']));
+	}
+
+}
 
 
 function dbmng_transactions($array){
