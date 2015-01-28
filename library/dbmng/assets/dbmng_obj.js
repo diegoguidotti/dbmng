@@ -1931,8 +1931,11 @@ function dialogClose(){
 
 
 
-function dbmng_export_table(id)
+function dbmng_export_table(id, separator)
 {
+	if(typeof separator == 'undefined')
+		separator = ";";
+	
 	var csv='';
 	jQuery.each( jQuery(id+' tr'), function(k,v){
 			v = jQuery(v);
@@ -1940,7 +1943,7 @@ function dbmng_export_table(id)
 			if(v.css('display')!='none'){
 							
 				jQuery.each( v.children('td') , function(k2,v2){
-					csv+=jQuery(v2).text()+"\t";
+					csv+=jQuery(v2).text()+separator;
 				}); //end of col
 
 				csv+='\n';
