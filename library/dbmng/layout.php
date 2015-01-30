@@ -561,7 +561,7 @@ function layout_form_picture( $aInput )
 			$html .= '<a href="#" id="dbmng_'.$fld.'_tmp_remove">'.t('Remove').'</a>';
 		}
 
-	$html .= "<script type=\"text/javascript\">dbmng_style_fileform('".$fld."');</script>";
+	$html .= "<script type=\"text/javascript\">dbmng_style_fileform('dbmng_".$fld."');</script>";
 
 	return $html;
 }
