@@ -1367,9 +1367,10 @@ function dbmng_file_create_link($value, $aParam)
 */
 function dbmng_picture_create_link($value, $aParam, $layout_type)
 {
-  $ret="";
-	$thumb='';
-
+  $ret   = "";
+	$thumb = "";
+	$zoom  = "";
+	
 	//echo realpath('.').'/'.$value;
 	if(!is_null($value) && $value!='')
 		{
@@ -1386,6 +1387,14 @@ function dbmng_picture_create_link($value, $aParam, $layout_type)
 								$thumb = $aParam['picture_version']['prw'];
 							elseif( isset($aParam['picture_version']['ext']) )
 								$thumb = $aParam['picture_version']['ext'];
+							
+							if( isset($aParam['picture_version']['big']) )
+								$zoom = $aParam['picture_version']['big'];
+							elseif( isset($aParam['picture_version']['nrm']) )
+								$zoom = $aParam['picture_version']['nrm'];
+							elseif( isset($aParam['picture_version']['ext']) )
+								$zoom = $aParam['picture_version']['ext'];
+							
 						}
 					elseif( $layout_type == "form" )
 						{
@@ -1396,12 +1405,16 @@ function dbmng_picture_create_link($value, $aParam, $layout_type)
 						}
 				}
 				
-			$link= base_path() . $thumb . $value;
-
+			$link = base_path() . $thumb . $value;
+			$pict = base_path() . $zoom . $value;
 			//if(in_array( substr(strrchr($value, '.'), 1), $allowedExts ))
 			if( preg_match('/\.(gif|jpe?g|png)$/i',strtolower($value)) )
 				{
-					$ret="<a class='dbmng_image_link' target='_NEW' href='".$link."'><img src='".$link."' /></a>\n";	//class='dbmng_image_thumb'				
+					if( $layout_type == "form" )
+						$ret="<img src='".$link."' />\n";
+					else
+						$ret="<a class='dbmng_image_link' target='_NEW' href='".$pict."'><img src='".$link."' /></a>\n";
+						
 				}
 			else
 				{
