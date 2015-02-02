@@ -406,7 +406,7 @@ function dbmng_insert($aForm, $aParam)
 
 	$sql    = "insert into " . $aForm['table_name'] . " (" . $sWhat . ") values (" . $sVal . ")";
 
-	echo debug_sql_statement($sql, $var);
+	//echo debug_sql_statement($sql, $var);
 	$result = dbmng_query($sql, $var);
 
 

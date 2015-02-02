@@ -150,6 +150,11 @@ function layout_form_date_elab( $aInput, $sType )
 	$actiontype = $aInput['actiontype'];
 	$aParam = $aInput['aParam'];
 
+	$class = "";
+	if( isset($aParam['theme']) )
+		if( $aParam['theme'] == 'bootstrap' )
+			$class .= "class='form-control'";
+		
 	$placeholder = "";
 	if(isset($aParam['hide_label']))
 		{
@@ -186,7 +191,7 @@ function layout_form_date_elab( $aInput, $sType )
 			$more2 = "disabled";
 		
 	//add a new input field for the datapicker ui
-	$html  = "<input type='text' name='".$actiontype.$fld."_tmp' id='dbmng_".$fld."_tmp' $placeholder value='".$datetime_str."' $more2 />";
+	$html  = "<input type='text' name='".$actiontype.$fld."_tmp' id='dbmng_".$fld."_tmp' $placeholder value='".$datetime_str."' $more2 $class/>";
 	//keep hidden the "real" input form
 	$html .= "<input type='hidden' name='$actiontype$fld' id='dbmng_".$fld."' ";
 	$html .= " value= '$value' ";	
@@ -218,6 +223,11 @@ function layout_form_input($aInput) //( $fld, $fld_value, $value, $more='' )
 	$actiontype = $aInput['actiontype'];
 	$aParam = $aInput['aParam'];
 
+	$class = "";
+	if( isset($aParam['theme']) )
+		if( $aParam['theme'] == 'bootstrap' )
+			$class .= "class='form-control'";
+	
 	$placeholder = "";
 	if(isset($aParam['hide_label']))
 		{
@@ -232,7 +242,7 @@ function layout_form_input($aInput) //( $fld, $fld_value, $value, $more='' )
 		if( $fld_value['readonly'] == 1 )
 			$more2 = "disabled";
 		
-	$html  = "<input type='text' name='$actiontype$fld' id='dbmng_$fld' $more $more2";
+	$html  = "<input type='text' name='$actiontype$fld' id='dbmng_$fld' $more $more2 $class";
 	$html .= " value= '$value' $placeholder ";
 	$html .= " test='test' ";	
 	$html .= layout_get_nullable($fld_value);	
@@ -322,7 +332,8 @@ function layout_form_textarea( $aInput )
 	$fld_value = $aInput['fld_value'];
 	$value = $aInput['value'];
 	$actiontype = $aInput['actiontype'];
-
+	$aParam = $aInput['aParam'];
+	
 	if( strlen($aInput['actiontype'])!= 0 )
 		$actiontype = "search_";
 			
@@ -330,9 +341,14 @@ function layout_form_textarea( $aInput )
 	if( isset($fld_value['readonly']) )
 		if( $fld_value['readonly'] == 1 )
 			$more2 = "disabled";
+	
+	$class = "";
+	if( isset($aParam['theme']) )
+		if( $aParam['theme'] == 'bootstrap' )
+			$class = "class='form-control'";
 		
 	$html  = "";
-	$html .= "<textarea name='$actiontype$fld' id='dbmng_$fld' ".layout_get_nullable($fld_value)." $more2>";
+	$html .= "<textarea name='$actiontype$fld' id='dbmng_$fld' ".layout_get_nullable($fld_value)." $more2 $class>";
 	$html .= $value;	
 	$html .= "</textarea>\n";
 	return $html;
@@ -402,7 +418,13 @@ function layout_form_html( $aInput )
 	$fld_value = $aInput['fld_value'];
 	$value = $aInput['value'];
 	$actiontype = $aInput['actiontype'];
-
+	$aParam = $aInput['aParam'];
+	
+	$class = "html_widget";
+	if( isset($aParam['theme']) )
+		if( $aParam['theme'] == 'bootstrap' )
+			$class .= " form-control";
+		
 	if( strlen($aInput['actiontype'])!= 0 )
 		$actiontype = "search_";
 			
@@ -421,7 +443,7 @@ function layout_form_html( $aInput )
 	$html .= '<script>';
 	$html .= '	tinymce.init({selector:"textarea#dbmng_'.$fld.'"});';
 	$html .= '</script>';
-	$html .= "<textarea class='html_widget' name='$actiontype$fld' id='dbmng_$fld' $more2 >";
+	$html .= "<textarea class='$class' name='$actiontype$fld' id='dbmng_$fld' $more2 >";
 	$html .= $value;	
 	$html .= "</textarea>\n";
 	return $html;
@@ -499,6 +521,11 @@ function layout_form_file( $aInput )
 	$actiontype = $aInput['actiontype'];
 	$aParam = $aInput['aParam'];
 	
+	$class = "dbmng_file_text";
+	if( isset($aParam['theme']) )
+		if( $aParam['theme'] == 'bootstrap' )
+			$class .= " form-control";
+	
 	if( strlen($aInput['actiontype'])!= 0 )
 		$actiontype = "search_";
 
@@ -510,7 +537,7 @@ function layout_form_file( $aInput )
 	$html  = "<span id='dbmng_".$fld."_link_container'>".dbmng_file_create_link($value, $aParam).'</span>';
 	$html .= "<div class='dbmng_file_hide_this'><input type='file' name='$actiontype$fld' id='dbmng_$fld' ></div>";
 
-	$html .= '<input class="dbmng_file_text" type="text" name="'.$fld.'_tmp_choosebox" id="dbmng_'.$fld.'_tmp_choosebox" value="'.$value.'" '.$more2.'/>&nbsp';
+	$html .= '<input class="'.$class.'" type="text" name="'.$fld.'_tmp_choosebox" id="dbmng_'.$fld.'_tmp_choosebox" value="'.$value.'" '.$more2.'/>&nbsp';
 	if( strlen($more2) == 0 )
 		{
 			$html .= '<a href="#" id="dbmng_'.$fld.'_tmp_choose">'.t('Choose').'</a>&nbsp';
@@ -543,6 +570,11 @@ function layout_form_picture( $aInput )
 	$actiontype = $aInput['actiontype'];
 	$aParam = $aInput['aParam'];
 	
+	$class = "dbmng_file_text";
+	if( isset($aParam['theme']) )
+		if( $aParam['theme'] == 'bootstrap' )
+			$class .= " form-control";
+	
 	if( strlen($aInput['actiontype'])!= 0 )
 		$actiontype = "search_";
 
@@ -554,7 +586,7 @@ function layout_form_picture( $aInput )
 	$html  = "<span id='dbmng_".$fld."_link_container'>".dbmng_picture_create_link($value, $aParam, "form").'</span><br/>';
 	$html .= "<div class='dbmng_file_hide_this'><input type='file' name='$actiontype$fld' id='dbmng_$fld' accept='image/*' ></div>";
 
-	$html .= '<input class="dbmng_file_text" type="text" name="'.$fld.'_tmp_choosebox" id="dbmng_'.$fld.'_tmp_choosebox" value="'.$value.'" '.$more2.'/>';
+	$html .= '<input class="'.$class.'" type="text" name="'.$fld.'_tmp_choosebox" id="dbmng_'.$fld.'_tmp_choosebox" value="'.$value.'" '.$more2.'/>';
 	if( strlen($more2) == 0 )
 		{
 			$html .= '<a href="#" id="dbmng_'.$fld.'_tmp_choose">'.t('Choose').'</a>&nbsp';
@@ -584,7 +616,13 @@ function layout_form_checkbox( $aInput )
 	$fld_value = $aInput['fld_value'];
 	$value = $aInput['value'];
 	$actiontype = $aInput['actiontype'];
-
+	$aParam = $aInput['aParam'];
+	
+	$class = "dbmng_checkbox";
+	if( isset($aParam['theme']) )
+		if( $aParam['theme'] == 'bootstrap' )
+			$class .= " form-control";
+		
 	if( strlen($aInput['actiontype'])!= 0 )
 		$actiontype = "search_";
 			
@@ -593,7 +631,7 @@ function layout_form_checkbox( $aInput )
 		if( $fld_value['readonly'] == 1 )
 			$more2 = "disabled";
 		
-	$html = "<input class='dbmng_checkbox' type='checkbox' name='$actiontype$fld' id='dbmng_$fld' $more2";
+	$html = "<input class='$class' type='checkbox' name='$actiontype$fld' id='dbmng_$fld' $more2 ";
 	if($value==1 || ($value<>0 &&  $fld_value['default']=="1"))
     {
 			$html .= " checked='true' ";
@@ -627,6 +665,11 @@ function layout_form_select( $aInput )
 	$actiontype = $aInput['actiontype'];
 	$aParam = $aInput['aParam'];
 
+	$class = "";
+	if( isset($aParam['theme']) )
+		if( $aParam['theme'] == 'bootstrap' )
+			$class .= "class='form-control'";
+	
 	$placeholder = "";
 	if(isset($aParam['hide_label']))
 		{
@@ -650,7 +693,7 @@ function layout_form_select( $aInput )
 			$aVoc = array();
 			$aVoc = $fld_value['voc_val'];
 		} 
-	$html = "<select name='$actiontype$fld' id='dbmng_$fld'  ".layout_get_nullable($fld_value)." $more2>\n";
+	$html = "<select name='$actiontype$fld' id='dbmng_$fld'  ".layout_get_nullable($fld_value)." $more2 $class>\n";
 	$html .= "<option>".$placeholder."</option> \n";	
 	$nLen  = count($aVoc);
 	
@@ -1242,7 +1285,7 @@ function layout_table( $result, $aForm, $aParam )
 	if( isset($aParam['tbl_sorter']) )
 		{
 			$id_tbl  = "id='" . $aForm['table_name'] . "'";
-			$class   = "class='tablesorter'";
+			$class   .= "class='tablesorter ";
 			
 			$nColumn = 0;
 			foreach ( $aForm['fields'] as $fld => $fld_value )
@@ -1252,7 +1295,18 @@ function layout_table( $result, $aForm, $aParam )
 				}
 			$add_js  = "<script type=\"text/javascript\">dbmng_tablesorter('".$aForm['table_name']."',".$nColumn.");</script>\n";
 		}
-
+	if( isset($aParam['theme']) )
+		if( $aParam['theme'] == 'bootstrap' )
+			{
+				if( strlen($class) == 0 )
+					$class .= "class='table table-striped table-bordered table-condensed'";
+				else
+					$class .= " table table-striped table-bordered table-condensed'";
+			}
+	else
+		if( strlen($class) >0 )
+			$class .= "'";
+			
 	$html = "";
 	if( isset($aParam['tbl_navigation']) )
 		if( dbmng_num_rows($result) > $aParam['tbl_navigation'] )

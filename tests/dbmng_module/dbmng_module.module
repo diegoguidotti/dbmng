@@ -90,6 +90,7 @@ function dbmng_ajax_response(){
 function dbmng_manager() 
 {
 	dbmng_add_drupal_libraries();
+	drupal_add_js('sites/all/modules/dbmng_module/dbmng_module.js',array('cache' => false));
 	$html = "";
 
 	if( isset($_REQUEST['testjs']) )
@@ -400,13 +401,19 @@ function dbmng_manager()
 			$aParam['tbl_sorter']                  = '1';
 			$aParam['user_function']['prt_tbl']    = 0;
 			$aParam['user_function']['prt_rec']    = 0;
+			$aParam['theme']		= 'bootstrap';
 			
 			$sql = "select * from dbmng_tables where id_table = :id_table";
 			$var = array(':id_table' => $_REQUEST['id_table'] );
 			$ret = dbmng_query($sql, $var);
 			$res = dbmng_fetch_object($ret);
 			
-			$html .= "Table Name: <b>" . $res->table_name . "</b> [id = ".$_REQUEST['id_table']."]";
+			// update record
+			$html .= "<script>jQuery(document).ready(function(){dbmng_module_search('dbmng_fields');});</script>";
+			$html .= "<div class='row'>";
+			$html .= "<div class='col-sm-6'>Table Name: <b>" . $res->table_name . "</b> [id = ".$_REQUEST['id_table']."]</div>";
+			$html .= "<div class='col-sm-6' style='text-align:right'><label>".t('Search')."</label>:&nbsp;<input type='text' id='dbmng_search' /></div>";	//class='form-control input-sm' 
+			$html .= "</div>";
 			$html .= dbmng_crud($aForm, $aParam);
 		}
 	else
@@ -492,11 +499,22 @@ function dbmng_manager()
 			$aParam['custom_function'][1]['custom_label']  = t('Add & Show Fields');
 			$aParam['user_function']['prt_tbl']    = 0;
 			$aParam['user_function']['prt_rec']    = 0;
+			$aParam['theme']		= 'bootstrap';
 			
 			$aParam['tbl_sorter']              = '1';
 
 			// update record
+			$html .= "<script>jQuery(document).ready(function(){dbmng_module_search('dbmng_tables');});</script>";
+			if( !isset($_REQUEST['act']) )
+				{
+					$html .= "<div class='row'>";
+					$html .= "<div class='col-sm-6'>&nbsp;</div>";
+					$html .= "<div class='col-sm-6' style='text-align:right'><label>".t('Search')."</label>:&nbsp;<input type='text' id='dbmng_search' /></div>";	// class='form-control' 
+					$html .= "</div>";
+				}
+			$html .= "<div class='row'>";
 			$html .= dbmng_crud($aForm, $aParam);
+			$html .= "</div>";
 		}
   return ($html);
 }

@@ -696,8 +696,6 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 	$nmvals = Array();
 	$html      = "";
 
-
-	
 	$btn_name_add = t("Insert");
 	if( isset($aParam['ui']['btn_name']) )
 		{
@@ -716,14 +714,10 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 			$btn_name_update = t($aParam['ui']['btn_name_update']);
 		}
 	
-
-
 	$bOk = true;
 	//create the $val array storing all the record data
 	if( $do_update == 1 )
 		{
-			
-
 			$where = "";
 			$var = array();
 			foreach ( $aForm['fields'] as $fld => $fld_value )
@@ -785,10 +779,18 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 				}
 			else
 				{
-					$html .= "<div class='message error'>".t('Column not found')." [$pkfld]</div>";
+					if( req_equal($aParam['theme'],'bootstrap') )
+						{
+							$html .= "<div class='alert alert-danger' role='alert'>
+												<span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span>
+												<span class='sr-only'>Error:</span>";
+							$html .= t('Column not found');
+							$html .= "</div>";
+						}
+					else
+						$html .= "<div class='message error'>".t('Column not found')." [$pkfld]</div>";
 				}
 		}
-
 
 	if( $bOk ) // dbmng_num_rows($result)>0 )
 		{
@@ -900,9 +902,9 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 													if( isset($fld_value['fieldset_start']) )
 														if( $fld_value['fieldset_start'] == 'start' )
 															{
-																$show = '<a onClick="javascript:jQuery(\'#'.$fld_value['fieldset_id'].'\').toggle()">'.t('Show').'</a>';
+																$show = '<a onClick="javascript:jQuery(\'#'.$fld_value['fieldset_id'].'\').toggle()">'.t($fld_value['fieldset_name']).'</a>';
 																$html .= "<fieldset class='dbmng_fieldset'>";
-																$html .= "<legend>".$show." ".$fld_value['fieldset_name']."</legend>";
+																$html .= "<legend>".$show."</legend>";
 																$html .= "<div id='".$fld_value['fieldset_id']."' style='display:none'>";
 															}
 															
