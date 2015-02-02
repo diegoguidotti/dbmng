@@ -145,6 +145,7 @@ function dbmng_get_form_array($id_table)
 
 				$aFields[$fld->field_name] = $aArray;
 				
+				
 				if( $fld->field_widget == 'select' || $fld->field_widget == 'select_nm' )
 					{
 						if( !isset($fld->voc_sql) )
@@ -164,12 +165,36 @@ function dbmng_get_form_array($id_table)
 						$aFVoc = array();
 
 						$v       = 0;
-						foreach($rVoc as $val)
+						$bVoc = false;
+						//echo print_r($aArray);
+						if( isset($aArray['out_type']) )
 							{
-								$keys=array_keys((array)$val);
-								$aFVoc[$val->$keys[0]] = $val->$keys[1];
+								//echo "----------------out_type ------------------------";
+								if($aArray['out_type'] == 'image' )
+									{
+											//echo "----------------image ------------------------";
+											foreach($rVoc as $val)
+												{
+													$keys=array_keys((array)$val);
+													$aVal = array();
+													$aVal['image'] = $val->$keys[1];
+													$aVal['title'] = $val->$keys[2];
+													
+													$keys=array_keys((array)$val);
+													$aFVoc[$val->$keys[0]] = $aVal;
+												}
+											$bVoc = true;
+									}
 							}
 						
+						if( !$bVoc )
+							{
+								foreach($rVoc as $val)
+									{
+										$keys=array_keys((array)$val);
+										$aFVoc[$val->$keys[0]] = $val->$keys[1];
+									}
+							}
 						/*
 						$sortAux = array();
 						foreach($aFVoc as $res)

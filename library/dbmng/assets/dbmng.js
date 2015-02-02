@@ -453,4 +453,27 @@ function dbmng_reduce_fields ( field_selector, lun )
 	});
 }
 
+function dbmng_nmimage(key, val, fld, path){
+	var html="";
 
+	var i=jQuery("#dbmng_nmimage_"+fld+"_div");
+
+	jQuery.each(key, function(k,v) {
+		var html = "<div draggable='true' class='dbmng_image' id='dbmng_"+fld+"_"+k+"'>"
+		html+='<img src="'+path+v['image']+'"></img><br/>'+v['title'];
+		html += "</div>";
+		i.append(html);
+		
+		jQuery('#dbmng_'+fld+'_'+k).ondragstart= function(evt){			
+			console.log('drag start');
+		};
+		
+		console.log(jQuery('#dbmng_'+fld+'_'+k));
+		
+		jQuery('#dbmng_'+fld+'_'+k).ondrop= function(evt){			
+			console.log('drop');
+		};
+		//html+='<img src="'+path+v['image']+'"></img><br/>'+v['title'];
+	});
+	//alert(fld);	
+}

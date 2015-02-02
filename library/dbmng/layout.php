@@ -803,6 +803,7 @@ function layout_form_select_nm( $aInput )
 	$fld_value = $aInput['fld_value'];
 	$value = $aInput['value'];
 	$actiontype = $aInput['actiontype'];
+	$aParam = $aInput['aParam'];
 
 	if( strlen($aInput['actiontype'])!= 0 )
 		$actiontype = "search_";
@@ -829,11 +830,11 @@ function layout_form_select_nm( $aInput )
 			$html = "<select  multiple='multiple' name='".$actiontype.$fld."[]' id='dbmng_$fld'  ".layout_get_nullable($fld_value)." $more2>\n";
 			$html .= "<option/> \n";	
 			//$nLen  = count($aVoc);
+					$expl=explode('|', $value);
 			
 			foreach ( $aVoc as $vocKey => $vocValue )
 				{
 					$s = "";
-					$expl=explode('|', $value);
 					if($do_update && in_array($vocKey ,  $expl))
 						{
 							$s = " selected='true' ";
@@ -846,10 +847,10 @@ function layout_form_select_nm( $aInput )
 	elseif( $outtype == 'checkbox' )
 		{
 			$html .= "<ul class='dbmng_checkbox_ul' id='dbmng_checkbox_ul_$fld'>";
+					$expl=explode('|', $value);
 			foreach ( $aVoc as $vocKey => $vocValue )
 				{
 					$s = "";
-					$expl=explode('|', $value);
 					if($do_update && in_array($vocKey ,  $expl))
 						{
 							$s = " checked='true' ";
@@ -858,6 +859,18 @@ function layout_form_select_nm( $aInput )
 					$html .= "<li><input class='dbmng_checkbox' type='checkbox' name='".$fld."[]' $s value='" . $vocKey . " $more2'/>" . $vocValue . "</li> \n";	
 				}
 			$html .= "</ul>";
+		} 
+	elseif( $outtype == 'image' )
+		{
+			//print_r($fld_value);
+			$path = "";
+			if( isset($aParam['base_path']) )
+				$path = $aParam['base_path'].$fld_value['img_path'];
+			
+			$html .= "<div class='droppable dbmng_selected_images' id='dbmng_selected_images_$fld'>drop here</div>";  
+			$html .= "<div id='dbmng_nmimage_".$fld."_div'></div><script> dbmng_nmimage_".$fld."_val='".$value."';";
+			$html .= "dbmng_nmimage_".$fld."_key=".json_encode($aVoc).";";
+			$html .= "jQuery(function(){ dbmng_nmimage(dbmng_nmimage_".$fld."_key, dbmng_nmimage_".$fld."_val, '".$fld."','".$path."'); });</script>";
 		} 
 	return $html;
 }
@@ -957,7 +970,8 @@ function layout_table_action( $aForm, $aParam, $id_record )
 		  $nDup = (isset($aParam['user_function']['dup']) ? $aParam['user_function']['dup'] : $nDup );				
 		  $nPrt_rec = (isset($aParam['user_function']['prt_rec']) ? $aParam['user_function']['prt_rec'] : $nPrt_rec );				
 		}
-	
+
+		
 	$label_del = t('Delete');
 	if( isset($aParam['ui']['btn_lst_delete']) )
 		$label_del = t($aParam['ui']['btn_lst_delete']);
@@ -974,7 +988,18 @@ function layout_table_action( $aForm, $aParam, $id_record )
 	if( isset($aParam['ui']['btn_lst_pdf']) )
 		$label_pdf = t($aParam['ui']['btn_lst_pdf']);
 	
-	
+	if( isset($aParam['theme']) )
+		if( $aParam['theme'] == 'bootstrap' )
+			{
+				$label_del = "<button type='button' class='btn btn-default btn-sm' title='$label_del'>
+											<span class='glyphicon glyphicon-trash' aria-hidden='true'></span></button>";
+				
+				$label_upd = "<button type='button' class='btn btn-default btn-sm' title='$label_upd'>
+											<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></button>";
+				
+				$label_dup = "<button type='button' class='btn btn-default btn-sm' title='$label_dup'>
+											<span class='glyphicon glyphicon-copy' aria-hidden='true'></span></button>";
+			}
 	$html = "";
 	$hv   = prepare_hidden_var($aParam);
 	if( true )
