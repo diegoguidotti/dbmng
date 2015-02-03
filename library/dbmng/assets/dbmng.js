@@ -455,8 +455,64 @@ function dbmng_reduce_fields ( field_selector, lun )
 
 function dbmng_nmimage(key, val, fld, path){
 	var html="";
+  var i=jQuery("#dbmng_nmimage_"+fld+"_div");
+	
+	html += "<div class='ui-widget ui-helper-clearfix'>";
+	html += "<ul id='gallery' class='gallery ui-helper-reset ui-helper-clearfix'>";
 
-	var i=jQuery("#dbmng_nmimage_"+fld+"_div");
+	jQuery.each(key, function(k,v) {
+			html += "  <li class='ui-widget-content ui-corner-tr'>";
+			html += "    <h5 class='ui-widget-header'>"+v['title']+"</h5>";
+			html += "    <input type='hidden' id='dbmng_id_selected' value='"+k+"' />";
+			html += "    <img src='"+path+v['image']+"' width='96' height='72'>";
+			html += "    <a href='"+path+v['image']+"' title='View larger image' class='ui-icon ui-icon-zoomin'>View larger</a>";
+			html += "  </li>";
+	});
+	
+	html += "</ul>";
+	html += "<div id='dbmng_selected_img' class='ui-widget-content ui-state-default'>";
+	html += "  <h4 class='ui-widget-header'>Selected</h4>";
+	html += "<select id='dbmng_selected' >";//style='visibility: hidden'
+	html += "</div>";
+	html += "</div>";	
+	
+	i.append(html);
+	
+	// there's the gallery and the trash
+	var gallery = jQuery( "#gallery" ),
+		dbmng_selected_img = jQuery( "#dbmng_selected_img" );
+
+	// let the gallery items be draggable
+	jQuery( "li", gallery ).draggable({
+		cancel: "a.ui-icon", // clicking an icon won't initiate dragging
+		revert: "invalid", // when not dropped, the item will revert back to its initial position
+		containment: "document",
+		helper: "clone",
+		cursor: "move"
+	});
+
+	// let the trash be droppable, accepting the gallery items
+	dbmng_selected_img.droppable({
+		accept: "#gallery > li",
+		activeClass: "ui-state-highlight",
+		drop: function( event, ui ) {
+			var item = ui.draggable
+			selectImage( item );
+		}
+	});
+
+	// let the gallery be droppable as well, accepting items from the trash
+	gallery.droppable({
+		accept: "#dbmng_selected_img li",
+		activeClass: "custom-state-active",
+		drop: function( event, ui ) {
+			unselectImage( ui.draggable );
+		
+			jQuery("#dbmng_selected").html("");
+			
+		}
+	});
+	/*	var i=jQuery("#dbmng_nmimage_"+fld+"_div");
 
 	jQuery.each(key, function(k,v) {
 		var html = "<div draggable='true' class='dbmng_image' id='dbmng_"+fld+"_"+k+"'>"
@@ -475,5 +531,71 @@ function dbmng_nmimage(key, val, fld, path){
 		};
 		//html+='<img src="'+path+v['image']+'"></img><br/>'+v['title'];
 	});
-	//alert(fld);	
+	*///alert(fld);	
+}
+
+var pippo;
+function selectImage( item ) {
+	item.fadeOut(function() {
+		var list = jQuery( "ul", dbmng_selected_img ).length ?
+			jQuery( "ul", dbmng_selected_img ) :
+			jQuery( "<ul class='gallery ui-helper-reset'/>" ).appendTo( dbmng_selected_img );
+
+		item.appendTo( list ).fadeIn(function() {
+			item
+				.animate({ width: "48px" })
+				.find( "img" )
+					.animate({ height: "36px" });
+		});
+		
+		//jQuery("#dbmng_selected").html("");
+		jQuery("#dbmng_selected").empty();
+		jQuery( "ul li", dbmng_selected_img ).each(function(k,v){
+			var title  = jQuery(v).children('h5').text();
+			var id_img = jQuery(v).children('input').val();
+			var o = new Option(title, id_img);
+			jQuery(o).html(title);
+			jQuery("#dbmng_selected").append(o);
+			
+		});
+// 		var title = jQuery( "ul h5", dbmng_selected_img ).text();
+// 		var id_img = jQuery( "ul input", dbmng_selected_img ).val();
+// 		var o = new Option(title, id_img);
+// 		jQuery(o).html(title);
+// 		jQuery("#dbmng_selected").append(o);
+	});
+}
+
+// image recycle function
+function unselectImage( item ) {
+	item.fadeOut(function() {
+		item
+			.css( "width", "96px")
+			.find( "img" )
+				.css( "height", "72px" )
+			.end()
+			.appendTo( gallery )
+			.fadeIn();
+	});
+}
+
+// image preview function, demonstrating the ui.dialog used as a modal window
+function viewLargerImage( link ) {
+	var src = link.attr( "href" ),
+		title = link.siblings( "img" ).attr( "alt" ),
+		modal = jQuery( "img[src$='" + src + "']" );
+
+	if ( modal.length ) {
+		modal.dialog( "open" );
+	} else {
+		var img = jQuery( "<img alt='" + title + "' width='384' height='288' style='display: none; padding: 8px;' />" )
+			.attr( "src", src ).appendTo( "body" );
+		setTimeout(function() {
+			img.dialog({
+				title: title,
+				width: 400,
+				modal: true
+			});
+		}, 1 );
+	}
 }
