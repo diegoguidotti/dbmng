@@ -325,7 +325,7 @@ function _climasouth_news_rss()
 	foreach( $res as $rec )
 		{
 			$place = $rec->place;
-			$title = $rec->title;
+			$title = cleanupXML($rec->title);
 			$date_from = new DateTime($rec->date_from);
 			$date_to = $rec->date_to;
 			$node = $rec->linked_page;
@@ -353,11 +353,11 @@ function _climasouth_news_rss()
 			$date = $days." ".$months." ".$year;
 		
 			$rss .= '<item>';
-			$rss .= '<title>'.$title.'</title>';
-			$rss .= '<link>'.l($title,$node).'</link>';
-			$rss .= '<guid>'.l($title,$node).'</guid>';
+			$rss .= '<title>'.($title).'</title>';
+			$rss .= '<link>'.url($node, array('absolute'=>TRUE)).'</link>';
+			//$rss .= '<guid>'.l(($title),$node).'</guid>';
 			$rss .= '<pubDate>'.$pubdate.'</pubDate>';
-			$rss .= '<description>'.strtoupper($place) . " - " . $date. '</description>';
+			$rss .= '<description>'.cleanupXML(strtoupper($place)) . " - " . $date. '</description>';
 			$rss .= '</item>';
 		}
 	$rss .= '</channel>';
@@ -371,6 +371,52 @@ function _climasouth_news_rss()
 
 	//return '';//$rss;
 }
+
+
+function cleanupXML($xml) {
+    $xmlOut = '';
+    $inTag = false;
+    $xmlLen = strlen($xml);
+    for($i=0; $i < $xmlLen; ++$i) {
+        $char = $xml[$i];
+        // $nextChar = $xml[$i+1];
+        switch ($char) {
+        case '<':
+          if (!$inTag) {
+              // Seek forward for the next tag boundry
+              for($j = $i+1; $j < $xmlLen; ++$j) {
+                 $nextChar = $xml[$j];
+                 switch($nextChar) {
+                 case '<':  // Means a < in text
+                   $char = htmlentities($char);
+                   break 2;
+                 case '>':  // Means we are in a tag
+                   $inTag = true;
+                   break 2;
+                 }
+              }
+          } else {
+             $char = htmlentities($char);
+          }
+          break;
+        case '>':
+          if (!$inTag) {  // No need to seek ahead here
+             $char = htmlentities($char);
+          } else {
+             $inTag = false;
+          }
+          break;
+        default:
+          if (!$inTag) {
+             $char = htmlentities($char);
+          }
+          break;
+        }
+        $xmlOut .= $char;
+    }
+    return $xmlOut;
+  }
+
 
 function _climasouth_news($block) 
 {	

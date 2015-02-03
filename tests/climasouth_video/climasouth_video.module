@@ -208,6 +208,25 @@ function cs_video_contest_page()
 						
 
 				}
+				else if(isset($_REQUEST['get_all_video'])){
+						if(in_array('administrator', $user->roles)){
+							echo('{"ret":[');
+							$res = (dbmng_query("select json from c_video ", array()));
+								$n=0;
+							
+								foreach($res as $val){
+									if($n>0)echo(' ,');
+									echo($val->json);				
+									$n++;
+								}
+							echo(']}');
+						}
+						else{
+							echo('{"ret":[]}');				
+						}
+						
+
+				}
 				else{
 					
 					dbmng_query("INSERT INTO c_video (uid, json) VALUES (:uid, :json) on duplicate key update json=:json ", array(':uid'=>$user->uid, ':json'=> $json));
@@ -624,8 +643,14 @@ function cs_get_view_section(){
 									<h1>'.tt('View & Vote').'</h1>'.tt('Videos will be available for public viewing and voting at the end of the submission period ending 15th January 2015');
 
 
+			
+
+
 
 				if(($user->uid)){
+						if(in_array('administrator', $user->roles)){
+								$html.='<div id="video_list"></div>';
+						}
 
 				}
 				else{				

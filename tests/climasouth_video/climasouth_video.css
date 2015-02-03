@@ -194,3 +194,17 @@ cs_video_description {
 .diego_editable textarea, .diego_editable input{
     border: 0px;
 }
+
+
+.video_box{
+ border: 1px solid #CCC;
+ float: left;
+ width: 300px;
+ height: 300px;
+ margin: 10px;
+ overflow: auto;
+}
+
+.video_box span{
+	font-weight: bold;
+}

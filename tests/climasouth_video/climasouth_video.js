@@ -96,6 +96,11 @@ jQuery(function(){
 			}
 		});
 
+		if(jQuery('#video_list').length){
+			showAllVideos();
+		}
+
+
 });
 
 
@@ -221,6 +226,58 @@ function fillTheForm(){
 					}
 		});
 	});
+}
+
+
+
+function showAllVideos(){
+
+	jQuery(function(){
+		html='<h3>Video</h3>';
+
+
+
+var obj={'ajax':true, 'get_all_video':true};
+
+		jQuery.ajax({
+			    type: "POST",
+			    url: 'video',
+					DataType: 'json',
+			    data: obj,                
+			    success: function(data){
+						
+						console.log(data);
+						
+						jQuery.each(data.ret, function(k,val) {
+							console.log(val);
+							if(val.inputAccept){
+								html+='<div class="video_box">';
+									html+='<h3>'+val.inputTitle+"</h3>";
+									html+='<div class="video_item"><span>Email</span>: '+val.inputEmail+"</div>";
+									html+='<div class="video_item"><span>Author</span>: '+val.inputAuthor+"</div>";
+									html+='<div class="video_item"><span>Video</span>: <a target="_NEW" href="'+val.inputURL+'">'+val.inputURL+'</a></div>';
+									html+='<div class="video_item"><span>Citizenship</span>: '+val.inputCitizenship+"</div>";
+									html+='<div class="video_item"><span>Extended Title</span>: '+val.inputTitleExtended+"</div>";
+									html+='<div class="video_item"><span>Address</span>: '+val.inputAddress+"</div>";
+									html+='<div class="video_item"><span>Description</span>: '+val.inputDescription+"</div>";
+								html+='</div>';		
+							}
+						});
+
+
+
+
+						jQuery('#video_list').html(html);
+						resize();
+						
+					}
+		});
+
+
+
+
+	});
+	
 }
 
 function uploadVideo(){

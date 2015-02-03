@@ -773,11 +773,18 @@ debug("URI: "+uri);
 		}	
 
 		, function (error) {
-				dialogAppend('Error during image uploading '+error.code,obj.aParam.mobile);
-				dialogClose();
-				//alert("An error has occurred: Code = " + error.code);
-				console.log("upload error source " + error.source);
-				console.log("upload error target " + error.target);
+				if(error.code==3){
+                //timeout (it may happen for ios)
+                dialogAppend('Fixing image upload ',obj.aParam.mobile);
+                obj.uploadedImage(v.gui, v.fld_name, ci, v.img_uri);          
+          }
+          else{
+						dialogAppend('Error during image uploading '+error.code,obj.aParam.mobile);
+						dialogClose();
+						//alert("An error has occurred: Code = " + error.code);
+						console.log("upload error source " + error.source);
+						console.log("upload error target " + error.target);
+          }
 		}
 		, options);
 
