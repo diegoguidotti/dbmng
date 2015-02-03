@@ -265,8 +265,41 @@ function layout_form_input($aInput) //( $fld, $fld_value, $value, $more='' )
 */
 function layout_form_hidden( $fld, $value )
 {
+
+	
+
 	//print_r($value);
 	$html = "<input type='hidden' name='$fld' id='dbmng_$fld' value='".$value."' />\n";
+
+	return $html;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////
+// layout_form_geo
+// ======================
+/// This function allow to add the widget geo (html tag) 
+/**
+\param $aInput			associative array that contains the follows param:
+\param $fld					field name
+\param $fld_value		field value
+\param $value				existing value
+\return             html
+*/
+function layout_form_geo( $aInput )
+{
+  $fld = $aInput['fld'];
+	$fld_value = $aInput['fld_value'];
+	$value = $aInput['value'];
+	$aParam = $aInput['aParam'];
+
+
+	$html = "<input type='input' name='$fld' id='dbmng_$fld' value='".$value."' />\n";
+
+
+	$html.="<div class='dbmng_mapcontainer' id='dbmng_mapcontainer_$fld'></div>";
+
+	$html.='<script>jQuery(function(){dbmng_init_map("'.$fld.'", "'.$fld_value.'")})</script>';
 
 	return $html;
 }
@@ -786,10 +819,12 @@ function layout_form_multiselect( $aInput )
 	return $html;
 }
 
+
+
 /////////////////////////////////////////////////////////////////////////////
 // layout_form_select_nm
 // ======================
-/// This function allow to add the widget select (html tag) 
+/// This function allow to add the widget select nm (html tag) 
 /**
 \param $aInput			associative array that contains the follows param:
 \param $fld					field name
@@ -1310,13 +1345,13 @@ function layout_table( $result, $aForm, $aParam )
 	$class   = "";
 	$add_js  = "";
 
-
+	$class='';
 
 
 	if( isset($aParam['tbl_sorter']) )
 		{
 			$id_tbl  = "id='" . $aForm['table_name'] . "'";
-			$class   .= "class='tablesorter ";
+			$class   .= "tablesorter";
 			
 			$nColumn = 0;
 			foreach ( $aForm['fields'] as $fld => $fld_value )
@@ -1330,13 +1365,11 @@ function layout_table( $result, $aForm, $aParam )
 		if( $aParam['theme'] == 'bootstrap' )
 			{
 				if( strlen($class) == 0 )
-					$class .= "class='table table-striped table-bordered table-condensed'";
+					$class .= " table table-striped table-bordered table-condensed ";
 				else
-					$class .= " table table-striped table-bordered table-condensed'";
+					$class .= " table table-striped table-bordered table-condensed ";
 			}
-	else
-		if( strlen($class) >0 )
-			$class .= "'";
+	
 			
 	$html = "";
 	if( isset($aParam['tbl_navigation']) )
@@ -1344,7 +1377,7 @@ function layout_table( $result, $aForm, $aParam )
 			$html .= layout_table_navigation($result, $aForm, $aParam);
 
 	//$html .= layout_table_insert($aForm, $aParam);
-	$html .= "<table $id_tbl $class>\n";
+	$html .= "<table $id_tbl class='$class'>\n";
 	
 	$html .= layout_table_head( $aForm['fields'] );
 	

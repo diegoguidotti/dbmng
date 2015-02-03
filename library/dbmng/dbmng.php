@@ -829,6 +829,14 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 								{
 									$more = "enctype='multipart/form-data'";
 								}
+							else if($fld_value['widget'] == 'geo'){ //add leaflet if at least one field requires it
+
+								if(DBMNG_CMS=='drupal'){
+									drupal_add_css('http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.ie.css', array('type' => 'external', 'weight' => CSS_THEME, 'browsers' => array('IE' => 'lt IE 8', '!IE' => FALSE), 'preprocess' => FALSE));
+									drupal_add_css('http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css',array('type' => 'external'));
+									drupal_add_js('http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js',array('type' => 'external'));
+								}
+							}							
 						}
 				}
 
@@ -1005,6 +1013,10 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 													else if ($widget==='multi')
 														{
 															$html .= layout_form_multi( $aInput );
+														}
+													else if ($widget==='geo')
+														{
+															$html .= layout_form_geo( $aInput );
 														}
 													else //use input by default
 														{

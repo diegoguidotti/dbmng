@@ -573,3 +573,75 @@ function viewLargerImage( link ) {
 		}, 1 );
 	}
 }
+
+var map;
+
+//create and populate the leaflet map for the field data
+function dbmng_init_map(fld, val, aParam){
+
+	//add a background layer
+	if(typeof L === 'undefined')	{
+		jQuery('#dbmng_mapcontainer_'+fld).html('There are no map library');
+
+	}
+	else{
+
+		var coord=[40, 13];
+		var zoom=3;
+	
+		
+		if(typeof aParam != 'undefined'){
+			if(aParam.coord)
+				coord=aParam.coord;
+
+			if(aParam.zoom)
+				zoom=aParam.zoom;
+		}
+
+		
+		//create the map objet
+		map = L.map('dbmng_mapcontainer_'+fld).setView(coord, zoom);
+
+		var mapquestUrl = 'http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png',
+		subDomains = ['otile1','otile2','otile3','otile4'],
+		mapquestAttrib = 'Data, imagery and map information provided by <a href="http://open.mapquest.co.uk" target="_blank">MapQuest</a>, <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> and contributors.';
+		var mapquest = new L.TileLayer(mapquestUrl, {maxZoom: 18, attribution: mapquestAttrib, subdomains: subDomains});
+		map.addLayer(mapquest);  
+
+
+		if(jQuery('#dbmng_'+fld).val()!=''){
+			var mygeo = JSON.parse(jQuery('#dbmng_'+fld).val());
+			if(mygeo){
+				if(mygeo.coordinates){
+					var marker = new L.marker([mygeo.coordinates[1] , mygeo.coordinates[0]]).addTo(map);
+				}
+			}
+			
+		}
+
+
+		map.on('click', function(e){
+				
+				map.eachLayer(function (layer) {
+						if(layer instanceof L.Marker){
+							map.removeLayer(layer);
+						}
+				});
+				var marker = new L.marker(e.latlng).addTo(map);
+				var geojson={
+                "type": "Point",
+                "coordinates": [e.latlng.lng, e.latlng.lat]
+            };
+				jQuery('#dbmng_'+fld).val(JSON.stringify(geojson));
+		});
+
+
+		
+	}
+
+
+
+	
+}
+
+

@@ -272,7 +272,8 @@ function dbmng_manager()
 														'select'=> t('Select'),	
 														'select_nm'=>t('Select nm'),
 														'multiselect'=> t('Multi-Select'),	
-														'textarea'=> t('Text Area')	
+														'textarea'=> t('Text Area') ,	
+														'geo'=> t('GEO Widget')	
 												)
 									),
 								'nullable'     => 

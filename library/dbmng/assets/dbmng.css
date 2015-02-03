@@ -261,3 +261,9 @@ fieldset.dbmng_fieldset {
   #dbmng_selected_img h4 { line-height: 16px; margin: 0 0 0.4em; }
   #dbmng_selected_img h4 .ui-icon { float: left; }
   #dbmng_selected_img .gallery h5 { display: none; }
+
+
+.dbmng_mapcontainer{
+	width: 500px;
+	height: 500px;
+}
