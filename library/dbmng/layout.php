@@ -1309,6 +1309,10 @@ function layout_table( $result, $aForm, $aParam )
 	$id_tbl  = "";
 	$class   = "";
 	$add_js  = "";
+
+
+
+
 	if( isset($aParam['tbl_sorter']) )
 		{
 			$id_tbl  = "id='" . $aForm['table_name'] . "'";

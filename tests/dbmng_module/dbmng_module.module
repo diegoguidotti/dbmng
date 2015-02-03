@@ -401,7 +401,15 @@ function dbmng_manager()
 			$aParam['tbl_sorter']                  = '1';
 			$aParam['user_function']['prt_tbl']    = 0;
 			$aParam['user_function']['prt_rec']    = 0;
-			$aParam['theme']		= 'bootstrap';
+
+
+
+			global	$theme;
+			$pos = strpos($theme, "bootstrap");
+			if($pos!==false){
+				$aParam['theme']		= 'bootstrap';
+			}
+			
 			
 			$sql = "select * from dbmng_tables where id_table = :id_table";
 			$var = array(':id_table' => $_REQUEST['id_table'] );
@@ -499,7 +507,13 @@ function dbmng_manager()
 			$aParam['custom_function'][1]['custom_label']  = t('Add & Show Fields');
 			$aParam['user_function']['prt_tbl']    = 0;
 			$aParam['user_function']['prt_rec']    = 0;
-			$aParam['theme']		= 'bootstrap';
+			global	$theme;
+			$pos = strpos($theme, "bootstrap");
+			if($pos!==false){
+				$aParam['theme']		= 'bootstrap';
+			}
+			
+
 			
 			$aParam['tbl_sorter']              = '1';
 

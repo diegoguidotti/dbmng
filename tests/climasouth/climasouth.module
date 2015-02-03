@@ -311,67 +311,156 @@ function _climasouth_country_flag()
 	return $html;
 }
 
+
+
 function _climasouth_news_rss()
 {
-	$rss = '<?xml version="1.0" encoding="utf-8"?>';
-	$rss .= '<rss version="2.0">';
-	$rss .= '<channel>';
-	$rss .= '<title>'.t('ClimaSouth feed').'</title>';
-	$rss .= '<link>http://www.climasouth.eu/</link>';
-	$rss .= '<description>'.t('News from the ClimaSouth News and Events web site').'.</description>';
+
+	if(isset($_REQUEST['ical'])){
+		_climasouth_news_ical();
+	}
+	else 
+		{
+
+		$rss = '<?xml version="1.0" encoding="utf-8"?>';
+		$rss .= '<rss version="2.0">';
+		$rss .= '<channel>';
+		$rss .= '<title>'.t('ClimaSouth feed').'</title>';
+		$rss .= '<link>http://www.climasouth.eu/</link>';
+		$rss .= '<description>'.t('News from the ClimaSouth News and Events web site').'.</description>';
 	
+		$res = dbmng_query("select * from c_news order by date_from desc ", array());
+
+		foreach( $res as $rec )
+			{
+				$place = $rec->place;
+				$title = cleanupXML($rec->title);
+				$date_from = new DateTime($rec->date_from);
+				$date_to = $rec->date_to;
+				$node = $rec->linked_page;
+				if(isset($date_to))
+					$date_to = new DateTime($rec->date_to);
+
+				$days = $date_from->format("d");
+				$months = $date_from->format("F");
+				$year = $date_from->format("Y");
+			
+				$timestamp = $rec->timestamp;
+				$pubdate = date("D, d M Y H:i:s T", $timestamp);
+		  
+				if( isset($date_to) )
+					{
+						$date_to = new DateTime($rec->date_to);
+						$days .= "-".$date_to->format("d");
+					
+						if( $months != $date_to->format("F") )
+							$months .= " ".$date_to->format("F");
+
+						if( $year != $date_to->format("Y") )
+							$months .= " ".$date_to->format("Y");
+					}
+				$date = $days." ".$months." ".$year;
+		
+				$rss .= '<item>';
+				$rss .= '<title>'.($title).'</title>';
+				$rss .= '<link>'.url($node, array('absolute'=>TRUE)).'</link>';
+				//$rss .= '<guid>'.l(($title),$node).'</guid>';
+				$rss .= '<pubDate>'.$pubdate.'</pubDate>';
+				$rss .= '<description>'.cleanupXML(strtoupper($place)) . " - " . $date. '</description>';
+				$rss .= '</item>';
+			}
+		$rss .= '</channel>';
+		$rss .= '</rss>';
+
+
+		header("Content-Type: text/xml; charset=utf-8");
+		echo $rss;
+		module_invoke_all('exit');
+		exit();
+	}
+
+	//return '';//$rss;
+}
+
+
+
+
+function _climasouth_news_ical()
+{
+
+?>
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//hacksw/handcal//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+<?php
+		
 	$res = dbmng_query("select * from c_news order by date_from desc ", array());
 
 	foreach( $res as $rec )
 		{
 			$place = $rec->place;
-			$title = cleanupXML($rec->title);
-			$date_from = new DateTime($rec->date_from);
-			$date_to = $rec->date_to;
+			$title = ($rec->title);
+			$date_from =  ($rec->date_from);
+			$date_to =  ($rec->date_to);
+
 			$node = $rec->linked_page;
-			if(isset($date_to))
-				$date_to = new DateTime($rec->date_to);
+			if(!isset($date_to))
+				$date_to = $date_from;
+	    
 
-			$days = $date_from->format("d");
-			$months = $date_from->format("F");
-			$year = $date_from->format("Y");
-			
-			$timestamp = $rec->timestamp;
-			$pubdate = date("D, d M Y H:i:s T", $timestamp);
-    
-			if( isset($date_to) )
-				{
-					$date_to = new DateTime($rec->date_to);
-					$days .= "-".$date_to->format("d");
-					
-					if( $months != $date_to->format("F") )
-						$months .= " ".$date_to->format("F");
+			?>
+BEGIN:VEVENT
+DTEND:<?= dateToCal(strtotime($date_to)) ?>
 
-					if( $year != $date_to->format("Y") )
-						$months .= " ".$date_to->format("Y");
-				}
-			$date = $days." ".$months." ".$year;
-		
-			$rss .= '<item>';
-			$rss .= '<title>'.($title).'</title>';
-			$rss .= '<link>'.url($node, array('absolute'=>TRUE)).'</link>';
-			//$rss .= '<guid>'.l(($title),$node).'</guid>';
-			$rss .= '<pubDate>'.$pubdate.'</pubDate>';
-			$rss .= '<description>'.cleanupXML(strtoupper($place)) . " - " . $date. '</description>';
-			$rss .= '</item>';
+UID:<?= uniqid() ?>
+
+DTSTAMP:<?= dateToCal(time()) ?>
+
+LOCATION:<?= escapeString($place) ?>
+
+DESCRIPTION:<?= escapeString($place) ?>
+
+URL;VALUE=URI:<?= escapeString(url($node, array('absolute'=>TRUE))) ?>
+
+SUMMARY:<?= escapeString($title) ?>
+
+DTSTART:<?= dateToCal(strtotime($date_from)) ?>
+
+END:VEVENT
+<?php
+
+			$iCal.='UID: '.uniqid();
+			$iCal.='DTSTAMP: '.dateToCal(time());
+			$iCal.='LOCATION: '.escapeString($place);
+			$iCal.='DESCRIPTION: '.escapeString($place." ".$date);
+			$iCal.='URL;VALUE=URI:'.escapeString(url($node, array('absolute'=>TRUE)));
+			//SUMMARY:escapeString($summary) 
+			$iCal.='DTEND: '.dateToCal($date_from);			
+
+
+
+
 		}
-	$rss .= '</channel>';
-	$rss .= '</rss>';
 
+	$ical .= 'END:VCALENDAR';
 
-	header("Content-Type: text/xml; charset=utf-8");
-	echo $rss;
+	header('Content-type: text/calendar; charset=utf-8');	
+	echo $ical;
 	module_invoke_all('exit');
 	exit();
 
 	//return '';//$rss;
 }
 
+function dateToCal($timestamp) {
+  return date('Ymd\THis\Z', $timestamp);
+}
+
+// Escapes a string of characters
+function escapeString($string) {
+  return preg_replace('/([\,;])/','\\\$1', $string);
+}
 
 function cleanupXML($xml) {
     $xmlOut = '';
