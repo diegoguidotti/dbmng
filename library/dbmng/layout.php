@@ -867,11 +867,12 @@ function layout_form_select_nm( $aInput )
 			if( isset($aParam['base_path']) )
 				$path = $aParam['base_path'].$fld_value['img_path'];
 			
-			//$html .= "<div class='droppable dbmng_selected_images' id='dbmng_selected_images_$fld'>drop here</div>";  
 			$html .= "<div id='dbmng_nmimage_".$fld."_div'></div><script> dbmng_nmimage_".$fld."_val='".$value."';";
 			$html .= "dbmng_nmimage_".$fld."_key=".json_encode($aVoc).";";
 			$html .= "jQuery(function(){ dbmng_nmimage(dbmng_nmimage_".$fld."_key, dbmng_nmimage_".$fld."_val, '".$fld."','".$path."'); });</script>";
-			$html .= "<select  multiple='multiple' name='".$actiontype.$fld."[]' id='dbmng_$fld'  ".layout_get_nullable($fld_value)." $more2>\n";
+			
+			
+			$html .= "<select multiple='multiple' name='".$actiontype.$fld."[]' id='dbmng_$fld' $more2></select>";//  ".layout_get_nullable($fld_value)." $more2>\n";	style='visibility: hidden'
 		} 
 	return $html;
 }

@@ -472,7 +472,6 @@ function dbmng_nmimage(key, val, fld, path){
 	html += "</ul>";
 	html += "<div id='dbmng_selected_img' class='ui-widget-content ui-state-default'>";
 	html += "  <h4 class='ui-widget-header'>Selected</h4>";
-	html += "<select id='dbmng_selected' >";//style='visibility: hidden'
 	html += "</div>";
 	html += "</div>";	
 	
@@ -497,7 +496,7 @@ function dbmng_nmimage(key, val, fld, path){
 		activeClass: "ui-state-highlight",
 		drop: function( event, ui ) {
 			var item = ui.draggable
-			selectImage( item );
+			selectImage( item, fld );
 		}
 	});
 
@@ -506,36 +505,16 @@ function dbmng_nmimage(key, val, fld, path){
 		accept: "#dbmng_selected_img li",
 		activeClass: "custom-state-active",
 		drop: function( event, ui ) {
-			unselectImage( ui.draggable );
+			var item = ui.draggable
+			unselectImage( item, fld );
 		
-			jQuery("#dbmng_selected").html("");
+			jQuery("#dbmng_"+fld).empty();
 			
 		}
 	});
-	/*	var i=jQuery("#dbmng_nmimage_"+fld+"_div");
-
-	jQuery.each(key, function(k,v) {
-		var html = "<div draggable='true' class='dbmng_image' id='dbmng_"+fld+"_"+k+"'>"
-		html+='<img src="'+path+v['image']+'"></img><br/>'+v['title'];
-		html += "</div>";
-		i.append(html);
-		
-		jQuery('#dbmng_'+fld+'_'+k).ondragstart= function(evt){			
-			console.log('drag start');
-		};
-		
-		console.log(jQuery('#dbmng_'+fld+'_'+k));
-		
-		jQuery('#dbmng_'+fld+'_'+k).ondrop= function(evt){			
-			console.log('drop');
-		};
-		//html+='<img src="'+path+v['image']+'"></img><br/>'+v['title'];
-	});
-	*///alert(fld);	
 }
 
-var pippo;
-function selectImage( item ) {
+function selectImage( item, fld ) {
 	item.fadeOut(function() {
 		var list = jQuery( "ul", dbmng_selected_img ).length ?
 			jQuery( "ul", dbmng_selected_img ) :
@@ -548,21 +527,16 @@ function selectImage( item ) {
 					.animate({ height: "36px" });
 		});
 		
-		//jQuery("#dbmng_selected").html("");
-		jQuery("#dbmng_selected").empty();
+		jQuery("#dbmng_"+fld).empty();
 		jQuery( "ul li", dbmng_selected_img ).each(function(k,v){
 			var title  = jQuery(v).children('h5').text();
 			var id_img = jQuery(v).children('input').val();
 			var o = new Option(title, id_img);
-			jQuery(o).html(title);
-			jQuery("#dbmng_selected").append(o);
+			jQuery(o).html(title).attr('selected',true);
+			
+			jQuery("#dbmng_"+fld).append(o);
 			
 		});
-// 		var title = jQuery( "ul h5", dbmng_selected_img ).text();
-// 		var id_img = jQuery( "ul input", dbmng_selected_img ).val();
-// 		var o = new Option(title, id_img);
-// 		jQuery(o).html(title);
-// 		jQuery("#dbmng_selected").append(o);
 	});
 }
 
