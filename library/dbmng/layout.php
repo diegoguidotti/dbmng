@@ -1169,7 +1169,11 @@ function layout_table_insert($aForm, $aParam)
 			if( isset($aParam['ui']['btn_lst_name']) )
 				$label = $aParam['ui']['btn_lst_name'];
 			
-			$html .= "<a class='dbmng_insert_button' href='?act=ins&amp;tbln=" . $aForm['table_name'] . $hv. "'>" . $label . "</a><br />\n";
+			$class = "dbmng_insert_button";
+			if( var_equal($aParam,'theme', 'bootstrap') )
+				$class .= " btn btn-default";
+			
+			$html .= "<a class='$class' href='?act=ins&amp;tbln=" . $aForm['table_name'] . $hv. "'>" . $label . "</a><br />\n";
 		}
 	return $html;
 }

@@ -1071,26 +1071,29 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 					$class .= " btn btn-default";
 				}
 			
+			$btn = "";
 			if( $do_update == 1 )
 				{
-					$html .= "<input type='hidden' name='act' value='do_upd' />\n";
-					$html .= "<input type='hidden' name='tbln' value='" . $aForm['table_name'] . "' />\n";
-					$html .= "<div class='dbmng_form_button'><input class='$class' type='submit' value='". $btn_name_update ."' /></div>\n";
+					$btn .= "<input type='hidden' name='act' value='do_upd' />\n";
+					$btn .= "<input type='hidden' name='tbln' value='" . $aForm['table_name'] . "' />\n";
+					$btn .= "<div class='dbmng_form_button'><input class='$class' type='submit' value='". $btn_name_update ."' /></div>\n";
 				}
 			elseif( $do_update == 0 || $do_update == 3 )
 				{
-					$html .= "<input type='hidden' name='act' value='do_ins' />\n";
-					$html .= "<input type='hidden' name='tbln' value='" . $aForm['table_name'] . "' />\n";
-					$html .= "<div class='dbmng_form_button'><input class='$class' type='submit' value='" . $btn_name_add . "' /></div>\n";
+					$btn .= "<input type='hidden' name='act' value='do_ins' />\n";
+					$btn .= "<input type='hidden' name='tbln' value='" . $aForm['table_name'] . "' />\n";
+					$btn .= "<div class='dbmng_form_button'><input class='$class' type='submit' value='" . $btn_name_add . "' /></div>\n";
 				}
 			elseif( $do_update == 2 && $actiontype == "search")
 				{
-					$html .= "<input type='hidden' name='act2' value='do_search' />\n";
-					$html .= "<input type='hidden' name='tbln' value='" . $aForm['table_name'] . "' />\n";
-					$html .= "<div class='dbmng_form_button'><input class='$class' type='submit' value='" . $btn_name_search . "' /></div>\n";
+					$btn .= "<input type='hidden' name='act2' value='do_search' />\n";
+					$btn .= "<input type='hidden' name='tbln' value='" . $aForm['table_name'] . "' />\n";
+					$btn .= "<div class='dbmng_form_button'><input class='$class' type='submit' value='" . $btn_name_search . "' /></div>\n";
 					//$html .= "<div class='dbmng_form_button'><input class='dbmng_form_button' type='reset' value='" . t('Reset') . "' /></div>\n";
 				}
-
+			
+			$html .= $btn;
+			
 			$html .= $hv;
 			$html .= "</form>\n";
 			$html .= "</div>\n";
