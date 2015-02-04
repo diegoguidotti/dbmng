@@ -477,9 +477,27 @@ function dbmng_nmimage(key, val, fld, path){
 	
 	i.append(html);
 	
+	
+	if( jQuery("#dbmng_"+fld+" :selected").length >0 )
+	{
+		jQuery("#dbmng_"+fld+" :selected").each(function(k,v){
+			v=jQuery(v);
+			var sel_id = v.val();
+			
+			jQuery("#gallery li").each(function(k1,v1){
+				v1=jQuery(v1);
+				var id_img = jQuery(v1).children('input').val();
+				if( id_img == sel_id ){
+					item = v1;
+					selectImage( item, fld );
+				}
+			});
+		});
+	}
+	
 	// there's the gallery and the trash
 	var gallery = jQuery( "#gallery" ),
-		dbmng_selected_img = jQuery( "#dbmng_selected_img" );
+	dbmng_selected_img = jQuery( "#dbmng_selected_img" );
 
 	// let the gallery items be draggable
 	jQuery( "li", gallery ).draggable({
@@ -508,7 +526,7 @@ function dbmng_nmimage(key, val, fld, path){
 			var item = ui.draggable
 			unselectImage( item, fld );
 		
-			jQuery("#dbmng_"+fld).empty();
+			//jQuery("#dbmng_"+fld).empty();
 			
 		}
 	});
@@ -535,13 +553,13 @@ function selectImage( item, fld ) {
 			jQuery(o).html(title).attr('selected',true);
 			
 			jQuery("#dbmng_"+fld).append(o);
-			
 		});
 	});
 }
 
 // image recycle function
-function unselectImage( item ) {
+var pippo = null;
+function unselectImage( item, fld ) {
 	item.fadeOut(function() {
 		item
 			.css( "width", "96px")
@@ -551,6 +569,10 @@ function unselectImage( item ) {
 			.appendTo( gallery )
 			.fadeIn();
 	});
+	
+	var id_img = jQuery(item).children('input').val();
+	jQuery("#dbmng_"+fld+" option[value='"+id_img+"']").remove();
+	//jQuery("select#mySelect option[value='option1']").remove(); 	
 }
 
 // image preview function, demonstrating the ui.dialog used as a modal window
@@ -577,7 +599,7 @@ function viewLargerImage( link ) {
 var map;
 
 //create and populate the leaflet map for the field data
-function dbmng_init_map(fld, val, aParam){
+function dbmng_init_map(fld, aParam){
 
 	//add a background layer
 	if(typeof L === 'undefined')	{
@@ -589,7 +611,7 @@ function dbmng_init_map(fld, val, aParam){
 		var coord=[40, 13];
 		var zoom=3;
 	
-		
+		/*
 		if(typeof aParam != 'undefined'){
 			if(aParam.coord)
 				coord=aParam.coord;
@@ -597,6 +619,7 @@ function dbmng_init_map(fld, val, aParam){
 			if(aParam.zoom)
 				zoom=aParam.zoom;
 		}
+		*/
 
 		
 		//create the map objet
@@ -635,7 +658,7 @@ function dbmng_init_map(fld, val, aParam){
 				jQuery('#dbmng_'+fld).val(JSON.stringify(geojson));
 		});
 
-
+	map.invalidateSize();
 		
 	}
 

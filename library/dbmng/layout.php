@@ -299,8 +299,8 @@ function layout_form_geo( $aInput )
 
 	$html.="<div class='dbmng_mapcontainer' id='dbmng_mapcontainer_$fld'></div>";
 
-	$html.='<script>jQuery(function(){dbmng_init_map("'.$fld.'", "'.$fld_value.'")})</script>';
-
+	$html.='<script>jQuery(function(){dbmng_init_map("'.$fld.'", '.json_encode($aParam).')})</script>';
+	//print_r($fld_value);
 	return $html;
 }
 
@@ -865,7 +865,7 @@ function layout_form_select_nm( $aInput )
 			$html = "<select  multiple='multiple' name='".$actiontype.$fld."[]' id='dbmng_$fld'  ".layout_get_nullable($fld_value)." $more2>\n";
 			$html .= "<option/> \n";	
 			//$nLen  = count($aVoc);
-					$expl=explode('|', $value);
+			$expl=explode('|', $value);
 			
 			foreach ( $aVoc as $vocKey => $vocValue )
 				{
@@ -882,7 +882,7 @@ function layout_form_select_nm( $aInput )
 	elseif( $outtype == 'checkbox' )
 		{
 			$html .= "<ul class='dbmng_checkbox_ul' id='dbmng_checkbox_ul_$fld'>";
-					$expl=explode('|', $value);
+			$expl=explode('|', $value);
 			foreach ( $aVoc as $vocKey => $vocValue )
 				{
 					$s = "";
@@ -906,8 +906,20 @@ function layout_form_select_nm( $aInput )
 			$html .= "dbmng_nmimage_".$fld."_key=".json_encode($aVoc).";";
 			$html .= "jQuery(function(){ dbmng_nmimage(dbmng_nmimage_".$fld."_key, dbmng_nmimage_".$fld."_val, '".$fld."','".$path."'); });</script>";
 			
+			$html .= "<select multiple='multiple' name='".$actiontype.$fld."[]' id='dbmng_$fld' $more2 style='visibility: hidden'>";
+			$expl=explode('|', $value);
 			
-			$html .= "<select multiple='multiple' name='".$actiontype.$fld."[]' id='dbmng_$fld' $more2></select>";//  ".layout_get_nullable($fld_value)." $more2>\n";	style='visibility: hidden'
+			foreach ( $aVoc as $vocKey => $vocValue )
+				{
+					$s = "";
+					if($do_update && in_array($vocKey ,  $expl))
+						{
+							$s = " selected='true' ";
+						}
+				
+					$html .= "<option $s value='" . $vocKey . "'>$vocKey</option> \n";	
+				}
+			$html .= "</select>";//  ".layout_get_nullable($fld_value)." $more2>\n";	
 		} 
 	return $html;
 }
