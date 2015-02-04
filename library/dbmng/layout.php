@@ -294,12 +294,11 @@ function layout_form_geo( $aInput )
 	$aParam = $aInput['aParam'];
 
 
-	$html = "<input type='input' name='$fld' id='dbmng_$fld' value='".$value."' />\n";
+	$html = "<input type='hidden' name='$fld' id='dbmng_$fld' value='".$value."' />\n";
 
 
 	$html.="<div class='dbmng_mapcontainer' id='dbmng_mapcontainer_$fld'></div>";
-
-	$html.='<script>jQuery(function(){dbmng_init_map("'.$fld.'", '.json_encode($aParam).')})</script>';
+	$html.='<script>jQuery(function(){dbmng_init_map("'.$fld.'", '.json_encode($fld_value).')})</script>';
 	//print_r($fld_value);
 	return $html;
 }

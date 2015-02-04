@@ -611,7 +611,6 @@ function dbmng_init_map(fld, aParam){
 		var coord=[40, 13];
 		var zoom=3;
 	
-		/*
 		if(typeof aParam != 'undefined'){
 			if(aParam.coord)
 				coord=aParam.coord;
@@ -619,7 +618,6 @@ function dbmng_init_map(fld, aParam){
 			if(aParam.zoom)
 				zoom=aParam.zoom;
 		}
-		*/
 
 		
 		//create the map objet
@@ -635,9 +633,16 @@ function dbmng_init_map(fld, aParam){
 		if(jQuery('#dbmng_'+fld).val()!=''){
 			var mygeo = JSON.parse(jQuery('#dbmng_'+fld).val());
 			if(mygeo){
-				if(mygeo.coordinates){
-					var marker = new L.marker([mygeo.coordinates[1] , mygeo.coordinates[0]]).addTo(map);
-				}
+				if(mygeo.geometry)
+					if(mygeo.geometry.coordinates){
+						var marker = new L.marker([mygeo.geometry.coordinates[1] , mygeo.geometry.coordinates[0]]).addTo(map);
+						
+						var zoom = map.getZoom();
+						if( mygeo.properties.zoom ) 
+							zoom = mygeo.properties.zoom;
+						
+						map.setView([mygeo.geometry.coordinates[1] , mygeo.geometry.coordinates[0]], zoom);
+					}
 			}
 			
 		}
@@ -652,19 +657,78 @@ function dbmng_init_map(fld, aParam){
 				});
 				var marker = new L.marker(e.latlng).addTo(map);
 				var geojson={
-                "type": "Point",
-                "coordinates": [e.latlng.lng, e.latlng.lat]
+								"type": "Feature",
+								"properties": {"zoom": map.getZoom()},
+								"geometry": {
+									"type": "Point",
+									"coordinates": [e.latlng.lng, e.latlng.lat]
+								}
             };
 				jQuery('#dbmng_'+fld).val(JSON.stringify(geojson));
+				
 		});
 
-	map.invalidateSize();
-		
 	}
 
-
-
+	jQuery('#dbmng_mapcontainer_coordinate')
+		.parentsUntil('fieldset','.dbmng_fieldset_container')
+    .bind('afterShow', function() {
+			map.invalidateSize();
+    });
 	
 }
 
 
+(function ($) {
+    var _oldShow = $.fn.toggle;
+
+    $.fn.toggle = function (/*speed, easing, callback*/) {
+        var argsArray = Array.prototype.slice.call(arguments),
+            duration = argsArray[0],
+            easing,
+            callback,
+            callbackArgIndex;
+
+        // jQuery recursively calls show sometimes; we shouldn't
+        //  handle such situations. Pass it to original show method.
+        if (!this.selector) {
+            _oldShow.apply(this, argsArray);
+            return this;
+        }
+
+        if (argsArray.length === 2) {
+            if ($.isFunction(argsArray[1])) {
+                callback = argsArray[1];
+                callbackArgIndex = 1;
+            } else {
+                easing = argsArray[1];
+            }
+        } else if (argsArray.length === 3) {
+            easing = argsArray[1];
+            callback = argsArray[2];
+            callbackArgIndex = 2;
+        }
+
+        return $(this).each(function () {
+            var obj = $(this),
+                oldCallback = callback,
+                newCallback = function () {
+                    if ($.isFunction(oldCallback)) {
+                        oldCallback.apply(obj);
+                    }
+
+                    obj.trigger('afterShow');
+                };
+
+            if (callback) {
+                argsArray[callbackArgIndex] = newCallback;
+            } else {
+                argsArray.push(newCallback);
+            }
+
+            obj.trigger('beforeShow');
+
+            _oldShow.apply(obj, argsArray);
+        });
+    };
+})(jQuery);

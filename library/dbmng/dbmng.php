@@ -938,7 +938,7 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 																$show = '<a onClick="javascript:jQuery(\'#'.$fld_value['fieldset_id'].'\').toggle()">'.t($fld_value['fieldset_name']).'</a>';
 																$html .= "<fieldset class='dbmng_fieldset'>";
 																$html .= "<legend>".$show."</legend>";
-																$html .= "<div id='".$fld_value['fieldset_id']."' style='display:none'>";
+																$html .= "<div id='".$fld_value['fieldset_id']."' class='dbmng_fieldset_container' style='display:none'>";
 															}
 															
 													$html.='<div class="dbmng_form_row dbmng_form_field_'.$fld.'">&nbsp;';
@@ -946,8 +946,13 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 														{
 															$html .= layout_get_label($fld, $fld_value);
 														}
-													$html.='<div class="dbmbg_form_element">&nbsp;';
-
+													
+													$html.='<div class="dbmbg_form_element">';
+													
+													if( !var_equal($aParam, 'theme', 'bootstrap') )
+														$html .= "&nbsp;";
+													
+													
 													$aInput = Array();
 													$aInput['fld'] = $fld;
 													$aInput['fld_value'] = $fld_value;
@@ -1060,24 +1065,29 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 			if( isset($aParam['captcha']) )
 				$html .= layout_form_captcha();
 			
+			$class = "dbmng_form_button ";
+			if( var_equal($aParam, 'theme','bootstrap') )
+				{
+					$class .= " btn btn-default";
+				}
+			
 			if( $do_update == 1 )
 				{
-				
 					$html .= "<input type='hidden' name='act' value='do_upd' />\n";
 					$html .= "<input type='hidden' name='tbln' value='" . $aForm['table_name'] . "' />\n";
-					$html .= "<div class='dbmng_form_button'><input  type='submit' value='". $btn_name_update ."' /></div>\n";
+					$html .= "<div class='dbmng_form_button'><input class='$class' type='submit' value='". $btn_name_update ."' /></div>\n";
 				}
 			elseif( $do_update == 0 || $do_update == 3 )
 				{
 					$html .= "<input type='hidden' name='act' value='do_ins' />\n";
 					$html .= "<input type='hidden' name='tbln' value='" . $aForm['table_name'] . "' />\n";
-					$html .= "<div class='dbmng_form_button'><input class='dbmng_form_button' type='submit' value='" . $btn_name_add . "' /></div>\n";
+					$html .= "<div class='dbmng_form_button'><input class='$class' type='submit' value='" . $btn_name_add . "' /></div>\n";
 				}
 			elseif( $do_update == 2 && $actiontype == "search")
 				{
 					$html .= "<input type='hidden' name='act2' value='do_search' />\n";
 					$html .= "<input type='hidden' name='tbln' value='" . $aForm['table_name'] . "' />\n";
-					$html .= "<div class='dbmng_form_button'><input class='dbmng_form_button' type='submit' value='" . $btn_name_search . "' /></div>\n";
+					$html .= "<div class='dbmng_form_button'><input class='$class' type='submit' value='" . $btn_name_search . "' /></div>\n";
 					//$html .= "<div class='dbmng_form_button'><input class='dbmng_form_button' type='reset' value='" . t('Reset') . "' /></div>\n";
 				}
 
