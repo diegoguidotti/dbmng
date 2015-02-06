@@ -249,15 +249,15 @@ fieldset.dbmng_fieldset {
 }
 
 /* STYLE TO MANAGE DROP IMAGES*/
-  #gallery { float: left; width: 65%; min-height: 12em; }
+  #dbmng_select_gallery { float: right; width: 50%; min-height: 30em; min-width: 22em; border: 1px solid #555; }
   .gallery.custom-state-active { background: #eee; }
-  .gallery li { float: left; width: 96px; padding: 0.4em; margin: 0 0.4em 0.4em 0; text-align: center; }
+  .gallery li { float: right; width: 96px; padding: 0.4em; margin: 0 0.4em 0.4em 0; text-align: center; }
   .gallery li h5 { margin: 0 0 0.4em; cursor: move; }
   .gallery li a { float: right; }
   .gallery li a.ui-icon-zoomin { float: left; }
   .gallery li img { width: 100%; cursor: move; }
  
-  #dbmng_selected_img { float: right; width: 32%; min-height: 18em; padding: 1%; }
+  #dbmng_selected_img { float: left; width: 50%; min-height: 30em; min-width: 22em; padding: 1%; }
   #dbmng_selected_img h4 { line-height: 16px; margin: 0 0 0.4em; }
   #dbmng_selected_img h4 .ui-icon { float: left; }
   #dbmng_selected_img .gallery h5 { display: none; }

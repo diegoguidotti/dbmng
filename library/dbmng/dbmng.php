@@ -540,17 +540,21 @@ function dbmng_create_table($aForm, $aParam)
 	//echo "</pre>";
 
 	$html = "";
+	
 	//execute the query returning all the records filtered and ordered according to aForm and aParam
 	$result= dbmng_get_data($aForm, $aParam);			  
 
 	$html  .= "<div class='dbmng_table' id='dbmng_".$aForm['table_name']."'>";
-
-	if(isset($aForm['table_label']))
-		{
-		  $tblLbl = (!is_null($aForm['table_label']) ? t($aForm['table_label']) : $aForm['table_name']);
-			$html  .= "<h1 class='dbmng_table_label'>" . $tblLbl . "</h1>\n";
-		}
 	
+	if( var_equal($aParam,'show_table_name', 1) )
+		{
+			if(isset($aForm['table_label']))
+				{
+					$tblLbl = (!is_null($aForm['table_label']) ? t($aForm['table_label']) : $aForm['table_name']);
+					$html  .= "<h1 class='dbmng_table_label'>" . $tblLbl . "</h1>\n";
+				}
+		}
+		
 	$html .= layout_table( $result, $aForm, $aParam );
 	$html  .= "<div class='dbmng_record_number'>" . t("Record number") . ": " . dbmng_num_rows($result) . " " . t("recs") . "</div>\n";
 	$html  .= '</div>';
@@ -721,6 +725,9 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 	$nmvals = Array();
 	$html      = "";
 
+	if( var_equal($aParam, 'unsave_alert', true) )
+		$html .= "<script>jQuery(function(){dbmng_beforesave();});</script>";
+		
 	$btn_name_add = t("Insert");
 	if( isset($aParam['ui']['btn_name']) )
 		{
@@ -1465,14 +1472,21 @@ function dbmng_picture_create_link($value, $aParam, $layout_type)
 					if( $layout_type == "form" )
 						$ret="<img src='".$link."' />\n";
 					else
-						$ret="<a class='dbmng_image_link' target='_NEW' href='".$pict."'><img src='".$link."' /></a>\n";
-						
+						{	
+							$rand = mt_rand(100, 999);
+							$ret="<a class='dbmng_image_link' target='_NEW' href='".$pict."'><img src='".$link."' /></a>\n";
+							$ret="<a class='dbmng_image_link' onClick='dbmng_zoom(\"zoom_$rand\",\"$pict\")' title='dbmng_zoom'><img src='".$link."' /></a>";
+							$ret.= "<div id='zoom_$rand' title='Image'></div>";
+						}
 				}
 			else
 				{
-					$ret="<a class='dbmng_file_link' target='_NEW' href='". base_path() . "" . $value."'>".t("download")."</a>\n";					
+					$ret="<a class='dbmng_file_link' target='_NEW' href='". base_path() . "" . $value."'>".t("download")."</a>\n";
 				}
-			$ret .= "&nbsp;";			
+			
+			if( !var_equal($aParam, 'theme', 'bootstrap') )
+				$ret .= "&nbsp;";
+
 		}
 	return $ret;
 }

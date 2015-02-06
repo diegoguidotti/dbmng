@@ -458,7 +458,7 @@ function dbmng_nmimage(key, val, fld, path){
   var i=jQuery("#dbmng_nmimage_"+fld+"_div");
 	
 	html += "<div class='ui-widget ui-helper-clearfix'>";
-	html += "<ul id='gallery' class='gallery ui-helper-reset ui-helper-clearfix'>";
+	html += "<ul id='dbmng_select_gallery' class='gallery ui-helper-reset ui-helper-clearfix'>";
 
 	jQuery.each(key, function(k,v) {
 			html += "  <li class='ui-widget-content ui-corner-tr'>";
@@ -466,6 +466,7 @@ function dbmng_nmimage(key, val, fld, path){
 			html += "    <input type='hidden' id='dbmng_id_selected' value='"+k+"' />";
 			html += "    <img src='"+path+v['image']+"' width='96' height='72'>";
 			html += "    <a href='"+path+v['image']+"' title='View larger image' class='ui-icon ui-icon-zoomin'>View larger</a>";
+			//html += "    <a onClick='dbmng_zoom(\"zoom_rand\",\"pict\")'    title='View larger image' class='ui-icon ui-icon-zoomin'>View larger</a>";
 			html += "  </li>";
 	});
 	
@@ -484,7 +485,7 @@ function dbmng_nmimage(key, val, fld, path){
 			v=jQuery(v);
 			var sel_id = v.val();
 			
-			jQuery("#gallery li").each(function(k1,v1){
+			jQuery("#dbmng_select_gallery li").each(function(k1,v1){
 				v1=jQuery(v1);
 				var id_img = jQuery(v1).children('input').val();
 				if( id_img == sel_id ){
@@ -496,7 +497,7 @@ function dbmng_nmimage(key, val, fld, path){
 	}
 	
 	// there's the gallery and the trash
-	var gallery = jQuery( "#gallery" ),
+	var gallery = jQuery( "#dbmng_select_gallery" );
 	dbmng_selected_img = jQuery( "#dbmng_selected_img" );
 
 	// let the gallery items be draggable
@@ -510,7 +511,7 @@ function dbmng_nmimage(key, val, fld, path){
 
 	// let the trash be droppable, accepting the gallery items
 	dbmng_selected_img.droppable({
-		accept: "#gallery > li",
+		accept: "#dbmng_select_gallery > li",
 		activeClass: "ui-state-highlight",
 		drop: function( event, ui ) {
 			var item = ui.draggable
@@ -540,9 +541,9 @@ function selectImage( item, fld ) {
 
 		item.appendTo( list ).fadeIn(function() {
 			item
-				.animate({ width: "48px" })
+				.animate({ width: "96px" })
 				.find( "img" )
-					.animate({ height: "36px" });
+					.animate({ height: "72px" });
 		});
 		
 		jQuery("#dbmng_"+fld).empty();
@@ -558,8 +559,9 @@ function selectImage( item, fld ) {
 }
 
 // image recycle function
-var pippo = null;
+// var pippo = null;
 function unselectImage( item, fld ) {
+	var gallery = jQuery( "#dbmng_select_gallery" );
 	item.fadeOut(function() {
 		item
 			.css( "width", "96px")
@@ -594,6 +596,19 @@ function viewLargerImage( link ) {
 			});
 		}, 1 );
 	}
+}
+
+function dbmng_zoom(divid, link){
+	var html = "";
+	html += "<div id='dbmng_dialog_container' style='width:900px; height:630px'>";
+	html += "<img style='width:100%; height:100%' src='"+link+"' />";
+	html += "</div>";
+	jQuery( "#"+divid ).html(html);
+	jQuery( "#"+divid ).dialog({
+		height:700,
+		width:950
+	}
+	);
 }
 
 var map;
@@ -732,3 +747,10 @@ function dbmng_init_map(fld, aParam){
         });
     };
 })(jQuery);
+
+function dbmng_beforesave(){
+	editing=false;
+	jQuery(window).bind('beforeunload', function(){ if(editing){var msg='Please save before exit.'; return (msg);} });
+	jQuery('.dbmng_form input, .dbmng_form select').focusout(function(){editing=true});
+	jQuery('.dbmng_form_button').click(function(){editing=false;});
+}
