@@ -241,7 +241,9 @@ function layout_form_input($aInput) //( $fld, $fld_value, $value, $more='' )
 	if( isset($fld_value['readonly']) )
 		if( $fld_value['readonly'] == 1 )
 			$more2 = "disabled";
-		
+	
+	$value = str_replace("'", "&#39;", $value);
+	
 	$html  = "<input type='text' name='$actiontype$fld' id='dbmng_$fld' $more $more2 $class";
 	$html .= " value= '$value' $placeholder ";
 	$html .= " test='test' ";	

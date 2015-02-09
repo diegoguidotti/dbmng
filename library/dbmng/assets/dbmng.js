@@ -600,7 +600,7 @@ function viewLargerImage( link ) {
 
 function dbmng_zoom(divid, link){
 	var html = "";
-	html += "<div id='dbmng_dialog_container' style='width:900px; height:630px'>";
+	html += "<div id='dbmng_dialog_container' style='width:900px;'>";
 	html += "<img style='width:100%; height:100%' src='"+link+"' />";
 	html += "</div>";
 	jQuery( "#"+divid ).html(html);
