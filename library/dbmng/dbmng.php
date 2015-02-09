@@ -349,7 +349,12 @@ function dbmng_crud($aForm, $aParam=null)
 		echo "<br/>viewtable: ". $view_table;
 		echo "<br/>do_update: ". $do_update;
 	*/
-
+		if( isset($_REQUEST['dbmng_view_form']) )
+			{
+				$view_table = false;
+				$do_update = 1;
+			}
+			
 		if($view_table)
 			{
 				if( $activate_search )

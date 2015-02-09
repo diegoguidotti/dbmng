@@ -634,8 +634,11 @@ function dbmng_init_map(fld, aParam){
 				zoom=aParam.zoom;
 		}
 
-		
+		console.log('map create');
 		//create the map objet
+		if( map )
+			map.remove();
+		
 		map = L.map('dbmng_mapcontainer_'+fld).setView(coord, zoom);
 
 		var mapquestUrl = 'http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png',
@@ -690,7 +693,12 @@ function dbmng_init_map(fld, aParam){
     .bind('afterShow', function() {
 			map.invalidateSize();
     });
-	
+		
+	jQuery('#dbmng_mapcontainer_coordinate')
+	.parentsUntil('li','.tab-content')
+		.bind('afterShow', function() {
+			map.invalidateSize();
+	});	
 }
 
 
