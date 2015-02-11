@@ -389,7 +389,14 @@ function _climasouth_render_res($r)
 	$html.='<div class="res_head"><h3>';
 
 	if($r->file!=null){
-		$html.='<a target="_NEW" href="'.base_path().'docs/'.$r->file.'">'.$r->res_title.'</a>';
+
+		if(substr( $r->file, 0, 4 ) !='http'){
+
+			$html.='<a target="_NEW" href="'.base_path().'docs/'.$r->file.'">'.$r->res_title.'</a>';
+		}
+		else{
+			$html.='<a target="_NEW" href="'.$r->file.'">'.$r->res_title.'</a>';
+		}
 		
 	}
 	else{

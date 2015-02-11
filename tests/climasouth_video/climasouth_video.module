@@ -200,8 +200,66 @@ function cs_video_contest_page()
   	 $json = json_encode($return);
 
 
+			if(isset($_REQUEST['teamwork'])){
 
-			if ($user->uid) {
+				if(isset($_REQUEST['objectId'])){
+
+					$objectID=$_REQUEST['objectId'];
+
+					dbmng_query("INSERT INTO c_teamwork (par) VALUES (:par);", array(':par'=> json_encode($_REQUEST)));
+					
+
+					$username = TEAMWORK_USERID;
+					$password = TEAMWORK_PASSWORD;
+
+					$remote_url = 'https://climasouth.teamwork.com/files/'.$objectID.'.json';
+
+					// Create a stream
+					$opts = array(
+						'http'=>array(
+							'method'=>"GET",
+							'header' => "Authorization: Basic " . base64_encode("$username:$password")                 
+						)
+					);
+
+					$context = stream_context_create($opts);
+
+
+					
+
+					// Open the file using the HTTP headers set above
+					$file_txt = file_get_contents($remote_url, false, $context);
+
+					$file_txt = str_replace('download-URL', 'downloadURL', $file_txt);
+
+					$file=json_decode($file_txt);
+					
+
+
+					$url=$file->file->downloadURL;
+					$title=$file->file->originalName;
+					$description=$file->file->description;
+
+
+
+					
+
+					dbmng_query("INSERT INTO c_resource (file, res_title, res_description, id_c_visibility) VALUES (:file, :title, :description, 1);", array(':file'=> $url, ':title'=>$title,  ':description'=>$description));
+			
+
+					echo('{"ok":true, "teamwork": true ');	
+					echo(',"UEL": "'.$url.'"');
+					echo(',"title": "'.$title.'"');
+					echo("}");
+
+
+				}
+				else{
+					echo('{"ok":false, "teamwork": true, "message":"No objectId"}');	
+				}
+
+			}
+			else if ($user->uid) {
 				if(isset($_REQUEST['get_video'])){
 						$ob = dbmng_fetch_object(dbmng_query("select json from c_video WHERE uid=:uid", array(':uid'=>$user->uid)));
 						echo('{"ret":'.($ob->json).'}');				
