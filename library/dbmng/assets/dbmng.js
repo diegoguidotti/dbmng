@@ -456,17 +456,20 @@ function dbmng_reduce_fields ( field_selector, lun )
 function dbmng_nmimage(key, val, fld, path){
 	var html="";
   var i=jQuery("#dbmng_nmimage_"+fld+"_div");
+	var path_ext = path + "ext/";
+	var path_nrm = path + "nrm/";
 	
 	html += "<div class='ui-widget ui-helper-clearfix'>";
 	html += "<ul id='dbmng_select_gallery' class='gallery ui-helper-reset ui-helper-clearfix'>";
-
+	html += "<script>dbmng_search_image('dbmng_select_gallery');</script>";
+	html += "Search:<input type='text' id='dbmng_search_image'/>";
+	
 	jQuery.each(key, function(k,v) {
 			html += "  <li class='ui-widget-content ui-corner-tr'>";
 			html += "    <h5 class='ui-widget-header'>"+v['title']+"</h5>";
 			html += "    <input type='hidden' id='dbmng_id_selected' value='"+k+"' />";
-			html += "    <img src='"+path+v['image']+"' width='96' height='72'>";
-			html += "    <a href='"+path+v['image']+"' title='View larger image' class='ui-icon ui-icon-zoomin'>View larger</a>";
-			//html += "    <a onClick='dbmng_zoom(\"zoom_rand\",\"pict\")'    title='View larger image' class='ui-icon ui-icon-zoomin'>View larger</a>";
+			html += "    <img src='"+path_ext+v['image']+"' width='86' height='65'>";
+			html += "    <a onClick='dbmng_zoom(\"zoom_rand\",\""+path_nrm+v['image']+"\")'    title='View larger image' class='ui-icon ui-icon-zoomin'>View larger</a>";
 			html += "  </li>";
 	});
 	
@@ -541,9 +544,9 @@ function selectImage( item, fld ) {
 
 		item.appendTo( list ).fadeIn(function() {
 			item
-				.animate({ width: "96px" })
+				.animate({ width: "86px" })
 				.find( "img" )
-					.animate({ height: "72px" });
+					.animate({ height: "65px" });
 		});
 		
 		jQuery("#dbmng_"+fld).empty();
@@ -564,9 +567,9 @@ function unselectImage( item, fld ) {
 	var gallery = jQuery( "#dbmng_select_gallery" );
 	item.fadeOut(function() {
 		item
-			.css( "width", "96px")
+			.css( "width", "86px")
 			.find( "img" )
-				.css( "height", "72px" )
+				.css( "height", "65px" )
 			.end()
 			.appendTo( gallery )
 			.fadeIn();
@@ -577,26 +580,26 @@ function unselectImage( item, fld ) {
 	//jQuery("select#mySelect option[value='option1']").remove(); 	
 }
 
-// image preview function, demonstrating the ui.dialog used as a modal window
-function viewLargerImage( link ) {
-	var src = link.attr( "href" ),
-		title = link.siblings( "img" ).attr( "alt" ),
-		modal = jQuery( "img[src$='" + src + "']" );
-
-	if ( modal.length ) {
-		modal.dialog( "open" );
-	} else {
-		var img = jQuery( "<img alt='" + title + "' width='384' height='288' style='display: none; padding: 8px;' />" )
-			.attr( "src", src ).appendTo( "body" );
-		setTimeout(function() {
-			img.dialog({
-				title: title,
-				width: 400,
-				modal: true
-			});
-		}, 1 );
-	}
-}
+// // image preview function, demonstrating the ui.dialog used as a modal window
+// function viewLargerImage( link ) {
+// 	var src = link.attr( "href" ),
+// 		title = link.siblings( "img" ).attr( "alt" ),
+// 		modal = jQuery( "img[src$='" + src + "']" );
+// 
+// 	if ( modal.length ) {
+// 		modal.dialog( "open" );
+// 	} else {
+// 		var img = jQuery( "<img alt='" + title + "' width='384' height='288' style='display: none; padding: 8px;' />" )
+// 			.attr( "src", src ).appendTo( "body" );
+// 		setTimeout(function() {
+// 			img.dialog({
+// 				title: title,
+// 				width: 400,
+// 				modal: true
+// 			});
+// 		}, 1 );
+// 	}
+// }
 
 function dbmng_zoom(divid, link){
 	var html = "";
@@ -761,4 +764,67 @@ function dbmng_beforesave(){
 	jQuery(window).bind('beforeunload', function(){ if(editing){var msg='Please save before exit.'; return (msg);} });
 	jQuery('.dbmng_form input, .dbmng_form select').focusout(function(){editing=true});
 	jQuery('.dbmng_form_button').click(function(){editing=false;});
+}
+
+
+function dbmng_pagination_select(div_container, page, rec_offset){
+	var n = 0;
+	
+	jQuery.each(jQuery("#"+div_container + " table tbody tr" ), function(k, v){
+		v = jQuery(v);
+		if( n >= page*rec_offset && n < (page+1)*rec_offset )
+		{
+			v.show();
+			//console.log(v);
+		}
+		else
+		{
+			v.hide();
+		}
+		n++;
+		
+	});
+	jQuery('#'+div_container+' ul.pagination li').removeClass('active');
+	jQuery('#dbmng_pag_'+page).addClass('active');
+	//console.log(rec_start);
+	jQuery("#"+div_container).show();
+}
+
+function dbmng_pagination(div_container,rec_offset){
+	var nRecs = parseInt(jQuery("#"+div_container + " table tbody tr" ).size());
+	var nPage = Math.ceil(nRecs/rec_offset);
+	//console.log(nPage);
+	
+	var html = "<nav id='nav_gallery'><ul class='pagination'>";
+	var Page = 0;
+	for( i=0; i< nPage; i++)
+	{
+		Page = i;
+		html += "<li id='dbmng_pag_"+i+"'><a onClick='dbmng_pagination_select(\""+div_container+"\","+Page+","+rec_offset+")'>"+(Page+1)+"</a></li>";
+	}
+	html += "</ul></nav>";
+	
+	jQuery("#"+div_container).prepend(html);
+	jQuery("#"+div_container).show();
+	dbmng_pagination_select(div_container, 0, rec_offset);
+}
+
+
+function dbmng_search_image(id)
+{
+	console.log("dbmng_search_image");
+	jQuery('#dbmng_search_image').keyup(function(){
+		jQuery('#'+id+' li h5').each( function(k,v){
+			v = jQuery(v);
+			testo = jQuery('#dbmng_search_image').val();
+			if( v.text().toLowerCase().indexOf(testo) > -1 )
+				{
+					v.parent().show();
+				}
+			else
+				{
+					v.parent().hide();
+				}
+		} )
+	})
 }

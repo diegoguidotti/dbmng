@@ -298,7 +298,6 @@ function layout_form_geo( $aInput )
 
 	$html = "<input type='hidden' name='$fld' id='dbmng_$fld' value='".$value."' />\n";
 
-	echo "pippo";
 	$html.="<div class='dbmng_mapcontainer' id='dbmng_mapcontainer_$fld'></div>";
 	$html.='<script>jQuery(function(){dbmng_init_map("'.$fld.'", '.json_encode($fld_value).')})</script>';
 	//print_r($fld_value);
@@ -655,7 +654,7 @@ function layout_form_checkbox( $aInput )
 	$class = "dbmng_checkbox";
 	if( isset($aParam['theme']) )
 		if( $aParam['theme'] == 'bootstrap' )
-			$class .= " form-control";
+			//$class .= " form-control";
 		
 	if( strlen($aInput['actiontype'])!= 0 )
 		$actiontype = "search_";
@@ -902,6 +901,7 @@ function layout_form_select_nm( $aInput )
 			$path = "";
 			if( isset($aParam['base_path']) )
 				$path = $aParam['base_path'].$fld_value['img_path'];
+			$html .= "<div id='zoom_rand'></div>";
 			
 			$html .= "<div id='dbmng_nmimage_".$fld."_div'></div><script> dbmng_nmimage_".$fld."_val='".$value."';";
 			$html .= "dbmng_nmimage_".$fld."_key=".json_encode($aVoc).";";
@@ -1054,26 +1054,29 @@ function layout_table_action( $aForm, $aParam, $id_record )
 	$hv   = prepare_hidden_var($aParam);
 	if( true )
 		{
-			if( $nDel == 1 )
-				{
-					$jsc = "return confirm('".t('Are you sure?')."')";
-					$html .= '<a class="dbmng_delete_button" onclick="'.$jsc.'" href="?act=del&amp;tbln=' . $aForm['table_name'] . '&amp;' . $id_record .$hv.'">' . $label_del . '</a>' . "&nbsp;";
-				}
 			$act2="";
 			if( isset($_REQUEST['act2']) )
 				{
 					$act2="&amp;act2=".$_REQUEST['act2'];
 					$hv.= dbmng_search_add_hidden($aForm, $aParam, "GET");
 				}
-
+			
 			if( $nUpd == 1 ) 
 				{
 					$html .= "<a class='dbmng_update_button' href='?act=upd".$act2."&amp;tbln=" . $aForm['table_name'] . "&amp;" . $id_record .$hv."'>" . $label_upd . "</a>" . "&nbsp;";
 				}
+			
 			if( $nDup == 1 )
 				$html .= "<a class='dbmng_duplicate_button' href='?act=dup".$act2."&amp;tbln=" . $aForm['table_name'] . "&amp;" . $id_record .$hv."'>" . $label_dup . "</a>" . "&nbsp;";
+			
 			if( $nPrt_rec == 1 )
 				$html .= "<a class='dbmng_print_rec_button' href='?act=prt_rec".$act2."&amp;tbln=" . $aForm['table_name'] . "&amp;" . $id_record .$hv."' target='_blank'>" . $label_pdf . "</a>" . "&nbsp;";
+			
+			if( $nDel == 1 )
+				{
+					$jsc = "return confirm('".t('Are you sure?')."')";
+					$html .= '<a class="dbmng_delete_button" onclick="'.$jsc.'" href="?act=del&amp;tbln=' . $aForm['table_name'] . '&amp;' . $id_record .$hv.'">' . $label_del . '</a>' . "&nbsp;";
+				}
 		}
 	else
 		{

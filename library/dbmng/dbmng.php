@@ -1479,9 +1479,15 @@ function dbmng_picture_create_link($value, $aParam, $layout_type)
 					else
 						{	
 							$rand = mt_rand(100, 999);
-							$ret="<a class='dbmng_image_link' target='_NEW' href='".$pict."'><img src='".$link."' /></a>\n";
-							$ret="<a class='dbmng_image_link' onClick='dbmng_zoom(\"zoom_$rand\",\"$pict\")' title='dbmng_zoom'><img src='".$link."' /></a>";
-							$ret.= "<div id='zoom_$rand' title='Image'></div>";
+							if( var_equal($aParam, 'picture_load', 'hidden') )
+							{
+								$ret = "<span>$link</span>";
+							}
+							else{
+								$ret="<a class='dbmng_image_link' target='_NEW' href='".$pict."'><img src='".$link."' /></a>\n";
+								$ret="<a class='dbmng_image_link' onClick='dbmng_zoom(\"zoom_$rand\",\"$pict\")' title='dbmng_zoom'><img src='".$link."' /></a>";
+								$ret.= "<div id='zoom_$rand' title='Image'></div>";
+							}
 						}
 				}
 			else
