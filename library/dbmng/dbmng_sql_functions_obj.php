@@ -94,13 +94,19 @@ class PDOStatementTester extends PDOStatement {
  
 function debug_sql_statement($sql, $aVal)
 {
-	$sConnection = DBMNG_DB.":dbname=".DBMNG_DB_NAME.";host=".DBMNG_DB_HOST;
+	$ret = "";
+	if( $_SERVER["HTTP_HOST"] == "localhost" )
+		{
+			$sConnection = DBMNG_DB.":dbname=".DBMNG_DB_NAME.";host=".DBMNG_DB_HOST;
 
-	if(DBMNG_DB=='mysql')
-			$sConnection .= ";charset=utf8";
-	$pdo = new PDOTester($sConnection, DBMNG_DB_USER, DBMNG_DB_PASS);
-	$query = $pdo->prepare($sql);
+			if(DBMNG_DB=='mysql')
+					$sConnection .= ";charset=utf8";
+			$pdo = new PDOTester($sConnection, DBMNG_DB_USER, DBMNG_DB_PASS);
+			$query = $pdo->prepare($sql);
+			
+			$ret = $query->getSQL($aVal);
+		}
 	
-	return $query->getSQL($aVal);				
+	return $ret;
 }
 ?>
