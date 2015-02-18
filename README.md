@@ -74,6 +74,9 @@ functions for user and adding custom function
   //allow to add the field sorter functionality
   $aParam['tbl_sorter']        = '1';
   
+  //allow system alert on exit page
+  $aParam['unsave_alert'] = true;
+  
   //specify the directory where the uploaded file will be stored
   //in case this parameter is missing your file will be stored in 'docs/'
   $aParam['file'] = 'sites/docs/';
