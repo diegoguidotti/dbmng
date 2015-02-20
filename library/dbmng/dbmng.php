@@ -1908,7 +1908,7 @@ function dbmng_ajax_manager(){
 												if(isset($val['record'][$fld])){
 
 													$updateValue=$val['record'][$fld];
-													if($fld_value['widget']=='date' && $updateValue='')
+													if($fld_value['type']=='date' && $updateValue='')
 														$updateValue=null;
 
 													$sVal .= $fld."= :$fld, ";
