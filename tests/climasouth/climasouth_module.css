@@ -534,3 +534,7 @@ display:none !important;
 #flag_container{
 width:500px;
 }
+
+body.page-dbmng-edit-tables #page-title{
+display:none;
+}

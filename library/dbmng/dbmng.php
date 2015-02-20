@@ -1906,8 +1906,13 @@ function dbmng_ajax_manager(){
 										if( $fld != $pk )
 											{
 												if(isset($val['record'][$fld])){
+
+													$updateValue=$val['record'][$fld];
+													if($fld_value['widget']=='date' && $updateValue='')
+														$updateValue=null;
+
 													$sVal .= $fld."= :$fld, ";
-													$aVal = array_merge( $aVal, array(":".$fld => $val['record'][$fld]) );
+													$aVal = array_merge( $aVal, array(":".$fld => $updateValue) );
 												}
 												else{
 													//there are a missing fields in update

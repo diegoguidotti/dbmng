@@ -62,24 +62,50 @@ function climasouth_video_permission() {
 function cs_menu_plus($nid, $lang, $showFigli)
 {
 	$html = "";
+	$q="";
 	
 	if ($nid) {
 				
-		//$q=" SELECT c.link_path, c.link_title, c.has_children FROM clima_menu_links o , clima_menu_links p , clima_menu_links c ";
-		//$q.=" WHERE o.menu_name='main-menu' AND o.link_path='node/".$node->nid."' AND o.plid=p.mlid AND c.plid=p.mlid AND o.language='".$lang."' order by c.weight ";
 
-		$q="  select c.link_path, c.link_title, c.has_children, p.p1 from clima_menu_links p , clima_menu_links c WHERE p.mlid in ( ";
-		if($showFigli){
-			$q.= "select max(mlid) from clima_menu_links WHERE menu_name='main-menu' AND link_path='node/".$nid."' AND language='".$lang."' "; 			
+		//$rn=dbmng_query("select * from c_news WHERE linked_page ='node/:nid'", array(':nid'=>$nid));
+		$rn=dbmng_query("select * from c_news WHERE linked_page ='node/".$nid."'", array());
+
+		//echo "select * from c_news WHERE linked_page ='node/".$nid."'";
+
+		//$html.="NN".dbmng_num_rows($rn)." ".$showFigli;
+		if( dbmng_num_rows($rn)>0 && !$showFigli ){
+
+
+			$tt="title";
+			global $language;
+			if($language->language=='fr'){
+				$tt="case when title_fr is null or title_fr='' then title else title_fr end";
+			}
+			else if($language->language=='ar'){
+				$tt="case when title_ar is null or title_ar='' then title else title_ar end";
+			}
+
+
+			$q="select linked_page as link_path, ".$tt." as link_title, 0 as has_children, 521 as p1  from c_news order by date_from desc";
+
 		}
 		else{
-			$q.= "select max(plid) from clima_menu_links WHERE menu_name='main-menu' AND link_path='node/".$nid."' AND language='".$lang."' "; 
+			//$q=" SELECT c.link_path, c.link_title, c.has_children FROM clima_menu_links o , clima_menu_links p , clima_menu_links c ";
+			//$q.=" WHERE o.menu_name='main-menu' AND o.link_path='node/".$node->nid."' AND o.plid=p.mlid AND c.plid=p.mlid AND o.language='".$lang."' order by c.weight ";
+
+			$q="  select c.link_path, c.link_title, c.has_children, p.p1 from clima_menu_links p , clima_menu_links c WHERE p.mlid in ( ";
+			if($showFigli){
+				$q.= "select max(mlid) from clima_menu_links WHERE menu_name='main-menu' AND link_path='node/".$nid."' AND language='".$lang."' "; 			
+			}
+			else{
+				$q.= "select max(plid) from clima_menu_links WHERE menu_name='main-menu' AND link_path='node/".$nid."' AND language='".$lang."' "; 
+			}
+		  $q.=" ) AND  c.plid=p.mlid order by c.weight";
 		}
 
-    $q.=" ) AND  c.plid=p.mlid order by c.weight";
 
 
-		//$html.=$q;
+		
 
 		$res = dbmng_query($q, array());
 
@@ -97,7 +123,7 @@ function cs_menu_plus($nid, $lang, $showFigli)
 
 				$parent_menu=$rec->p1;
 
-				$html.="<div class='cs_menu_plus2 ".$cl."'>".l($rec->link_title, $rec->link_path);
+				$html.="<div class='cs_menu_plus2 ".$cl."'>".l(t($rec->link_title), $rec->link_path);
 				if($rec->has_children=='1'){
 					$path=$rec->link_path;
 					//$html.=' - '.substr($path,0,4).' - ';
