@@ -654,34 +654,41 @@ function dbmng_get_js_array($aForm, $aParam)
 			$first_record=true;
 			foreach( $result as $record )
 				{
-
-					if($first_record){
-						$first_record=false;
-					}
-					else{
-						$sObj .=", ";
-					}
+					if($first_record)
+						{
+							$first_record=false;
+						}
+					else
+						{
+							$sObj .=", ";
+						}
 
 					$sObj .= "{";
 					$first_field=true;
 
-				
-
 					//get the query results for each field
 					foreach ( $aForm['fields'] as $fld => $fld_value )
 						{					
-							if(isset($record->$fld)){
-								$value=$record->$fld;
-
-								if($first_field){
+							if($first_field)
+								{
 									$first_field=false;
 								}
-								else{
+							else
+								{
 									$sObj .=", ";
 								}
-								//important! use json_encode to escape special characters
-								$sObj .= '"' . $fld . '": ' . json_encode($value);
-							}						
+							
+							if(isset($record->$fld))
+								{
+									$value=$record->$fld;
+
+									//important! use json_encode to escape special characters
+									$sObj .= '"' . $fld . '": ' . json_encode($value);
+								}
+							else
+								{
+									$sObj .= '"' . $fld . '": null';
+								}
 						}				
 					$sObj .= "} ";
 				}		
@@ -1906,13 +1913,16 @@ function dbmng_ajax_manager(){
 										if( $fld != $pk )
 											{
 												if(isset($val['record'][$fld])){
-
+													$skipField=false;	
 													$updateValue=$val['record'][$fld];
-													if($fld_value['type']=='date' && $updateValue='')
+													if($fld_value['type']=='date' && $updateValue==''){
 														$updateValue=null;
-
-													$sVal .= $fld."= :$fld, ";
-													$aVal = array_merge( $aVal, array(":".$fld => $updateValue) );
+														$skipField=true;	
+													}
+// 													if(!$skipField){
+														$sVal .= $fld."= :$fld, ";
+														$aVal = array_merge( $aVal, array(":".$fld => $updateValue) );
+// 													}
 												}
 												else{
 													//there are a missing fields in update
