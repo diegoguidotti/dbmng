@@ -259,9 +259,18 @@ function dbmng_crud($aForm, $aParam=null)
 	//echo '<pre>';
 	//print_r($_POST);
 	//echo '</pre>';
+
+
 	$ret = dbmng_check_aForm($aForm, $aParam);
 
+	
+
 	$html='';
+
+	//check if a new record has been insert. If the user want to reload the form after a new page has been inserted
+  //keep empty of no record has been added
+  //otherwise provide the inserted_id to create_form function
+	$inserted_id='';
 
 
 	if($ret['ok']){
@@ -269,6 +278,8 @@ function dbmng_crud($aForm, $aParam=null)
 		//echo($_REQUEST["act"]." ".$view_table." ".$do_update);
 		$html  = "";
 		$ret_form_process = dbmng_create_form_process($aForm, $aParam);
+
+		
 
 		//show table if there is no act or it's working on update or duplicate
 		$view_table = true;
@@ -310,6 +321,11 @@ function dbmng_crud($aForm, $aParam=null)
 							}
 
 					}
+				else{
+					if(isset($ret_form_process['inserted_id'])){
+						$inserted_id=$ret_form_process['inserted_id'];
+					}
+				}
 		}
 
 		$activate_search=false;
@@ -354,6 +370,9 @@ function dbmng_crud($aForm, $aParam=null)
 				$view_table = false;
 				$do_update = 1;
 			}
+
+
+		
 			
 		if($view_table)
 			{
@@ -367,7 +386,10 @@ function dbmng_crud($aForm, $aParam=null)
 		else
 			{
 				//echo "do_upd: ". $do_update;
-				$html .= dbmng_create_form($aForm, $aParam, $do_update);
+
+				//drupal_set_message("vt".$view_table."-".$do_update." ".$_REQUEST['act'].' '.$_REQUEST['dbmng_view_form']);
+
+				$html .= dbmng_create_form($aForm, $aParam, $do_update, "", $inserted_id);
 			}
 
 	}
@@ -723,9 +745,11 @@ function dbmng_get_js_array($aForm, $aParam)
 \param $aForm  		Associative array with all the characteristics
 \param $aParam  		Associative array with some custom variable used by the renderer
 \param $do_update  		0 Insert 1 Update 2 Search 3 Insert
+\param $actiontype  	???
+\param $inserted_key  provide the function the inserted key to reload in update the newly inserted record
 \return           HTML generated code
 */
-function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="") 
+function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="", $inserted_key="") 
 {
 	$nmvals = Array();
 	$html      = "";
@@ -762,7 +786,13 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 					if( dbmng_check_is_pk($fld_value) )
 						{
 							$where .= "$fld = :$fld and ";
-							$var = array_merge($var, array(":".$fld => $_REQUEST[$fld] ));
+							if($inserted_key==''){
+								$var = array_merge($var, array(":".$fld => $_REQUEST[$fld] ));
+							}
+							else{
+								$var = array_merge($var, array(":".$fld => $inserted_key ));
+							}
+							
 							$pkfld = $fld;
 						}
 				}
@@ -783,6 +813,10 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 			$var_all = array_merge($var, $var_filter);
 			
 			$result = dbmng_query("select * FROM " . $aForm['table_name'] . " WHERE $where $where_filter ", $var_all);
+
+			//drupal_set_message("select * FROM " . $aForm['table_name'] . " WHERE $where $where_filter ");
+			//drupal_set_message('<pre>'.print_r($var_all, true).'</pre>');
+
 			
 
 			if( dbmng_is_valid($result) )
@@ -828,6 +862,9 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="")
 						$html .= "<div class='message error'>".t('Column not found')." [$pkfld]</div>";
 				}
 		}
+
+
+	
 
 	if( $bOk ) // dbmng_num_rows($result)>0 )
 		{
