@@ -1246,16 +1246,18 @@ function dbmng_value_prepare($x_value, $x, $post, $aParam)
 			
 			$sValue = $dir_upd_file . $_FILES[$x]['name'];
 
+			//print_r($_FILES[$x]);
+			//drupal_set_message ("Carica::::: ".$sValue." ". $_FILES[$x]["error"]);
+
 			if( $_FILES[$x]["error"] == 0 )
 				{
 					$sValue = dbmng_uploadfile($_FILES[$x]['name'], $dir_upd_file, $_FILES[$x]["tmp_name"]);
 					$sValue = $_FILES[$x]['name'];
-
 			  }
-			else if ($_FILES[$x]["error"] == 4)
+			else 
 				{ //if the file is null use the text in the checkbox
 					$sValue = $post[$x.'_tmp_choosebox'];
-				}		
+				}
 		}
 
 	if( $widget=='picture' )
@@ -1303,10 +1305,10 @@ function dbmng_value_prepare($x_value, $x, $post, $aParam)
 					$sValue = $_FILES[$x]['name'];
 
 			  }
-			else if ($_FILES[$x]["error"] == 4)
+			else 
 				{ //if the file is null use the text in the checkbox
 					$sValue = $post[$x.'_tmp_choosebox'];
-				}		
+				}	
 		}
 
 
@@ -2105,6 +2107,15 @@ function dbmng_generate_array($sql, $var){
 			}		
 		return $aFVoc;
 }
+
+function dbmng_print_r($var){
+	if(DBMNG_CMS=='drupal')
+		drupal_set_message("<pre>".print_r($var, true)."</pre>");
+	else
+		print_r($var);
+}
+
+
  
 
 ?>
