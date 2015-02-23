@@ -970,7 +970,6 @@ Dbmng.prototype.createRow = function (value, id_record) {
 	var html_img="";
 	
 	
-						console.log(o);
 	
 		for( var key in o )	{        
 			//get the field parameters
