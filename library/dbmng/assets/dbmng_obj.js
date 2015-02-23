@@ -969,6 +969,9 @@ Dbmng.prototype.createRow = function (value, id_record) {
 	var html_row="";
 	var html_img="";
 	
+	
+						console.log(o);
+	
 		for( var key in o )	{        
 			//get the field parameters
       var f = obj.aForm.fields[key];
