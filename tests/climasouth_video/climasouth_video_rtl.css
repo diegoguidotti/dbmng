@@ -1,0 +1,14 @@
+ul{
+/*direction:rtl;*/
+}
+
+
+body{
+unicode-bidi:embed;
+}
+
+
+section div.container{
+direction: rtl; unicode-bidi: embed;
+
+}

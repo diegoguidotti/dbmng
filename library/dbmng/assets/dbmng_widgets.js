@@ -1,8 +1,14 @@
 
 //For each widget we need three custom function
-
 function executeFunctionByName(functionName, context /*, args */) {
-  var args = Array.prototype.slice.call(arguments).splice(2);
+  //var args = Array.prototype.slice.call(arguments).splice(2);
+	//Fixed splice for IE8
+	var args= []; //arguments.splice(2, arguments.length);
+	for(i=2; i<arguments.length; i++){
+		args.push(arguments[i]);
+	}
+
+	//alert(arguments[2]+" "+args[0]);
   var namespaces = functionName.split(".");
   var func = namespaces.pop();
   for(var i = 0; i < namespaces.length; i++) {
@@ -29,7 +35,7 @@ dbmng_widget_form = function(obj_id,  fld, field, id_record, value, more, act ){
 	var ty="text";
 	if(field.type=='double')
 		ty="number"
-	var html  = "<input type='"+ty+"' name='"+fld+"' id='"+obj_id+"_"+id_record+"_"+fld+"' " + more;
+	var html  = "<input class='dbmng_form_field_"+fld+"' type='"+ty+"' name='"+fld+"' id='"+obj_id+"_"+id_record+"_"+fld+"' " + more;
 	html += " value= '"+value+"' ";	
 	html += Dbmng.layout_get_nullable(field,act);
 	html += " />\n";
@@ -50,12 +56,12 @@ dbmng_widget_html = function(val, field ){
 dbmng_select_form = function(obj_id,  fld, field, id_record, value, more, act ){
 	var html='';
 
-	console.log(field.voc_val);
+	//console.log(field.voc_val);
 
-	html = "<select  name='"+fld+"' id='"+obj_id+"_"+id_record+"_"+fld+"' ";
+	html = "<select  class='dbmng_form_field_"+fld+"' name='"+fld+"' id='"+obj_id+"_"+id_record+"_"+fld+"' ";
 	html += Dbmng.layout_get_nullable(field,act);
-	html += " >\n";
-	html += "<option/> \n";	
+	html += " >";
+	html += "<option></option>";	
 	if(field.voc_val){
 		jQuery.each(field.voc_val, function(order, val){
 			s = "";
@@ -72,23 +78,31 @@ dbmng_select_form = function(obj_id,  fld, field, id_record, value, more, act ){
 			if(k == value){
 				s = " selected='true' ";
 			}
-			html += "<option "+s+" value='" + k + "'>" + v + "</option> \n";	
+			html += "<option "+s+" value='" + k + "'>" + v + "</option>";	
 		});
 	}
-	html += "</select>\n";
+	html += "</select>";
 	return html;
 }
 
 dbmng_select_html = function(key, field ){
 	var ret="-";
-	if(field.voc_val){
-		for(n=0; n<field.voc_val.length; n++){
-			if(field.voc_val[n].k==key){
-				ret=field.voc_val[n].val;
+
+	
+			//alert("dentro"+key+" "+field);
+
+	
+	if(typeof field != 'undefined'){
+
+		if(typeof field.voc_val != 'undefined'){
+			for(n=0; n<field.voc_val.length; n++){
+				if(field.voc_val[n].k==key){
+					ret=field.voc_val[n].val;
+				}
 			}
+			//if(field.voc_val[key])
+			//	ret  = field.voc_val[key];
 		}
-		//if(field.voc_val[key])
-		//	ret  = field.voc_val[key];
 	}
 	return ret;
 }
@@ -121,9 +135,9 @@ dbmng_checkbox_form = function(obj_id,  fld, field, id_record, value, more, act 
 	html += " / >\n";
 */
 	//html+='<input id=new type=checkbox name=news><label for=news>'+field.label+'</label>';
-	
-	   html='<input class="custom"  name="'+fld+'" id="'+obj_id+"_"+id_record+"_"+fld+'" type="checkbox"  ';
-		if( value == 1 || (value != 0 && field.default == 1) ){
+
+	   html='<input class="custom dbmng_form_field_'+fld+'" name="'+fld+'" id="'+obj_id+"_"+id_record+"_"+fld+'" type="checkbox"  ';
+		if( value == 1 || (value != 0 ) ){
 			html += ' checked="true" ';
 		}	
 
@@ -142,7 +156,7 @@ dbmng_checkbox_html = function(val, field ){
 
 dbmng_textarea_form = function(obj_id,  fld, field, id_record, value, more, act ){
 	var html='';
-	html  = "<textarea  name='" + fld + "' id='"+obj_id+"_"+id_record+"_"+fld+"' ";
+	html  = "<textarea class='dbmng_form_field_"+fld+"' name='" + fld + "' id='"+obj_id+"_"+id_record+"_"+fld+"' ";
 	html += Dbmng.layout_get_nullable(field,act);
 	html += " >\n";
 	html += value;	
@@ -188,7 +202,7 @@ dbmng_gps_form = function(obj_id,  fld, field, id_record, value, more, act ){
 
 
 dbmng_date_form = function(obj_id,  fld, field, id_record, value, more, act ){
-	var html  = "<input type='date' name='"+fld+"' id='"+obj_id+"_"+id_record+"_"+fld+"' " + more;
+	var html  = "<input class='dbmng_form_field_"+fld+"' type='date' name='"+fld+"' id='"+obj_id+"_"+id_record+"_"+fld+"' " + more;
 	html += " value= '"+value+"' ";	
 	html += Dbmng.layout_get_nullable(field,act);
 	html += " />\n";
@@ -219,7 +233,7 @@ dbmng_date_html = function(val, field ){
 }
 
 dbmng_password_form = function(obj_id,  fld, field, id_record, value, more, act ){
-	var html  = "<input type='password' name='"+fld+"' id='"+obj_id+"_"+id_record+"_"+fld+"' " + more;
+	var html  = "<input class='dbmng_form_field_"+fld+"' type='password' name='"+fld+"' id='"+obj_id+"_"+id_record+"_"+fld+"' " + more;
 	html += " value= '"+value+"' ";	
 	html += Dbmng.layout_get_nullable(field,act);
 	html += " />\n";

@@ -522,14 +522,18 @@ function cs_mapResize(){
 		
 	}
 
-
-	if((jQuery('h1#page-title').html()).trim()=='لمحة عامة والبيانات الرئيسية'){
-		if(jQuery('html').attr('lang')=='en'){
-			jQuery('h1#page-title').html('Overview & key data');
+	try{
+		if((jQuery('h1#page-title').html()).trim()=='لمحة عامة والبيانات الرئيسية'){
+			if(jQuery('html').attr('lang')=='en'){
+				jQuery('h1#page-title').html('Overview & key data');
+			}
+			else if(jQuery('html').attr('lang')=='fr'){
+				jQuery('h1#page-title').html('Données de base');
+			}
 		}
-		else if(jQuery('html').attr('lang')=='fr'){
-			jQuery('h1#page-title').html('Données de base');
-		}
+	}
+	catch(e){
+		;
 	}
 
 

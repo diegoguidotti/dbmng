@@ -116,8 +116,11 @@ function resize(){
 		//console.log('Video alto:'+vh+" metto margine: -"+tm);
 		jQuery('#intro video').css('margin-top','-'+tm+'px');
 
-		var left=jQuery('#about div.row').offset().left;
-		jQuery('#intro #cs_video_title').css('left', left+'px');
+		try{
+			var left=jQuery('#about div.row').offset().left;
+			jQuery('#intro #cs_video_title').css('left', left+'px');
+		}
+		catch(e){;}
 
 
 		min_height=jQuery(window).height();
@@ -307,5 +310,284 @@ function uploadVideo(){
 		jQuery('#cs_video_container').html(error_message);
 	}
 }
+
+
+var myRadarChart;
+
+var group={};
+
+function createSpiderChart(populate_select){
+
+
+	var obj={'ajax':'ok', 'spider': ''};
+	jQuery.ajax({
+		      type: "POST",
+		      url: base_path+'/climasouth/video',
+					DataType: 'json',
+		      data: obj,                
+		      success: function(data){
+						//console.log(data);
+	
+						group={};
+						jQuery.each(data.res.data, function(k,v){
+							//console.log(v+" "+jQuery.inArray(v[0], group));
+							//console.log(group);
+							if(!group[v[0]]){
+								group[v[0]]={"name": v[1]+" - "+v[2], "country":{}};
+							}
+
+							if(!group[v[0]].country[v[3]]){
+								group[v[0]].country[v[3]]={};
+							}
+						
+							group[v[0]].country[v[3]][v[4]]={'current': v[5] ,'target':v[6]}
+						});
+
+						console.log(group);
+						if(populate_select)
+							populateSelect();
+						else
+							updateChart();	
+					},
+		      error: function(errMsg) {
+						console.log(errMsg);
+					}
+		});
+}
+
+function populateSelect(){
+
+	
+	
+	var opt='';
+	jQuery.each(group, function(k,v){
+		opt+='<option selected value="'+k+'">'+v.name+'</option>';
+	});
+	jQuery('#choose_a_sector').html(opt);
+	changeSector();
+}
+
+function changeSector(){
+
+
+	var sec=jQuery('#choose_a_sector').val();
+
+	console.log("Choose sec "+sec);
+
+	var opt='';
+	jQuery.each(group[sec].country, function(k,v){
+		console.log('ac'+k)
+		opt+='<option selected value="'+k+'">'+k+'</option>';
+	});
+	jQuery('#choose_a_country').html(opt);
+	changeCountry();
+	
+}
+
+
+function changeCountry(){
+	//console.log('plot '+sec+" "+cou);
+	spider_select();
+}
+
+
+function updateChart(){
+	var sec=jQuery('#choose_a_sector').val();
+	var cou=jQuery('#choose_a_country').val();
+
+	var vals= group[sec].country[cou];
+	var labels=[];
+	var labelsLong=[];
+	var data_target=[];
+	var data_current=[];
+
+	jQuery.each(vals, function(k,v){
+
+		var l=k.substr(0,40);
+		if(l.length==40) l+="...";
+		labels.push(l);		
+		labelsLong.push(k);		
+		//labels.push(k.substr(0,40));		
+
+
+		data_target.push(v.target);
+		data_current.push(v.current);
+	});
+
+	createSpiderChart2(labels, labelsLong, data_target,  data_current);
+}
+
+
+function createSpiderChart2(labels, labelsLong, data_target,  data_current){
+
+	var data = {
+		  labels: labels,
+		  datasets: [
+		      {
+		          label: "Current Rating",
+		          fillColor: "rgba(255,0,0,0.3)",
+		          strokeColor: "rgba(255,0,0,1)",
+		          pointColor: "rgba(255,0,0,1)",
+		          pointStrokeColor: "#fff",
+		          pointHighlightFill: "#fff",
+		          pointHighlightStroke: "rgba(255,0,0,1)",
+		          data: data_current
+		      },
+		      {
+		          label: "Target Rating",
+		          fillColor: "rgba(0,0,255,0.3)",
+		          strokeColor: "rgba(0,0,255,1)",
+		          pointColor: "rgba(0,0,255,1)",
+		          pointStrokeColor: "#fff",
+		          pointHighlightFill: "#fff",
+		          pointHighlightStroke: "rgba(0,0,255,1)",
+		          data:  data_target
+		      }
+		  ]
+			,labelsLong: labelsLong
+
+	};
+
+	var hh='<canvas id="spider_chart" width="900" height="550"></canvas><div id="spider_legends"><div id="spider_chart_legend"></div>';
+	hh+='<table class="rating_legend"><tr><th>1</th><td>Unsatisfactory: No substantial targets or benefits achieved.</td></tr><tr><th>2</th><td>Moderately Unsatisfactory: Major shortcomings and limited relevance.</td></tr><tr><th>3</th><td>Moderately Satisfactory: Limited compliance with key targets, significant shortcomings and/or modest overall relevance.</td></tr><tr><th>4</th><td>Satisfactory: In substantial compliance with key targets, with only minor shortcomings that are subject to remedial action.</td></tr> <tr><th>5</th><td>Highly Satisfactory. Targets achieved or exceeded, without shortcomings. Can be presented as “good” practice</td></tr></table></div>';
+
+	jQuery('#radar_container').html(hh);
+
+	if(false){
+
+		
+		myRadarChart.datasets=data;
+		myRadarChart.update();
+	}
+		else{
+
+
+			// Get the context of the canvas element we want to select
+		var ctx; // = document.getElementById("spider_chart").getContext("2d");
+
+		//var cv = document.getElementById("cv");
+
+		try{
+			var canvas = document.getElementById("spider_chart");
+		  ctx = canvas.getContext('2d');            
+
+		
+
+
+
+				var options={
+						//Boolean - Whether to show lines for each scale point
+						scaleShowLine : true,
+
+						//Boolean - Whether we show the angle lines out of the radar
+						angleShowLineOut : true,
+
+						//Boolean - Whether to show labels on the scale
+						scaleShowLabels : false,
+
+						// Boolean - Whether the scale should begin at zero
+						scaleBeginAtZero : true,
+
+						//String - Colour of the angle line
+						angleLineColor : "rgba(0,0,0,.1)",
+
+						//Number - Pixel width of the angle line
+						angleLineWidth : 1,
+
+						//String - Point label font declaration
+						pointLabelFontFamily : "'Arial'",
+
+						//String - Point label font weight
+						pointLabelFontStyle : "normal",
+
+						//Number - Point label font size in pixels
+						pointLabelFontSize : 15,
+
+						//String - Point label font colour
+						pointLabelFontColor : "#666",
+
+						//Boolean - Whether to show a dot for each point
+						pointDot : true,
+
+						//Number - Radius of each point dot in pixels
+						pointDotRadius : 6,
+
+						//Number - Pixel width of point dot stroke
+						pointDotStrokeWidth : 1,
+
+						//Number - amount extra to add to the radius to cater for hit detection outside the drawn point
+						pointHitDetectionRadius : 20,
+
+						//Boolean - Whether to show a stroke for datasets
+						datasetStroke : true,
+
+						//Number - Pixel width of dataset stroke
+						datasetStrokeWidth : 2,
+
+						//Boolean - Whether to fill the dataset with a colour
+						datasetFill : true,
+
+						//String - A legend template
+						legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\">&nbsp;</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>",				
+
+				};
+
+	
+		
+			myRadarChart = new Chart(ctx).Radar(data, options);
+			var legend = myRadarChart.generateLegend();
+
+			//and append it to your page somewhere
+			jQuery('#spider_chart_legend').append(legend);
+		}
+		catch(e){
+			jQuery('#radar_container').append("<div class='error'>You need to update your browser to the latest version.</div>");
+
+		}
+	}
+
+}
+
+
+function spider_select()
+{
+	
+
+
+		id='spider_ind_container';
+
+		var testo1=jQuery('#choose_a_country').val();
+		//console.log('plot '+sec+" "+cou);
+		var testo2=jQuery('#choose_a_sector option:selected').html();
+
+
+		console.log('spider_select '+testo1+" "+testo2);
+		jQuery.each( jQuery('#'+id+' tbody tr'), function(k,v){
+			v = jQuery(v);
+
+
+			//console.log(v.text().toLowerCase())	;
+			//console.log(testo2.toLowerCase())	;
+
+			if( v.text().toLowerCase().indexOf(testo1.toLowerCase()) > -1 &&  v.text().toLowerCase().indexOf(testo2.toLowerCase()) > -1)
+				{
+					v.show();
+				}
+			else
+				{
+					v.hide();
+				}
+		} );
+
+
+
+	createSpiderChart(false);
+	
+
+
+
+}
+
+
 
 if(typeof window.console == 'undefined') { window.console = {log: function (msg) {} }; }

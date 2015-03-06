@@ -1,5 +1,6 @@
 <?php
 include_once "sites/all/libraries/dbmng/dbmng.php";
+include_once "climasouth_spider.php";
 
 
 function climasouth_video_block_info() 
@@ -48,13 +49,23 @@ function climasouth_video_menu()
       'type' => MENU_CALLBACK,
    );
 
+
+	// this entry is similar to the previous one except the path
+  $items['spider_simulation'] = array(
+      'title' => 'SpiderChart Simulation',
+      'page callback' => '_climasouth_spider',
+      'access arguments' => array('spider'),
+      'type' => MENU_CALLBACK,
+   );
+
   return $items;
 }
 
 
 function climasouth_video_permission() {
 	return array(
-			  		'video content' => array('title'=>t('View the video contest'))
+			  		'video content' => array('title'=>t('View the video contest')),
+			  		'spider' => array('title'=>t('SpiderChart Simulation'))
 					);
 }
 
@@ -225,8 +236,17 @@ function cs_video_contest_page()
 		 $return = $_REQUEST;  
   	 $json = json_encode($return);
 
+			if(isset($_REQUEST['spider'])){
 
-			if(isset($_REQUEST['teamwork'])){
+				echo('{"ok":true, "spider": true, ');	
+
+					$q=" SELECT a.id_c_voc_ass_group, s.strategy, g.ass_group, c.country_name , (a.ass_type),     r.current_rating, r.target_rating  FROM c_assessment a, c_voc_ass_group g, c_voc_strategy s, c_activity r, c_country c WHERE a.id_c_voc_ass_group=g.id_c_voc_ass_group AND a.id_c_voc_strategy=s.id_c_voc_strategy AND r.id_c_assessment=a.id_c_assessment AND c.id_c_country=r.id_c_country AND r.id_simulation=:id_simulation";
+
+					echo '"res":'.json_encode( dbmng_query2array($q, array(':id_simulation'=>1)));
+
+				echo("}");
+			}
+			else if(isset($_REQUEST['teamwork'])){
 
 				if(isset($_REQUEST['objectId'])){
 

@@ -295,39 +295,44 @@ Dbmng.prototype.createTable = function(){
 
 	jQuery('#'+obj.id+'_view').html(html);
   
+
+	console.log(this.aData.records);
 	//Create the body of the table
 	jQuery.each(this.aData.records, function(k,value){
 		var o = value.record;
 		var state = value.state;
 		var id_record=k;
 
-		if( obj.mobile == 1 ){
-			var html_row = "<li ><a href='#' class='dbmng_edit_button'  ><div id='"+obj.id+"_"+k+"' class='"+state+"'>";
-			html_row += obj.createRow(value, id_record);	//<a href = "#">record name</a>
-			html_row += "</div></a></li>\n";
+		//check if the field has a valid object			
+		if(typeof o != 'undefined'){
+			if( obj.mobile == 1 ){
+				var html_row = "<li ><a href='#' class='dbmng_edit_button'  ><div id='"+obj.id+"_"+k+"' class='"+state+"'>";
+				html_row += obj.createRow(value, id_record);	//<a href = "#">record name</a>
+				html_row += "</div></a></li>\n";
 			
-			id_element='#'+obj.id+'_view ul';
+				id_element='#'+obj.id+'_view ul';
 
-		}
-		else{
-			var html_row = "<tr id='"+obj.id+"_"+k+"' class='"+state+"'>";
-	
-			html_row += obj.createRow(value, id_record);
-			html_row += "</tr>\n";	
-
-			id_element= '#'+obj.id+'_view tbody';
-		}
-
-			//Save the table row in DOM
-			if(obj.prepend){
-				jQuery(id_element).prepend(html_row);
 			}
 			else{
-				jQuery(id_element).append(html_row);
+				var html_row = "<tr id='"+obj.id+"_"+k+"' class='"+state+"'>";
+	
+				html_row += obj.createRow(value, id_record);
+				html_row += "</tr>\n";	
+
+				id_element= '#'+obj.id+'_view tbody';
 			}
 
-		//attach command assign the click function to delete/update/restore/insert button			
-		obj.attachCommand(id_record);
+				//Save the table row in DOM
+				if(obj.prepend){
+					jQuery(id_element).prepend(html_row);
+				}
+				else{
+					jQuery(id_element).append(html_row);
+				}
+
+			//attach command assign the click function to delete/update/restore/insert button			
+			obj.attachCommand(id_record);
+		}
 	});
 
 	var id_sel_add    = ''+obj.id+'_add';
@@ -442,6 +447,13 @@ Dbmng.prototype.createTable = function(){
 
 
 	debug("createTable - end");
+
+	if(obj.aParam.jsHook){
+		if(obj.aParam.jsHook.create_table_end){
+			executeFunctionByName(obj.aParam.jsHook.create_table_end, window );		
+		}		
+	}
+	console.log(obj.aParam);
 	//return html;
 };
 
@@ -963,25 +975,32 @@ Dbmng.prototype.createRow = function (value, id_record) {
 	var state=value.state;
 	var o=value.record;		
 
+
+	//console.log("Add row ");
+	//console.log(value);
+
 	var added_field_mobile=0;
 	//debug(value.record);
 
 	var html_row="";
 	var html_img="";
 	
-	
-	
-		for( var key in o )	{        
+	//console.log(obj.aForm.fields);
+	//console.log(o);
+	if(typeof o != 'undefined') {
+		for( var key in obj.aForm.fields )	{        
 			//get the field parameters
       var f = obj.aForm.fields[key];
       if(f){
 				if( layout_view_field_table(f.skip_in_tbl) ){
-					if (o.hasOwnProperty(key)){
+					
+					if ( o.hasOwnProperty(key)){
 						var field_value=o[key];
 
 						if(!dbmng_check_is_pk(f)){
 
 							var html_value='';
+
 
 							if(typeof window["dbmng_"+f.widget+"_html"] == "undefined") {
 								html_value = dbmng_widget_html(field_value, f ); 
@@ -1015,7 +1034,7 @@ Dbmng.prototype.createRow = function (value, id_record) {
 						}
 					}
 					else{
-						html_row += "<td>-</td>";
+						html_row += "<td>aaaa-</td>";
 					}				
 				}
 			}
@@ -1023,6 +1042,7 @@ Dbmng.prototype.createRow = function (value, id_record) {
 				//debug('field '+key+' not found in aForm' );
 			}
 		}
+	}
 	
 	// available functionalities
 	if( obj.mobile == 1 ){
@@ -1419,7 +1439,8 @@ Dbmng.prototype.createForm = function(id_record) {
 		}
 	}
 	
-	var form='<form >';
+	var form='<form action="" method="POST">';
+	var form='';
 
 //	console.log(this.aForm);
 //console.log(this.aForm.fields);
@@ -1458,22 +1479,24 @@ Dbmng.prototype.createForm = function(id_record) {
 			var value='';
 
 			if(act=='upd'){
-				if(item.record[index]){
-					value=item.record[index];							
+				if(item.record){
+					if(item.record[index]){
+						value=item.record[index];							
+					}
 				}
 			}
-			form += obj.layout_form_widget(index, field, id_record, value, '', act) + "<br/>";
+			form += obj.layout_form_widget(index, field, id_record, value, '', act) + "<br></br>";
 
 			
 			if(obj.inline==1){
-				form+='</td>';
+				form+="</td>";
 			}
 		}
 		else if (dbmng_check_is_pk(field))	{
 			if(obj.inline==1){
 				if(typeof field.skip_in_tbl != 'undefined' ){
-					if(layout_view_field_table(field.skip_in_tbl)){
-						form+="<td>&nbsp"+field.skip_in_tbl+"</td>";
+					if(!layout_view_field_table(field.skip_in_tbl)){
+						//form+="<td>&nbsp"+field.skip_in_tbl+"</td>";
 					}
 				}
 			}
@@ -1484,6 +1507,7 @@ Dbmng.prototype.createForm = function(id_record) {
 	});
 
 	form+="</form>";
+	form+="";
 
 
 	
@@ -1570,9 +1594,14 @@ Dbmng.prototype.createForm = function(id_record) {
 	}
 	else{
 		if(obj.inline==1){
-			//console.log(form);
+			
 
-			jQuery('#'+obj.id+"_"+id_record).html(form)
+			jQuery('#'+obj.id+"_"+id_record).html(form);
+	
+			//var hhh=document.getElementById(obj.id+"_"+id_record).outerHTML;
+			//console.log(form);
+			//jQuery('#txt'+obj.id+"_"+id_record).val(hhh);
+			//alert(jQuery('#'+obj.id+"_"+id_record).parent().html());;
 		}
 		else{
 			jQuery('#'+obj.id+"_form").html(form);
@@ -1767,7 +1796,7 @@ Dbmng.prototype.layout_form_widget = function( fld, field, id_record, value, mor
 Dbmng.layout_get_nullable = function( field, act ){
 	ht = "";
 	if(	typeof field.nullable != 'undefined' && field.nullable == 0 )
-		ht += "required ";
+		ht += "required='required' ";
 			
 	/* Check if needed
 	if( typeof act != 'undefined' )
@@ -1847,8 +1876,11 @@ var _guid = function () {
 };
 
 var create = function () {
-  var hasCrypto = typeof (window.crypto) != 'undefined',
-      hasRandomValues = typeof (window.crypto.getRandomValues) != 'undefined';
+  var hasCrypto = typeof (window.crypto) != 'undefined';
+	var hasRandomValues=false;
+	if(hasCrypto){
+	  hasRandomValues = typeof (window.crypto.getRandomValues) != 'undefined';
+	}
   return (hasCrypto && hasRandomValues) ? _cryptoGuid() : _guid();
 };
 
@@ -1926,7 +1958,7 @@ function dialogAppend(message, is_mobile){
 	try{
 		console.log(message);
 		if(is_mobile)
-			jQuery("#dialog_save_content").append('<br/>'+message);
+			jQuery("#dialog_save_content").append('<br></br>'+message);
 		}
 	catch(e){
 		console.log(e);
