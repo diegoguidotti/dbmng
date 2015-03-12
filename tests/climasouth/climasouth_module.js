@@ -494,9 +494,11 @@ function cs_mapResize(){
 	jQuery('#main-top').width(1170);
 
 	var pos=jQuery('#main-top').offset().left;
+	if(pos<20){
+		pos=20;
+	}
 
-
-
+	console.log(pos);
   
   //jQuery("#map_container").width(mw-300-(2*pos)); 
   jQuery("#map_container").width(870); 
@@ -506,6 +508,7 @@ function cs_mapResize(){
 
 	jQuery("#map_new_container").css('margin-right',-(pos-10));
   jQuery("#map_new_container").width(pos+290); 
+	jQuery("#map_new_container").css('padding-right',(10));
 
 
 	debug(jQuery('#main-menu div.navbar').width());
@@ -513,7 +516,7 @@ function cs_mapResize(){
 	//JS fix for arabic
 	if(jQuery('body').css('direction')=='rtl'){
 		jQuery('#map_container').css('left','-300px');
-		jQuery('#climasouth_news').css('padding-right','240px');
+		//jQuery('#climasouth_news').css('padding-right','150px');
 		jQuery('#map_container iframe').css('position', 'absolute');
 		jQuery('#map_container iframe').css('left', '0px');
 	  jQuery('#map_container .cs_image_cropper').css('position', 'absolute');

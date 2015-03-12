@@ -126,6 +126,15 @@ function spider_module_search(id)
 					width: 701px;
 				}
 
+				#spider_chart_legend {
+					margin-right: 20px;					
+				}
+
+
+				table.rating_legend td{
+					text-align: left;
+				}
+
 				#spider_chart_legend li{
 					text-align:left;			
 				}
@@ -138,11 +147,16 @@ function spider_module_search(id)
 				}
 
 				#spider_chart_legend li{
-					list-style: none;			
+					list-style: none;		
+          
 				}
 
 				#content{
 					background: #FFF;
+				}
+
+				#spider_legends{
+					margin-top: 25px;
 				}
 
 			</style>';	
