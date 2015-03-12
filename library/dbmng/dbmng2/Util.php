@@ -17,7 +17,7 @@ class Util
 	\param $val  				value
 	\return $ret				boolean
 	*/
-	function var_equal($array, $type_var, $val)
+	static function var_equal($array, $type_var, $val)
 	{
 		$ret=false;
 		if(isset($array[$type_var]))
