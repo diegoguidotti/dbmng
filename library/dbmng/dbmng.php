@@ -15,10 +15,12 @@ include_once DBMNG_LIB_PATH."dbmng/dbmng_sql_functions.php";
 include_once DBMNG_LIB_PATH."dbmng/dbmng_sql_functions_obj.php";
 include_once DBMNG_LIB_PATH."dbmng/dbmng_resize_functions.php";
 
+include_once DBMNG_LIB_PATH."dbmng/dbmng2/Util.php";
+
 if(file_exists(DBMNG_LIB_PATH.'fpdf/fpdf.php')){
 	include_once DBMNG_LIB_PATH."dbmng/dbmng_pdf.php";
 }
-
+use Dbmng\Util;
 
 /*
 Convention to be used in code:
@@ -760,6 +762,9 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="", $inserte
 {
 	$nmvals = Array();
 	$html      = "";
+
+
+	$html.=req_equal('a',1);
 
 	if( var_equal($aParam, 'unsave_alert', true) )
 		$html .= "<script>jQuery(function(){dbmng_beforesave();});</script>";
@@ -2045,7 +2050,10 @@ function dbmng_ajax_manager(){
 \param $val  				$_REQUEST value
 \return $ret				boolean
 */
+
 function req_equal($type_var, $val){
+
+/*
 	$ret=false;
 	//echo $type_var;
 	if(isset($_REQUEST[$type_var])){
@@ -2056,10 +2064,13 @@ function req_equal($type_var, $val){
 	}
 	//echo $ret;
 	return $ret;
+*/
+	return Util::var_equal($_REQUEST, $type_var, $val);
 }
 
 //Check if the key exist in array and check the value
 function var_equal($array, $key, $val){
+/*
 	$ret=false;
 	//echo $type_var;
 	if(@isset($array[$key])){
@@ -2071,6 +2082,9 @@ function var_equal($array, $key, $val){
 	}
 	//echo $ret;
 	return $ret;
+*/
+	return Util::var_equal($array, $key, $val);
+
 }
 
 function dbmng_objectToArray($d) {
