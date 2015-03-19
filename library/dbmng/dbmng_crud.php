@@ -13,8 +13,6 @@ function dbmng_create_form_process($aForm, $aParam, $actiontype="")
 {
 	$ret=null;
 
-	
-
 	//echo $_REQUEST['tbln'] ." ".$aForm['table_name']."|".$_REQUEST['act']."|";
 	//if(isset($_REQUEST['tbln']) && isset($_REQUEST['act']))
 	if(isset($_REQUEST['act']))
@@ -99,7 +97,7 @@ function dbmng_create_form_process($aForm, $aParam, $actiontype="")
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// dbmng_delete
+// dbmng_delete -> replaced by $dbmng->delete()
 // ======================
 /// This function delete the selected record
 /**
@@ -532,7 +530,7 @@ function dbmng_create_form_upload_file($aForm, $aParam)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// dbmng_update
+// dbmng_update -> replaced by $dbmng->update()
 // ======================
 /// This function update an existing record
 /**
