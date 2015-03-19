@@ -558,7 +558,7 @@ function dbmng_update($aForm, $aParam)
 				$readonly=$fld_value['readonly'];
 			}
 
-			if($fld_value['key'] != 1 ) 
+			if($fld_value['key'] != 1 && $fld_value['key'] != 2 ) 
 				{
 					if( !$readonly ) //$fld_value['readonly'] != 1 )
 						{
