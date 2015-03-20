@@ -195,7 +195,7 @@ return $hv;
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// dbmng_check_is_pk
+// dbmng_check_is_pk -> not used any more
 // ======================
 /// This function return true if the $fld_value is a primary key
 /**
@@ -214,7 +214,7 @@ function dbmng_check_is_pk($fld_value)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// dbmng_check_is_autopk
+// dbmng_check_is_autopk -> not used any more
 // ======================
 /// This function return true if the $fld_value is an autoincrement primary key
 /**
@@ -323,7 +323,7 @@ function dbmng_duplicate($aForm, $aParam)
 
 
 /////////////////////////////////////////////////////////////////////////////
-// dbmng_insert
+// dbmng_insert -> replaced by $dbmng->insert($aVars) or by $dbmng->insert($dbmng->processRequest($_REQUEST))
 // ======================
 /// This function insert a new record
 /**
@@ -419,7 +419,7 @@ function dbmng_insert($aForm, $aParam)
 
 
 /////////////////////////////////////////////////////////////////////////////
-// dbmng_insert_nm
+// dbmng_insert_nm -> replaced by $dbmng->insert($aVars, id_key) 
 // ======================
 /// This function insert a new record in one-to-many table
 /**
@@ -530,7 +530,7 @@ function dbmng_create_form_upload_file($aForm, $aParam)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// dbmng_update -> replaced by $dbmng->update()
+// dbmng_update -> replaced by $dbmng->update($aVars) 
 // ======================
 /// This function update an existing record
 /**
@@ -690,6 +690,7 @@ function dbmng_update($aForm, $aParam)
 
 }
 
+//MM -> check probaby to be removed
 // Move outside this file
 function dbmng_print_rec($aForm, $aParam)
 {
@@ -738,6 +739,7 @@ function dbmng_print_rec($aForm, $aParam)
 */
 }
 
+//MM -> check probaby to be removed
 // Move outside this file
 function dbmng_print_table($aForm, $aParam)
 {

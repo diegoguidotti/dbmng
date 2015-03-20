@@ -1184,7 +1184,7 @@ function dbmng_is_field_type_numeric($sType)
 
 
 /////////////////////////////////////////////////////////////////////////////
-// dbmng_value_prepare
+// dbmng_value_prepare -> the code has been used to create the function $dbmng->processRequest()
 // ======================
 /// This function prepare the value from the POST request to insert it in the database
 /**
