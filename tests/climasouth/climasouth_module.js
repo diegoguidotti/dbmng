@@ -37,6 +37,9 @@ jQuery(document).ready(function() {
 		//alert(t);
 	});
 
+
+	jQuery('.carousel').carousel()
+
 });
 
 

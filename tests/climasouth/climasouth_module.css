@@ -108,7 +108,7 @@ div.agro_logo img{
 	background-attachment: local;
 
 	background-repeat:repeat-x;
-
+	z-index:50;
   position: absolute;
 	right:0px;	
 	height: 311px;		
@@ -164,6 +164,13 @@ div.agro_logo img{
 	color: white;
 	font-size: 17px;
 	text-transform:uppercase;
+}
+
+#climasouth_news_h2 a.btn{
+	margin-left: 20px;
+	margin-right: 20px;
+	padding: 5px;
+	color: black!important;
 }
 
 
@@ -538,3 +545,18 @@ width:500px;
 body.page-dbmng-edit-tables #page-title{
 display:none;
 }
+
+
+#myCarousel .right {
+	margin-right: 320px !important;
+}
+
+#myCarousel .carousel-indicators {
+	top: 250px  !important;
+	right: 600px  !important;
+}
+
+#myCarousel .carousel-control{
+	top: 90px;
+}
+
