@@ -507,16 +507,23 @@ function cleanupXML($xml) {
   }
 
 
-function _climasouth_news($block) 
+function _climasouth_news($block, $type = null) 
 {	
 	global $base_path;
 	$html ='';
 
-	if(!$block){
-		$tit=t('News & Events');
-		$html.="<script>jQuery(function(){jQuery('#page-title').html('".$tit."'); jQuery(document).prop('title', '".$tit."'); }); </script>";
-	
-	}
+	if(!$block)
+		{
+			$title=t('News & Events');
+			if( isset($type) )
+				if( $type == 'news' )
+					$title = t("News");
+				elseif( $type == 'events' )
+					$title = t("Events");
+			
+			
+			$html.="<script>jQuery(function(){jQuery('#page-title').html('".$title."'); jQuery(document).prop('title', '".$title."'); }); </script>";
+		}
 
 	$id="climasouth_news";
 	if(!$block){
@@ -525,35 +532,50 @@ function _climasouth_news($block)
 	$html .= '<div id="'.$id.'">';
 	
 	$sql_limit = "";
-	if($block){
-		$html .= "<a href='".$base_path."/climasouth/news_events_rss'>";
-		$html .= "<img class='rss_icon' src='".$base_path."/sites/all/modules/climasouth/resources/rss.png'>";
-		$html .= "</a>";
-		$html .= '<h2 id="climasouth_news_h2">'.l(t('News & Events'),'climasouth/news_events').'</h2>';
+	if($block)
+		{
+			$html .= "<a href='".$base_path."/climasouth/news_events_rss'>";
+			$html .= "<img class='rss_icon' src='".$base_path."/sites/all/modules/climasouth/resources/rss.png'>";
+			$html .= "</a>";
+			//$html .= '<h2 id="climasouth_news_h2">'.l(t('News & Events'),'climasouth/news_events').'</h2>';
+			$html .= '<h2 id="climasouth_news_h2">'.l(t('News'),'climasouth/news').'</h2>';	//.' & '.l(t('Events'),'climasouth/events')
 
 //		$html .= '<h2 id="climasouth_news_h2">'.l(t('News'),'climasouth/news_events',
 //			array('attributes' => array('class' => array('btn btn-default')))).' - '.l(t('Events'),'climasouth/news_events',
 //			array('attributes' => array('class' => array('btn btn-default')))).'</h2>';
-		$sql_limit = " limit 3";
+			$sql_limit = " limit 3";
+			$sql_where = "type = 1";
 		}
-	else{
-//		$html .='<div class="field field-name-field-image field-type-image field-label-above"><img typeof="foaf:Image" src="http://www.climasouth.eu/drupal/sites/all/modules/climasouth/resources/news.png" width="553" height="311" alt="" /></div>';
+	else
+		{
+	//		$html .='<div class="field field-name-field-image field-type-image field-label-above"><img typeof="foaf:Image" src="http://www.climasouth.eu/drupal/sites/all/modules/climasouth/resources/news.png" width="553" height="311" alt="" /></div>';
 
-      $html .='<div class="field field-name-field-video field-type-text field-label-above"><div class="field-items"><div class="field-item even">player.vimeo.com/video/104943503</div></div></div>';
-
-
-	}
-	
-
-
-	
+				$html .='<div class="field field-name-field-video field-type-text field-label-above"><div class="field-items"><div class="field-item even">player.vimeo.com/video/124107415</div></div></div>';	
+		}
 	
 	/** load dinamically from database*/
-	$html .= "<ul>"; 
 	
-	$res = dbmng_query("select * from c_news order by date_from desc " . $sql_limit, array());
+	if( $block )
+		{
+			$where = $sql_where;
+		}
+	else
+		{
+			$where = "1";
+			if( isset($type) )
+				if( $type == 'news' )
+					$where = "type = 1";
+				elseif( $type == 'events' )
+					$where = "type = 2";
+		}
+		
+	$sql = "select * from c_news where $where order by date_from desc " . $sql_limit;
+	$res = dbmng_query($sql, array());
+	
+	$html .= "<ul>"; 
 	foreach ($res as $rec) {
 		$place = $rec->place;
+		$descr = $rec->description;
 		$date_from = new DateTime($rec->date_from);
 		$date_to = $rec->date_to;
 		$node = $rec->linked_page;
@@ -612,8 +634,10 @@ function _climasouth_news($block)
 				$date = date_convert2arabic($your_date);
 			}
 		
-
-		$html.="<li class='climasouth_news'><h3>".l(t($title),$node).'</h3>'.strtoupper(t($place)) . " - " . $date . "<br/></li>";
+		if( $block )
+			$descr = '';
+		
+		$html.="<li class='climasouth_news'><h3>".l(t($title),$node).'</h3>'.strtoupper(t($place)) . " - " . $date . "<br/>$descr</li>";
 	}
 	
 	$html .= "</ul>";
@@ -693,6 +717,20 @@ function climasouth_menu()
 		$items['climasouth/news_events'] = array(
       'title' => 'News & Events',
       'page callback' => '_climasouth_news_events',
+      'access arguments' => array('access content'),
+      'type' => MENU_CALLBACK,
+   );
+
+		$items['climasouth/news'] = array(
+      'title' => 'News',
+      'page callback' => '_clima_news',
+      'access arguments' => array('access content'),
+      'type' => MENU_CALLBACK,
+   );
+
+		$items['climasouth/events'] = array(
+      'title' => 'News',
+      'page callback' => '_clima_events',
       'access arguments' => array('access content'),
       'type' => MENU_CALLBACK,
    );
@@ -808,6 +846,20 @@ return ($html);
 function _climasouth_news_events() {
 	$html="";
 	$html=_climasouth_news(false);
+
+	return $html;
+}
+
+function _clima_news() {
+	$html="";
+	$html=_climasouth_news(false, 'news');
+
+	return $html;
+}
+
+function _clima_events() {
+	$html="";
+	$html=_climasouth_news(false, 'events');
 
 	return $html;
 }
@@ -979,9 +1031,9 @@ if($show_map==1){
 						';
 						$html .= '<div class="active item"><div id="map_container" style="width:1170px; height:311px;"  ><div id="map_info_container">&nbsp;</div></div></div>';
 				$html.='
-						<div class="item"><div id="label_container"><span style="vertical-align: middle;">Introduction to the ClimaSouth project<br/>Video –presentation</span></div><div style="width:1170px; height:311px;"  ><iframe src="//player.vimeo.com/video/124107415?color=71b1cb&amp;badge=0" width="553" height="311" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen="" style="margin-left: 318px;"></iframe></div></div>';
+						<div class="item"><div id="label_container"><span style="vertical-align: middle;"><h5>Introduction to the ClimaSouth project<br/>Video – presentation</span></h5></div><div style="width:1170px; height:311px;"  ><iframe src="//player.vimeo.com/video/124107415?color=71b1cb&amp;badge=0" width="553" height="311" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen="" style="margin-left: 318px;"></iframe></div></div>';
 
-	$html.='<div class="item"><div id="label_container"><span style="vertical-align: middle;"><a href="http://www.climasouth.eu/drupal/fr/node/241">French edition of Climasouth E-Handbook N.1 now available</a>
+	$html.='<div class="item"><div id="label_container"><span style="vertical-align: middle;"><h5><a href="http://www.climasouth.eu/drupal/fr/node/241">French edition of Climasouth E-Handbook N.1 now available</a></h5>
 </span></div><div class="cs_image_cropper"><img src="http://www.climasouth.eu/drupal/sites/default/files/handbook_fr.png"></div></div>';
 
 // to add a news item...
