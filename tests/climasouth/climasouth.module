@@ -1033,8 +1033,8 @@ if($show_map==1){
 				$html.='
 						<div class="item"><div id="label_container"><span style="vertical-align: middle;"><h5>Introduction to the ClimaSouth project<br/>Video – presentation</span></h5></div><div style="width:1170px; height:311px;"  ><iframe src="//player.vimeo.com/video/124107415?color=71b1cb&amp;badge=0" width="553" height="311" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen="" style="margin-left: 318px;"></iframe></div></div>';
 
-	$html.='<div class="item"><div id="label_container"><span style="vertical-align: middle;"><h5><a href="http://www.climasouth.eu/drupal/fr/node/241">French edition of Climasouth E-Handbook N.1 now available</a></h5>
-</span></div><div class="cs_image_cropper"><img src="http://www.climasouth.eu/drupal/sites/default/files/handbook_fr.png"></div></div>';
+	$html.='<div class="item"><div id="label_container"><span style="vertical-align: middle;"><h5><a href="http://www.climasouth.eu/drupal/fr/node/242">French edition of Climasouth E-Handbook N.2 now available</a></h5>
+</span></div><div class="cs_image_cropper"><img src="http://www.climasouth.eu/drupal/sites/default/files/handbook_fr2.png"></div></div>';
 
 // to add a news item...
 //	$html.='<div class="item"></div>'
