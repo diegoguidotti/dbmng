@@ -525,7 +525,10 @@ function cs_mapResize(){
 	  jQuery('#map_container .cs_image_cropper').css('position', 'absolute');
 		jQuery('#map_container .cs_image_cropper').css('left', '0px')
     jQuery('#home_activities h4.ha').css('margin-right','300px');
-		
+		jQuery('.carousel-inner iframe').css('margin-right','310px');
+		jQuery('.carousel-inner .cs_image_cropper').css('margin-right','310px');
+		jQuery('#myCarousel .right').html('‹');
+		jQuery('#myCarousel .left').html('›');
 	}
 
 	try{
