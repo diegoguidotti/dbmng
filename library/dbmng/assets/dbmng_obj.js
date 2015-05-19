@@ -145,7 +145,7 @@ function Dbmng(idt , p) {
 	//check when exit the page
 	jQuery(window).bind('beforeunload', function(){ 
 		if(!obj.isSaved()){
-			var msg='Please save before exit.';
+			var msg=t('Please save before exit');
 			return (msg);
 
 			obj.updateStorage();
@@ -506,7 +506,7 @@ Dbmng.prototype.syncData = function() {
 			debug('NO DATA TO SAVE '+obj.id);
 		
 			if(obj.aParam.mobile){
-				showMessageBox("There are no data to save");
+				showMessageBox(t("There are no data to save"));
 			}
 
 			obj.running=false;
@@ -516,7 +516,7 @@ Dbmng.prototype.syncData = function() {
 			console.log('start '+obj.prog);
 
 			if(obj.aParam.mobile){
-				dialogStart("Starting to upload data & images");
+				dialogStart(t("Starting to upload data & images"));
 			}
 
 			obj.prog = obj.prog+1;
@@ -544,12 +544,12 @@ Dbmng.prototype.syncData = function() {
 							if(v.ok==1){
 								delete obj.aData.records[k];
 								delete obj.aData.deleted[k];
-								dialogAppend('Record deleted', obj.aParam.mobile);							
+								dialogAppend(t('Record deleted'), obj.aParam.mobile);							
 							}
 							else{
 								obj.aData.records[k].error=v.error;
 								error++;
-								dialogAppend('Delete Record Error', obj.aParam.mobile);	
+								dialogAppend(t('Delete Record Error'), obj.aParam.mobile);	
 							}
 						});
 					}
@@ -577,12 +577,12 @@ Dbmng.prototype.syncData = function() {
 								obj.aData.records[k].record[pk_key] = v.inserted_id;
 								delete obj.aData.inserted[k];	
 								obj.aData.records[k].error='';	
-								dialogAppend('Record inserted',obj.aParam.mobile);												
+								dialogAppend(t('Record inserted'),obj.aParam.mobile);												
 
 							}
 							else{														
 									obj.aData.records[k].error=v.error;
-									dialogAppend('Insert Record Error',obj.aParam.mobile);	
+									dialogAppend(y('Insert Record Error'),obj.aParam.mobile);	
 									error++;
 							}
 						});
@@ -597,7 +597,7 @@ Dbmng.prototype.syncData = function() {
 									obj.aData.records[k].state='ok';	
 									obj.aData.records[k].error='';						
 									delete obj.aData.updated[k];	
-									dialogAppend('Record updated',obj.aParam.mobile);		
+									dialogAppend(t('Record updated'),obj.aParam.mobile);		
 
 								}
 								else{
@@ -607,16 +607,16 @@ Dbmng.prototype.syncData = function() {
 							else{		
 								obj.aData.records[k].error=v.error;
 								error++;
-								dialogAppend('Update Record Error',obj.aParam.mobile);
+								dialogAppend(t('Update Record Error'),obj.aParam.mobile);
 							}
 						});
 					}
 
 					if(error==0){
-						dialogAppend("All the data has been uploaded correctly",obj.aParam.mobile);
+						dialogAppend(t("All the data has been uploaded correctly"),obj.aParam.mobile);
 					}
 					else{
-						dialogAppend("Some error occurred during data uploading. Records affected: "+error,obj.aParam.mobile);
+						dialogAppend(t("Some error occurred during data uploading. Records affected: ")+error,obj.aParam.mobile);
 
 					}
 
@@ -648,10 +648,10 @@ Dbmng.prototype.syncData = function() {
 						obj.current_image=0;
 
 						if(	img_to_upload.length>0){
-							dialogAppend("Start pictures uploading ("+img_to_upload.length+") ",obj.aParam.mobile);
+							dialogAppend(t("Start pictures uploading")+" ("+img_to_upload.length+") ",obj.aParam.mobile);
 						}
 						else{
-								dialogAppend("There are no picture to be uploaded ",obj.aParam.mobile);
+								dialogAppend(t("There are no picture to be uploaded"),obj.aParam.mobile);
 								dialogClose();
 						}		
 
@@ -681,7 +681,7 @@ Dbmng.prototype.syncData = function() {
 				},
 				error: function (xhr, ajaxOptions, thrownError){
 
-					dialogAppend("The server replied with an error: "+thrownError,obj.aParam.mobile);
+					dialogAppend(t("The server replied with an error")+": "+thrownError,obj.aParam.mobile);
 					dialogClose();
 			  	console.log(xhr);
 					console.log(ajaxOptions);
@@ -741,7 +741,7 @@ debug("URI: "+uri);
 	obj.current_image++;
 	var ci=obj.current_image;
 
-	dialogAppend('Uploading image '+ci+': <span id="upload_prog_'+ci+'"></span> ',obj.aParam.mobile);	
+	dialogAppend(t('Uploading image')+' '+ci+': <span id="upload_prog_'+ci+'"></span> ',obj.aParam.mobile);	
 
 	ft.onprogress = function(progressEvent) {
 		//console.log("AAAAAAAAAAAAAAAAAAAAAAA "+progressEvent.loaded +" "+ progressEvent.total);
@@ -787,11 +787,11 @@ debug("URI: "+uri);
 		, function (error) {
 				if(error.code==3){
                 //timeout (it may happen for ios)
-                dialogAppend('Fixing image upload ',obj.aParam.mobile);
+                dialogAppend(t('Fixing image upload')+' ',obj.aParam.mobile);
                 obj.uploadedImage(v.gui, v.fld_name, ci, v.img_uri);          
           }
           else{
-						dialogAppend('Error during image uploading '+error.code,obj.aParam.mobile);
+						dialogAppend(t('Error during image uploading')+' '+error.code,obj.aParam.mobile);
 						dialogClose();
 						//alert("An error has occurred: Code = " + error.code);
 						console.log("upload error source " + error.source);
@@ -820,13 +820,13 @@ Dbmng.prototype.uploadedImage = function (gui, fld_name, ci, img_uri) {
 		obj.aData.records[gui].record[fld_name]=JSON.stringify(img);
 		obj.updateStorage();
 
-		jQuery("#upload_prog_"+ci).html("completed")
+		jQuery("#upload_prog_"+ci).html(t("completed"))
 		dialogClose();
 		
 	}
 	else{
 		console.log("XXX Not found "+gui+" "+fld_name+" "+obj.id);
-		dialogAppend('Image uploaded ',obj.aParam.mobile);	
+		dialogAppend(t('Image uploaded'),obj.aParam.mobile);	
 
 		
 		
@@ -1708,7 +1708,7 @@ Dbmng.prototype.validateForm = function(id_record){
 			var val= jQuery('#'+obj.id+'_'+id_record+'_'+index).val();
 			console.log(" validate "+val+" "+field.label);
 			if( val==''){
-				msg+="Field "+field.label+" can not be empty. ";
+				msg+=t('The field')+" "+t(field.label)+" "+t('can not be empty')+". ";
 				ok=false;
 			}
 		}
@@ -1903,7 +1903,7 @@ function showMessageBox (message) {
 			  .attr("data-role", "content")
 			  .append(jQuery("<span />").html(message));
 		content.append("<a href=\"javascript:jQuery('.ui-dialog').dialog('close'); " +
-			  "return false;\" data-role=\"button\" data-rel=\"back\">Close</a>");
+			  "return false;\" data-role=\"button\" data-rel=\"back\">"+t('Close')+"</a>");
 	
 		dlg.append(content);
 	
@@ -1939,7 +1939,7 @@ function dialogStart (message) {
 			  .append(jQuery("<span />").html("<div id=\"dialog_save_content\">"+message+"</div>"));
 
 		content.append("<a id=\"dialog_save_close\" style=\"display:none\"  href=\"javascript:jQuery('.ui-dialog').dialog('close'); " +
-			  "return false;\" data-role=\"button\" data-rel=\"back\">Close</a>");
+			  "return false;\" data-role=\"button\" data-rel=\"back\">"+t('Close')+"</a>");
 	
 		dlg.append(content);
 	

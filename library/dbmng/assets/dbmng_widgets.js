@@ -142,7 +142,7 @@ dbmng_checkbox_form = function(obj_id,  fld, field, id_record, value, more, act 
 		}	
 
 		 html+=' />';
-		 html+='<label class="dbmng_checkbox_label" for='+obj_id+"_"+id_record+"_"+fld+'>'+field.label+'</label>';
+		 html+='<label class="dbmng_checkbox_label" for='+obj_id+"_"+id_record+"_"+fld+'>'+t(field.label)+'</label>';
 	return html;
 }
 
@@ -190,10 +190,10 @@ dbmng_gps_form = function(obj_id,  fld, field, id_record, value, more, act ){
 
 	//html += "<button onclick=\"dbmng_getPosition('"+obj_id+"_"+id_record+"_"+fld+"');\">Get Position</button>";
 
-	html += "<a data-role=\"button\" onclick=\"dbmng_getPosition('"+obj_id+"_"+id_record+"_"+fld+"');\">Get Position</a>";
+	html += "<a data-role=\"button\" onclick=\"dbmng_getPosition('"+obj_id+"_"+id_record+"_"+fld+"');\">"+t('Get Position')+"</a>";
 
 	if(typeof dbmng_activate_map != 'undefined'){
-		html += "<a data-role=\"button\" onclick=\"dbmng_ShowMap('"+obj_id+"_"+id_record+"_"+fld+"',"+ll[1]+","+ll[0]+");\">Show Map</a>";		
+		html += "<a data-role=\"button\" onclick=\"dbmng_ShowMap('"+obj_id+"_"+id_record+"_"+fld+"',"+ll[1]+","+ll[0]+");\">"+t('Show Map')+"</a>";		
 	}
 
 
@@ -254,9 +254,9 @@ dbmng_picture_form = function(obj_id,  fld, field, id_record, value, more, act )
 		}
 
 		html = '<div data-role="controlgroup" data-type="horizontal">';			
-		  html += '<button onclick="dbmng_getImage('+navigator.camera.PictureSourceType.CAMERA+');">Take a Photo</button>';
+		  html += '<button onclick="dbmng_getImage('+navigator.camera.PictureSourceType.CAMERA+');">'+t('Take a Photo')+'</button>';
 			if(!camera_only)
-			  html += '<button onclick="dbmng_getImage('+navigator.camera.PictureSourceType.SAVEDPHOTOALBUM+');">Upload a Photo</button>';
+			  html += '<button onclick="dbmng_getImage('+navigator.camera.PictureSourceType.SAVEDPHOTOALBUM+');">'+t('Upload a Photo')+'</button>';
 		html+='</div>';
 		html += "<input type='hidden' name='"+fld+"' id='"+obj_id+"_"+id_record+"_"+fld+"' " + more;
 		html += " value= '"+value+"' ";	
@@ -287,14 +287,14 @@ dbmng_picture_form = function(obj_id,  fld, field, id_record, value, more, act )
 			html+='<img id="'+obj_id+'_'+id_record+'_'+fld+'_image" width="300px" src="'+img_src+'" />';
 		}
 		else{
-			html+="Image loaded";
+			html+=t("Image loaded");
 		}
 	}
 	else{
 		html ='';
 		html += "<input type='hidden' name='"+fld+"' id='"+obj_id+"_"+id_record+"_"+fld+"' " + more;
 		html += " value= '' ";	
-		html += " /><br/>Image upload available only in web version and mobile app.\n";
+		html += " /><br/>"+t('Image upload available only in web version and mobile app')+".\n";
 	}
 
 	return html;
@@ -399,7 +399,7 @@ dbmng_ShowMap  = function(id_element, lat, lon){
 dbmng_getPosition  = function(id_element){
 
 	console.log("getPosition");
-	jQuery("#"+id_element+"_label").html('Searching...');
+	jQuery("#"+id_element+"_label").html(t('Searching...'));
 	console.log(id_element);
 
 	if(is_cordova()){
@@ -410,7 +410,7 @@ dbmng_getPosition  = function(id_element){
 			function(position) {
 				coord="POINT( " +position.coords.longitude+" "+ position.coords.latitude + ") ";
 
-				jQuery("#"+id_element+"_label").html('Coordinates Found :<a href="geo:'+ position.coords.latitude + ','+position.coords.longitude+'">'+coord+"</a> Accuracy: "+position.coords.accuracy);
+				jQuery("#"+id_element+"_label").html(t('Coordinates Found')+' :<a href="geo:'+ position.coords.latitude + ','+position.coords.longitude+'">'+coord+"</a> "+t('Accuracy')+": "+position.coords.accuracy);
 				jQuery("#"+id_element).val(coord);
 			},                                         
 			function(error) {
@@ -425,7 +425,7 @@ dbmng_getPosition  = function(id_element){
 	 if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position){
 						coord="POINT( " +position.coords.longitude+" "+ position.coords.latitude + ")";
- 				    jQuery("#"+id_element+"_label").html('Coordinates Found :'+coord);
+ 				    jQuery("#"+id_element+"_label").html(t('Coordinates Found')+' :'+coord);
 
 						jQuery("#"+id_element).val(coord);
 
