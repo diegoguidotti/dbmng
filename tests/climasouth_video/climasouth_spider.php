@@ -158,7 +158,8 @@ function spider_module_search(id)
 				#spider_legends{
 					margin-top: 25px;
 				}
-
+				
+				body.page-spider-simulation h1#page-title{display:none}
 			</style>';	
 
 
@@ -178,7 +179,7 @@ A flexible and participatory tool has been developed to effectively identify, si
 			else{
 				$ins="insert into c_simulation (simulation_name, id_user) values (:simulation_name, :id_user) ";
 				$ret=dbmng_query($ins, array(":simulation_name"=>$_REQUEST['add_simulation_name'],":id_user"=>$user->uid));
-			
+				//print_r($ret);
 				$inserted_id=$ret['inserted_id'];
 
 
