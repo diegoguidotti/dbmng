@@ -531,6 +531,11 @@ function cs_mapResize(){
 		jQuery('#myCarousel .left').html('›');
 	}
 
+	var logo=jQuery('#logo img').attr('src');
+	var lang=jQuery('html').attr('lang')
+	var new_logo=logo.substring(0,logo.length-4)+'_'+lang+'.png';
+	jQuery('#logo img').attr('src',new_logo);
+
 	try{
 		if((jQuery('h1#page-title').html()).trim()=='لمحة عامة والبيانات الرئيسية'){
 			if(jQuery('html').attr('lang')=='en'){
