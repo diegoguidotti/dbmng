@@ -575,7 +575,6 @@ function _climasouth_news($block, $type = null)
 	$html .= "<ul>"; 
 	foreach ($res as $rec) {
 		$place = $rec->place;
-		$descr = $rec->description;
 		$date_from = new DateTime($rec->date_from);
 		$date_to = $rec->date_to;
 		$node = $rec->linked_page;
@@ -591,6 +590,16 @@ function _climasouth_news($block, $type = null)
 		else if( $language->language == 'fr' ){
 			if($rec->title_fr!=null)
 				$title = $rec->title_fr;
+		}
+		
+		$descr = $rec->description;
+		if( $language->language == 'ar' ){
+			if($rec->description_ar!=null)
+				$descr = $rec->description_ar;
+		}
+		else if( $language->language == 'fr' ){
+			if($rec->description_fr!=null)
+				$descr = $rec->description_fr;
 		}
 
 		if( $language->language != 'ar' )
