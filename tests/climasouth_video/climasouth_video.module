@@ -240,10 +240,11 @@ function cs_video_contest_page()
 
 				echo('{"ok":true, "spider": true, ');	
 
-					$q=" SELECT a.id_c_voc_ass_group, s.strategy, g.ass_group, c.country_name , (a.ass_type),     r.current_rating, r.target_rating  FROM c_assessment a, c_voc_ass_group g, c_voc_strategy s, c_activity r, c_country c WHERE a.id_c_voc_ass_group=g.id_c_voc_ass_group AND a.id_c_voc_strategy=s.id_c_voc_strategy AND r.id_c_assessment=a.id_c_assessment AND c.id_c_country=r.id_c_country AND r.id_simulation=:id_simulation";
+					$q=" SELECT a.id_c_voc_ass_group, s.strategy, g.ass_group, sim.simulation_name as simulation_name , (a.ass_type),     r.current_rating, r.target_rating  FROM c_assessment a, c_voc_ass_group g, c_voc_strategy s, c_activity r,  c_simulation sim WHERE a.id_c_voc_ass_group=g.id_c_voc_ass_group AND a.id_c_voc_strategy=s.id_c_voc_strategy AND r.id_c_assessment=a.id_c_assessment  AND r.id_simulation=sim.id_c_simulation";
 
-					echo '"res":'.json_encode( dbmng_query2array($q, array(':id_simulation'=>1)));
-
+					//echo '"res":'.json_encode( dbmng_query2array($q, array(':id_simulation'=>1)));
+				echo '"res":'.json_encode( dbmng_query2array($q, array()));
+	
 				echo("}");
 			}
 			else if(isset($_REQUEST['teamwork'])){

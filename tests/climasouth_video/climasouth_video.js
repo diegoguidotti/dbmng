@@ -333,14 +333,14 @@ function createSpiderChart(populate_select){
 							//console.log(v+" "+jQuery.inArray(v[0], group));
 							//console.log(group);
 							if(!group[v[0]]){
-								group[v[0]]={"name": v[1]+" - "+v[2], "country":{}};
+								group[v[0]]={"name": v[1]+" - "+v[2], "simulation":{}};
 							}
 
-							if(!group[v[0]].country[v[3]]){
-								group[v[0]].country[v[3]]={};
+							if(!group[v[0]].simulation[v[3]]){
+								group[v[0]].simulation[v[3]]={};
 							}
 						
-							group[v[0]].country[v[3]][v[4]]={'current': v[5] ,'target':v[6]}
+							group[v[0]].simulation[v[3]][v[4]]={'current': v[5] ,'target':v[6]}
 						});
 
 						console.log(group);
@@ -375,17 +375,17 @@ function changeSector(){
 	console.log("Choose sec "+sec);
 
 	var opt='';
-	jQuery.each(group[sec].country, function(k,v){
+	jQuery.each(group[sec].simulation, function(k,v){
 		console.log('ac'+k)
 		opt+='<option selected value="'+k+'">'+k+'</option>';
 	});
-	jQuery('#choose_a_country').html(opt);
-	changeCountry();
+	jQuery('#choose_a_simulation').html(opt);
+	changeSimulation();
 	
 }
 
 
-function changeCountry(){
+function changeSimulation(){
 	//console.log('plot '+sec+" "+cou);
 	spider_select();
 }
@@ -393,9 +393,9 @@ function changeCountry(){
 
 function updateChart(){
 	var sec=jQuery('#choose_a_sector').val();
-	var cou=jQuery('#choose_a_country').val();
+	var cou=jQuery('#choose_a_simulation').val();
 
-	var vals= group[sec].country[cou];
+	var vals= group[sec].simulation[cou];
 	var labels=[];
 	var labelsLong=[];
 	var data_target=[];
@@ -556,7 +556,7 @@ function spider_select()
 
 		id='spider_ind_container';
 
-		var testo1=jQuery('#choose_a_country').val();
+		var testo1=jQuery('#choose_a_simulation').val();
 		//console.log('plot '+sec+" "+cou);
 		var testo2=jQuery('#choose_a_sector option:selected').html();
 
