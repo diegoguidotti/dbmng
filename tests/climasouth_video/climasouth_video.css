@@ -208,3 +208,5 @@ cs_video_description {
 .video_box span{
 	font-weight: bold;
 }
+
+body.page-spider-simulation h1#page-title{display:none}
