@@ -213,7 +213,7 @@ function _climasouth_toolbar()
 	$html .= "<li class='climasouth_toolbar'>|</li>";
 	$html .= "<li class='climasouth_toolbar'>".l(t('Legal notice & disclaimer'),'legal_notice')."</li>";
 	$html .= "<li class='climasouth_toolbar'>|</li>";
-	$html .= "<li class='climasouth_toolbar'>".l(t('Contacts'),'utilisation_data')."</li>";
+	$html .= "<li class='climasouth_toolbar'>".l(t('Contacts'),'node/130')."</li>";
 	$html .= "<li class='climasouth_toolbar'>|</li>";
 	$html .= "<li class='climasouth_toolbar'>".l(t('Credits'),'credit')."</li>";
 
