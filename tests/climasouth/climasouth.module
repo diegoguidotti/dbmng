@@ -277,7 +277,7 @@ function _climasouth_country_flag()
 	$html .= "<td>&nbsp;</td>";
 	$html .= "<td>&nbsp;</td>";
 	$html .= "<td>&nbsp;</td>";
-	$html .= "<td class='cs_last_col loginlogout'>".$uid."</td>";
+	$html .= "<td class='cs_last_col loginlogout'><div id='cs_disconnecter'>".$uid."</div></td>";
 	$html .= "</tr>";
 	$html .= "</table>";
 

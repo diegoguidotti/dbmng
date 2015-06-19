@@ -97,7 +97,7 @@ margin: 0px;
 
 .climasouth_link_blu, td.loginlogout a {
 	color: #71b1cb !important;
-	margin-left:70px;
+	margin-left:10px;	
 	text-decoration: none;
 }
 
@@ -301,5 +301,27 @@ div.climasouth_res{
    background-color: inherit;
 }
 
+
+.page-node-1  #main-content{
+ width: 1170px;
+}
+
+.page-node-1 #content{
+ width: 870px;
+}
+
+#header #name{
+display:none;
+}
+
+
+
+#flag_container .cs_last_col a{
+	display: block;
+}
+
+#cs_disconnecter{
+	width: 120px !important;
+}
 
 
