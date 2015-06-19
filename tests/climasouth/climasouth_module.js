@@ -454,7 +454,7 @@ function climasouth_no_map(){
 		var src = jQuery("div.field-name-field-video div.field-items").text();
 		if( typeof src != 'undefined' && src != '' ){
 			//alert("climasouth_no_map video");
-			html = '<iframe src="//'+src+'?color='+color+'&badge=0" width="553" height="311" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>'; 
+			html = '<iframe src="//'+src+'?color='+color+'&badge=0&title=0&byline=0&portrait=0" width="553" height="311" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>'; 
 			jQuery('#map_info_container').hide();
 			jQuery('#map_container').html(html);
 			jQuery('#map_container iframe').css('margin-left','318px');
