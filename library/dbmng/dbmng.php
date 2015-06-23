@@ -1129,7 +1129,7 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="", $inserte
 			$class = "dbmng_form_button ";
 			if( var_equal($aParam, 'theme','bootstrap') )
 				{
-					$class .= " btn btn-default";
+					$class .= " btn btn-primary";
 				}
 			
 			$btn = "";
