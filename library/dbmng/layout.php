@@ -1481,7 +1481,7 @@ function layout_table_navigation($result, $aForm, $aParam)
 \param $aParam  	  parameter array
 \return             html
 */
-function layout_array_print($aTbl, $bDebug=false)
+function layout_array_print($aTbl, $bDebug=false, $bNew=true)
 {
 	$html = "";
 	if( $_SERVER['SERVER_NAME'] == 'localhost' && $bDebug )
@@ -1489,31 +1489,60 @@ function layout_array_print($aTbl, $bDebug=false)
 			$colcnt = $aTbl['colCount'];
 			$rowcnt = $aTbl['rowCount'];
 			$html .= "<div class='dbmng_debug'>";
-			$html .= "<p style='margin-left:20px;color:magenta;font-size:11px;font-family:\"courier new\"'>SQL: ".$aTbl['sql']."</p>";
+			if( isset($aTbl['sql']) )
+				$html .= "<p style='margin-left:20px;color:magenta;font-size:11px;font-family:\"courier new\"'>SQL: ".$aTbl['sql']."</p>";
+			
 			$html .= "<p style='margin-left:20px;color:magenta;font-size:11px;font-family:\"courier new\"'>rowCount: ".$aTbl['rowCount']."</p>";
 			$html .= "<p style='margin-left:20px;color:magenta;font-size:11px;font-family:\"courier new\"'>colCount: ".$aTbl['colCount']."</p>";
 			if( $aTbl['rowCount'] != 0 )
 				{
-					$html .= "<p style='margin-left:20px;color:magenta;font-size:11px;font-family:\"courier new\"'>Use: aTbl['data'][0][0] = ".$aTbl['data'][0][0]."</p>";
-					$html .= "<table border='1' cellspacing='0' cellpadding='0' style='margin-left:20px;color:magenta;font-size:11px;font-family:\"courier new\"'>";
-					$html .= "<thead><tr style='background-color:#F0F0F0'>";
-					$html .= "<th style='text-align:center'>[-]</th>";
-					for( $nC = 0; $nC <= $colcnt-1; $nC++ )
+					if( $bNew )
 						{
-							$html .= "<th style='text-align:center'>[".$nC."] ".$aTbl['header'][$nC]."</th>";
+							$html .= "<table border='1' cellspacing='0' cellpadding='0' style='margin-left:20px;color:magenta;font-size:11px;font-family:\"courier new\"'>";
+							$html .= "<thead><tr style='background-color:#F0F0F0'>";
+							$html .= "<th style='text-align:center; padding:5px 10px;'>[-]</th>";
+							foreach( $aTbl['data'][0] as $k => $aVar )
+								{
+									$html .= "<th style='text-align:center; padding:5px 10px;'>".$k."</th>";
+								}
+							$html .= "</tr></thead>";
+							
+							foreach( $aTbl['data'] as $k => $aVar )
+								{
+									$html .= "<tr>";
+									$html .= "<td style='background-color:#F0F0F0;text-align:right;'>[".$k."]</td>";
+									foreach( $aVar as $fld => $val )
+										{
+											$html .= "<td>$val</td>";
+										}
+									$html .= "</tr>";
+								}
+							
+							$html .= "</table>";
 						}
-					$html .= "</tr></thead>";
-					for( $nR = 0; $nR <= $rowcnt-1; $nR++ )
+					else
 						{
-							$html .= "<tr>";
-							$html .= "<td style='background-color:#F0F0F0;text-align:right'>[".$nR."]</td>";
+							$html .= "<p style='margin-left:20px;color:magenta;font-size:11px;font-family:\"courier new\"'>Use: aTbl['data'][0][0] = ".$aTbl['data'][0][0]."</p>";
+							$html .= "<table border='1' cellspacing='0' cellpadding='0' style='margin-left:20px;color:magenta;font-size:11px;font-family:\"courier new\"'>";
+							$html .= "<thead><tr style='background-color:#F0F0F0'>";
+							$html .= "<th style='text-align:center'>[-]</th>";
 							for( $nC = 0; $nC <= $colcnt-1; $nC++ )
 								{
-									$html .= "<td align='right'>".$aTbl['data'][$nR][$nC]."</td>";
+									$html .= "<th style='text-align:center'>[".$nC."] ".$aTbl['header'][$nC]."</th>";
 								}
-							$html .= "</tr>";
+							$html .= "</tr></thead>";
+							for( $nR = 0; $nR <= $rowcnt-1; $nR++ )
+								{
+									$html .= "<tr>";
+									$html .= "<td style='background-color:#F0F0F0;text-align:right'>[".$nR."]</td>";
+									for( $nC = 0; $nC <= $colcnt-1; $nC++ )
+										{
+											$html .= "<td align='right'>".$aTbl['data'][$nR][$nC]."</td>";
+										}
+									$html .= "</tr>";
+								}
+							$html .= "</table>";
 						}
-					$html .= "</table>";
 				}
 			$html .= "</div>";
 		}
