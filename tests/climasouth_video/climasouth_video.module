@@ -111,7 +111,7 @@ function cs_menu_plus($nid, $lang, $showFigli)
 			else{
 				$q.= "select max(plid) from clima_menu_links WHERE menu_name='main-menu' AND link_path='node/".$nid."' AND language='".$lang."' "; 
 			}
-		  $q.=" ) AND  c.plid=p.mlid order by c.weight";
+		  $q.=" ) AND c.plid=p.mlid and c.language ='$lang' order by c.weight";
 		}
 
 
@@ -119,7 +119,7 @@ function cs_menu_plus($nid, $lang, $showFigli)
 		
 
 		$res = dbmng_query($q, array());
-
+		//drupal_set_message( debug_sql_statement($q,array()) );
 		//$html.=$q;
 		$html.="<div id='cs_menu_plus'>";
 
