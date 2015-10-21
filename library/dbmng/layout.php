@@ -191,7 +191,7 @@ function layout_form_date_elab( $aInput, $sType )
 			$more2 = "disabled";
 		
 	//add a new input field for the datapicker ui
-	$html  = "<input type='text' name='".$actiontype.$fld."_tmp' id='dbmng_".$fld."_tmp' $placeholder value='".$datetime_str."' $more2 $class/>";
+	$html  = "<input type='text' name='".$actiontype.$fld."_tmp' id='dbmng_".$fld."_tmp' $placeholder value='".$datetime_str."' ".layout_get_nullable($fld_value)." $more2 $class/>";
 	//keep hidden the "real" input form
 	$html .= "<input type='hidden' name='$actiontype$fld' id='dbmng_".$fld."' ";
 	$html .= " value= '$value' ";	
