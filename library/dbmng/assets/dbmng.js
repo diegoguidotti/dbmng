@@ -511,6 +511,15 @@ function dbmng_nmimage(key, val, fld, path){
 		helper: "clone",
 		cursor: "move"
 	});
+	
+		// let the gallery items be draggable
+	jQuery( "li", dbmng_selected_img ).draggable({
+		cancel: "a.ui-icon", // clicking an icon won't initiate dragging
+		revert: "invalid", // when not dropped, the item will revert back to its initial position
+		containment: "document",
+		helper: "clone",
+		cursor: "move"
+	});
 
 	// let the trash be droppable, accepting the gallery items
 	dbmng_selected_img.droppable({
@@ -642,6 +651,32 @@ function dbmng_init_map(fld, aParam){
 		if( map )
 			map.remove();
 		
+		jQuery('.dbmng_form_field_'+fld+' > div').prepend('<input type="text" class="dbmng_latlong form-control" id="dbmng_lat_text_'+fld+'" placeholder="Latitude"/><input type="text" class="dbmng_latlong form-control" id="dbmng_lon_text_'+fld+'"  placeholder="Longitude"/>');
+		
+		jQuery('.dbmng_form_field_'+fld+' .dbmng_latlong').change(function(){
+			var lat = jQuery('#dbmng_lat_text_'+fld).val();
+			var lon = jQuery('#dbmng_lon_text_'+fld).val();
+			
+			if(lat != '' && lon != '' ) {
+				map.eachLayer(function (layer) {
+						if(layer instanceof L.Marker){
+							map.removeLayer(layer);
+						}
+				});
+				var marker = new L.marker([lat , lon]).addTo(map);
+				map.panTo([lat , lon]);
+				var geojson={
+								"type": "Feature",
+								"properties": {"zoom": map.getZoom()},
+								"geometry": {
+									"type": "Point",
+									"coordinates": [lon, lat]
+								}
+            };
+				jQuery('#dbmng_'+fld).val(JSON.stringify(geojson));
+			}
+		});
+		
 		map = L.map('dbmng_mapcontainer_'+fld).setView(coord, zoom);
 
 		var mapquestUrl = 'http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png',
@@ -663,6 +698,8 @@ function dbmng_init_map(fld, aParam){
 							zoom = mygeo.properties.zoom;
 						
 						map.setView([mygeo.geometry.coordinates[1] , mygeo.geometry.coordinates[0]], zoom);
+						jQuery('#dbmng_lon_text_'+fld).val(mygeo.geometry.coordinates[0]);
+						jQuery('#dbmng_lat_text_'+fld).val(mygeo.geometry.coordinates[1]);
 					}
 			}
 			
@@ -686,6 +723,8 @@ function dbmng_init_map(fld, aParam){
 								}
             };
 				jQuery('#dbmng_'+fld).val(JSON.stringify(geojson));
+				jQuery('#dbmng_lon_text_'+fld).val(e.latlng.lng);
+				jQuery('#dbmng_lat_text_'+fld).val(e.latlng.lat);
 				
 		});
 
