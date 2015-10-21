@@ -291,7 +291,7 @@ function dbmng_query2array($sql, $aVal)	//dbmng_query($sql, $var=null)
 					$aTblD[] = $aRow;
 				}
 			$aTbl['ok']=true;
-			$aTbl['sql'] = "";//debug_sql_statement($sql, $aVal);
+			$aTbl['sql'] = debug_sql_statement($sql, $aVal);
 			$aTbl['error']='';
 			$aTbl['data'] = $aTblD;
 			$aTbl['header'] = $aTblH;
