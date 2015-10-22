@@ -891,7 +891,7 @@ function layout_form_select_nm( $aInput )
 							$s = " checked='true' ";
 						}
 				
-					$html .= "<li><input class='dbmng_checkbox' type='checkbox' name='".$fld."[]' $s value='" . $vocKey . " $more2'/>" . $vocValue . "</li> \n";	
+					$html .= "<li><input class='dbmng_checkbox' type='checkbox' name='".$fld."[]' $s value='" . $vocKey . "' $more2/>" . $vocValue . "</li> \n";	
 				}
 			$html .= "</ul>";
 		} 
