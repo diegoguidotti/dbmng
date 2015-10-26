@@ -172,7 +172,7 @@ dbmng_gps_form = function(obj_id,  fld, field, id_record, value, more, act ){
 	html += Dbmng.layout_get_nullable(field,act);
 	html += " />\n";
 
-	value=value.trim();
+	value=value.trim();	
 	var cc=value.substring(6,value.length-1);
 
 	cc=cc.trim();
@@ -181,7 +181,7 @@ dbmng_gps_form = function(obj_id,  fld, field, id_record, value, more, act ){
 
 	if(is_cordova()){
 		html += "<div class='gps_label' id='"+obj_id+"_"+id_record+"_"+fld+"_label' ";
-		html += "><a href='geo:"+ll[1]+","+ll[0]+"'>"+ll[1]+","+ll[0]+"</div>";	
+		html += ">"+ll[1]+","+ll[0]+"</div>";	//<a href='geo:"+ll[1]+","+ll[0]+"'>"+ll[1]+","+ll[0]+"'></A>
 	}
 	else{
 		html += "<div class='gps_label' id='"+obj_id+"_"+id_record+"_"+fld+"_label' ";
@@ -193,7 +193,7 @@ dbmng_gps_form = function(obj_id,  fld, field, id_record, value, more, act ){
 	html += "<a data-role=\"button\" onclick=\"dbmng_getPosition('"+obj_id+"_"+id_record+"_"+fld+"');\">"+t('Get Position')+"</a>";
 
 	if(typeof dbmng_activate_map != 'undefined'){
-		html += "<a data-role=\"button\" onclick=\"dbmng_ShowMap('"+obj_id+"_"+id_record+"_"+fld+"',"+ll[1]+","+ll[0]+");\">"+t('Show Map')+"</a>";		
+		html += "<a data-role=\"button\" onclick=\"dbmng_ShowMap('"+obj_id+"_"+id_record+"_"+fld+"');\">"+t('Show Map')+"</a>";		
 	}
 
 
@@ -368,29 +368,59 @@ function getLocation() {
 function showPosition(position) {
     
 }
+
+var last_marker, map;
+
 dbmng_ShowMap  = function(id_element, lat, lon){
 	
 	if(typeof  L != 'undefined' && typeof  dbmng_activate_map != 'undefined'){
 
+		var value=jQuery('#'+id_element).val()
+		value=value.trim();	
+		var cc=value.substring(6,value.length-1);
 
+		cc=cc.trim();
+		var ll=cc.split(" ");
+		lon=ll[0];	
+		lat=ll[1];	
 
 
 		jQuery.mobile.changePage("#"+dbmng_activate_map.map_page);
-	
- 		var map = new L.Map(dbmng_activate_map.map_container, {        
-        center: new L.LatLng(dbmng_activate_map.start_lat,dbmng_activate_map.start_lon),
-        zoom: dbmng_activate_map.start_zoom
-    });
-		map.invalidateSize();
+		if(!map){
+	 		map = new L.Map(dbmng_activate_map.map_container, {        
+				center: new L.LatLng(dbmng_activate_map.start_lat,dbmng_activate_map.start_lon),
+				zoom: dbmng_activate_map.start_zoom
+			    });
+		
 
-    var mapquestUrl = 'http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png',
-    subDomains = ['otile1','otile2','otile3','otile4'],
-    mapquestAttrib = 'Data, imagery and map information provided by <a href="http://open.mapquest.co.uk" target="_blank">MapQuest</a>, <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> and contributors.';
-    var mapquest = new L.TileLayer(mapquestUrl, {maxZoom: 18, attribution: mapquestAttrib, subdomains: subDomains});
-    map.addLayer(mapquest); 
+			    var mapquestUrl = 'http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png',
+			    subDomains = ['otile1','otile2','otile3','otile4'],
+			    mapquestAttrib = 'Data, imagery and map information provided by <a href="http://open.mapquest.co.uk" target="_blank">MapQuest</a>, <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> and contributors.';
+			    var mapquest = new L.TileLayer(mapquestUrl, {maxZoom: 18, attribution: mapquestAttrib, subdomains: subDomains});
+			    map.addLayer(mapquest); 
+		}
+		else{
+			if(last_marker){
+				map.removeLayer(last_marker);
+			}
+		}		
+		last_marker = L.marker([lat, lon]).addTo(map); 		
+		
+		map.setView([lat, lon],19);
 
+		setTimeout(function() { map.invalidateSize(); }, 500);
 
-		var marker = L.marker([lat, lon]).addTo(map); 
+		map.on('click', function onMapClick(e) {
+			if(last_marker){
+				map.removeLayer(last_marker);
+			}
+			//alert(id_element+" "+jQuery('#'+id_element).val());
+			jQuery('#'+id_element).val("POINT("+e.latlng.lng+" "+e.latlng.lat+")");
+			//alert(jQuery('#'+id_element).val());
+			last_marker = L.marker(e.latlng).addTo(map); 	
+			
+		});
+
 		
 	}
 
