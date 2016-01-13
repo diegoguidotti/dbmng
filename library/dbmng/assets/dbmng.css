@@ -31,12 +31,12 @@ div.dbmng_form_button {
 }
 
 div.dbmng_form_row input, div.dbmng_form_row select, div.dbmng_form_row textarea  {
-  width:500px;
+  width:100%;
 }
 
 
 div.dbmng_form_row textarea.html_widget{
-	width: 500px;
+	width: 100%;
 	height: 300px;
 }
 
