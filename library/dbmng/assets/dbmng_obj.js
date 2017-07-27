@@ -275,7 +275,7 @@ Dbmng.prototype.createTable = function(){
 		html+="</ul>";
 	}
 	else { 
-		html += "<table class='dbmng_table' id='"+this.id+"_table'>\n";
+		html += "<table class='dbmng_table table' id='"+this.id+"_table'>\n";
 		//Add header
 		html += "<thead>\n";
 		html += "<tr >\n";

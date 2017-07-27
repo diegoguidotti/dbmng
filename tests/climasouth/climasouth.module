@@ -363,9 +363,9 @@ function _climasouth_news_rss()
 		
 				$rss .= '<item>';
 				$rss .= '<title>'.($title).'</title>';
+        $rss .= '<pubDate>'.$pubdate.'</pubDate>';
 				$rss .= '<link>'.url($node, array('absolute'=>TRUE)).'</link>';
-				//$rss .= '<guid>'.l(($title),$node).'</guid>';
-				$rss .= '<pubDate>'.$pubdate.'</pubDate>';
+				$rss .= '<guid>'.url($node, array('absolute'=>TRUE)).'</guid>';
 				$rss .= '<description>'.cleanupXML(strtoupper($place)) . " - " . $date. '</description>';
 				$rss .= '</item>';
 			}

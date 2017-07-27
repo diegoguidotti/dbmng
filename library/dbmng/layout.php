@@ -85,7 +85,9 @@ function layout_get_nullable($fld_value)
 */
 function layout_get_label($fld, $fld_value)
 	{
-		$lb = $fld_value['label'];
+    $lb = "undefined for $fld";
+    if( isset($fld_value['label']) )
+      $lb = $fld_value['label'];
 		if( isset($fld_value['label_long']) )
 			$lb =  $fld_value['label_long'];			
 		
@@ -573,7 +575,7 @@ function layout_form_file( $aInput )
 	$html .= '<input class="'.$class.'" type="text" name="'.$fld.'_tmp_choosebox" id="dbmng_'.$fld.'_tmp_choosebox" value="'.$value.'" '.$more2.'/>&nbsp';
 	if( strlen($more2) == 0 )
 		{
-			$html .= '<a href="#" id="dbmng_'.$fld.'_tmp_choose">'.t('Choose').'</a>&nbsp';
+			$html .= '<a href="#" id="dbmng_'.$fld.'_tmp_choose">'.t('Chooseaa').'</a>&nbsp';
 			$html .= '<a href="#" id="dbmng_'.$fld.'_tmp_remove">'.t('Remove').'</a>';
 		}
 
@@ -840,6 +842,11 @@ function layout_form_select_nm( $aInput )
 	$actiontype = $aInput['actiontype'];
 	$aParam = $aInput['aParam'];
 
+  $class = "";
+  if( isset($aParam['theme']) )
+    if( $aParam['theme'] == 'bootstrap' )
+      $class .= "class='form-control'";
+	
 	if( strlen($aInput['actiontype'])!= 0 )
 		$actiontype = "search_";
 			
@@ -862,7 +869,7 @@ function layout_form_select_nm( $aInput )
 	
 	if( $outtype == 'select' )
 		{
-			$html = "<select  multiple='multiple' name='".$actiontype.$fld."[]' id='dbmng_$fld'  ".layout_get_nullable($fld_value)." $more2>\n";
+			$html = "<select $class multiple='multiple' name='".$actiontype.$fld."[]' id='dbmng_$fld'  ".layout_get_nullable($fld_value)." $more2>\n";
 			$html .= "<option/> \n";	
 			//$nLen  = count($aVoc);
 			$expl=explode('|', $value);

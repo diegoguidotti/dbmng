@@ -97,15 +97,24 @@ function debug_sql_statement($sql, $aVal)
 	$ret = "";
 	if( $_SERVER["HTTP_HOST"] == "localhost" )
 		{
-			$sConnection = DBMNG_DB.":dbname=".DBMNG_DB_NAME.";host=".DBMNG_DB_HOST;
+      // $sConnection = DBMNG_DB.":dbname=".DBMNG_DB_NAME.";host=".DBMNG_DB_HOST;
+      // 
+      // if(DBMNG_DB=='mysql')
+      //     $sConnection .= ";charset=utf8";
+      // $pdo = new PDOTester($sConnection, DBMNG_DB_USER, DBMNG_DB_PASS);
+      // $query = $pdo->prepare($sql);
+      // 
+      // $ret = $query->getSQL($aVal);
 
-			if(DBMNG_DB=='mysql')
-					$sConnection .= ";charset=utf8";
-			$pdo = new PDOTester($sConnection, DBMNG_DB_USER, DBMNG_DB_PASS);
-			$query = $pdo->prepare($sql);
-			
-			$ret = $query->getSQL($aVal);
-		}
+      if( sizeof($aVal) > 0 )
+        {
+          foreach ($aVal as $key => $value)
+            {
+              $sql = str_replace($key, ($value), $sql);
+            }
+        }
+      $ret = $sql;
+    }
 	
 	return $ret;
 }

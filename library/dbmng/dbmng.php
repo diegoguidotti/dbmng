@@ -1673,10 +1673,13 @@ function dbmng_value_prepare_html($fld_value, $value, $aParam, $layout_type)
 // dbmng_get_table_structure
 // ======================
 /// This function add javascript and css to drupal CMS
-function dbmng_add_drupal_libraries()
+function dbmng_add_drupal_libraries( $bCSS = "" )
 	{
-		drupal_add_css( "sites/all/modules/dbmng_module/dbmng_module.css" );
-		drupal_add_css( "sites/all/libraries/dbmng/assets/dbmng.css" );
+		if( $bCSS ) 
+      {
+        drupal_add_css( "sites/all/modules/dbmng_module/dbmng_module.css" );
+        drupal_add_css( "sites/all/libraries/dbmng/assets/dbmng.css" );
+      }
 		drupal_add_js ( "sites/all/libraries/dbmng/assets/dbmng.js" );
 		drupal_add_js ( "sites/all/libraries/dbmng/assets/dbmng_obj.js" );
 		drupal_add_js ( "sites/all/libraries/dbmng/assets/dbmng_widgets.js" );
