@@ -194,7 +194,11 @@ function dbmng_get_form_array($id_table)
 								foreach($rVoc as $val)
 									{
 										$keys=array_keys((array)$val);
-										$aFVoc[$val->$keys[0]] = $val->$keys[1];
+
+										$val2 = (array)$val;
+										$pp = $val2[$keys[1]];
+										$kk = $val2[$keys[0]];
+										$aFVoc[$kk] = $pp;
 									}
 							}
 						/*
