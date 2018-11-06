@@ -1,0 +1,8 @@
+# ignore my configuration file
+library/dbmng/dbmng_cfg.php
+library/dbmng/dbmng_cfg_somalia.php
+library/dbmng/dbmng_cfg_mm.php
+library/dbmng/dbmng_cfg_raeevolution.php
+library/dbmng/dbmng_cfg_orig.php
+/doxygen/
+/.kateproject.d/
