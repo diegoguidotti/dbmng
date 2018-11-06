@@ -575,7 +575,7 @@ function layout_form_file( $aInput )
 	$html .= '<input class="'.$class.'" type="text" name="'.$fld.'_tmp_choosebox" id="dbmng_'.$fld.'_tmp_choosebox" value="'.$value.'" '.$more2.'/>&nbsp';
 	if( strlen($more2) == 0 )
 		{
-			$html .= '<a href="#" id="dbmng_'.$fld.'_tmp_choose">'.t('Chooseaa').'</a>&nbsp';
+			$html .= '<a href="#" id="dbmng_'.$fld.'_tmp_choose">'.t('Choose').'</a>&nbsp';
 			$html .= '<a href="#" id="dbmng_'.$fld.'_tmp_remove">'.t('Remove').'</a>';
 		}
 

@@ -4,7 +4,7 @@
 //use by default the Drupal location for library.
 if(!defined( 'DBMNG_LIB_PATH'))
 	{
-		define( 'DBMNG_LIB_PATH', 'sites/all/libraries/' ); 
+		define( 'DBMNG_LIB_PATH', 'sites/all/libraries/' );
 	}
 
 include_once DBMNG_LIB_PATH."dbmng/dbmng_cfg.php";
@@ -32,7 +32,7 @@ duplicate: "dup_" . $aForm['table_name']
 
 Associative array with all the characteristics to manage a table
 
- 		$aForm= array(				
+ 		$aForm= array(
 				'id_table' => 'ID',
 				'table_name' => 'test',
 				'primary_key' => array(),
@@ -47,7 +47,7 @@ Associative array with all the characteristics to manage a table
 						),
 					array(
 							'field_name' => 'eta',
-							'label' => 'Et&agrave',								
+							'label' => 'Et&agrave',
 							'type' => 'text'
 							'default' => 'default'
 							'field_function' => 'name function'
@@ -66,10 +66,10 @@ function getVersion()
 /////////////////////////////////////////////////////////////////////////////
 // dbmng_get_form_array
 // ======================
-/// This function allow to get fields information into structured array 
+/// This function allow to get fields information into structured array
 /**
 \param $id_table  table id
-\return           structured array 
+\return           structured array
 */
 function dbmng_get_form_array($id_table)
 	{
@@ -86,9 +86,9 @@ function dbmng_get_form_array($id_table)
 						$id_table = $t->id_table;
 					}
 			}
-		
+
 		$table = dbmng_query("select * from dbmng_tables where id_table=:id_table", array(':id_table' => intval($id_table)));
-		
+
 		$aForm['id_table'] = $id_table;
 		//if()
 		if(dbmng_num_rows($table)>0){
@@ -97,7 +97,7 @@ function dbmng_get_form_array($id_table)
 			$aForm['table_label'] = $fo->table_label;
 			$exist_id=true;
 		}
-		
+
 
 		//TODO: ['primary key shoud be an array to manage multiples key']
 		$aFields = array();
@@ -110,17 +110,17 @@ function dbmng_get_form_array($id_table)
 						// $aPK[] = array($fld->pk, $fld->field_name);
 						$aPK[] = $fld->field_name;
 					}
-					//$aForm['primary_key'] = $fld->field_name; 
+					//$aForm['primary_key'] = $fld->field_name;
 
 				$sLabelLong = ( strlen($fld->field_label_long)>0 ? $fld->field_label_long : $fld->field_label );
 				$isSearcheable = ( isset($fld->is_searchable) ? ($fld->is_searchable) : "0" );
 				$sWidget = ( isset($fld->field_widget) ? $fld->field_widget : "input" );
 
-				$aArray=array('label' => $fld->field_label, 
-					 'type' => $fld->id_field_type, 
-					 'widget' => $sWidget, 
-					 'value' => null, 
-					 'nullable' => $fld->nullable, 
+				$aArray=array('label' => $fld->field_label,
+					 'type' => $fld->id_field_type,
+					 'widget' => $sWidget,
+					 'value' => null,
+					 'nullable' => $fld->nullable,
 					 'readonly' => $fld->readonly,
 					 'default' => $fld->default_value,
 					 'is_searchable' => $isSearcheable,
@@ -129,12 +129,12 @@ function dbmng_get_form_array($id_table)
 					 'label_long' => $sLabelLong,
 					 'skip_in_tbl' => $fld->skip_in_tbl,
 					 'voc_sql' => $fld->voc_sql );
-				
+
 				if(isset($fld->param))
 					{
 						$param = $fld->param;
 						$param = str_replace("'",'"',$param);
-						
+
 						//echo $param;
 
 						$js = json_decode($param);
@@ -146,8 +146,8 @@ function dbmng_get_form_array($id_table)
 					}
 
 				$aFields[$fld->field_name] = $aArray;
-				
-				
+
+
 				if( $fld->field_widget == 'select' || $fld->field_widget == 'select_nm' )
 					{
 						if( !isset($fld->voc_sql) )
@@ -159,7 +159,7 @@ function dbmng_get_form_array($id_table)
 						else
 							{
 								// sql written in dbmng_fields
-								$sql  = $fld->voc_sql;							
+								$sql  = $fld->voc_sql;
 							}
 
 						//TODO: review the safety of this query
@@ -181,14 +181,14 @@ function dbmng_get_form_array($id_table)
 													$aVal = array();
 													$aVal['image'] = $val->$keys[1];
 													$aVal['title'] = $val->$keys[2];
-													
+
 													$keys=array_keys((array)$val);
 													$aFVoc[$val->$keys[0]] = $aVal;
 												}
 											$bVoc = true;
 									}
 							}
-						
+
 						if( !$bVoc )
 							{
 								foreach($rVoc as $val)
@@ -205,17 +205,17 @@ function dbmng_get_form_array($id_table)
 						$sortAux = array();
 						foreach($aFVoc as $res)
 							$sortAux[] = $res[0];
-						
+
 						//array_multisort($sortAux, SORT_ASC, $aFVoc);
 						*/
-						
+
 						$aFields[$fld->field_name]['voc_val'] = $aFVoc;
 					}
-				
+
 				if( $fld->field_widget == 'multiselect')
 					{
 						// sql written in dbmng_fields
-						$sql  = $fld->voc_sql;							
+						$sql  = $fld->voc_sql;
 
 						//TODO: review the safety of this query
 						$rVoc  = dbmng_query($sql, array());
@@ -228,23 +228,23 @@ function dbmng_get_form_array($id_table)
 									$aFVoc[$val->$keys[0]] = array("key" => $val->$keys[0], "value" => $val->$keys[1]);
 								if( !isset($aFVoc[$val->$keys[0]]["vals"][$val->$keys[2]]) )
 									$aFVoc[$val->$keys[0]]["vals"][$val->$keys[2]] = array("key" => $val->$keys[2], "value" => $val->$keys[3]);
-								if( !isset($aFVoc[$val->$keys[0]]["vals"][$val->$keys[2]]["vals"][$val->$keys[4]]) ) 
+								if( !isset($aFVoc[$val->$keys[0]]["vals"][$val->$keys[2]]["vals"][$val->$keys[4]]) )
 									$aFVoc[$val->$keys[0]]["vals"][$val->$keys[2]]["vals"][$val->$keys[4]] = array("key" => $val->$keys[4], "value" => $val->$keys[5]);
 							}
 
-						$aFields[$fld->field_name]['voc_val'] = $aFVoc;						
+						$aFields[$fld->field_name]['voc_val'] = $aFVoc;
 					}
 			}
 
-		$aForm['primary_key'] = $aPK; 
+		$aForm['primary_key'] = $aPK;
 		if(!array_key_exists('primary_key', $aForm))
 			{
-				$aForm['primary_key'] = array('id_' . $aForm['table_name']);	
+				$aForm['primary_key'] = array('id_' . $aForm['table_name']);
 			}
-		
+
 		$aForm['fields']=$aFields;
 		//print_r($aForm);
-		if($exist_id)				
+		if($exist_id)
 			return $aForm;
 		else
 			return null;
@@ -269,7 +269,7 @@ function dbmng_crud($aForm, $aParam=null)
 
 	$ret = dbmng_check_aForm($aForm, $aParam);
 
-	
+
 
 	$html='';
 
@@ -285,7 +285,7 @@ function dbmng_crud($aForm, $aParam=null)
 		$html  = "";
 		$ret_form_process = dbmng_create_form_process($aForm, $aParam);
 
-		
+
 
 		//show table if there is no act or it's working on update or duplicate
 		$view_table = true;
@@ -345,13 +345,13 @@ function dbmng_crud($aForm, $aParam=null)
 					}
 				}
 			}
-		
+
 
 /*
 		if( isset($_REQUEST["act2"]) && !isset($_REQUEST["act"]) )
 			{
 				//dbmng_create_form_process($aForm, $aParam, "search");
-				if( $_REQUEST["act2"]=='do_search' ) //$_REQUEST["act2"]=='search' || 
+				if( $_REQUEST["act2"]=='do_search' ) //$_REQUEST["act2"]=='search' ||
 					{
 						$do_update = 2;
 						$view_table = true;
@@ -367,7 +367,7 @@ function dbmng_crud($aForm, $aParam=null)
 			echo "<br/>act: ". $_REQUEST["act"];
 		if( isset($_REQUEST["act2"]) )
 			echo "<br/>act2: ". $_REQUEST["act2"];
-	
+
 		echo "<br/>viewtable: ". $view_table;
 		echo "<br/>do_update: ". $do_update;
 	*/
@@ -378,8 +378,8 @@ function dbmng_crud($aForm, $aParam=null)
 			}
 
 
-		
-			
+
+
 		if($view_table)
 			{
 				if( $activate_search )
@@ -424,25 +424,25 @@ function dbmng_check_aForm($aForm, $aParam)
 	$tn = 0;
 	if( isset($aForm['id_table']) )
 		$tn=$aForm['id_table'];
-		
+
 	//print_r($aForm);
 
-	if( !isset($aForm['table_name']) ){		
+	if( !isset($aForm['table_name']) ){
 		$err_msg='Table '.$tn.' is missing. Check if table exists in dbmng_table';
 	}
-	else if( $aForm['table_name']=='' ){		
+	else if( $aForm['table_name']=='' ){
 		$err_msg='Table '.$tn.' is missing. Check if table exists in dbmng_table';
 	}
-	else if( !isset($aForm['fields']) ){		
+	else if( !isset($aForm['fields']) ){
 		$err_msg='There are no fields for '.$tn.'. Check dbmng_fields table';
 	}
-	else if( count($aForm['fields'])==0 ){		
+	else if( count($aForm['fields'])==0 ){
 		$err_msg='There are no fields for '.$tn.'. Check dbmng_fields table';
 	}
-	else if( !isset($aForm['primary_key']) ){		
+	else if( !isset($aForm['primary_key']) ){
 		$err_msg='There are no primary_keys for '.$tn.'. Check dbmng_fields table';
 	}
-	else if( count($aForm['primary_key'])==0 ){		
+	else if( count($aForm['primary_key'])==0 ){
 		$err_msg='There are no primary_keys for '.$tn.'. Check dbmng_fields table';
 	}
 	else{
@@ -467,7 +467,7 @@ function dbmng_check_aForm($aForm, $aParam)
 \param $aParam  		Associative array with some custom variable used by the renderer
 \return           HTML generated code
 */
-function dbmng_get_data($aForm, $aParam) 
+function dbmng_get_data($aForm, $aParam)
 {
 	$var=array();
 	// Initialize where clause and hidden variables
@@ -477,10 +477,10 @@ function dbmng_get_data($aForm, $aParam)
 			if( isset($aParam['filters']) )
 				{
 					foreach ( $aParam['filters'] as $x => $x_value )
-						{				
+						{
 								$where.=" AND $x = :$x ";
 								$var = array_merge($var, array(":$x" => $x_value));
-						}					
+						}
 				}
 		}
 
@@ -500,12 +500,12 @@ function dbmng_get_data($aForm, $aParam)
 												{
 													if( $fld_value['widget'] == 'input' )
 														{
-															$where.=" AND $fld like :$fld ";														
+															$where.=" AND $fld like :$fld ";
 															$var = array_merge($var, array(":$fld" => '%'.$_REQUEST["search_".$fld].'%'));
 														}
 													else
 														{
-															$where.=" AND $fld = :$fld ";														
+															$where.=" AND $fld = :$fld ";
 															$var = array_merge($var, array(":$fld" => $_REQUEST["search_".$fld]));
 														}
 												}
@@ -518,18 +518,18 @@ function dbmng_get_data($aForm, $aParam)
 	$order_by = '';
 	if( isset($aParam['tbl_order']) )
 		$order_by = 'order by ' . $aParam['tbl_order'];
-	       
+
 	$limit = "";
 	//if( isset($aParam['tbl_navigation']) )
 	//	$limit = 'limit 0, ' . $aParam['tbl_navigation'];
-	
+
 	//print_r ($aForm);
 
 	if( isset($aForm['table_view']) )
 	  $sql = 'select * from ' . $aForm['table_view'].' '. $where . ' ' . $order_by . ' ' . $limit;
 	else
 	  $sql = 'select * from ' . $aForm['table_name'].' '. $where . ' ' . $order_by . ' ' . $limit;
-	
+
 	$result = dbmng_query($sql, $var);
 
 	return $result;
@@ -549,14 +549,14 @@ function dbmng_create_table($aForm, $aParam)
 {
 	foreach ( $aForm['fields'] as $fld => $fld_value )
 		{
-			if( isset($fld_value['widget']) ) 
+			if( isset($fld_value['widget']) )
 				{
 					if( $fld_value['widget'] == 'select_nm' )
 						{
 							$table = $fld_value['table_nm'];
 							$sql = "select * from $table";
 							$result = dbmng_query($sql, array());
-							
+
 							$aNM = array();
 							foreach( $result as $record )
 								{
@@ -567,18 +567,18 @@ function dbmng_create_table($aForm, $aParam)
 						}
 				}
 		}
-	
+
 	//echo "<pre>";
 	//print_r($aForm);
 	//echo "</pre>";
 
 	$html = "";
-	
+
 	//execute the query returning all the records filtered and ordered according to aForm and aParam
-	$result= dbmng_get_data($aForm, $aParam);			  
+	$result= dbmng_get_data($aForm, $aParam);
 
 	$html  .= "<div class='dbmng_table' id='dbmng_".$aForm['table_name']."'>";
-	
+
 	if( var_equal($aParam,'show_table_name', 1) )
 		{
 			if(isset($aForm['table_label']))
@@ -587,7 +587,7 @@ function dbmng_create_table($aForm, $aParam)
 					$html  .= "<h1 class='dbmng_table_label'>" . $tblLbl . "</h1>\n";
 				}
 		}
-		
+
 	$html .= layout_table( $result, $aForm, $aParam );
 	$html  .= "<div class='dbmng_record_number'>" . t("Record number") . ": " . dbmng_num_rows($result) . " " . t("recs") . "</div>\n";
 	$html  .= '</div>';
@@ -618,11 +618,11 @@ function dbmng_crud_js($id_table, $aParam=Array())
 	}
 
 	$html  = "";
-  
+
 	$html .= "<div id='table_container_".$id_table."'></div>\n";
 
 	$html .= "\n<script type='text/javascript'>\n";
-		
+
 	if(true){
 		$html .= "var db_".$id_table."; ";
 		$html .= "jQuery(document).ready(function() {";
@@ -635,9 +635,9 @@ function dbmng_crud_js($id_table, $aParam=Array())
 		$aParamDefault['auto_edit']=0;
 		$aParamDefault['mobile']=0;
 
-		$aParam=array_merge($aParamDefault,$aParam);  
+		$aParam=array_merge($aParamDefault,$aParam);
   	$html .= " db".$id_table."  = new Dbmng(".$id_table.", ".json_encode($aParam).");";
-  
+
 		$html .= "db".$id_table.".start();";
 		$html .= "});";
 
@@ -651,7 +651,7 @@ function dbmng_crud_js($id_table, $aParam=Array())
 /////////////////////////////////////////////////////////////////////////////
 // dbmng_get_js_array
 // ======================
-/// This function allow to define a JS array 
+/// This function allow to define a JS array
 /**
 \param $aForm  		Associative array with all the characteristics of the table
 \param $aParam  	Associative array with some custom variable used by the renderer
@@ -659,23 +659,23 @@ function dbmng_crud_js($id_table, $aParam=Array())
 */
 function dbmng_get_js_array($aForm, $aParam)
 {
-		
+
 	$html = "";
   if($aForm!=null){
-		$result = dbmng_get_data($aForm, $aParam);	
+		$result = dbmng_get_data($aForm, $aParam);
 
-		
-		
+
+
 		$html .= '{ ';
 
-		
+
 
 		if(is_array($result) && isset($result['error'])){
 			$html.='"error": '.json_encode($result['error']);
 		}
 		else{
 			$html.='"records":[';
-		
+
 			$sObj  = "";
 
 
@@ -696,7 +696,7 @@ function dbmng_get_js_array($aForm, $aParam)
 
 					//get the query results for each field
 					foreach ( $aForm['fields'] as $fld => $fld_value )
-						{					
+						{
 							if($first_field)
 								{
 									$first_field=false;
@@ -705,7 +705,7 @@ function dbmng_get_js_array($aForm, $aParam)
 								{
 									$sObj .=", ";
 								}
-							
+
 							if(isset($record->$fld))
 								{
 									$value=$record->$fld;
@@ -717,15 +717,15 @@ function dbmng_get_js_array($aForm, $aParam)
 								{
 									$sObj .= '"' . $fld . '": null';
 								}
-						}				
+						}
 					$sObj .= "} ";
-				}		
-	
+				}
+
 			$html .= $sObj . "] ";
 		}
 
 		foreach ( $aForm['fields'] as $fld => $fld_value ){
-			
+
 			if(isset($fld_value['voc_val'])){
 				$old_var=$fld_value['voc_val'];
 				$new_var=Array();
@@ -734,10 +734,10 @@ function dbmng_get_js_array($aForm, $aParam)
 						$o=Array();
 						$o['k']=$k;
 						$o['val']=$v;
-						array_push($new_var, $o);	
+						array_push($new_var, $o);
 					}
-				
-				
+
+
 				$aForm['fields'][$fld]['voc_val']=$new_var;
 			}
 		}
@@ -753,7 +753,7 @@ function dbmng_get_js_array($aForm, $aParam)
 /////////////////////////////////////////////////////////////////////////////
 // dbmng_create_form
 // ======================
-/// This function create the form to (insert / update) from a structured array 
+/// This function create the form to (insert / update) from a structured array
 /**
 \param $aForm  		Associative array with all the characteristics
 \param $aParam  		Associative array with some custom variable used by the renderer
@@ -762,7 +762,7 @@ function dbmng_get_js_array($aForm, $aParam)
 \param $inserted_key  provide the function the inserted key to reload in update the newly inserted record
 \return           HTML generated code
 */
-function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="", $inserted_key="") 
+function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="", $inserted_key="")
 {
 	$nmvals = Array();
 	$html      = "";
@@ -772,25 +772,25 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="", $inserte
 
 	if( var_equal($aParam, 'unsave_alert', true) )
 		$html .= "<script>jQuery(function(){dbmng_beforesave();});</script>";
-		
+
 	$btn_name_add = t("Insert");
 	if( isset($aParam['ui']['btn_name']) )
 		{
 			$btn_name_add = t($aParam['ui']['btn_name']);
 		}
-	
+
 	$btn_name_search = t("Search");
 	if( isset($aParam['ui']['btn_name_search']) )
 		{
 			$btn_name_search = t($aParam['ui']['btn_name_search']);
 		}
-	
+
 	$btn_name_update = t("Update");
 	if( isset($aParam['ui']['btn_name_update']) )
 		{
 			$btn_name_update = t($aParam['ui']['btn_name_update']);
 		}
-	
+
 	$bOk = true;
 	//create the $val array storing all the record data
 	if( $do_update == 1 )
@@ -808,11 +808,11 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="", $inserte
 							else{
 								$var = array_merge($var, array(":".$fld => $inserted_key ));
 							}
-							
+
 							$pkfld = $fld;
 						}
 				}
-			
+
 			$where_filter = "";
 			$var_filter   = array();
 			if( isset($aParam['filters']) )
@@ -825,15 +825,15 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="", $inserte
 						}
 				}
 
-			$where = substr($where, 0, strlen($where)-4);			
+			$where = substr($where, 0, strlen($where)-4);
 			$var_all = array_merge($var, $var_filter);
-			
+
 			$result = dbmng_query("select * FROM " . $aForm['table_name'] . " WHERE $where $where_filter ", $var_all);
 
 			//drupal_set_message("select * FROM " . $aForm['table_name'] . " WHERE $where $where_filter ");
 			//drupal_set_message('<pre>'.print_r($var_all, true).'</pre>');
 
-			
+
 
 			if( dbmng_is_valid($result) )
 				{
@@ -851,11 +851,11 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="", $inserte
 										{
 											$result = dbmng_query("select ".$fld_value['field_nm']." FROM " . $fld_value['table_nm'] . " WHERE $where ", $var);
 											$tx="";
-											
+
 											if( $do_update == 1 )
 												{
 													foreach ($result as $record)
-														{							
+														{
 															$tx.=($record->$fld_value['field_nm']).'|';
 														}
 												}
@@ -880,7 +880,7 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="", $inserte
 		}
 
 
-	
+
 
 	if( $bOk ) // dbmng_num_rows($result)>0 )
 		{
@@ -901,7 +901,7 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="", $inserte
 									drupal_add_css('http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css',array('type' => 'external'));
 									drupal_add_js('http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js',array('type' => 'external'));
 								}
-							}							
+							}
 						}
 				}
 
@@ -914,14 +914,14 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="", $inserte
 				$class .= "_search";
 
 			$html .= "<div class='$class' id='dbmng_form_".$aForm['table_name']."' >\n<form method='POST' $more action='?' >\n".$hv."";
-			
+
 			foreach ( $aForm['fields'] as $fld => $fld_value )
 				{
 					//render the form field
 					$custom_function_exists=false;
 					if( isset($fld_value['field_function']) )
 						{
-							if( function_exists($fld_value['field_function']) ) 
+							if( function_exists($fld_value['field_function']) )
 								{
 									$html .= call_user_func($fld_value['field_function']);
 									$custom_function_exists=true;
@@ -943,21 +943,21 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="", $inserte
 											$value = $_REQUEST["search_".$fld];
 										}
 									//print_r($_REQUEST);
-									//$value = 
+									//$value =
 								}
 							elseif($do_update == 3)
 								{
 									if(isset($_REQUEST[$fld]))
 										{
 											$value = $_REQUEST[$fld];
-											
-											if( isset($fld_value['widget']) ) 
+
+											if( isset($fld_value['widget']) )
 												if( $fld_value['widget'] == 'select_nm' )
 													{
 														$tx = "";
 														foreach( $_REQUEST[$fld] as $v )
 															$tx.=$v."|";
-			
+
 														$nmvals[$fld]=$tx;
 													}
 									}
@@ -968,7 +968,7 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="", $inserte
 								}
 							// if( $aForm['primary_key'][0] != $fld ) // $aForm['primary_key'][0][0] != 1 && $aForm['primary_key'][0][1] != $fld
 							if( !dbmng_check_is_autopk($fld_value) ) // 1 means: Auto-increment primary key (must be removed from the form.
-								{										
+								{
 									$widget='input';
 									if(isset($fld_value['widget']))
 										$widget=$fld_value['widget'];
@@ -981,7 +981,7 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="", $inserte
 											if( $fld_value['is_searchable']==1 )
 												$is_searchable = true;
 										}
-																	
+
 									// Do not show input or seletc field for PK
 									if($do_update == 1 && dbmng_check_is_pk($fld_value))
 										{
@@ -1005,19 +1005,19 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="", $inserte
 																$html .= "<legend>".$show."</legend>";
 																$html .= "<div id='".$fld_value['fieldset_id']."' class='dbmng_fieldset_container' style='display:none'>";
 															}
-															
+
 													$html.='<div class="dbmng_form_row dbmng_form_field_'.$fld.'">&nbsp;';
 													if( !isset($aParam['hide_label']) )
 														{
 															$html .= layout_get_label($fld, $fld_value);
 														}
-													
+
 													$html.='<div class="dbmbg_form_element">';
-													
+
 													if( !var_equal($aParam, 'theme', 'bootstrap') )
 														$html .= "&nbsp;";
-													
-													
+
+
 													$aInput = Array();
 													$aInput['fld'] = $fld;
 													$aInput['fld_value'] = $fld_value;
@@ -1053,7 +1053,7 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="", $inserte
 															else{
 																$aInput['value'] = "";
 															}
-												
+
 															$html .= layout_form_select_nm( $aInput ); //$fld, $fld_value, $nmvals[$fld] );
 														}
 													else if ($widget==='date')
@@ -1093,24 +1093,24 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="", $inserte
 															$more='';
 															if(dbmng_is_field_type_numeric($fld_value['type']))
 																{
-																	$more="onkeypress=\"dbmng_validate_numeric(event)\"";		
-																}  
+																	$more="onkeypress=\"dbmng_validate_numeric(event)\"";
+																}
 															$aInput['more'] = $more;
-																
-															$html .= layout_form_input($aInput);// ( $fld, $fld_value, $value, $more );		
+
+															$html .= layout_form_input($aInput);// ( $fld, $fld_value, $value, $more );
 														}
-													
+
 													$html.='</div>';
-													
+
 													$html.='</div>';
-													
+
 													if( isset($fld_value['fieldset_end']) )
 														if( $fld_value['fieldset_end'] == 'end' )
 															{
 																$html .= "</div>";
 																$html .= "</fieldset>";
 															}
-													
+
 													if( isset($aParam['ui']['fld_separator']) )
 														{
 															if( $aParam['ui']['fld_separator'] == 1 )
@@ -1125,11 +1125,11 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="", $inserte
 								}
 						} //End of fields
 				} //End of form
-			
+
 			$hv = '';//dbmng_search_add_hidden($aForm, $aParam, "POST");
 			if( isset($aParam['captcha']) )
 				$html .= layout_form_captcha();
-			
+
 			$class = "dbmng_form_button ";
 			if( var_equal($aParam, 'theme','bootstrap') )
 				{
@@ -1138,7 +1138,7 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="", $inserte
 					else
 						$class .= "btn btn-primary";
 				}
-			
+
 			$btn = "";
 			if( $do_update == 1 )
 				{
@@ -1159,9 +1159,9 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="", $inserte
 					$btn .= "<div class='dbmng_form_button'><input class='$class' type='submit' value='" . $btn_name_search . "' /></div>\n";
 					//$html .= "<div class='dbmng_form_button'><input class='dbmng_form_button' type='reset' value='" . t('Reset') . "' /></div>\n";
 				}
-			
+
 			$html .= $btn;
-			
+
 			$html .= $hv;
 			$html .= "</form>\n";
 			$html .= "</div>\n";
@@ -1170,7 +1170,7 @@ function dbmng_create_form($aForm, $aParam, $do_update, $actiontype="", $inserte
 		{
 			$html .= "<div class='message error'>".t('Record not found')."</div>";
 		}
-	
+
 
 	return $html;
 }
@@ -1204,14 +1204,14 @@ function dbmng_value_prepare($x_value, $x, $post, $aParam)
 
 	$widget='input';
 
-	
+
 
   $sValue=null;
 	if(isset($post[$x]))
 		{
 		  $sValue=$post[$x];
 		}
-	
+
 	if(isset($x_value['widget']))
 		{
 			$widget=$x_value['widget'];
@@ -1230,18 +1230,18 @@ function dbmng_value_prepare($x_value, $x, $post, $aParam)
 			$sValue='';
 			if(isset($post[$x])){
 				foreach ( $post[$x] as $vocKey => $vocValue )
-					{ 
-					
+					{
+
 						$sValue.=$vocValue.'|';
 						//echo '<br/>'.$vocKey.' '.	$vocValue.' '.$sValue.'<br/>';
 					}
 			}
 			if(strlen($sValue)>0){
-				$sValue = substr($sValue, 0, strlen($sValue)-1);		
+				$sValue = substr($sValue, 0, strlen($sValue)-1);
 			}
 			//echo '<br/><b>'.$sValue.'</b><br/>';
 		}
-	
+
   if($widget=='checkbox')
 	  {
 	    if(is_null($sValue))
@@ -1249,13 +1249,13 @@ function dbmng_value_prepare($x_value, $x, $post, $aParam)
 			else
 				$sValue=1;
 		}
-	
+
 	if( $widget=='file' )
 		{
 			$dir_upd_file = "docs/";
 			if( isset($aParam['file']) )
 				$dir_upd_file = $aParam['file'];
-			
+
 			$sValue = $dir_upd_file . $_FILES[$x]['name'];
 
 			//print_r($_FILES[$x]);
@@ -1263,10 +1263,14 @@ function dbmng_value_prepare($x_value, $x, $post, $aParam)
 
 			if( $_FILES[$x]["error"] == 0 )
 				{
-					$sValue = dbmng_uploadfile($_FILES[$x]['name'], $dir_upd_file, $_FILES[$x]["tmp_name"]);
-					$sValue = $_FILES[$x]['name'];
+					$retu = dbmng_uploadfile($_FILES[$x]['name'], $dir_upd_file, $_FILES[$x]["tmp_name"]);
+
+					$sValue = $retu['fullpath'];
+					// drupal_set_message($sValue);
+					// drupal_set_message($retu['name']);
+					$sValue = $retu['name'];
 			  }
-			else 
+			else
 				{ //if the file is null use the text in the checkbox
 					$sValue = $post[$x.'_tmp_choosebox'];
 				}
@@ -1277,50 +1281,51 @@ function dbmng_value_prepare($x_value, $x, $post, $aParam)
 			$dir_upd_file = "docs";
 			if( isset($aParam['picture']) )
 				$dir_upd_file = $aParam['picture'];
-				
+
 			// echo "aParam dir:" . $dir_upd_file . "<br/>";
 			// echo "File: " . $_FILES[$x]['name'] . "<br/>";
 			$sValue = $dir_upd_file . $_FILES[$x]['name'];
 
 			if( $_FILES[$x]["error"] == 0 )
 				{
-					$sValue = dbmng_uploadfile($_FILES[$x]['name'], $dir_upd_file, $_FILES[$x]["tmp_name"]);
+					$retu = dbmng_uploadfile($_FILES[$x]['name'], $dir_upd_file, $_FILES[$x]["tmp_name"]);
+					$sValue = $retu['fullpath'];
 
 					if( dbmng_is_picture($_FILES[$x]) )
 						{
 							//echo "picture:" . $sValue;
 							if( isset($aParam['picture_version']['nrm']) )
 								{
-									$thumb=new thumbnail($sValue); 
-									$thumb->size_auto($aParam['picture_size']['nrm']);	
+									$thumb=new thumbnail($sValue);
+									$thumb->size_auto($aParam['picture_size']['nrm']);
 									$thumb->save($aParam['picture_version']['nrm'] . $_FILES[$x]['name'] );
 								}
 							if( isset($aParam['picture_version']['big']) )
 								{
-									$thumb=new thumbnail($sValue); 
-									$thumb->size_auto($aParam['picture_size']['big']);	
+									$thumb=new thumbnail($sValue);
+									$thumb->size_auto($aParam['picture_size']['big']);
 									$thumb->save($aParam['picture_version']['big'] . $_FILES[$x]['name'] );
 								}
 							if( isset($aParam['picture_version']['prw']) )
 								{
-									$thumb=new thumbnail($sValue); 
-									$thumb->size_auto($aParam['picture_size']['prw']);	
+									$thumb=new thumbnail($sValue);
+									$thumb->size_auto($aParam['picture_size']['prw']);
 									$thumb->save($aParam['picture_version']['prw'] . $_FILES[$x]['name'] );
 								}
 							if( isset($aParam['picture_version']['ext']) )
 								{
-									$thumb=new thumbnail($sValue); 
-									$thumb->size_auto($aParam['picture_size']['ext']);	
+									$thumb=new thumbnail($sValue);
+									$thumb->size_auto($aParam['picture_size']['ext']);
 									$thumb->save($aParam['picture_version']['ext'] . $_FILES[$x]['name'] );
 								}
 						}
-					$sValue = $_FILES[$x]['name'];
+					$sValue = $retu['name'];
 
 			  }
-			else 
+			else
 				{ //if the file is null use the text in the checkbox
 					$sValue = $post[$x.'_tmp_choosebox'];
-				}	
+				}
 		}
 
 
@@ -1355,7 +1360,7 @@ function dbmng_value_prepare($x_value, $x, $post, $aParam)
 					//echo 'set '.$x.' def to '+	$sDefault;
 				}
 
-				if (dbmng_is_field_type_numeric($sType)) 
+				if (dbmng_is_field_type_numeric($sType))
 					{
 
 						if ($widget=='select_nm'){
@@ -1365,10 +1370,10 @@ function dbmng_value_prepare($x_value, $x, $post, $aParam)
 							$sVal  = intval($sValue);
 						else if($sType=="float" || $sType=="double")
 							$sVal  = doubleval($sValue);
-						else 
-							$sVal  = doubleval($sValue);							
+						else
+							$sVal  = doubleval($sValue);
 					}
-				else 
+				else
 					{
 						$sVal  = $sValue;
 					}
@@ -1379,7 +1384,7 @@ function dbmng_value_prepare($x_value, $x, $post, $aParam)
 	//echo "<br/>value:|".strlen($sVal)."|<br/>";
 	if( strlen($sVal) == 0 )
 		$sVal = null;
-		
+
   return $sVal;
 }
 
@@ -1396,16 +1401,23 @@ function dbmng_value_prepare($x_value, $x, $post, $aParam)
 */
 function dbmng_uploadfile($origin, $dest, $tmp_name)
 {
+	$ret = array();
+	$ret['name'] = $origin;
+
 	$fullpath = $dest . $origin;
   if (file_exists( $fullpath ))
 		{
 			$additional = time();
 			$info = pathinfo($fullpath);
 			$fullpath = $info['dirname'] . '/' . $info['filename'] . '_' . $additional . '.' . $info['extension'];
+
+			$ret['name'] = $info['filename'] . '_' . $additional . '.' . $info['extension'];
 		}
-		
+
+	$ret['fullpath'] = $fullpath;
+
 	move_uploaded_file($tmp_name, $fullpath);
-	return $fullpath;
+	return $ret;
 }
 
 
@@ -1420,7 +1432,7 @@ function dbmng_uploadfile($origin, $dest, $tmp_name)
 function dbmng_is_picture($fn)
 {
 	$is_picture = false;
-	
+
 	//$allowedExts = array("gif", "jpeg", "jpg", "png");
 	//$temp = explode(".", $_FILES[$fn]["name"]);
 	//$extension = end($temp);
@@ -1466,13 +1478,13 @@ function dbmng_file_create_link($value, $aParam)
 			if( preg_match('/\.(gif|jpe?g|png)$/i',strtolower($value)) )
 				{
 					//$link = str_replace("raw/", "prw/", $link);
-					$ret="<a class='dbmng_image_link' target='_NEW' href='".$link."'><img src='".$link."' /></a>\n";	//class='dbmng_image_thumb'				
+					$ret="<a class='dbmng_image_link' target='_NEW' href='".$link."'><img src='".$link."' /></a>\n";	//class='dbmng_image_thumb'
 				}
 			else
 				{
-					$ret="<a class='dbmng_file_link' target='_NEW' href='".$link."'>".t("download")."</a>\n";					
+					$ret="<a class='dbmng_file_link' target='_NEW' href='".$link."'>".t("download")."</a>\n";
 				}
-			$ret .= "&nbsp;";			
+			$ret .= "&nbsp;";
 		}
 	return $ret;
 }
@@ -1492,7 +1504,7 @@ function dbmng_picture_create_link($value, $aParam, $layout_type)
   $ret   = "";
 	$thumb = "";
 	$zoom  = "";
-	
+
 	//echo realpath('.').'/'.$value;
 	if(!is_null($value) && $value!='')
 		{
@@ -1509,14 +1521,14 @@ function dbmng_picture_create_link($value, $aParam, $layout_type)
 								$thumb = $aParam['picture_version']['prw'];
 							elseif( isset($aParam['picture_version']['ext']) )
 								$thumb = $aParam['picture_version']['ext'];
-							
+
 							if( isset($aParam['picture_version']['big']) )
 								$zoom = $aParam['picture_version']['big'];
 							elseif( isset($aParam['picture_version']['nrm']) )
 								$zoom = $aParam['picture_version']['nrm'];
 							elseif( isset($aParam['picture_version']['ext']) )
 								$zoom = $aParam['picture_version']['ext'];
-							
+
 						}
 					elseif( $layout_type == "form" )
 						{
@@ -1526,7 +1538,7 @@ function dbmng_picture_create_link($value, $aParam, $layout_type)
 								$thumb = $aParam['picture_version']['big'];
 						}
 				}
-				
+
 			$link = base_path() . $thumb . $value;
 			$pict = base_path() . $zoom . $value;
 			//if(in_array( substr(strrchr($value, '.'), 1), $allowedExts ))
@@ -1535,7 +1547,7 @@ function dbmng_picture_create_link($value, $aParam, $layout_type)
 					if( $layout_type == "form" )
 						$ret="<img src='".$link."' />\n";
 					else
-						{	
+						{
 							$rand = mt_rand(100, 999);
 							if( var_equal($aParam, 'picture_load', 'hidden') )
 							{
@@ -1552,7 +1564,7 @@ function dbmng_picture_create_link($value, $aParam, $layout_type)
 				{
 					$ret="<a class='dbmng_file_link' target='_NEW' href='". base_path() . "" . $value."'>".t("download")."</a>\n";
 				}
-			
+
 			if( !var_equal($aParam, 'theme', 'bootstrap') )
 				$ret .= "&nbsp;";
 
@@ -1579,7 +1591,7 @@ function dbmng_value_prepare_html($fld_value, $value, $aParam, $layout_type)
 		{
 			//echo $fld_value['widget']."<br/>";
 			$widget=$fld_value['widget'];
-		}	
+		}
 
 	if( $widget == "select" )
 		{
@@ -1605,7 +1617,7 @@ function dbmng_value_prepare_html($fld_value, $value, $aParam, $layout_type)
 							if(isset($aVocval[$ind])){
 								$val.= $aVocval[$ind]. " | ";
 							}
-						} 
+						}
 				}
 			$ret = $val;
 		}
@@ -1627,7 +1639,7 @@ function dbmng_value_prepare_html($fld_value, $value, $aParam, $layout_type)
 								}
 						}
 				}
-		}	
+		}
 	elseif($widget == "file" )
 		{
 			$ret=dbmng_file_create_link($value, $aParam);
@@ -1679,7 +1691,7 @@ function dbmng_value_prepare_html($fld_value, $value, $aParam, $layout_type)
 /// This function add javascript and css to drupal CMS
 function dbmng_add_drupal_libraries( $bCSS = "" )
 	{
-		if( $bCSS ) 
+		if( $bCSS )
       {
         drupal_add_css( "sites/all/modules/dbmng_module/dbmng_module.css" );
         drupal_add_css( "sites/all/libraries/dbmng/assets/dbmng.css" );
@@ -1707,17 +1719,17 @@ function dbmng_add_drupal_libraries( $bCSS = "" )
 function dbmng_get_table_structure($id_table)
 {
 	$sql = "select table_name from dbmng_tables where id_table = :id_table";
-	
+
 	//$fields = dbmng_query($sql, array(':id_table' => $_REQUEST['id_table']));
 	$fields = dbmng_query($sql, array(':id_table' => $id_table));
 	foreach($fields as $f)
 		{
 			$tn = $f->table_name;
 		}
-	
+
 	$sql = "select * from information_schema.columns where table_name = :table_name and table_schema = :table_schema";
 	$fields = dbmng_query($sql, array(':table_name' => $tn, ':table_schema' => DBMNG_DB_NAME) );
-	
+
 	foreach($fields as $f)
 		{
 			/* identify the primary key */
@@ -1732,7 +1744,7 @@ function dbmng_get_table_structure($id_table)
 								$pk = 2;
 						}
 				}
-			
+
 			/* Map type into crud type */
 			$sType ="";
 			switch( $f->DATA_TYPE )
@@ -1751,7 +1763,7 @@ function dbmng_get_table_structure($id_table)
 					default:
 						$sType = "varchar";
 				}
-			
+
 			/* Assign the 'basic' widget */
 			$widget = "";
 			$voc_sql = null;
@@ -1776,18 +1788,18 @@ function dbmng_get_table_structure($id_table)
 					default:
 						$widget = "input";
 				}
-			
+
 			/* identify if a fields accept or no to be empty */
 			$nullable = 0;
 			if( $f->IS_NULLABLE == "YES" )
 				$nullable = 1;
-			
+
 			/* Prepare insert sql command */
 			$sql  = "insert into dbmng_fields( id_table, id_field_type, field_widget, field_name, nullable, field_label, field_order, pk, is_searchable ) ";
 			$sql .= "values( :id_table, :id_field_type, :field_widget, :field_name, :nullable, :field_label, :field_order, :pk, :is_searchable );";
-			$var = array(':id_table' => $id_table, 
-									 ':id_field_type' => $sType, 
-									 ':field_widget' => $widget, 
+			$var = array(':id_table' => $id_table,
+									 ':id_field_type' => $sType,
+									 ':field_widget' => $widget,
 									 ':field_name' => $f->COLUMN_NAME,
 									 ':nullable' => $nullable,
 									 ':field_label' => ucfirst(str_replace("_", " ", $f->COLUMN_NAME)),
@@ -1795,8 +1807,8 @@ function dbmng_get_table_structure($id_table)
 									 ':pk' => $pk,
 									 ':is_searchable' => 0);
 			$result = dbmng_query($sql, $var);
-			
-			//echo debug_sql_statement($sql, $var) . "<br/>";			
+
+			//echo debug_sql_statement($sql, $var) . "<br/>";
 		}
 }
 
@@ -1814,14 +1826,14 @@ function dbmng_ajax_manager(){
 	$aParam = Array();
 	//TODO check login
 	//TODO check that the uid can access the given id_table
-	
+
 
 	if($login){
 		if(isset($_REQUEST['id_table'])) {
 
-			session_start();	
+			session_start();
 
-		
+
 			if(isset($_SESSION["dbmng_param_".$_REQUEST['id_table']])){
 		 		$aParam =  dbmng_objectToArray(json_decode(($_SESSION["dbmng_param_".$_REQUEST['id_table']])));
 			}
@@ -1836,24 +1848,24 @@ function dbmng_ajax_manager(){
 				//echo json_encode($aForm);
 			}
 			else
-				$aForm = dbmng_get_form_array($_REQUEST['id_table']); 
+				$aForm = dbmng_get_form_array($_REQUEST['id_table']);
 
 			if($aForm==null){
 				$ajax.='{"ok":false, "msg": "The requested id ('.$_REQUEST['id_table'].') does not exist"}';
 			}
-			else{				
+			else{
 				$table = $aForm['table_name'];
 				$ok=true;
 			}
 		}
 
-		if(isset($_REQUEST['get_records'])){		
+		if(isset($_REQUEST['get_records'])){
 			//$json['records']=Array();
 
 			if(isset($_REQUEST['id_parent'])){
-				
+
 				if(isset($_REQUEST['fk'])){
-					
+
 					if(isset($_SESSION["dbmng_param_".$_REQUEST['id_table']])){
 				 		$aParam =  dbmng_objectToArray(json_decode(($_SESSION["dbmng_param_".$_REQUEST['id_table']])));
 						if(isset($aParam['filters'])){
@@ -1865,7 +1877,7 @@ function dbmng_ajax_manager(){
 					}
 
 				}
-			//$aParamFigli['filters']['id_padre'] = 2; 
+			//$aParamFigli['filters']['id_padre'] = 2;
 
 			}
 
@@ -1884,16 +1896,16 @@ function dbmng_ajax_manager(){
 
 			if(isset($_REQUEST['updated']))
 				$aUpd = json_decode($_REQUEST['updated'], true);
-	
-	
-			if($ok) {	
+
+
+			if($ok) {
 				//print_r( $aForm );
 				// ********** GET PRIMARY KEY ********** //
 				foreach( $aForm['primary_key'] as $fld => $fld_value )
 					{
 						$pk = $fld_value;
 					}
-	
+
 				// ********** INSERT ********** //
 				if( isset($aIns) )
 					{
@@ -1916,7 +1928,7 @@ function dbmng_ajax_manager(){
 													$aVal = array_merge( $aVal, array(":".$fld => $val['record'][$fld]) );
 												}
 												else{
-													//$err_msg .= "Field ".	$fld ." not found in val ";																		
+													//$err_msg .= "Field ".	$fld ." not found in val ";
 												}
 											}
 									}
@@ -1924,26 +1936,26 @@ function dbmng_ajax_manager(){
 								if( isset($aParam['filters']) )
 									{
 										foreach ( $aParam['filters'] as $fld => $fld_value )
-											{				
+											{
 												$sFld.=$fld.", ";
 												$sVal.=":$fld, ";
 
 												$aVal = array_merge($aVal, array(":".$fld =>  $fld_value ));
-											}					
+											}
 									}
 
 
 								$sVal = substr( $sVal, 0, strlen($sVal)-2 );
 								$sFld = substr( $sFld, 0, strlen($sFld)-2 );
-								$sql = $sql_ins . "(" . $sFld . ") VALUES (" . $sVal . ");";						
+								$sql = $sql_ins . "(" . $sFld . ") VALUES (" . $sVal . ");";
 								$ret = (dbmng_query( $sql, $aVal));
 								if($ret['ok']==1){
 									$json['inserted'][$index]['ok']=1;
 									$json['inserted'][$index]['inserted_id']=$ret['inserted_id'];
 								}
 								else{
-									$json['inserted'][$index]['ok']=0;				
-									$json['inserted'][$index]['error']=$ret['error'];				
+									$json['inserted'][$index]['ok']=0;
+									$json['inserted'][$index]['error']=$ret['error'];
 								}
 
 							}
@@ -1958,7 +1970,7 @@ function dbmng_ajax_manager(){
 						$json['updated']=Array();
 
 						foreach($aUpd as $index => $val)
-							{						
+							{
 								$sVal = "";
 								$where = "";
 								$aVal = array();
@@ -1967,11 +1979,11 @@ function dbmng_ajax_manager(){
 										if( $fld != $pk )
 											{
 												if(isset($val['record'][$fld])){
-													$skipField=false;	
+													$skipField=false;
 													$updateValue=$val['record'][$fld];
 													if($fld_value['type']=='date' && $updateValue==''){
 														$updateValue=null;
-														$skipField=true;	
+														$skipField=true;
 													}
 // 													if(!$skipField){
 														$sVal .= $fld."= :$fld, ";
@@ -1981,7 +1993,7 @@ function dbmng_ajax_manager(){
 												else{
 													//there are a missing fields in update
 													//it may be thata field will not be editable
-													//$err_msg .= "Field ".	$fld ." not found in val ";																		
+													//$err_msg .= "Field ".	$fld ." not found in val ";
 												}
 											}
 										else{
@@ -1993,14 +2005,14 @@ function dbmng_ajax_manager(){
 									}
 								$sVal = substr( $sVal, 0, strlen($sVal)-2 );
 
-								$sql = $sql_ins . " SET " . $sVal . " WHERE ".$where."; ";						
+								$sql = $sql_ins . " SET " . $sVal . " WHERE ".$where."; ";
 								$ret = (dbmng_query( $sql, $aVal));
 								if($ret['ok']==1){
-									$json['updated'][$index]['ok']=1;							
+									$json['updated'][$index]['ok']=1;
 								}
 								else{
-									$json['updated'][$index]['ok']=0;				
-									$json['updated'][$index]['error']=$ret['error'].' '. $sql;				
+									$json['updated'][$index]['ok']=0;
+									$json['updated'][$index]['error']=$ret['error'].' '. $sql;
 								}
 
 							}
@@ -2012,26 +2024,26 @@ function dbmng_ajax_manager(){
 						$json['deleted']=Array();
 
 						$sql = "";
-				
+
 						$sVal = "";
 						$aVal = array();
 						$sql_del = "delete from $table where ";
-				
+
 						foreach( $aDel as $index => $val )
 							{
 								//print_r ($val);
 								//$sVal = $pk . " = " . $val[$pk] . ";\n";
 								$sVal = $pk . " = :" . $pk . ";\n";
 								$aVal = array(":".$pk => $val['record'][$pk]);
-								$sql = $sql_del . $sVal; 
+								$sql = $sql_del . $sVal;
 								$ret = (dbmng_query( $sql, $aVal));
 								if($ret['ok']==1){
 									$json['deleted'][$index]['ok']=1;
 								}
 								else{
-									$json['deleted'][$index]['ok']=0;				
-									$json['deleted'][$index]['error']=$ret['error'];				
-								}						
+									$json['deleted'][$index]['ok']=0;
+									$json['deleted'][$index]['error']=$ret['error'];
+								}
 							}
 					}
 
@@ -2103,7 +2115,7 @@ function dbmng_objectToArray($d) {
 			// with get_object_vars function
 			$d = get_object_vars($d);
 		}
- 
+
 		if (is_array($d)) {
 			/*
 			* Return array converted to object
@@ -2122,13 +2134,13 @@ function dbmng_objectToArray($d) {
 function dbmng_generate_array($sql, $var){
 
 		$rVoc  = dbmng_query( $sql, $var );
-		$aFVoc = array();		
+		$aFVoc = array();
 		$v       = 0;
 		foreach($rVoc as $val)
 			{
 				$keys=array_keys((array)$val);
 				$aFVoc[$val->$keys[0]] = $val->$keys[1];
-			}		
+			}
 		return $aFVoc;
 }
 
@@ -2140,6 +2152,6 @@ function dbmng_print_r($var){
 }
 
 
- 
+
 
 ?>
